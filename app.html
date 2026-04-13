@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STR:D Running App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <style>
+    body {
+      font-family: 'Red Hat Display', sans-serif;
+      background-color: #8c8c8c;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .app-container {
+      background-color: #C3C3C3;
+      width: 100%;
+      max-width: 414px;
+      height: 100vh;
+      max-height: 896px;
+      overflow-y: auto;
+      position: relative;
+    }
+    
+    @media (min-width: 640px) {
+      .app-container {
+        height: 896px;
+        border-radius: 40px;
+        margin: 2rem 0;
+        border: 8px solid #a0a0a0;
+      }
+      body {
+        padding: 2rem;
+      }
+    }
+
+    .hide-scroll::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scroll {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .neon-bg {
+      background-color: #a3ff12;
+    }
+    .neon-text {
+      color: #a3ff12;
+    }
+
+    .cal-circle {
+      aspect-ratio: 1 / 1;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem; /* 14px */
+      transition: transform 0.15s ease, filter 0.15s ease;
+      user-select: none;
+    }
+
+    .cal-circle:not(.cal-faint):active {
+      transform: scale(1.1);
+      filter: brightness(1.1);
+    }
+
+    .cal-faint {
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: rgba(255, 255, 255, 0.25);
+      font-weight: 600;
+      pointer-events: none;
+    }
+
+    .cal-dark {
+      background-color: #6a6a6a;
+      color: white;
+      font-weight: 700;
+    }
+
+    .cal-white {
+      background-color: white;
+      color: #1a1a1a;
+      font-weight: 800;
+    }
+
+    .cal-neon {
+      background-color: #a3ff12;
+      color: #1a1a1a;
+      font-weight: 800;
+    }
+
+    .cal-black {
+      background-color: #1a1a1a;
+      color: #a3ff12;
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container hide-scroll">
+    
+    <div class="pt-14 pb-24 h-full relative">
+      
+      <!-- Top header -->
+      <div class="flex justify-between items-center px-3">
+        <div class="flex items-center gap-3">
+          <img src="https://i.pravatar.cc/150?img=11" alt="Profile" class="w-11 h-11 rounded-full border-2 border-[#a3ff12] object-cover">
+          <div class="font-extrabold text-[17px] text-gray-900 tracking-tight">@run_strd</div>
+        </div>
+        <div class="flex items-center space-x-2 mt-2">
+          <i class="ph-fill ph-sun text-yellow-500 text-lg"></i>
+          <!-- Toggle Switch -->
+          <div class="w-12 h-[26px] bg-black/10 border border-black/5 rounded-full p-[3px] flex transition-colors">
+            <div class="w-[20px] h-[20px] bg-white rounded-full"></div>
+          </div>
+          <i class="ph-fill ph-moon text-yellow-500/50 text-lg"></i>
+        </div>
+      </div>
+
+      <!-- Mileage Statement -->
+      <div class="mt-8 px-3 flex justify-between items-end">
+        <div class="flex items-baseline gap-1">
+          <span class="text-[84px] leading-[0.8] font-black tracking-tighter text-gray-900">96.2</span>
+          <span class="text-2xl font-bold text-gray-600 tracking-tight">km</span>
+        </div>
+        <div class="text-right pb-[2px]">
+          <h2 id="main-month" class="text-[17px] leading-none font-bold tracking-tight text-gray-800 transition-opacity duration-300">4월</h2>
+          <p id="main-year" class="text-[10px] text-gray-500 font-semibold mt-[2px] transition-opacity duration-300 tracking-wider">2026</p>
+        </div>
+      </div>
+
+      <!-- Calendar Section -->
+      <div class="mt-10">
+        
+
+
+        <!-- Swipeable Container -->
+        <div class="flex overflow-x-auto snap-x snap-mandatory hide-scroll w-full px-3 gap-6" id="calendar-carousel">
+          
+          <!-- Month 1 (February) -->
+          <div class="min-w-full snap-center flex-shrink-0" data-month="FEBRUARY 2026">
+            <div class="grid grid-cols-7 mb-3">
+              <div class="text-center text-[10px] font-bold text-gray-400">M</div>
+              <div class="text-center text-[10px] font-bold text-gray-400">T</div>
+              <div class="text-center text-[10px] font-bold text-gray-400">W</div>
+              <div class="text-center text-[10px] font-bold text-gray-400">T</div>
+              <div class="text-center text-[10px] font-bold text-gray-400">F</div>
+              <div class="text-center text-[10px] font-bold text-gray-400">S</div>
+              <div class="text-center text-[10px] font-bold text-gray-400">S</div>
+            </div>
+            <div class="grid grid-cols-7">
+              <div></div><div></div><div></div><div></div><div></div><div></div>
+              <div class="cal-circle cal-faint">1</div>
+              <div class="cal-circle cal-faint">2</div><div class="cal-circle cal-faint">3</div><div class="cal-circle cal-faint">4</div><div class="cal-circle cal-faint">5</div><div class="cal-circle cal-faint">6</div><div class="cal-circle cal-faint">7</div><div class="cal-circle cal-faint">8</div>
+            </div>
+          </div>
+
+          <!-- Month 2 (March, Current) -->
+          <div class="min-w-full snap-center flex-shrink-0" data-month="MARCH 2026">
+            <div class="grid grid-cols-7 mb-3">
+              <div class="text-center text-[10px] font-bold text-gray-400">M</div>
+              <div class="text-center text-[10px] font-bold text-gray-400">T</div>
+              <div class="text-center text-[10px] font-bold text-gray-400">W</div>
+              <div class="text-center text-[10px] font-bold text-gray-400">T</div>
+              <div class="text-center text-[10px] font-bold text-gray-400">F</div>
+              <div class="text-center text-[10px] font-bold text-gray-400">S</div>
+              <div class="text-center text-[10px] font-bold text-gray-400">S</div>
+            </div>
+            <div class="grid grid-cols-7">
+              <div></div><div></div><div></div><div></div><div></div><div></div>
+              <div class="cal-circle cal-faint">1</div>
+              <div class="cal-circle cal-dark">6</div><div class="cal-circle cal-dark">9</div><div class="cal-circle cal-faint">4</div><div class="cal-circle cal-faint">5</div><div class="cal-circle cal-dark">6</div><div class="cal-circle cal-white">19</div><div class="cal-circle cal-faint">8</div>
+              <div class="cal-circle cal-dark">6</div><div class="cal-circle cal-faint">10</div><div class="cal-circle cal-faint">11</div><div class="cal-circle cal-faint">12</div><div class="cal-circle cal-dark">4</div><div class="cal-circle cal-faint">14</div><div class="cal-circle cal-faint">15</div>
+              <div class="cal-circle cal-faint">16</div><div class="cal-circle cal-faint">17</div><div class="cal-circle cal-faint">18</div><div class="cal-circle cal-dark">5</div><div class="cal-circle cal-neon">9</div><div class="cal-circle cal-faint">21</div><div class="cal-circle cal-black">H</div>
+              <div class="cal-circle cal-faint">23</div><div class="cal-circle cal-faint">24</div><div class="cal-circle cal-faint">25</div><div class="cal-circle cal-faint">26</div><div class="cal-circle cal-faint">27</div><div class="cal-circle cal-neon">5</div><div class="cal-circle cal-faint">29</div>
+              <div class="cal-circle cal-neon">6</div><div class="cal-circle cal-faint">31</div><div></div><div></div><div></div><div></div><div></div>
+            </div>
+          </div>
+
+          <!-- Month 3 (April) -->
+          <div class="min-w-full snap-center flex-shrink-0" data-month="APRIL 2026">
+            <div class="grid grid-cols-7 mb-3">
+              <div class="text-center text-[10px] font-bold text-gray-400">M</div>
+              <div class="text-center text-[10px] font-bold text-gray-400">T</div>
+              <div class="text-center text-[10px] font-bold text-gray-400">W</div>
+              <div class="text-center text-[10px] font-bold text-gray-400">T</div>
+              <div class="text-center text-[10px] font-bold text-gray-400">F</div>
+              <div class="text-center text-[10px] font-bold text-gray-400">S</div>
+              <div class="text-center text-[10px] font-bold text-gray-400">S</div>
+            </div>
+            <div class="grid grid-cols-7">
+              <div></div><div class="cal-circle cal-faint">1</div><div class="cal-circle cal-faint">2</div><div class="cal-circle cal-faint">3</div><div class="cal-circle cal-faint">4</div><div class="cal-circle cal-faint">5</div><div class="cal-circle cal-faint">6</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Recent Run Card -->
+      <div class="mt-8 mx-3 neon-bg rounded-2xl p-4 flex justify-between items-center transition-transform active:scale-[0.98]">
+        <div class="flex items-center gap-3">
+          <div class="bg-black/5 rounded-xl px-2 py-[6px] border border-black/10">
+            <span class="text-black font-extrabold text-[10px] tracking-widest">STDY</span>
+          </div>
+          <div>
+            <h3 class="text-gray-900 font-bold text-[15px] leading-tight">Steady Run</h3>
+            <p class="text-gray-700 font-medium text-xs mt-[2px]">Mar 30 · 7:51 PM</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <div class="font-black text-gray-900 text-[17px] leading-tight">
+            5.7<span class="text-xs font-bold ml-[1px]">km</span>
+          </div>
+          <div class="text-gray-700 font-medium text-[11px] mt-[2px]">5:36 /km</div>
+        </div>
+      </div>
+
+      <!-- More Runs Indicator -->
+      <div class="text-center mt-6 flex flex-col items-center justify-center text-[11px] font-semibold text-gray-400">
+        <i class="ph-bold ph-caret-down mb-1"></i>
+        more runs
+      </div>
+
+      <!-- Floating Action Button -->
+      <button class="absolute bottom-10 right-3 neon-bg w-[52px] h-[52px] rounded-[18px] flex items-center justify-center active:scale-95 transition-transform duration-200">
+        <i class="ph-bold ph-plus text-black text-xl"></i>
+      </button>
+
+    </div>
+  </div>
+
+  <script>
+    const carousel = document.getElementById('calendar-carousel');
+    const mainMonth = document.getElementById('main-month');
+    const mainYear = document.getElementById('main-year');
+    const sections = carousel.querySelectorAll('[data-month]');
+
+    // Scroll to the second item (MARCH 2026) initially
+    requestAnimationFrame(() => {
+        carousel.scrollTo({ left: carousel.clientWidth + 24, behavior: 'instant' }); // 24 accounts for the gap
+    });
+
+    // --- Mouse Drag to Scroll (For Desktop test) ---
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    carousel.addEventListener('mousedown', (e) => {
+      isDown = true;
+      carousel.style.scrollBehavior = 'auto'; // ensure immediate scroll during pan
+      carousel.style.scrollSnapType = 'none'; // disable snap during drag
+      startX = e.pageX - carousel.offsetLeft;
+      scrollLeft = carousel.scrollLeft;
+      carousel.style.cursor = 'grabbing';
+    });
+
+    carousel.addEventListener('mouseleave', () => {
+      if(!isDown) return;
+      isDown = false;
+      carousel.style.scrollSnapType = 'x mandatory'; // re-enable snap
+      carousel.style.cursor = 'auto';
+    });
+
+    carousel.addEventListener('mouseup', () => {
+      isDown = false;
+      carousel.style.scrollSnapType = 'x mandatory';
+      carousel.style.cursor = 'auto';
+    });
+
+    carousel.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - carousel.offsetLeft;
+      const walk = (x - startX) * 1.5; // drag speed multiplier
+      carousel.scrollLeft = scrollLeft - walk;
+    });
+    // -----------------------------------------------
+
+    let scrollTimeout;
+    carousel.addEventListener('scroll', () => {
+      clearTimeout(scrollTimeout);
+      
+      scrollTimeout = setTimeout(() => {
+        let currentMonth = '';
+        let minDistance = Infinity;
+        
+        sections.forEach(section => {
+          const sectionCenter = section.offsetLeft - carousel.parentElement.offsetLeft + section.clientWidth / 2 - carousel.scrollLeft;
+          const carouselCenter = carousel.clientWidth / 2;
+          const distance = Math.abs(sectionCenter - carouselCenter);
+
+          if (distance < minDistance) {
+            minDistance = distance;
+            currentMonth = section.dataset.month;
+          }
+        });
+
+        const monthMap = {
+          'JANUARY': '1월', 'FEBRUARY': '2월', 'MARCH': '3월', 'APRIL': '4월',
+          'MAY': '5월', 'JUNE': '6월', 'JULY': '7월', 'AUGUST': '8월',
+          'SEPTEMBER': '9월', 'OCTOBER': '10월', 'NOVEMBER': '11월', 'DECEMBER': '12월'
+        };
+        let [m, y] = currentMonth.split(' ');
+        let krMonth = monthMap[m] || m;
+        
+        if (mainMonth.innerText !== krMonth) {
+          mainMonth.style.opacity = 0;
+          mainYear.style.opacity = 0;
+          
+          setTimeout(() => {
+            mainMonth.innerText = krMonth;
+            mainYear.innerText = y;
+            mainMonth.style.opacity = 1;
+            mainYear.style.opacity = 1;
+          }, 150);
+        }
+      }, 50); // Add a small debounce to smoothen the label update
+    });
+  </script>
+</body>
+</html>
