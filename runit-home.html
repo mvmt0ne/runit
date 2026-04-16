@@ -669,11 +669,10 @@
 
     /* 섹션 헤더 */
     .list-sheet-handle {
-      height: 54px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 22px;
+      padding: 20px;
       flex-shrink: 0;
       position: sticky;
       top: 0;
@@ -687,8 +686,8 @@
     }
 
     .list-sheet-title {
-      font-size: 16px;
-      font-weight: 300;
+      font-size: 18px;
+      font-weight: 400;
       letter-spacing: -0.03em;
       color: #949494;
       font-family: 'Pretendard Variable', sans-serif;
@@ -765,7 +764,7 @@
       background: #CACACA;
       transition: background 0.3s;
       position: sticky;
-      top: 54px;
+      top: 60px;
       z-index: 5;
       display: flex;
       justify-content: space-between;
@@ -866,8 +865,8 @@
     }
 
     .lp-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
+      display: flex;
+      justify-content: space-between;
       margin-top: 10px;
     }
 
@@ -879,10 +878,14 @@
       transition: color 0.3s;
     }
 
+    .lp-stat:last-child {
+      align-items: flex-end;
+    }
+
     .lp-stat strong {
       font-size: 14px;
       font-weight: 700;
-      color: var(--text-2);
+      color: var(--text-1);
       line-height: 1;
       transition: color 0.3s;
     }
