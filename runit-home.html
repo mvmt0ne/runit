@@ -59,14 +59,14 @@
       --type-dark-bg: #484848;
       /* TT / Tempo / Interval */
       --type-dark-text: #FFFFFF;
-      --type-steady-bg: #757575;
+      --type-steady-bg: #666666;
       --type-steady-text: #FFFFFF;
-      --type-easy-bg: #D7D7D7;
+      --type-easy-bg: #DCDCDC;
       --type-easy-text: #4A4A4A;
-      --type-jog-bg: #A0A0A0;
-      --type-jog-text: #2A2A2A;
-      --type-long-bg: #9CFD32;
-      --type-long-text: #111111;
+      --type-jog-bg: #888888;
+      --type-jog-text: #FFFFFF;
+      --type-long-bg: #222222;
+      --type-long-text: #FFFFFF;
       --type-none-border: #B8B8B8;
       --type-none-text: #AAAAAA;
     }
@@ -477,7 +477,7 @@
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       margin-bottom: 12px;
-      padding: 0 12px;
+      padding: 0 22px;
     }
 
     .cal-wd {
@@ -513,7 +513,7 @@
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 0;
-      padding: 0 12px;
+      padding: 0 22px;
     }
 
     /* ─── Calendar day cell ───────────────── */
@@ -647,19 +647,19 @@
     .cal-page {
       display: flex;
       flex-direction: column;
-      padding-bottom: 8px;
+      min-height: calc(100svh - 54px);
+      padding-bottom: 40px;
     }
 
     /* 히어로↔캘린더 사이 가변 여백 */
     .cal-flex-spacer {
       flex: 1;
       min-height: 32px;
-      max-height: 64px;
     }
 
     /* ─── 러닝 활동 인라인 섹션 ──────────────── */
     .list-sheet {
-      background: var(--surface-5);
+      background: #CACACA;
       display: flex;
       flex-direction: column;
       transition: background 0.3s;
@@ -676,7 +676,7 @@
       position: sticky;
       top: 0;
       z-index: 10;
-      background: var(--surface-5);
+      background: #CACACA;
       transition: background 0.3s;
     }
 
@@ -757,8 +757,14 @@
       margin-top: 14px;
       flex-shrink: 0;
       padding: 12px 20px;
-      background: var(--surface-4);
+      background: #CACACA;
       transition: background 0.3s;
+      position: sticky;
+      top: 54px;
+      z-index: 5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .lp-month-label {
@@ -769,11 +775,21 @@
       transition: color 0.3s;
     }
 
+    .lp-month-km {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-2);
+      font-family: 'Urbanist', sans-serif;
+    }
+
     .lp-list {
       flex: 1;
-      overflow-y: auto;
-      scrollbar-width: none;
       padding: 0 20px;
+      background: #CACACA;
+    }
+
+    [data-theme="dark"] .lp-list {
+      background: var(--surface-1);
     }
 
     .lp-list::-webkit-scrollbar {
@@ -784,9 +800,14 @@
       display: flex;
       align-items: center;
       gap: 16px;
-      padding: 16px 0;
+      padding: 20px 0;
       cursor: pointer;
       transition: opacity 0.15s;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    [data-theme="dark"] .lp-row {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .lp-row:last-child {
@@ -818,40 +839,58 @@
       min-width: 0;
     }
 
+    .lp-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
     .lp-run-name {
       font-size: 18px;
-      font-weight: 600;
+      font-weight: 300;
       color: var(--text-1);
       font-family: 'Pretendard Variable', sans-serif;
       transition: color 0.3s;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      margin-right: 8px;
+    }
+
+    .lp-run-time {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text-2);
+      font-family: 'Urbanist', sans-serif;
+      flex-shrink: 0;
     }
 
     .lp-stats {
-      display: flex;
-      gap: 10px;
-      margin-top: 5px;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      margin-top: 10px;
     }
 
     .lp-stat {
-      font-size: 12px;
-      color: var(--text-2);
-      font-family: 'Urbanist', sans-serif;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-family: 'Pretendard Variable', sans-serif;
       transition: color 0.3s;
-      white-space: nowrap;
     }
 
     .lp-stat strong {
+      font-size: 14px;
       font-weight: 700;
       color: var(--text-1);
+      line-height: 1;
       transition: color 0.3s;
     }
 
     .lp-stat span {
-      font-weight: 400;
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--text-2);
     }
 
     /* ─── Bottom Sheet ────────────────────── */
@@ -1365,7 +1404,7 @@
 
             <div class="hero-section">
               <div class="hero-title">
-                <div class="hero-title-line">4월, 워니님의</div>
+                <div class="hero-title-line"><span id="hero-month-label">4월</span>, 워니님의</div>
                 <div class="hero-title-line">마일리지는</div>
               </div>
               <div class="theme-toggle" onclick="toggleTheme()">
@@ -1478,267 +1517,465 @@
             <div class="list-sheet-content">
               <div class="lp-month-section">
                 <div class="lp-month-label">4월</div>
+                <div class="lp-month-km">59.7km</div>
               </div>
               <div class="lp-list" id="bs-list-1">
                 <div class="lp-row" onclick="p1Show('detail')">
                   <div class="lp-badge type-race">4/11</div>
                   <div class="lp-info">
-                    <div class="lp-run-name">2026 Incheon half marathon</div>
+                    <div class="lp-title-row">
+                      <div class="lp-run-name">2026 인천하프</div>
+                      <div class="lp-run-time">08:00</div>
+                    </div>
                     <div class="lp-stats">
-                      <div class="lp-stat"><strong>21.1</strong><span> km</span></div>
-                      <div class="lp-stat"><strong>5:02</strong><span> /km</span></div>
-                      <div class="lp-stat"><strong>176</strong><span> bpm</span></div>
-                      <div class="lp-stat"><strong>174</strong><span> spm</span></div>
+                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
+                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
+                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
+                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
                     </div>
                   </div>
                 </div>
                 <div class="lp-row" onclick="p1Show('detail')">
-                  <div class="lp-badge type-steady">4/10</div>
+                  <div class="lp-badge type-jogging">4/10</div>
                   <div class="lp-info">
-                    <div class="lp-run-name">Steady Run</div>
+                    <div class="lp-title-row">
+                      <div class="lp-run-name">2026 인천하프</div>
+                      <div class="lp-run-time">08:00</div>
+                    </div>
                     <div class="lp-stats">
-                      <div class="lp-stat"><strong>5.4</strong><span> km</span></div>
-                      <div class="lp-stat"><strong>5:59</strong><span> /km</span></div>
-                      <div class="lp-stat"><strong>158</strong><span> bpm</span></div>
-                      <div class="lp-stat"><strong>170</strong><span> spm</span></div>
+                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
+                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
+                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
+                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
                     </div>
                   </div>
                 </div>
                 <div class="lp-row" onclick="p1Show('detail')">
                   <div class="lp-badge type-tempo">4/7</div>
                   <div class="lp-info">
-                    <div class="lp-run-name">Tempo Run</div>
+                    <div class="lp-title-row">
+                      <div class="lp-run-name">2026 인천하프</div>
+                      <div class="lp-run-time">08:00</div>
+                    </div>
                     <div class="lp-stats">
-                      <div class="lp-stat"><strong>6.0</strong><span> km</span></div>
-                      <div class="lp-stat"><strong>5:47</strong><span> /km</span></div>
-                      <div class="lp-stat"><strong>165</strong><span> bpm</span></div>
-                      <div class="lp-stat"><strong>172</strong><span> spm</span></div>
+                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
+                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
+                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
+                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
                     </div>
                   </div>
                 </div>
                 <div class="lp-row" onclick="p1Show('detail')">
                   <div class="lp-badge type-easy">4/5</div>
                   <div class="lp-info">
-                    <div class="lp-run-name">Easy Run</div>
+                    <div class="lp-title-row">
+                      <div class="lp-run-name">2026 인천하프</div>
+                      <div class="lp-run-time">08:00</div>
+                    </div>
                     <div class="lp-stats">
-                      <div class="lp-stat"><strong>9.0</strong><span> km</span></div>
-                      <div class="lp-stat"><strong>6:06</strong><span> /km</span></div>
-                      <div class="lp-stat"><strong>148</strong><span> bpm</span></div>
-                      <div class="lp-stat"><strong>168</strong><span> spm</span></div>
+                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
+                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
+                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
+                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
                     </div>
                   </div>
                 </div>
                 <div class="lp-row" onclick="p1Show('detail')">
                   <div class="lp-badge type-easy">4/4</div>
                   <div class="lp-info">
-                    <div class="lp-run-name">Easy Run</div>
+                    <div class="lp-title-row">
+                      <div class="lp-run-name">2026 인천하프</div>
+                      <div class="lp-run-time">08:00</div>
+                    </div>
                     <div class="lp-stats">
-                      <div class="lp-stat"><strong>10.2</strong><span> km</span></div>
-                      <div class="lp-stat"><strong>5:51</strong><span> /km</span></div>
-                      <div class="lp-stat"><strong>152</strong><span> bpm</span></div>
-                      <div class="lp-stat"><strong>169</strong><span> spm</span></div>
+                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
+                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
+                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
+                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
                     </div>
                   </div>
                 </div>
                 <div class="lp-row" onclick="p1Show('detail')">
                   <div class="lp-badge type-easy">4/3</div>
                   <div class="lp-info">
-                    <div class="lp-run-name">Easy Run</div>
+                    <div class="lp-title-row">
+                      <div class="lp-run-name">2026 인천하프</div>
+                      <div class="lp-run-time">08:00</div>
+                    </div>
                     <div class="lp-stats">
-                      <div class="lp-stat"><strong>8.2</strong><span> km</span></div>
-                      <div class="lp-stat"><strong>6:12</strong><span> /km</span></div>
-                      <div class="lp-stat"><strong>145</strong><span> bpm</span></div>
-                      <div class="lp-stat"><strong>166</strong><span> spm</span></div>
+                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
+                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
+                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
+                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
                     </div>
                   </div>
                 </div>
               </div>
 
-            </div><!-- /lp-list -->
-          </div><!-- /list-sheet-content -->
+              <!-- 3월 섹션 추가 -->
+              <div class="lp-month-section">
+                <div class="lp-month-label">3월</div>
+                <div class="lp-month-km">96.2km</div>
+              </div>
+              <div class="lp-list">
+                <div class="lp-row" onclick="p1Show('detail')">
+                  <div class="lp-badge type-steady">3/30</div>
+                  <div class="lp-info">
+                    <div class="lp-title-row">
+                      <div class="lp-run-name">2026 인천하프</div>
+                      <div class="lp-run-time">08:00</div>
+                    </div>
+                    <div class="lp-stats">
+                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
+                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
+                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
+                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="lp-row" onclick="p1Show('detail')">
+                  <div class="lp-badge type-steady">3/28</div>
+                  <div class="lp-info">
+                    <div class="lp-title-row">
+                      <div class="lp-run-name">2026 인천하프</div>
+                      <div class="lp-run-time">08:00</div>
+                    </div>
+                    <div class="lp-stats">
+                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
+                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
+                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
+                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="lp-row" onclick="p1Show('detail')">
+                  <div class="lp-badge type-race">3/22</div>
+                  <div class="lp-info">
+                    <div class="lp-title-row">
+                      <div class="lp-run-name">2026 인천하프</div>
+                      <div class="lp-run-time">08:00</div>
+                    </div>
+                    <div class="lp-stats">
+                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
+                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
+                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
+                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="lp-row" onclick="p1Show('detail')">
+                  <div class="lp-badge type-steady">3/20</div>
+                  <div class="lp-info">
+                    <div class="lp-title-row">
+                      <div class="lp-run-name">2026 인천하프</div>
+                      <div class="lp-run-time">08:00</div>
+                    </div>
+                    <div class="lp-stats">
+                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
+                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
+                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
+                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="lp-row" onclick="p1Show('detail')">
+                  <div class="lp-badge type-jogging">3/19</div>
+                  <div class="lp-info">
+                    <div class="lp-title-row">
+                      <div class="lp-run-name">2026 인천하프</div>
+                      <div class="lp-run-time">08:00</div>
+                    </div>
+                    <div class="lp-stats">
+                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
+                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
+                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
+                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="lp-row" onclick="p1Show('detail')">
+                  <div class="lp-badge type-easy">3/13</div>
+                  <div class="lp-info">
+                    <div class="lp-title-row">
+                      <div class="lp-run-name">2026 인천하프</div>
+                      <div class="lp-run-time">08:00</div>
+                    </div>
+                    <div class="lp-stats">
+                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
+                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
+                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
+                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="lp-row" onclick="p1Show('detail')">
+                  <div class="lp-badge type-easy">3/9</div>
+                  <div class="lp-info">
+                    <div class="lp-title-row">
+                      <div class="lp-run-name">2026 인천하프</div>
+                      <div class="lp-run-time">08:00</div>
+                    </div>
+                    <div class="lp-stats">
+                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
+                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
+                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
+                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-        </div><!-- /list-sheet -->
+              <!-- 2월 섹션 추가 -->
+              <div class="lp-month-section">
+                <div class="lp-month-label">2월</div>
+                <div class="lp-month-km">68.1km</div>
+              </div>
+              <div class="lp-list">
+                <div class="lp-row" onclick="p1Show('detail')">
+                  <div class="lp-badge type-long">2/25</div>
+                  <div class="lp-info">
+                    <div class="lp-title-row">
+                      <div class="lp-run-name">2026 인천하프</div>
+                      <div class="lp-run-time">08:00</div>
+                    </div>
+                    <div class="lp-stats">
+                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
+                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
+                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
+                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="lp-row" onclick="p1Show('detail')">
+                  <div class="lp-badge type-tempo">2/18</div>
+                  <div class="lp-info">
+                    <div class="lp-title-row">
+                      <div class="lp-run-name">2026 인천하프</div>
+                      <div class="lp-run-time">08:00</div>
+                    </div>
+                    <div class="lp-stats">
+                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
+                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
+                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
+                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="lp-row" onclick="p1Show('detail')">
+                  <div class="lp-badge type-steady">2/10</div>
+                  <div class="lp-info">
+                    <div class="lp-title-row">
+                      <div class="lp-run-name">2026 인천하프</div>
+                      <div class="lp-run-time">08:00</div>
+                    </div>
+                    <div class="lp-stats">
+                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
+                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
+                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
+                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="lp-row" onclick="p1Show('detail')">
+                  <div class="lp-badge type-easy">2/2</div>
+                  <div class="lp-info">
+                    <div class="lp-title-row">
+                      <div class="lp-run-name">2026 인천하프</div>
+                      <div class="lp-run-time">08:00</div>
+                    </div>
+                    <div class="lp-stats">
+                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
+                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
+                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
+                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div><!-- /list-sheet-content -->
 
-      </div><!-- /cal-area -->
+          </div><!-- /list-sheet -->
 
-    </div>
+        </div><!-- /cal-area -->
 
-    <!-- ── SCREEN: STATS ── -->
-    <div id="s1-stats" class="screen">
-      <div class="status-bar">
-        <span class="status-time">9:41</span>
-        <div class="status-icons">
-          <svg width="24" height="11" viewBox="0 0 24 11">
-            <rect x="0" y="1" width="20" height="9" rx="2.5" stroke="var(--text-1)" stroke-width="1" fill="none"
-              opacity="0.35" />
-            <rect x="1.5" y="2.5" width="14" height="6" rx="1.5" fill="var(--text-1)" />
-            <path d="M21.5 4v3a1.5 1.5 0 000-3z" fill="var(--text-1)" opacity="0.4" />
-          </svg>
+      </div>
+
+      <!-- ── SCREEN: STATS ── -->
+      <div id="s1-stats" class="screen">
+        <div class="status-bar">
+          <span class="status-time">9:41</span>
+          <div class="status-icons">
+            <svg width="24" height="11" viewBox="0 0 24 11">
+              <rect x="0" y="1" width="20" height="9" rx="2.5" stroke="var(--text-1)" stroke-width="1" fill="none"
+                opacity="0.35" />
+              <rect x="1.5" y="2.5" width="14" height="6" rx="1.5" fill="var(--text-1)" />
+              <path d="M21.5 4v3a1.5 1.5 0 000-3z" fill="var(--text-1)" opacity="0.4" />
+            </svg>
+          </div>
+        </div>
+        <div class="back-header">
+          <button class="back-btn" onclick="p1Show('home')">←</button>
+          <span class="back-title">Statistics</span>
+          <div style="width:34px"></div>
+        </div>
+
+        <div class="tab-row">
+          <div class="tab active">Month</div>
+          <div class="tab">Week</div>
+          <div class="tab">All</div>
+        </div>
+
+        <div class="scroll-area">
+          <!-- Hero stat -->
+          <div class="stat-block">
+            <div class="stat-block-label">April Distance</div>
+            <div class="stat-block-value">59.7<span>km</span></div>
+            <div class="stat-block-sub">↓ 32% vs March</div>
+            <div class="stat-block-deco"></div>
+          </div>
+
+          <div class="stats-2col">
+            <div class="mini-stat">
+              <div class="mini-stat-label">Runs</div>
+              <div class="mini-stat-value">6</div>
+              <div class="mini-stat-sub">runs this month</div>
+            </div>
+            <div class="mini-stat">
+              <div class="mini-stat-label">Best Pace</div>
+              <div class="mini-stat-value" style="color:var(--accent)">5:02</div>
+              <div class="mini-stat-sub">/km · Apr 11</div>
+            </div>
+            <div class="mini-stat">
+              <div class="mini-stat-label">Long Run</div>
+              <div class="mini-stat-value">21.1<span>km</span></div>
+              <div class="mini-stat-sub">Apr 11</div>
+            </div>
+            <div class="mini-stat">
+              <div class="mini-stat-label">Calories</div>
+              <div class="mini-stat-value">2,840<span>kcal</span></div>
+              <div class="mini-stat-sub">this month</div>
+            </div>
+          </div>
+
+          <!-- Monthly bar chart -->
+          <div class="chart-section">
+            <div class="chart-label">Monthly Distance</div>
+            <div class="bar-chart">
+              <div class="bar-col">
+                <div class="bar-val">72.3</div>
+                <div class="bar dim-bar" style="height:82%"></div>
+                <div class="bar-label">Jan</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar-val">68.1</div>
+                <div class="bar dim-bar" style="height:78%"></div>
+                <div class="bar-label">Feb</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar-val">87.6</div>
+                <div class="bar dim-bar" style="height:100%"></div>
+                <div class="bar-label">Mar</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar-val">59.7</div>
+                <div class="bar accent-bar" style="height:68%"></div>
+                <div class="bar-label">Apr</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="back-header">
-        <button class="back-btn" onclick="p1Show('home')">←</button>
-        <span class="back-title">Statistics</span>
-        <div style="width:34px"></div>
+
+      <!-- ── SCREEN: DETAIL ── -->
+      <div id="s1-detail" class="screen">
+        <div class="status-bar">
+          <span class="status-time">9:41</span>
+          <div class="status-icons">
+            <svg width="24" height="11" viewBox="0 0 24 11">
+              <rect x="0" y="1" width="20" height="9" rx="2.5" stroke="var(--text-1)" stroke-width="1" fill="none"
+                opacity="0.35" />
+              <rect x="1.5" y="2.5" width="14" height="6" rx="1.5" fill="var(--text-1)" />
+              <path d="M21.5 4v3a1.5 1.5 0 000-3z" fill="var(--text-1)" opacity="0.4" />
+            </svg>
+          </div>
+        </div>
+        <div class="back-header">
+          <button class="back-btn" onclick="p1Show('home')">←</button>
+          <span class="back-title">April 10</span>
+          <div style="width:34px"></div>
+        </div>
+
+        <div class="scroll-area">
+          <div class="detail-type-badge type-race" style="margin-top:16px">
+            <span>RACE</span>
+          </div>
+
+          <div class="detail-hero">
+            <div class="detail-km">21.1<span>km</span></div>
+            <div class="detail-meta">Half Marathon · 8:00 AM</div>
+          </div>
+
+          <div class="detail-stats-row">
+            <div class="detail-stat-cell">
+              <div class="dsc-label">Duration</div>
+              <div class="dsc-value">1:46:22</div>
+            </div>
+            <div class="detail-stat-cell">
+              <div class="dsc-label">Avg Pace</div>
+              <div class="dsc-value accent">5:02</div>
+            </div>
+            <div class="detail-stat-cell">
+              <div class="dsc-label">Calories</div>
+              <div class="dsc-value">1,240</div>
+            </div>
+          </div>
+
+          <div class="detail-pace-chart">
+            <div class="chart-label">Pace / km</div>
+            <div class="bar-chart" style="height:80px">
+              <div class="bar-col">
+                <div class="bar accent-bar" style="height:55%"></div>
+                <div class="bar-label">1</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar accent-bar" style="height:60%"></div>
+                <div class="bar-label">3</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar accent-bar" style="height:65%"></div>
+                <div class="bar-label">5</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar accent-bar" style="height:70%"></div>
+                <div class="bar-label">7</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar accent-bar" style="height:72%"></div>
+                <div class="bar-label">10</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar accent-bar" style="height:75%"></div>
+                <div class="bar-label">13</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar accent-bar" style="height:80%"></div>
+                <div class="bar-label">16</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar accent-bar" style="height:100%"></div>
+                <div class="bar-label">21</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-note">
+            <div class="detail-note-label">Note</div>
+            <div class="detail-note-text">네거티브 스플릿. 후반 5km 가장 빠름.</div>
+          </div>
+        </div>
       </div>
 
-      <div class="tab-row">
-        <div class="tab active">Month</div>
-        <div class="tab">Week</div>
-        <div class="tab">All</div>
-      </div>
-
-      <div class="scroll-area">
-        <!-- Hero stat -->
-        <div class="stat-block">
-          <div class="stat-block-label">April Distance</div>
-          <div class="stat-block-value">59.7<span>km</span></div>
-          <div class="stat-block-sub">↓ 32% vs March</div>
-          <div class="stat-block-deco"></div>
-        </div>
-
-        <div class="stats-2col">
-          <div class="mini-stat">
-            <div class="mini-stat-label">Runs</div>
-            <div class="mini-stat-value">6</div>
-            <div class="mini-stat-sub">runs this month</div>
-          </div>
-          <div class="mini-stat">
-            <div class="mini-stat-label">Best Pace</div>
-            <div class="mini-stat-value" style="color:var(--accent)">5:02</div>
-            <div class="mini-stat-sub">/km · Apr 11</div>
-          </div>
-          <div class="mini-stat">
-            <div class="mini-stat-label">Long Run</div>
-            <div class="mini-stat-value">21.1<span>km</span></div>
-            <div class="mini-stat-sub">Apr 11</div>
-          </div>
-          <div class="mini-stat">
-            <div class="mini-stat-label">Calories</div>
-            <div class="mini-stat-value">2,840<span>kcal</span></div>
-            <div class="mini-stat-sub">this month</div>
-          </div>
-        </div>
-
-        <!-- Monthly bar chart -->
-        <div class="chart-section">
-          <div class="chart-label">Monthly Distance</div>
-          <div class="bar-chart">
-            <div class="bar-col">
-              <div class="bar-val">72.3</div>
-              <div class="bar dim-bar" style="height:82%"></div>
-              <div class="bar-label">Jan</div>
-            </div>
-            <div class="bar-col">
-              <div class="bar-val">68.1</div>
-              <div class="bar dim-bar" style="height:78%"></div>
-              <div class="bar-label">Feb</div>
-            </div>
-            <div class="bar-col">
-              <div class="bar-val">87.6</div>
-              <div class="bar dim-bar" style="height:100%"></div>
-              <div class="bar-label">Mar</div>
-            </div>
-            <div class="bar-col">
-              <div class="bar-val">59.7</div>
-              <div class="bar accent-bar" style="height:68%"></div>
-              <div class="bar-label">Apr</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── SCREEN: DETAIL ── -->
-    <div id="s1-detail" class="screen">
-      <div class="status-bar">
-        <span class="status-time">9:41</span>
-        <div class="status-icons">
-          <svg width="24" height="11" viewBox="0 0 24 11">
-            <rect x="0" y="1" width="20" height="9" rx="2.5" stroke="var(--text-1)" stroke-width="1" fill="none"
-              opacity="0.35" />
-            <rect x="1.5" y="2.5" width="14" height="6" rx="1.5" fill="var(--text-1)" />
-            <path d="M21.5 4v3a1.5 1.5 0 000-3z" fill="var(--text-1)" opacity="0.4" />
-          </svg>
-        </div>
-      </div>
-      <div class="back-header">
-        <button class="back-btn" onclick="p1Show('home')">←</button>
-        <span class="back-title">April 10</span>
-        <div style="width:34px"></div>
-      </div>
-
-      <div class="scroll-area">
-        <div class="detail-type-badge type-race" style="margin-top:16px">
-          <span>RACE</span>
-        </div>
-
-        <div class="detail-hero">
-          <div class="detail-km">21.1<span>km</span></div>
-          <div class="detail-meta">Half Marathon · 8:00 AM</div>
-        </div>
-
-        <div class="detail-stats-row">
-          <div class="detail-stat-cell">
-            <div class="dsc-label">Duration</div>
-            <div class="dsc-value">1:46:22</div>
-          </div>
-          <div class="detail-stat-cell">
-            <div class="dsc-label">Avg Pace</div>
-            <div class="dsc-value accent">5:02</div>
-          </div>
-          <div class="detail-stat-cell">
-            <div class="dsc-label">Calories</div>
-            <div class="dsc-value">1,240</div>
-          </div>
-        </div>
-
-        <div class="detail-pace-chart">
-          <div class="chart-label">Pace / km</div>
-          <div class="bar-chart" style="height:80px">
-            <div class="bar-col">
-              <div class="bar accent-bar" style="height:55%"></div>
-              <div class="bar-label">1</div>
-            </div>
-            <div class="bar-col">
-              <div class="bar accent-bar" style="height:60%"></div>
-              <div class="bar-label">3</div>
-            </div>
-            <div class="bar-col">
-              <div class="bar accent-bar" style="height:65%"></div>
-              <div class="bar-label">5</div>
-            </div>
-            <div class="bar-col">
-              <div class="bar accent-bar" style="height:70%"></div>
-              <div class="bar-label">7</div>
-            </div>
-            <div class="bar-col">
-              <div class="bar accent-bar" style="height:72%"></div>
-              <div class="bar-label">10</div>
-            </div>
-            <div class="bar-col">
-              <div class="bar accent-bar" style="height:75%"></div>
-              <div class="bar-label">13</div>
-            </div>
-            <div class="bar-col">
-              <div class="bar accent-bar" style="height:80%"></div>
-              <div class="bar-label">16</div>
-            </div>
-            <div class="bar-col">
-              <div class="bar accent-bar" style="height:100%"></div>
-              <div class="bar-label">21</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="detail-note">
-          <div class="detail-note-label">Note</div>
-          <div class="detail-note-text">네거티브 스플릿. 후반 5km 가장 빠름.</div>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- /phone-inner -->
+    </div><!-- /phone-inner -->
   </div><!-- /phone -->
   </div>
 
@@ -1765,6 +2002,7 @@
 
         const MONTH_DATA = {
           march: {
+            monthName: '3월',
             label: 'March 2026',
             km: '96.2',
             runCount: '11 runs',
@@ -1848,6 +2086,7 @@
         </div>`
           },
           april: {
+            monthName: '4월',
             label: 'April 2026',
             km: '59.7',
             runCount: '6 runs',
@@ -1937,10 +2176,12 @@
           const d = MONTH_DATA[key];
           const kmEl = document.querySelector('.hero-km-big');
           if (kmEl) kmEl.textContent = d.km;
+          const labelEl = document.getElementById('hero-month-label');
+          if (labelEl) labelEl.textContent = d.monthName;
           const gridEl = document.getElementById('cal-grid-1');
           if (gridEl) gridEl.innerHTML = d.calGrid;
-          const listEl = document.getElementById('bs-list-1');
-          if (listEl) listEl.innerHTML = d.runList;
+          // const listEl = document.getElementById('bs-list-1');
+          // if (listEl) listEl.innerHTML = d.runList;
           const countEl = document.getElementById('bs-count-1');
           if (countEl) countEl.textContent = d.runCount;
         }
