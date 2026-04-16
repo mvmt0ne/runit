@@ -28,6 +28,7 @@
       --surface-4: #C0C0C0;
       --surface-5: #CACACA;
       --accent: #9CFD32;
+      --accent-rgb: 156, 253, 50;
       --accent-dim: rgba(156, 253, 50, 0.2);
       --text-1: #1A1A1A;
       --text-2: #505050;
@@ -756,6 +757,177 @@
       color: var(--text-2);
       transition: color 0.3s;
       cursor: pointer;
+    }
+
+    /* ─── Sort / Filter ────────────────────── */
+    .sf-btn {
+      position: relative;
+    }
+
+    .sf-btn.active {
+      color: var(--accent);
+    }
+
+    .sf-badge {
+      position: absolute;
+      top: -3px;
+      right: -4px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: none;
+    }
+
+    .sf-badge.visible {
+      display: block;
+    }
+
+    .sf-panel {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      background: var(--surface-5);
+      border-bottom: 1px solid rgba(128,128,128,0.12);
+    }
+
+    .sf-panel.open {
+      max-height: 360px;
+    }
+
+    .sf-panel-inner {
+      padding: 14px 20px 16px;
+    }
+
+    /* 정렬 옵션 */
+    .sort-opts {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .sort-opt {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .sort-opt:active {
+      background: rgba(128,128,128,0.12);
+    }
+
+    .sort-opt.active {
+      background: rgba(128,128,128,0.1);
+    }
+
+    .sort-opt-label {
+      font-size: 15px;
+      font-weight: 400;
+      font-family: 'Pretendard Variable', sans-serif;
+      color: var(--text-2);
+      transition: color 0.2s;
+    }
+
+    .sort-opt.active .sort-opt-label {
+      color: var(--text-1);
+      font-weight: 500;
+    }
+
+    .sort-opt-dir {
+      font-size: 12px;
+      color: var(--text-2);
+      font-family: 'Urbanist', sans-serif;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .sort-opt.active .sort-opt-dir {
+      opacity: 1;
+      color: var(--accent);
+    }
+
+    /* 필터 카테고리 */
+    .filter-cats {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .filter-cat {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .filter-cat-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-2);
+      font-family: 'Urbanist', sans-serif;
+      opacity: 0.6;
+    }
+
+    .filter-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .filter-chip {
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 400;
+      font-family: 'Pretendard Variable', sans-serif;
+      color: var(--text-2);
+      background: rgba(128,128,128,0.1);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .filter-chip:active {
+      transform: scale(0.95);
+    }
+
+    .filter-chip.active {
+      color: var(--accent);
+      background: rgba(var(--accent-rgb), 0.12);
+      border-color: var(--accent);
+    }
+
+    .filter-actions {
+      margin-top: 14px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .filter-reset-btn {
+      font-size: 13px;
+      font-family: 'Pretendard Variable', sans-serif;
+      color: var(--text-2);
+      background: none;
+      border: none;
+      padding: 6px 10px;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+
+    /* 빈 결과 */
+    .empty-result {
+      padding: 48px 20px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-2);
+      font-family: 'Pretendard Variable', sans-serif;
+      opacity: 0.5;
     }
 
     .lp-month-section {
@@ -1496,7 +1668,7 @@
             <div class="list-sheet-handle" id="list-sheet-handle-1">
               <div class="list-sheet-title">러닝 활동</div>
               <div class="list-sheet-actions lp-actions">
-                <div class="lp-action-btn">
+                <div class="lp-action-btn sf-btn" id="sort-btn" onclick="togglePanel('sort')">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
                     stroke-linecap="round" stroke-linejoin="round">
                     <path d="M8 6l4-4 4 4" />
@@ -1504,298 +1676,41 @@
                     <path d="M16 18l-4 4-4-4" />
                     <line x1="12" y1="22" x2="12" y2="10" />
                   </svg>
+                  <span class="sf-badge" id="sort-badge"></span>
                 </div>
-                <div class="lp-action-btn">
+                <div class="lp-action-btn sf-btn" id="filter-btn" onclick="togglePanel('filter')">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
                     stroke-linecap="round">
                     <line x1="4" y1="6" x2="20" y2="6" />
                     <line x1="7" y1="12" x2="17" y2="12" />
                     <line x1="10" y1="18" x2="14" y2="18" />
                   </svg>
+                  <span class="sf-badge" id="filter-badge"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 정렬 패널 -->
+            <div class="sf-panel" id="sort-panel">
+              <div class="sf-panel-inner">
+                <div class="sort-opts" id="sort-opts"></div>
+              </div>
+            </div>
+
+            <!-- 필터 패널 -->
+            <div class="sf-panel" id="filter-panel">
+              <div class="sf-panel-inner">
+                <div class="filter-cats" id="filter-cats"></div>
+                <div class="filter-actions">
+                  <button class="filter-reset-btn" onclick="resetFilters()">초기화</button>
                 </div>
               </div>
             </div>
 
             <!-- 시트 본문 -->
-            <div class="list-sheet-content">
-              <div class="lp-month-section">
-                <div class="lp-month-label">4월</div>
-                <div class="lp-month-km">59.7km</div>
-              </div>
-              <div class="lp-list" id="bs-list-1">
-                <div class="lp-row" onclick="p1Show('detail')">
-                  <div class="lp-badge type-race">4/11</div>
-                  <div class="lp-info">
-                    <div class="lp-title-row">
-                      <div class="lp-run-name">2026 인천하프</div>
-                      <div class="lp-run-time">08:00</div>
-                    </div>
-                    <div class="lp-stats">
-                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
-                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
-                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
-                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="lp-row" onclick="p1Show('detail')">
-                  <div class="lp-badge type-jogging">4/10</div>
-                  <div class="lp-info">
-                    <div class="lp-title-row">
-                      <div class="lp-run-name">2026 인천하프</div>
-                      <div class="lp-run-time">08:00</div>
-                    </div>
-                    <div class="lp-stats">
-                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
-                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
-                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
-                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="lp-row" onclick="p1Show('detail')">
-                  <div class="lp-badge type-tempo">4/7</div>
-                  <div class="lp-info">
-                    <div class="lp-title-row">
-                      <div class="lp-run-name">2026 인천하프</div>
-                      <div class="lp-run-time">08:00</div>
-                    </div>
-                    <div class="lp-stats">
-                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
-                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
-                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
-                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="lp-row" onclick="p1Show('detail')">
-                  <div class="lp-badge type-easy">4/5</div>
-                  <div class="lp-info">
-                    <div class="lp-title-row">
-                      <div class="lp-run-name">2026 인천하프</div>
-                      <div class="lp-run-time">08:00</div>
-                    </div>
-                    <div class="lp-stats">
-                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
-                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
-                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
-                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="lp-row" onclick="p1Show('detail')">
-                  <div class="lp-badge type-easy">4/4</div>
-                  <div class="lp-info">
-                    <div class="lp-title-row">
-                      <div class="lp-run-name">2026 인천하프</div>
-                      <div class="lp-run-time">08:00</div>
-                    </div>
-                    <div class="lp-stats">
-                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
-                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
-                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
-                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="lp-row" onclick="p1Show('detail')">
-                  <div class="lp-badge type-easy">4/3</div>
-                  <div class="lp-info">
-                    <div class="lp-title-row">
-                      <div class="lp-run-name">2026 인천하프</div>
-                      <div class="lp-run-time">08:00</div>
-                    </div>
-                    <div class="lp-stats">
-                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
-                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
-                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
-                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 3월 섹션 추가 -->
-              <div class="lp-month-section">
-                <div class="lp-month-label">3월</div>
-                <div class="lp-month-km">96.2km</div>
-              </div>
-              <div class="lp-list">
-                <div class="lp-row" onclick="p1Show('detail')">
-                  <div class="lp-badge type-steady">3/30</div>
-                  <div class="lp-info">
-                    <div class="lp-title-row">
-                      <div class="lp-run-name">2026 인천하프</div>
-                      <div class="lp-run-time">08:00</div>
-                    </div>
-                    <div class="lp-stats">
-                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
-                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
-                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
-                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="lp-row" onclick="p1Show('detail')">
-                  <div class="lp-badge type-steady">3/28</div>
-                  <div class="lp-info">
-                    <div class="lp-title-row">
-                      <div class="lp-run-name">2026 인천하프</div>
-                      <div class="lp-run-time">08:00</div>
-                    </div>
-                    <div class="lp-stats">
-                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
-                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
-                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
-                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="lp-row" onclick="p1Show('detail')">
-                  <div class="lp-badge type-race">3/22</div>
-                  <div class="lp-info">
-                    <div class="lp-title-row">
-                      <div class="lp-run-name">2026 인천하프</div>
-                      <div class="lp-run-time">08:00</div>
-                    </div>
-                    <div class="lp-stats">
-                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
-                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
-                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
-                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="lp-row" onclick="p1Show('detail')">
-                  <div class="lp-badge type-steady">3/20</div>
-                  <div class="lp-info">
-                    <div class="lp-title-row">
-                      <div class="lp-run-name">2026 인천하프</div>
-                      <div class="lp-run-time">08:00</div>
-                    </div>
-                    <div class="lp-stats">
-                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
-                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
-                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
-                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="lp-row" onclick="p1Show('detail')">
-                  <div class="lp-badge type-jogging">3/19</div>
-                  <div class="lp-info">
-                    <div class="lp-title-row">
-                      <div class="lp-run-name">2026 인천하프</div>
-                      <div class="lp-run-time">08:00</div>
-                    </div>
-                    <div class="lp-stats">
-                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
-                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
-                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
-                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="lp-row" onclick="p1Show('detail')">
-                  <div class="lp-badge type-easy">3/13</div>
-                  <div class="lp-info">
-                    <div class="lp-title-row">
-                      <div class="lp-run-name">2026 인천하프</div>
-                      <div class="lp-run-time">08:00</div>
-                    </div>
-                    <div class="lp-stats">
-                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
-                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
-                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
-                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="lp-row" onclick="p1Show('detail')">
-                  <div class="lp-badge type-easy">3/9</div>
-                  <div class="lp-info">
-                    <div class="lp-title-row">
-                      <div class="lp-run-name">2026 인천하프</div>
-                      <div class="lp-run-time">08:00</div>
-                    </div>
-                    <div class="lp-stats">
-                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
-                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
-                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
-                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 2월 섹션 추가 -->
-              <div class="lp-month-section">
-                <div class="lp-month-label">2월</div>
-                <div class="lp-month-km">68.1km</div>
-              </div>
-              <div class="lp-list">
-                <div class="lp-row" onclick="p1Show('detail')">
-                  <div class="lp-badge type-long">2/25</div>
-                  <div class="lp-info">
-                    <div class="lp-title-row">
-                      <div class="lp-run-name">2026 인천하프</div>
-                      <div class="lp-run-time">08:00</div>
-                    </div>
-                    <div class="lp-stats">
-                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
-                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
-                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
-                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="lp-row" onclick="p1Show('detail')">
-                  <div class="lp-badge type-tempo">2/18</div>
-                  <div class="lp-info">
-                    <div class="lp-title-row">
-                      <div class="lp-run-name">2026 인천하프</div>
-                      <div class="lp-run-time">08:00</div>
-                    </div>
-                    <div class="lp-stats">
-                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
-                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
-                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
-                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="lp-row" onclick="p1Show('detail')">
-                  <div class="lp-badge type-steady">2/10</div>
-                  <div class="lp-info">
-                    <div class="lp-title-row">
-                      <div class="lp-run-name">2026 인천하프</div>
-                      <div class="lp-run-time">08:00</div>
-                    </div>
-                    <div class="lp-stats">
-                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
-                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
-                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
-                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="lp-row" onclick="p1Show('detail')">
-                  <div class="lp-badge type-easy">2/2</div>
-                  <div class="lp-info">
-                    <div class="lp-title-row">
-                      <div class="lp-run-name">2026 인천하프</div>
-                      <div class="lp-run-time">08:00</div>
-                    </div>
-                    <div class="lp-stats">
-                      <div class="lp-stat"><strong>21.2</strong><span>km</span></div>
-                      <div class="lp-stat"><strong>5:02</strong><span>/km</span></div>
-                      <div class="lp-stat"><strong>176</strong><span>bpm</span></div>
-                      <div class="lp-stat"><strong>174</strong><span>spm</span></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div><!-- /list-sheet-content -->
+            <div class="list-sheet-content" id="runs-list-container">
+              <!-- 동적 렌더링 -->
+            </div><\!-- /runs-list-container -->
 
           </div><!-- /list-sheet -->
 
@@ -2296,6 +2211,292 @@
             const dx = e.clientX - startX;
             if (Math.abs(dx) > 40) navMonth(dx < 0 ? 1 : -1);
           });
+        })();
+      </script>
+
+      <script>
+        /* ═══════════════════════════════════════
+           RUNS DATA
+        ═══════════════════════════════════════ */
+        const RUNS = [
+          // 4월
+          { id:1,  date:'2026-04-11', label:'4/11', month:4, type:'race',    name:'2026 인천하프',  time:'08:00', km:21.2, pace:'5:02', paceV:302, bpm:176, spm:174 },
+          { id:2,  date:'2026-04-10', label:'4/10', month:4, type:'jogging', name:'회복 조깅',      time:'07:30', km:5.4,  pace:'6:52', paceV:412, bpm:142, spm:163 },
+          { id:3,  date:'2026-04-07', label:'4/7',  month:4, type:'tempo',   name:'템포 런',        time:'06:15', km:8.0,  pace:'4:45', paceV:285, bpm:169, spm:180 },
+          { id:4,  date:'2026-04-05', label:'4/5',  month:4, type:'easy',    name:'이지 런',        time:'06:30', km:7.2,  pace:'6:15', paceV:375, bpm:138, spm:162 },
+          { id:5,  date:'2026-04-04', label:'4/4',  month:4, type:'easy',    name:'이지 런',        time:'18:00', km:6.8,  pace:'6:20', paceV:380, bpm:135, spm:160 },
+          { id:6,  date:'2026-04-03', label:'4/3',  month:4, type:'easy',    name:'이지 런',        time:'07:00', km:5.0,  pace:'6:40', paceV:400, bpm:132, spm:158 },
+          // 3월
+          { id:7,  date:'2026-03-30', label:'3/30', month:3, type:'steady',  name:'스테디 런',      time:'07:30', km:10.5, pace:'5:30', paceV:330, bpm:158, spm:170 },
+          { id:8,  date:'2026-03-28', label:'3/28', month:3, type:'steady',  name:'스테디 런',      time:'07:00', km:9.8,  pace:'5:38', paceV:338, bpm:155, spm:168 },
+          { id:9,  date:'2026-03-22', label:'3/22', month:3, type:'race',    name:'서울 10K',       time:'09:00', km:10.0, pace:'4:52', paceV:292, bpm:172, spm:177 },
+          { id:10, date:'2026-03-20', label:'3/20', month:3, type:'steady',  name:'스테디 런',      time:'07:15', km:11.2, pace:'5:25', paceV:325, bpm:160, spm:171 },
+          { id:11, date:'2026-03-19', label:'3/19', month:3, type:'jogging', name:'회복 조깅',      time:'07:30', km:4.8,  pace:'7:05', paceV:425, bpm:138, spm:161 },
+          { id:12, date:'2026-03-13', label:'3/13', month:3, type:'easy',    name:'이지 런',        time:'06:45', km:8.5,  pace:'6:08', paceV:368, bpm:141, spm:164 },
+          { id:13, date:'2026-03-09', label:'3/9',  month:3, type:'easy',    name:'이지 런',        time:'07:00', km:6.0,  pace:'6:22', paceV:382, bpm:136, spm:160 },
+          // 2월
+          { id:14, date:'2026-02-25', label:'2/25', month:2, type:'long',    name:'롱 런',          time:'07:00', km:18.0, pace:'5:48', paceV:348, bpm:155, spm:168 },
+          { id:15, date:'2026-02-18', label:'2/18', month:2, type:'tempo',   name:'템포 런',        time:'06:30', km:7.5,  pace:'4:52', paceV:292, bpm:167, spm:178 },
+          { id:16, date:'2026-02-10', label:'2/10', month:2, type:'steady',  name:'스테디 런',      time:'07:15', km:9.2,  pace:'5:42', paceV:342, bpm:152, spm:167 },
+          { id:17, date:'2026-02-02', label:'2/2',  month:2, type:'easy',    name:'이지 런',        time:'08:00', km:5.5,  pace:'6:28', paceV:388, bpm:133, spm:159 },
+        ];
+
+        const MONTH_LABELS = { 4:'4월', 3:'3월', 2:'2월' };
+
+        /* ═══════════════════════════════════════
+           SORT / FILTER STATE
+        ═══════════════════════════════════════ */
+        let sortState  = { key: 'date', asc: false }; // 최신순 기본
+        let filterState = { type: null, dist: null, month: null, bpm: null, pace: null };
+        let openPanel  = null; // 'sort' | 'filter' | null
+
+        const SORT_OPTS = [
+          { key:'date',  label:'날짜',   asc:'오래된순', desc:'최신순'  },
+          { key:'km',    label:'거리',   asc:'짧은순',   desc:'긴 순'   },
+          { key:'paceV', label:'페이스', asc:'느린순',   desc:'빠른순'  },
+          { key:'bpm',   label:'심박수', asc:'낮은순',   desc:'높은순'  },
+          { key:'spm',   label:'케이던스',asc:'낮은순',  desc:'높은순'  },
+        ];
+
+        const FILTER_CATS = [
+          {
+            key: 'type', label: '타입',
+            opts: [
+              { val:'race',    label:'레이스' },
+              { val:'tempo',   label:'템포'   },
+              { val:'steady',  label:'스테디' },
+              { val:'easy',    label:'이지'   },
+              { val:'jogging', label:'조깅'   },
+              { val:'long',    label:'롱런'   },
+            ]
+          },
+          {
+            key: 'dist', label: '거리',
+            opts: [
+              { val:'lt5',   label:'5km 미만'  },
+              { val:'5to10', label:'5–10km'    },
+              { val:'gt10',  label:'10km 이상' },
+            ]
+          },
+          {
+            key: 'month', label: '월',
+            opts: [
+              { val:4, label:'4월' },
+              { val:3, label:'3월' },
+              { val:2, label:'2월' },
+            ]
+          },
+          {
+            key: 'bpm', label: '심박수 구간',
+            opts: [
+              { val:'z1', label:'Zone 1 ~119' },
+              { val:'z2', label:'Zone 2 120–139' },
+              { val:'z3', label:'Zone 3 140–159' },
+              { val:'z4', label:'Zone 4 160–174' },
+              { val:'z5', label:'Zone 5 175+' },
+            ]
+          },
+          {
+            key: 'pace', label: '페이스 구간',
+            opts: [
+              { val:'fast',   label:'~4:59' },
+              { val:'mid',    label:'5:00–5:59' },
+              { val:'steady', label:'6:00–6:59' },
+              { val:'slow',   label:'7:00+' },
+            ]
+          },
+        ];
+
+        /* ═══════════════════════════════════════
+           PANEL TOGGLE
+        ═══════════════════════════════════════ */
+        function togglePanel(name) {
+          if (openPanel === name) {
+            closePanel();
+          } else {
+            closePanel();
+            openPanel = name;
+            document.getElementById(name + '-panel').classList.add('open');
+            document.getElementById(name + '-btn').classList.add('active');
+          }
+        }
+
+        function closePanel() {
+          if (!openPanel) return;
+          document.getElementById(openPanel + '-panel').classList.remove('open');
+          document.getElementById(openPanel + '-btn').classList.remove('active');
+          openPanel = null;
+        }
+
+        /* ═══════════════════════════════════════
+           SORT PANEL RENDER
+        ═══════════════════════════════════════ */
+        function renderSortPanel() {
+          const container = document.getElementById('sort-opts');
+          container.innerHTML = SORT_OPTS.map(opt => {
+            const active = sortState.key === opt.key;
+            const dir = active ? (sortState.asc ? opt.asc : opt.desc) : '';
+            return `<div class="sort-opt ${active ? 'active' : ''}" onclick="selectSort('${opt.key}')">
+              <span class="sort-opt-label">${opt.label}</span>
+              <span class="sort-opt-dir">${dir}</span>
+            </div>`;
+          }).join('');
+        }
+
+        function selectSort(key) {
+          if (sortState.key === key) {
+            sortState.asc = !sortState.asc; // 방향 토글
+          } else {
+            sortState.key = key;
+            sortState.asc = key === 'paceV'; // 페이스는 낮을수록 빠름
+          }
+          renderSortPanel();
+          renderList();
+          updateBadges();
+        }
+
+        /* ═══════════════════════════════════════
+           FILTER PANEL RENDER
+        ═══════════════════════════════════════ */
+        function renderFilterPanel() {
+          const container = document.getElementById('filter-cats');
+          container.innerHTML = FILTER_CATS.map(cat => `
+            <div class="filter-cat">
+              <div class="filter-cat-label">${cat.label}</div>
+              <div class="filter-chips">
+                ${cat.opts.map(opt => {
+                  const active = filterState[cat.key] == opt.val;
+                  return `<div class="filter-chip ${active ? 'active' : ''}"
+                    onclick="selectFilter('${cat.key}', '${opt.val}')">${opt.label}</div>`;
+                }).join('')}
+              </div>
+            </div>
+          `).join('');
+        }
+
+        function selectFilter(catKey, val) {
+          filterState[catKey] = filterState[catKey] == val ? null : val;
+          renderFilterPanel();
+          renderList();
+          updateBadges();
+        }
+
+        function resetFilters() {
+          Object.keys(filterState).forEach(k => filterState[k] = null);
+          renderFilterPanel();
+          renderList();
+          updateBadges();
+        }
+
+        /* ═══════════════════════════════════════
+           BADGES
+        ═══════════════════════════════════════ */
+        function updateBadges() {
+          const sortDefault = sortState.key === 'date' && !sortState.asc;
+          document.getElementById('sort-badge').classList.toggle('visible', !sortDefault);
+
+          const hasFilter = Object.values(filterState).some(v => v !== null);
+          document.getElementById('filter-badge').classList.toggle('visible', hasFilter);
+        }
+
+        /* ═══════════════════════════════════════
+           FILTER LOGIC
+        ═══════════════════════════════════════ */
+        function applyFilters(runs) {
+          return runs.filter(r => {
+            if (filterState.type   && r.type !== filterState.type) return false;
+            if (filterState.month  && r.month != +filterState.month) return false;
+            if (filterState.dist) {
+              if (filterState.dist === 'lt5'   && r.km >= 5)  return false;
+              if (filterState.dist === '5to10' && (r.km < 5 || r.km >= 10)) return false;
+              if (filterState.dist === 'gt10'  && r.km < 10) return false;
+            }
+            if (filterState.bpm) {
+              const z = { z1:[0,119], z2:[120,139], z3:[140,159], z4:[160,174], z5:[175,999] }[filterState.bpm];
+              if (r.bpm < z[0] || r.bpm > z[1]) return false;
+            }
+            if (filterState.pace) {
+              const p = { fast:[0,299], mid:[300,359], steady:[360,419], slow:[420,999] }[filterState.pace];
+              if (r.paceV < p[0] || r.paceV > p[1]) return false;
+            }
+            return true;
+          });
+        }
+
+        /* ═══════════════════════════════════════
+           SORT LOGIC
+        ═══════════════════════════════════════ */
+        function applySort(runs) {
+          const { key, asc } = sortState;
+          return [...runs].sort((a, b) => {
+            let va = a[key], vb = b[key];
+            if (key === 'date') { va = va.replace(/-/g,''); vb = vb.replace(/-/g,''); }
+            return asc ? (va > vb ? 1 : -1) : (va < vb ? 1 : -1);
+          });
+        }
+
+        /* ═══════════════════════════════════════
+           RENDER LIST
+        ═══════════════════════════════════════ */
+        function renderList() {
+          const container = document.getElementById('runs-list-container');
+          const sorted  = applySort(applyFilters(RUNS));
+
+          if (sorted.length === 0) {
+            container.innerHTML = '<div class="empty-result">해당하는 활동이 없습니다</div>';
+            return;
+          }
+
+          // 정렬 기준이 날짜면 월별 그룹핑, 아니면 단일 리스트
+          const groupByMonth = sortState.key === 'date';
+
+          if (groupByMonth) {
+            const groups = {};
+            sorted.forEach(r => {
+              if (!groups[r.month]) groups[r.month] = [];
+              groups[r.month].push(r);
+            });
+            const months = Object.keys(groups).sort((a,b) => sortState.asc ? a-b : b-a);
+            container.innerHTML = months.map(m => {
+              const runs = groups[m];
+              const totalKm = runs.reduce((s, r) => s + r.km, 0).toFixed(1);
+              return `
+                <div class="lp-month-section">
+                  <div class="lp-month-label">${MONTH_LABELS[m]}</div>
+                  <div class="lp-month-km">${totalKm}km</div>
+                </div>
+                <div class="lp-list">${runs.map(rowHTML).join('')}</div>`;
+            }).join('');
+          } else {
+            container.innerHTML = `<div class="lp-list">${sorted.map(rowHTML).join('')}</div>`;
+          }
+        }
+
+        function rowHTML(r) {
+          return `<div class="lp-row" onclick="p1Show('detail')">
+            <div class="lp-badge type-${r.type}">${r.label}</div>
+            <div class="lp-info">
+              <div class="lp-title-row">
+                <div class="lp-run-name">${r.name}</div>
+                <div class="lp-run-time">${r.time}</div>
+              </div>
+              <div class="lp-stats">
+                <div class="lp-stat"><strong>${r.km}</strong><span>km</span></div>
+                <div class="lp-stat"><strong>${r.pace}</strong><span>/km</span></div>
+                <div class="lp-stat"><strong>${r.bpm}</strong><span>bpm</span></div>
+                <div class="lp-stat"><strong>${r.spm}</strong><span>spm</span></div>
+              </div>
+            </div>
+          </div>`;
+        }
+
+        /* ═══════════════════════════════════════
+           INIT
+        ═══════════════════════════════════════ */
+        (function init() {
+          renderSortPanel();
+          renderFilterPanel();
+          renderList();
         })();
       </script>
 
