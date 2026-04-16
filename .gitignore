@@ -1,0 +1,7 @@
+# Claude / Cowork
+CLAUDE.md
+*.md
+agent/
+
+# macOS
+.DS_Store

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="light">
+<html lang="ko" data-theme="dark">
 
 <head>
   <meta charset="UTF-8">
@@ -665,6 +665,10 @@
       transition: background 0.3s;
     }
 
+    [data-theme="dark"] .list-sheet {
+      background: var(--surface-1);
+    }
+
     /* 섹션 헤더 */
     .list-sheet-handle {
       height: 54px;
@@ -678,6 +682,10 @@
       z-index: 10;
       background: #CACACA;
       transition: background 0.3s;
+    }
+
+    [data-theme="dark"] .list-sheet-handle {
+      background: var(--surface-1);
     }
 
     .list-sheet-title {
@@ -765,6 +773,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+    }
+
+    [data-theme="dark"] .lp-month-section {
+      background: var(--surface-1);
     }
 
     .lp-month-label {
