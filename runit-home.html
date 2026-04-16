@@ -113,7 +113,8 @@
     }
 
     .dynamic-island {
-      display: none; /* 실제 기기에서는 OS가 처리 */
+      display: none;
+      /* 실제 기기에서는 OS가 처리 */
     }
 
     /* ─── Status bar ──────────────────────── */
@@ -1334,10 +1335,10 @@
     <div class="phone-inner">
       <div class="dynamic-island"></div>
 
-        <!-- ── SCREEN: HOME ── -->
-        <div id="s1-home" class="screen active">
+      <!-- ── SCREEN: HOME ── -->
+      <div id="s1-home" class="screen active">
 
-          <!-- Status bar -->
+        <!-- Status bar
           <div class="status-bar">
             <span class="status-time">9:41</span>
             <div class="status-icons">
@@ -1354,420 +1355,420 @@
                 <path d="M21.5 4v3a1.5 1.5 0 000-3z" fill="var(--text-1)" opacity="0.4" />
               </svg>
             </div>
-          </div>
+          </div> -->
 
-          <!-- 캘린더 + 바텀 시트 -->
-          <div class="cal-area">
+        <!-- 캘린더 + 바텀 시트 -->
+        <div class="cal-area">
 
-            <!-- 캘린더 페이지 (캘린더 하단 정렬) -->
-            <div class="cal-page">
+          <!-- 캘린더 페이지 (캘린더 하단 정렬) -->
+          <div class="cal-page">
 
-              <div class="hero-section">
-                <div class="hero-title">
-                  <div class="hero-title-line">4월, 워니님의</div>
-                  <div class="hero-title-line">마일리지는</div>
-                </div>
-                <div class="theme-toggle" onclick="toggleTheme()">
-                  <div class="t-track">
-                    <div class="t-zone-l">
-                      <svg class="t-icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                        <path
-                          d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-13a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V5a1 1 0 0 1 1-1zm0 14a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1zm9-7a1 1 0 0 1-1 1h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 1 1zM4 12a1 1 0 0 1-1 1H2a1 1 0 1 1 0-2h1a1 1 0 0 1 1 1zm14.657-5.657a1 1 0 0 1 0 1.414l-.707.707a1 1 0 1 1-1.414-1.414l.707-.707a1 1 0 0 1 1.414 0zM7.05 16.95a1 1 0 0 1 0 1.414l-.707.707a1 1 0 1 1-1.414-1.414l.707-.707a1 1 0 0 1 1.414 0zm11.314 0a1 1 0 0 1-1.414 0l-.707-.707a1 1 0 0 1 1.414-1.414l.707.707a1 1 0 0 1 0 1.414zM7.05 7.05a1 1 0 0 1-1.414 0l-.707-.707A1 1 0 0 1 6.343 4.93l.707.707a1 1 0 0 1 0 1.414z" />
-                      </svg>
-                    </div>
-                    <div class="t-zone-r">
-                      <svg class="t-icon-moon" width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                      </svg>
-                    </div>
-                    <div class="t-thumb"></div>
-                  </div>
-                </div>
+            <div class="hero-section">
+              <div class="hero-title">
+                <div class="hero-title-line">4월, 워니님의</div>
+                <div class="hero-title-line">마일리지는</div>
               </div>
-
-              <div class="hero-km-row" onclick="p1Show('stats')">
-                <span class="hero-km-big">59.7</span>
-                <span class="hero-km-unit">km</span>
-              </div>
-
-              <!-- 가변 여백: 히어로↔캘린더 사이 -->
-              <div class="cal-flex-spacer"></div>
-
-              <div class="calendar" id="calendar-1">
-                <div class="cal-weekdays">
-                  <div class="cal-wd">일</div>
-                  <div class="cal-wd">월</div>
-                  <div class="cal-wd">화</div>
-                  <div class="cal-wd">수</div>
-                  <div class="cal-wd">목</div>
-                  <div class="cal-wd">금</div>
-                  <div class="cal-wd">토</div>
-                </div>
-                <div class="cal-slide-wrap" id="cal-slide-wrap">
-                  <div class="cal-grid" id="cal-grid-1">
-                    <div class="cal-day"></div>
-                    <div class="cal-day"></div>
-                    <div class="cal-day"></div>
-                    <div class="cal-day type-none"><span class="day-num">1</span></div>
-                    <div class="cal-day type-none"><span class="day-num">2</span></div>
-                    <div class="cal-day type-easy" onclick="p1Show('detail')"><span class="day-note">8</span></div>
-                    <div class="cal-day type-easy" onclick="p1Show('detail')"><span class="day-note">10</span></div>
-                    <div class="cal-day type-easy" onclick="p1Show('detail')"><span class="day-note">9</span></div>
-                    <div class="cal-day type-none"><span class="day-num">6</span></div>
-                    <div class="cal-day type-tempo" onclick="p1Show('detail')"><span class="day-note">T</span></div>
-                    <div class="cal-day type-none"><span class="day-num">8</span></div>
-                    <div class="cal-day type-none"><span class="day-num">9</span></div>
-                    <div class="cal-day type-steady" onclick="p1Show('detail')"><span class="day-note">5</span></div>
-                    <div class="cal-day type-race" onclick="p1Show('detail')"><span class="day-note">H</span></div>
-                    <div class="cal-day type-none"><span class="day-num">12</span></div>
-                    <div class="cal-day type-none today"><span class="day-num">13</span></div>
-                    <div class="cal-day type-none"><span class="day-num">14</span></div>
-                    <div class="cal-day type-none"><span class="day-num">15</span></div>
-                    <div class="cal-day type-none"><span class="day-num">16</span></div>
-                    <div class="cal-day type-none"><span class="day-num">17</span></div>
-                    <div class="cal-day type-none"><span class="day-num">18</span></div>
-                    <div class="cal-day type-none"><span class="day-num">19</span></div>
-                    <div class="cal-day type-none"><span class="day-num">20</span></div>
-                    <div class="cal-day type-none"><span class="day-num">21</span></div>
-                    <div class="cal-day type-none"><span class="day-num">22</span></div>
-                    <div class="cal-day type-none"><span class="day-num">23</span></div>
-                    <div class="cal-day type-none"><span class="day-num">24</span></div>
-                    <div class="cal-day type-none"><span class="day-num">25</span></div>
-                    <div class="cal-day type-none"><span class="day-num">26</span></div>
-                    <div class="cal-day type-none"><span class="day-num">27</span></div>
-                    <div class="cal-day type-none"><span class="day-num">28</span></div>
-                    <div class="cal-day type-none"><span class="day-num">29</span></div>
-                    <div class="cal-day type-none"><span class="day-num">30</span></div>
-                    <div class="cal-day"></div>
-                    <div class="cal-day"></div>
-                  </div>
-                </div>
-              </div>
-
-            </div><!-- /cal-page -->
-
-            <!-- 러닝 활동 목록 (인라인) -->
-            <div class="list-sheet" id="list-sheet-1">
-
-              <!-- 섹션 헤더 -->
-              <div class="list-sheet-handle" id="list-sheet-handle-1">
-                <div class="list-sheet-title">러닝 활동</div>
-                <div class="list-sheet-actions lp-actions">
-                  <div class="lp-action-btn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-                      stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M8 6l4-4 4 4" />
-                      <line x1="12" y1="2" x2="12" y2="14" />
-                      <path d="M16 18l-4 4-4-4" />
-                      <line x1="12" y1="22" x2="12" y2="10" />
+              <div class="theme-toggle" onclick="toggleTheme()">
+                <div class="t-track">
+                  <div class="t-zone-l">
+                    <svg class="t-icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                      <path
+                        d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-13a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V5a1 1 0 0 1 1-1zm0 14a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1zm9-7a1 1 0 0 1-1 1h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 1 1zM4 12a1 1 0 0 1-1 1H2a1 1 0 1 1 0-2h1a1 1 0 0 1 1 1zm14.657-5.657a1 1 0 0 1 0 1.414l-.707.707a1 1 0 1 1-1.414-1.414l.707-.707a1 1 0 0 1 1.414 0zM7.05 16.95a1 1 0 0 1 0 1.414l-.707.707a1 1 0 1 1-1.414-1.414l.707-.707a1 1 0 0 1 1.414 0zm11.314 0a1 1 0 0 1-1.414 0l-.707-.707a1 1 0 0 1 1.414-1.414l.707.707a1 1 0 0 1 0 1.414zM7.05 7.05a1 1 0 0 1-1.414 0l-.707-.707A1 1 0 0 1 6.343 4.93l.707.707a1 1 0 0 1 0 1.414z" />
                     </svg>
                   </div>
-                  <div class="lp-action-btn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-                      stroke-linecap="round">
-                      <line x1="4" y1="6" x2="20" y2="6" />
-                      <line x1="7" y1="12" x2="17" y2="12" />
-                      <line x1="10" y1="18" x2="14" y2="18" />
+                  <div class="t-zone-r">
+                    <svg class="t-icon-moon" width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                     </svg>
                   </div>
+                  <div class="t-thumb"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-km-row" onclick="p1Show('stats')">
+              <span class="hero-km-big">59.7</span>
+              <span class="hero-km-unit">km</span>
+            </div>
+
+            <!-- 가변 여백: 히어로↔캘린더 사이 -->
+            <div class="cal-flex-spacer"></div>
+
+            <div class="calendar" id="calendar-1">
+              <div class="cal-weekdays">
+                <div class="cal-wd">일</div>
+                <div class="cal-wd">월</div>
+                <div class="cal-wd">화</div>
+                <div class="cal-wd">수</div>
+                <div class="cal-wd">목</div>
+                <div class="cal-wd">금</div>
+                <div class="cal-wd">토</div>
+              </div>
+              <div class="cal-slide-wrap" id="cal-slide-wrap">
+                <div class="cal-grid" id="cal-grid-1">
+                  <div class="cal-day"></div>
+                  <div class="cal-day"></div>
+                  <div class="cal-day"></div>
+                  <div class="cal-day type-none"><span class="day-num">1</span></div>
+                  <div class="cal-day type-none"><span class="day-num">2</span></div>
+                  <div class="cal-day type-easy" onclick="p1Show('detail')"><span class="day-note">8</span></div>
+                  <div class="cal-day type-easy" onclick="p1Show('detail')"><span class="day-note">10</span></div>
+                  <div class="cal-day type-easy" onclick="p1Show('detail')"><span class="day-note">9</span></div>
+                  <div class="cal-day type-none"><span class="day-num">6</span></div>
+                  <div class="cal-day type-tempo" onclick="p1Show('detail')"><span class="day-note">T</span></div>
+                  <div class="cal-day type-none"><span class="day-num">8</span></div>
+                  <div class="cal-day type-none"><span class="day-num">9</span></div>
+                  <div class="cal-day type-steady" onclick="p1Show('detail')"><span class="day-note">5</span></div>
+                  <div class="cal-day type-race" onclick="p1Show('detail')"><span class="day-note">H</span></div>
+                  <div class="cal-day type-none"><span class="day-num">12</span></div>
+                  <div class="cal-day type-none today"><span class="day-num">13</span></div>
+                  <div class="cal-day type-none"><span class="day-num">14</span></div>
+                  <div class="cal-day type-none"><span class="day-num">15</span></div>
+                  <div class="cal-day type-none"><span class="day-num">16</span></div>
+                  <div class="cal-day type-none"><span class="day-num">17</span></div>
+                  <div class="cal-day type-none"><span class="day-num">18</span></div>
+                  <div class="cal-day type-none"><span class="day-num">19</span></div>
+                  <div class="cal-day type-none"><span class="day-num">20</span></div>
+                  <div class="cal-day type-none"><span class="day-num">21</span></div>
+                  <div class="cal-day type-none"><span class="day-num">22</span></div>
+                  <div class="cal-day type-none"><span class="day-num">23</span></div>
+                  <div class="cal-day type-none"><span class="day-num">24</span></div>
+                  <div class="cal-day type-none"><span class="day-num">25</span></div>
+                  <div class="cal-day type-none"><span class="day-num">26</span></div>
+                  <div class="cal-day type-none"><span class="day-num">27</span></div>
+                  <div class="cal-day type-none"><span class="day-num">28</span></div>
+                  <div class="cal-day type-none"><span class="day-num">29</span></div>
+                  <div class="cal-day type-none"><span class="day-num">30</span></div>
+                  <div class="cal-day"></div>
+                  <div class="cal-day"></div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /cal-page -->
+
+          <!-- 러닝 활동 목록 (인라인) -->
+          <div class="list-sheet" id="list-sheet-1">
+
+            <!-- 섹션 헤더 -->
+            <div class="list-sheet-handle" id="list-sheet-handle-1">
+              <div class="list-sheet-title">러닝 활동</div>
+              <div class="list-sheet-actions lp-actions">
+                <div class="lp-action-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M8 6l4-4 4 4" />
+                    <line x1="12" y1="2" x2="12" y2="14" />
+                    <path d="M16 18l-4 4-4-4" />
+                    <line x1="12" y1="22" x2="12" y2="10" />
+                  </svg>
+                </div>
+                <div class="lp-action-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round">
+                    <line x1="4" y1="6" x2="20" y2="6" />
+                    <line x1="7" y1="12" x2="17" y2="12" />
+                    <line x1="10" y1="18" x2="14" y2="18" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- 시트 본문 -->
+            <div class="list-sheet-content">
+              <div class="lp-month-section">
+                <div class="lp-month-label">4월</div>
+              </div>
+              <div class="lp-list" id="bs-list-1">
+                <div class="lp-row" onclick="p1Show('detail')">
+                  <div class="lp-badge type-race">4/11</div>
+                  <div class="lp-info">
+                    <div class="lp-run-name">2026 Incheon half marathon</div>
+                    <div class="lp-stats">
+                      <div class="lp-stat"><strong>21.1</strong><span> km</span></div>
+                      <div class="lp-stat"><strong>5:02</strong><span> /km</span></div>
+                      <div class="lp-stat"><strong>176</strong><span> bpm</span></div>
+                      <div class="lp-stat"><strong>174</strong><span> spm</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="lp-row" onclick="p1Show('detail')">
+                  <div class="lp-badge type-steady">4/10</div>
+                  <div class="lp-info">
+                    <div class="lp-run-name">Steady Run</div>
+                    <div class="lp-stats">
+                      <div class="lp-stat"><strong>5.4</strong><span> km</span></div>
+                      <div class="lp-stat"><strong>5:59</strong><span> /km</span></div>
+                      <div class="lp-stat"><strong>158</strong><span> bpm</span></div>
+                      <div class="lp-stat"><strong>170</strong><span> spm</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="lp-row" onclick="p1Show('detail')">
+                  <div class="lp-badge type-tempo">4/7</div>
+                  <div class="lp-info">
+                    <div class="lp-run-name">Tempo Run</div>
+                    <div class="lp-stats">
+                      <div class="lp-stat"><strong>6.0</strong><span> km</span></div>
+                      <div class="lp-stat"><strong>5:47</strong><span> /km</span></div>
+                      <div class="lp-stat"><strong>165</strong><span> bpm</span></div>
+                      <div class="lp-stat"><strong>172</strong><span> spm</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="lp-row" onclick="p1Show('detail')">
+                  <div class="lp-badge type-easy">4/5</div>
+                  <div class="lp-info">
+                    <div class="lp-run-name">Easy Run</div>
+                    <div class="lp-stats">
+                      <div class="lp-stat"><strong>9.0</strong><span> km</span></div>
+                      <div class="lp-stat"><strong>6:06</strong><span> /km</span></div>
+                      <div class="lp-stat"><strong>148</strong><span> bpm</span></div>
+                      <div class="lp-stat"><strong>168</strong><span> spm</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="lp-row" onclick="p1Show('detail')">
+                  <div class="lp-badge type-easy">4/4</div>
+                  <div class="lp-info">
+                    <div class="lp-run-name">Easy Run</div>
+                    <div class="lp-stats">
+                      <div class="lp-stat"><strong>10.2</strong><span> km</span></div>
+                      <div class="lp-stat"><strong>5:51</strong><span> /km</span></div>
+                      <div class="lp-stat"><strong>152</strong><span> bpm</span></div>
+                      <div class="lp-stat"><strong>169</strong><span> spm</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="lp-row" onclick="p1Show('detail')">
+                  <div class="lp-badge type-easy">4/3</div>
+                  <div class="lp-info">
+                    <div class="lp-run-name">Easy Run</div>
+                    <div class="lp-stats">
+                      <div class="lp-stat"><strong>8.2</strong><span> km</span></div>
+                      <div class="lp-stat"><strong>6:12</strong><span> /km</span></div>
+                      <div class="lp-stat"><strong>145</strong><span> bpm</span></div>
+                      <div class="lp-stat"><strong>166</strong><span> spm</span></div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <!-- 시트 본문 -->
-              <div class="list-sheet-content">
-                <div class="lp-month-section">
-                  <div class="lp-month-label">4월</div>
-                </div>
-                <div class="lp-list" id="bs-list-1">
-                  <div class="lp-row" onclick="p1Show('detail')">
-                    <div class="lp-badge type-race">4/11</div>
-                    <div class="lp-info">
-                      <div class="lp-run-name">2026 Incheon half marathon</div>
-                      <div class="lp-stats">
-                        <div class="lp-stat"><strong>21.1</strong><span> km</span></div>
-                        <div class="lp-stat"><strong>5:02</strong><span> /km</span></div>
-                        <div class="lp-stat"><strong>176</strong><span> bpm</span></div>
-                        <div class="lp-stat"><strong>174</strong><span> spm</span></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="lp-row" onclick="p1Show('detail')">
-                    <div class="lp-badge type-steady">4/10</div>
-                    <div class="lp-info">
-                      <div class="lp-run-name">Steady Run</div>
-                      <div class="lp-stats">
-                        <div class="lp-stat"><strong>5.4</strong><span> km</span></div>
-                        <div class="lp-stat"><strong>5:59</strong><span> /km</span></div>
-                        <div class="lp-stat"><strong>158</strong><span> bpm</span></div>
-                        <div class="lp-stat"><strong>170</strong><span> spm</span></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="lp-row" onclick="p1Show('detail')">
-                    <div class="lp-badge type-tempo">4/7</div>
-                    <div class="lp-info">
-                      <div class="lp-run-name">Tempo Run</div>
-                      <div class="lp-stats">
-                        <div class="lp-stat"><strong>6.0</strong><span> km</span></div>
-                        <div class="lp-stat"><strong>5:47</strong><span> /km</span></div>
-                        <div class="lp-stat"><strong>165</strong><span> bpm</span></div>
-                        <div class="lp-stat"><strong>172</strong><span> spm</span></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="lp-row" onclick="p1Show('detail')">
-                    <div class="lp-badge type-easy">4/5</div>
-                    <div class="lp-info">
-                      <div class="lp-run-name">Easy Run</div>
-                      <div class="lp-stats">
-                        <div class="lp-stat"><strong>9.0</strong><span> km</span></div>
-                        <div class="lp-stat"><strong>6:06</strong><span> /km</span></div>
-                        <div class="lp-stat"><strong>148</strong><span> bpm</span></div>
-                        <div class="lp-stat"><strong>168</strong><span> spm</span></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="lp-row" onclick="p1Show('detail')">
-                    <div class="lp-badge type-easy">4/4</div>
-                    <div class="lp-info">
-                      <div class="lp-run-name">Easy Run</div>
-                      <div class="lp-stats">
-                        <div class="lp-stat"><strong>10.2</strong><span> km</span></div>
-                        <div class="lp-stat"><strong>5:51</strong><span> /km</span></div>
-                        <div class="lp-stat"><strong>152</strong><span> bpm</span></div>
-                        <div class="lp-stat"><strong>169</strong><span> spm</span></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="lp-row" onclick="p1Show('detail')">
-                    <div class="lp-badge type-easy">4/3</div>
-                    <div class="lp-info">
-                      <div class="lp-run-name">Easy Run</div>
-                      <div class="lp-stats">
-                        <div class="lp-stat"><strong>8.2</strong><span> km</span></div>
-                        <div class="lp-stat"><strong>6:12</strong><span> /km</span></div>
-                        <div class="lp-stat"><strong>145</strong><span> bpm</span></div>
-                        <div class="lp-stat"><strong>166</strong><span> spm</span></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            </div><!-- /lp-list -->
+          </div><!-- /list-sheet-content -->
 
-              </div><!-- /lp-list -->
-            </div><!-- /list-sheet-content -->
+        </div><!-- /list-sheet -->
 
-          </div><!-- /list-sheet -->
+      </div><!-- /cal-area -->
 
-        </div><!-- /cal-area -->
+    </div>
 
+    <!-- ── SCREEN: STATS ── -->
+    <div id="s1-stats" class="screen">
+      <div class="status-bar">
+        <span class="status-time">9:41</span>
+        <div class="status-icons">
+          <svg width="24" height="11" viewBox="0 0 24 11">
+            <rect x="0" y="1" width="20" height="9" rx="2.5" stroke="var(--text-1)" stroke-width="1" fill="none"
+              opacity="0.35" />
+            <rect x="1.5" y="2.5" width="14" height="6" rx="1.5" fill="var(--text-1)" />
+            <path d="M21.5 4v3a1.5 1.5 0 000-3z" fill="var(--text-1)" opacity="0.4" />
+          </svg>
+        </div>
+      </div>
+      <div class="back-header">
+        <button class="back-btn" onclick="p1Show('home')">←</button>
+        <span class="back-title">Statistics</span>
+        <div style="width:34px"></div>
       </div>
 
-      <!-- ── SCREEN: STATS ── -->
-      <div id="s1-stats" class="screen">
-        <div class="status-bar">
-          <span class="status-time">9:41</span>
-          <div class="status-icons">
-            <svg width="24" height="11" viewBox="0 0 24 11">
-              <rect x="0" y="1" width="20" height="9" rx="2.5" stroke="var(--text-1)" stroke-width="1" fill="none"
-                opacity="0.35" />
-              <rect x="1.5" y="2.5" width="14" height="6" rx="1.5" fill="var(--text-1)" />
-              <path d="M21.5 4v3a1.5 1.5 0 000-3z" fill="var(--text-1)" opacity="0.4" />
-            </svg>
-          </div>
-        </div>
-        <div class="back-header">
-          <button class="back-btn" onclick="p1Show('home')">←</button>
-          <span class="back-title">Statistics</span>
-          <div style="width:34px"></div>
+      <div class="tab-row">
+        <div class="tab active">Month</div>
+        <div class="tab">Week</div>
+        <div class="tab">All</div>
+      </div>
+
+      <div class="scroll-area">
+        <!-- Hero stat -->
+        <div class="stat-block">
+          <div class="stat-block-label">April Distance</div>
+          <div class="stat-block-value">59.7<span>km</span></div>
+          <div class="stat-block-sub">↓ 32% vs March</div>
+          <div class="stat-block-deco"></div>
         </div>
 
-        <div class="tab-row">
-          <div class="tab active">Month</div>
-          <div class="tab">Week</div>
-          <div class="tab">All</div>
+        <div class="stats-2col">
+          <div class="mini-stat">
+            <div class="mini-stat-label">Runs</div>
+            <div class="mini-stat-value">6</div>
+            <div class="mini-stat-sub">runs this month</div>
+          </div>
+          <div class="mini-stat">
+            <div class="mini-stat-label">Best Pace</div>
+            <div class="mini-stat-value" style="color:var(--accent)">5:02</div>
+            <div class="mini-stat-sub">/km · Apr 11</div>
+          </div>
+          <div class="mini-stat">
+            <div class="mini-stat-label">Long Run</div>
+            <div class="mini-stat-value">21.1<span>km</span></div>
+            <div class="mini-stat-sub">Apr 11</div>
+          </div>
+          <div class="mini-stat">
+            <div class="mini-stat-label">Calories</div>
+            <div class="mini-stat-value">2,840<span>kcal</span></div>
+            <div class="mini-stat-sub">this month</div>
+          </div>
         </div>
 
-        <div class="scroll-area">
-          <!-- Hero stat -->
-          <div class="stat-block">
-            <div class="stat-block-label">April Distance</div>
-            <div class="stat-block-value">59.7<span>km</span></div>
-            <div class="stat-block-sub">↓ 32% vs March</div>
-            <div class="stat-block-deco"></div>
-          </div>
-
-          <div class="stats-2col">
-            <div class="mini-stat">
-              <div class="mini-stat-label">Runs</div>
-              <div class="mini-stat-value">6</div>
-              <div class="mini-stat-sub">runs this month</div>
+        <!-- Monthly bar chart -->
+        <div class="chart-section">
+          <div class="chart-label">Monthly Distance</div>
+          <div class="bar-chart">
+            <div class="bar-col">
+              <div class="bar-val">72.3</div>
+              <div class="bar dim-bar" style="height:82%"></div>
+              <div class="bar-label">Jan</div>
             </div>
-            <div class="mini-stat">
-              <div class="mini-stat-label">Best Pace</div>
-              <div class="mini-stat-value" style="color:var(--accent)">5:02</div>
-              <div class="mini-stat-sub">/km · Apr 11</div>
+            <div class="bar-col">
+              <div class="bar-val">68.1</div>
+              <div class="bar dim-bar" style="height:78%"></div>
+              <div class="bar-label">Feb</div>
             </div>
-            <div class="mini-stat">
-              <div class="mini-stat-label">Long Run</div>
-              <div class="mini-stat-value">21.1<span>km</span></div>
-              <div class="mini-stat-sub">Apr 11</div>
+            <div class="bar-col">
+              <div class="bar-val">87.6</div>
+              <div class="bar dim-bar" style="height:100%"></div>
+              <div class="bar-label">Mar</div>
             </div>
-            <div class="mini-stat">
-              <div class="mini-stat-label">Calories</div>
-              <div class="mini-stat-value">2,840<span>kcal</span></div>
-              <div class="mini-stat-sub">this month</div>
-            </div>
-          </div>
-
-          <!-- Monthly bar chart -->
-          <div class="chart-section">
-            <div class="chart-label">Monthly Distance</div>
-            <div class="bar-chart">
-              <div class="bar-col">
-                <div class="bar-val">72.3</div>
-                <div class="bar dim-bar" style="height:82%"></div>
-                <div class="bar-label">Jan</div>
-              </div>
-              <div class="bar-col">
-                <div class="bar-val">68.1</div>
-                <div class="bar dim-bar" style="height:78%"></div>
-                <div class="bar-label">Feb</div>
-              </div>
-              <div class="bar-col">
-                <div class="bar-val">87.6</div>
-                <div class="bar dim-bar" style="height:100%"></div>
-                <div class="bar-label">Mar</div>
-              </div>
-              <div class="bar-col">
-                <div class="bar-val">59.7</div>
-                <div class="bar accent-bar" style="height:68%"></div>
-                <div class="bar-label">Apr</div>
-              </div>
+            <div class="bar-col">
+              <div class="bar-val">59.7</div>
+              <div class="bar accent-bar" style="height:68%"></div>
+              <div class="bar-label">Apr</div>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- ── SCREEN: DETAIL ── -->
-      <div id="s1-detail" class="screen">
-        <div class="status-bar">
-          <span class="status-time">9:41</span>
-          <div class="status-icons">
-            <svg width="24" height="11" viewBox="0 0 24 11">
-              <rect x="0" y="1" width="20" height="9" rx="2.5" stroke="var(--text-1)" stroke-width="1" fill="none"
-                opacity="0.35" />
-              <rect x="1.5" y="2.5" width="14" height="6" rx="1.5" fill="var(--text-1)" />
-              <path d="M21.5 4v3a1.5 1.5 0 000-3z" fill="var(--text-1)" opacity="0.4" />
-            </svg>
-          </div>
-        </div>
-        <div class="back-header">
-          <button class="back-btn" onclick="p1Show('home')">←</button>
-          <span class="back-title">April 10</span>
-          <div style="width:34px"></div>
-        </div>
-
-        <div class="scroll-area">
-          <div class="detail-type-badge type-race" style="margin-top:16px">
-            <span>RACE</span>
-          </div>
-
-          <div class="detail-hero">
-            <div class="detail-km">21.1<span>km</span></div>
-            <div class="detail-meta">Half Marathon · 8:00 AM</div>
-          </div>
-
-          <div class="detail-stats-row">
-            <div class="detail-stat-cell">
-              <div class="dsc-label">Duration</div>
-              <div class="dsc-value">1:46:22</div>
-            </div>
-            <div class="detail-stat-cell">
-              <div class="dsc-label">Avg Pace</div>
-              <div class="dsc-value accent">5:02</div>
-            </div>
-            <div class="detail-stat-cell">
-              <div class="dsc-label">Calories</div>
-              <div class="dsc-value">1,240</div>
-            </div>
-          </div>
-
-          <div class="detail-pace-chart">
-            <div class="chart-label">Pace / km</div>
-            <div class="bar-chart" style="height:80px">
-              <div class="bar-col">
-                <div class="bar accent-bar" style="height:55%"></div>
-                <div class="bar-label">1</div>
-              </div>
-              <div class="bar-col">
-                <div class="bar accent-bar" style="height:60%"></div>
-                <div class="bar-label">3</div>
-              </div>
-              <div class="bar-col">
-                <div class="bar accent-bar" style="height:65%"></div>
-                <div class="bar-label">5</div>
-              </div>
-              <div class="bar-col">
-                <div class="bar accent-bar" style="height:70%"></div>
-                <div class="bar-label">7</div>
-              </div>
-              <div class="bar-col">
-                <div class="bar accent-bar" style="height:72%"></div>
-                <div class="bar-label">10</div>
-              </div>
-              <div class="bar-col">
-                <div class="bar accent-bar" style="height:75%"></div>
-                <div class="bar-label">13</div>
-              </div>
-              <div class="bar-col">
-                <div class="bar accent-bar" style="height:80%"></div>
-                <div class="bar-label">16</div>
-              </div>
-              <div class="bar-col">
-                <div class="bar accent-bar" style="height:100%"></div>
-                <div class="bar-label">21</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="detail-note">
-            <div class="detail-note-label">Note</div>
-            <div class="detail-note-text">네거티브 스플릿. 후반 5km 가장 빠름.</div>
-          </div>
+    <!-- ── SCREEN: DETAIL ── -->
+    <div id="s1-detail" class="screen">
+      <div class="status-bar">
+        <span class="status-time">9:41</span>
+        <div class="status-icons">
+          <svg width="24" height="11" viewBox="0 0 24 11">
+            <rect x="0" y="1" width="20" height="9" rx="2.5" stroke="var(--text-1)" stroke-width="1" fill="none"
+              opacity="0.35" />
+            <rect x="1.5" y="2.5" width="14" height="6" rx="1.5" fill="var(--text-1)" />
+            <path d="M21.5 4v3a1.5 1.5 0 000-3z" fill="var(--text-1)" opacity="0.4" />
+          </svg>
         </div>
       </div>
+      <div class="back-header">
+        <button class="back-btn" onclick="p1Show('home')">←</button>
+        <span class="back-title">April 10</span>
+        <div style="width:34px"></div>
+      </div>
 
-    </div><!-- /phone-inner -->
+      <div class="scroll-area">
+        <div class="detail-type-badge type-race" style="margin-top:16px">
+          <span>RACE</span>
+        </div>
+
+        <div class="detail-hero">
+          <div class="detail-km">21.1<span>km</span></div>
+          <div class="detail-meta">Half Marathon · 8:00 AM</div>
+        </div>
+
+        <div class="detail-stats-row">
+          <div class="detail-stat-cell">
+            <div class="dsc-label">Duration</div>
+            <div class="dsc-value">1:46:22</div>
+          </div>
+          <div class="detail-stat-cell">
+            <div class="dsc-label">Avg Pace</div>
+            <div class="dsc-value accent">5:02</div>
+          </div>
+          <div class="detail-stat-cell">
+            <div class="dsc-label">Calories</div>
+            <div class="dsc-value">1,240</div>
+          </div>
+        </div>
+
+        <div class="detail-pace-chart">
+          <div class="chart-label">Pace / km</div>
+          <div class="bar-chart" style="height:80px">
+            <div class="bar-col">
+              <div class="bar accent-bar" style="height:55%"></div>
+              <div class="bar-label">1</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar accent-bar" style="height:60%"></div>
+              <div class="bar-label">3</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar accent-bar" style="height:65%"></div>
+              <div class="bar-label">5</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar accent-bar" style="height:70%"></div>
+              <div class="bar-label">7</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar accent-bar" style="height:72%"></div>
+              <div class="bar-label">10</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar accent-bar" style="height:75%"></div>
+              <div class="bar-label">13</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar accent-bar" style="height:80%"></div>
+              <div class="bar-label">16</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar accent-bar" style="height:100%"></div>
+              <div class="bar-label">21</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-note">
+          <div class="detail-note-label">Note</div>
+          <div class="detail-note-text">네거티브 스플릿. 후반 5km 가장 빠름.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /phone-inner -->
   </div><!-- /phone -->
   </div>
 
-    </div><\!-- /phone-inner -->
-  </div><\!-- /phone -->
+  </div><\!-- /phone-inner -->
+    </div><\!-- /phone -->
 
-  <script>
-    function toggleTheme() {
-      const t = document.documentElement.getAttribute('data-theme');
-      document.documentElement.setAttribute('data-theme', t === 'light' ? 'dark' : 'light');
-    }
+      <script>
+        function toggleTheme() {
+          const t = document.documentElement.getAttribute('data-theme');
+          document.documentElement.setAttribute('data-theme', t === 'light' ? 'dark' : 'light');
+        }
 
-    /* ── Bottom sheet drag (removed — activity list is now inline) ── */
+        /* ── Bottom sheet drag (removed — activity list is now inline) ── */
 
-    function p1Show(name) {
-      ['home', 'stats', 'detail'].forEach(s => {
-        document.getElementById('s1-' + s).classList.toggle('active', s === name);
-      });
-    }
+        function p1Show(name) {
+          ['home', 'stats', 'detail'].forEach(s => {
+            document.getElementById('s1-' + s).classList.toggle('active', s === name);
+          });
+        }
 
-    /* ── Month navigation ── */
-    const MONTHS_ORDER = ['march', 'april'];
-    let currentMonthIdx = 1; // april
+        /* ── Month navigation ── */
+        const MONTHS_ORDER = ['march', 'april'];
+        let currentMonthIdx = 1; // april
 
-    const MONTH_DATA = {
-      march: {
-        label: 'March 2026',
-        km: '96.2',
-        runCount: '11 runs',
-        calGrid: `
+        const MONTH_DATA = {
+          march: {
+            label: 'March 2026',
+            km: '96.2',
+            runCount: '11 runs',
+            calGrid: `
         <div class="cal-day type-none"><span class="day-num">1</span></div>
         <div class="cal-day type-easy" onclick="p1Show('detail')"><span class="day-note">6</span></div>
         <div class="cal-day type-easy" onclick="p1Show('detail')"><span class="day-note">9</span></div>
@@ -1800,7 +1801,7 @@
         <div class="cal-day type-steady" onclick="p1Show('detail')"><span class="day-note">6</span></div>
         <div class="cal-day type-none"><span class="day-num">31</span></div>
         <div class="cal-day"></div><div class="cal-day"></div><div class="cal-day"></div><div class="cal-day"></div>`,
-        runList: `
+            runList: `
         <div class="bs-row" onclick="p1Show('detail')">
           <div class="bs-row-info"><div class="bs-row-name">Steady Run</div><div class="bs-row-meta">Mar 30 · 5.7km · 5:36 /km</div></div>
           <div class="bs-badge type-steady"><span>6</span></div>
@@ -1845,12 +1846,12 @@
           <div class="bs-row-info"><div class="bs-row-name">Easy Run</div><div class="bs-row-meta">Mar 2 · 6.2km · 6:18 /km</div></div>
           <div class="bs-badge type-easy"><span>6</span></div>
         </div>`
-      },
-      april: {
-        label: 'April 2026',
-        km: '59.7',
-        runCount: '6 runs',
-        calGrid: `
+          },
+          april: {
+            label: 'April 2026',
+            km: '59.7',
+            runCount: '6 runs',
+            calGrid: `
         <div class="cal-day"></div><div class="cal-day"></div><div class="cal-day"></div>
         <div class="cal-day type-none"><span class="day-num">1</span></div>
         <div class="cal-day type-none"><span class="day-num">2</span></div>
@@ -1883,7 +1884,7 @@
         <div class="cal-day type-none"><span class="day-num">29</span></div>
         <div class="cal-day type-none"><span class="day-num">30</span></div>
         <div class="cal-day"></div><div class="cal-day"></div>`,
-        runList: `
+            runList: `
         <div class="bs-row" onclick="p1Show('detail')">
           <div class="bs-row-info"><div class="bs-row-name">Half Marathon</div><div class="bs-row-meta">Apr 11 · 21.1km · 5:02 /km</div></div>
           <div class="bs-badge type-race"><span>H</span></div>
@@ -1908,151 +1909,152 @@
           <div class="bs-row-info"><div class="bs-row-name">Easy Run</div><div class="bs-row-meta">Apr 3 · 8.2km · 6:12 /km</div></div>
           <div class="bs-badge type-easy"><span>8</span></div>
         </div>`
-      }
-    };
+          }
+        };
 
-    function navMonth(dir) {
-      const next = currentMonthIdx + dir;
-      if (next < 0 || next >= MONTHS_ORDER.length) return;
-      const wrap = document.getElementById('cal-slide-wrap');
-      // slide out
-      wrap.classList.add(dir < 0 ? 'slide-out-right' : 'slide-out-left');
-      setTimeout(() => {
-        wrap.classList.remove('slide-out-right', 'slide-out-left');
-        // prepare slide-in from opposite side (no transition)
-        wrap.style.transition = 'none';
-        wrap.classList.add(dir < 0 ? 'slide-in-left' : 'slide-in-right');
-        currentMonthIdx = next;
-        renderMonth();
-        // force reflow then animate in
-        wrap.getBoundingClientRect();
-        wrap.style.transition = '';
-        wrap.classList.remove('slide-in-left', 'slide-in-right');
-      }, 200);
-    }
+        function navMonth(dir) {
+          const next = currentMonthIdx + dir;
+          if (next < 0 || next >= MONTHS_ORDER.length) return;
+          const wrap = document.getElementById('cal-slide-wrap');
+          // slide out
+          wrap.classList.add(dir < 0 ? 'slide-out-right' : 'slide-out-left');
+          setTimeout(() => {
+            wrap.classList.remove('slide-out-right', 'slide-out-left');
+            // prepare slide-in from opposite side (no transition)
+            wrap.style.transition = 'none';
+            wrap.classList.add(dir < 0 ? 'slide-in-left' : 'slide-in-right');
+            currentMonthIdx = next;
+            renderMonth();
+            // force reflow then animate in
+            wrap.getBoundingClientRect();
+            wrap.style.transition = '';
+            wrap.classList.remove('slide-in-left', 'slide-in-right');
+          }, 200);
+        }
 
-    function renderMonth() {
-      const key = MONTHS_ORDER[currentMonthIdx];
-      const d = MONTH_DATA[key];
-      const kmEl = document.querySelector('.hero-km-big');
-      if (kmEl) kmEl.textContent = d.km;
-      const gridEl = document.getElementById('cal-grid-1');
-      if (gridEl) gridEl.innerHTML = d.calGrid;
-      const listEl = document.getElementById('bs-list-1');
-      if (listEl) listEl.innerHTML = d.runList;
-      const countEl = document.getElementById('bs-count-1');
-      if (countEl) countEl.textContent = d.runCount;
-    }
+        function renderMonth() {
+          const key = MONTHS_ORDER[currentMonthIdx];
+          const d = MONTH_DATA[key];
+          const kmEl = document.querySelector('.hero-km-big');
+          if (kmEl) kmEl.textContent = d.km;
+          const gridEl = document.getElementById('cal-grid-1');
+          if (gridEl) gridEl.innerHTML = d.calGrid;
+          const listEl = document.getElementById('bs-list-1');
+          if (listEl) listEl.innerHTML = d.runList;
+          const countEl = document.getElementById('bs-count-1');
+          if (countEl) countEl.textContent = d.runCount;
+        }
 
-    /* ── Bottom Sheet drag (legacy — guarded) ── */
-    (function () {
-      const sheet = document.getElementById('bottom-sheet-1');
-      const handle = document.getElementById('bs-handle-1');
-      if (!sheet || !handle) return; // elements removed — skip
-      const PEEK = 104;   // collapsed peek height (px)
-      let isDragging = false;
-      let startY = 0;
-      let startTranslate = 0;
+        /* ── Bottom Sheet drag (legacy — guarded) ── */
+        (function () {
+          const sheet = document.getElementById('bottom-sheet-1');
+          const handle = document.getElementById('bs-handle-1');
+          if (!sheet || !handle) return; // elements removed — skip
+          const PEEK = 104;   // collapsed peek height (px)
+          let isDragging = false;
+          let startY = 0;
+          let startTranslate = 0;
 
-      function getCollapsedY() {
-        return sheet.offsetHeight - PEEK;
-      }
+          function getCollapsedY() {
+            return sheet.offsetHeight - PEEK;
+          }
 
-      function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+          function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 
-      function setY(y, animate) {
-        sheet.style.transition = animate
-          ? 'transform 0.42s cubic-bezier(0.4,0,0.2,1), background 0.3s'
-          : 'background 0.3s';
-        sheet.style.transform = `translateY(${y}px)`;
-      }
+          function setY(y, animate) {
+            sheet.style.transition = animate
+              ? 'transform 0.42s cubic-bezier(0.4,0,0.2,1), background 0.3s'
+              : 'background 0.3s';
+            sheet.style.transform = `translateY(${y}px)`;
+          }
 
-      function snapSheet(velocity) {
-        // velocity > 0 = moving down = close; < 0 = moving up = open
-        const mid = getCollapsedY() / 2;
-        const currentY = parseFloat(sheet.style.transform.replace(/[^0-9.-]/g, '')) || getCollapsedY();
-        const open = velocity < -0.3 || (velocity >= -0.3 && currentY < mid);
-        setY(open ? 0 : getCollapsedY(), true);
-        sheet.classList.toggle('bs-open', open);
-      }
+          function snapSheet(velocity) {
+            // velocity > 0 = moving down = close; < 0 = moving up = open
+            const mid = getCollapsedY() / 2;
+            const currentY = parseFloat(sheet.style.transform.replace(/[^0-9.-]/g, '')) || getCollapsedY();
+            const open = velocity < -0.3 || (velocity >= -0.3 && currentY < mid);
+            setY(open ? 0 : getCollapsedY(), true);
+            sheet.classList.toggle('bs-open', open);
+          }
 
-      function onStart(clientY) {
-        isDragging = true;
-        startY = clientY;
-        const m = sheet.style.transform.match(/-?[\d.]+/);
-        startTranslate = m ? parseFloat(m[0]) : getCollapsedY();
-        sheet.style.transition = 'background 0.3s';
-      }
+          function onStart(clientY) {
+            isDragging = true;
+            startY = clientY;
+            const m = sheet.style.transform.match(/-?[\d.]+/);
+            startTranslate = m ? parseFloat(m[0]) : getCollapsedY();
+            sheet.style.transition = 'background 0.3s';
+          }
 
-      function onMove(clientY) {
-        if (!isDragging) return;
-        const dy = clientY - startY;
-        const next = clamp(startTranslate + dy, 0, getCollapsedY());
-        sheet.style.transform = `translateY(${next}px)`;
-      }
+          function onMove(clientY) {
+            if (!isDragging) return;
+            const dy = clientY - startY;
+            const next = clamp(startTranslate + dy, 0, getCollapsedY());
+            sheet.style.transform = `translateY(${next}px)`;
+          }
 
-      function onEnd(clientY) {
-        if (!isDragging) return;
-        isDragging = false;
-        const dy = clientY - startY;
-        const velocity = dy / (Date.now() - startTime + 1); // rough
-        snapSheet(dy < -40 ? -1 : dy > 40 ? 1 : 0);
-      }
+          function onEnd(clientY) {
+            if (!isDragging) return;
+            isDragging = false;
+            const dy = clientY - startY;
+            const velocity = dy / (Date.now() - startTime + 1); // rough
+            snapSheet(dy < -40 ? -1 : dy > 40 ? 1 : 0);
+          }
 
-      let startTime = 0;
+          let startTime = 0;
 
-      handle.addEventListener('touchstart', e => {
-        startTime = Date.now();
-        onStart(e.touches[0].clientY);
-      }, { passive: true });
-      window.addEventListener('touchmove', e => {
-        if (isDragging) onMove(e.touches[0].clientY);
-      }, { passive: true });
-      window.addEventListener('touchend', e => {
-        onEnd(e.changedTouches[0].clientY);
-      });
+          handle.addEventListener('touchstart', e => {
+            startTime = Date.now();
+            onStart(e.touches[0].clientY);
+          }, { passive: true });
+          window.addEventListener('touchmove', e => {
+            if (isDragging) onMove(e.touches[0].clientY);
+          }, { passive: true });
+          window.addEventListener('touchend', e => {
+            onEnd(e.changedTouches[0].clientY);
+          });
 
-      handle.addEventListener('mousedown', e => {
-        startTime = Date.now();
-        onStart(e.clientY);
-        e.preventDefault();
-      });
-      window.addEventListener('mousemove', e => {
-        if (isDragging) onMove(e.clientY);
-      });
-      window.addEventListener('mouseup', e => {
-        if (isDragging) onEnd(e.clientY);
-      });
-    })();
+          handle.addEventListener('mousedown', e => {
+            startTime = Date.now();
+            onStart(e.clientY);
+            e.preventDefault();
+          });
+          window.addEventListener('mousemove', e => {
+            if (isDragging) onMove(e.clientY);
+          });
+          window.addEventListener('mouseup', e => {
+            if (isDragging) onEnd(e.clientY);
+          });
+        })();
 
-    // Swipe (touch + mouse) on calendar
-    (function () {
-      const cal = document.getElementById('calendar-1');
-      let startX = 0;
-      let dragging = false;
+        // Swipe (touch + mouse) on calendar
+        (function () {
+          const cal = document.getElementById('calendar-1');
+          let startX = 0;
+          let dragging = false;
 
-      // Touch
-      cal.addEventListener('touchstart', e => {
-        startX = e.touches[0].clientX;
-      }, { passive: true });
-      cal.addEventListener('touchend', e => {
-        const dx = e.changedTouches[0].clientX - startX;
-        if (Math.abs(dx) > 40) navMonth(dx < 0 ? 1 : -1);
-      }, { passive: true });
+          // Touch
+          cal.addEventListener('touchstart', e => {
+            startX = e.touches[0].clientX;
+          }, { passive: true });
+          cal.addEventListener('touchend', e => {
+            const dx = e.changedTouches[0].clientX - startX;
+            if (Math.abs(dx) > 40) navMonth(dx < 0 ? 1 : -1);
+          }, { passive: true });
 
-      // Mouse (for desktop testing)
-      cal.addEventListener('mousedown', e => {
-        startX = e.clientX;
-        dragging = true;
-      });
-      window.addEventListener('mouseup', e => {
-        if (!dragging) return;
-        dragging = false;
-        const dx = e.clientX - startX;
-        if (Math.abs(dx) > 40) navMonth(dx < 0 ? 1 : -1);
-      });
-    })();
-  </script>
+          // Mouse (for desktop testing)
+          cal.addEventListener('mousedown', e => {
+            startX = e.clientX;
+            dragging = true;
+          });
+          window.addEventListener('mouseup', e => {
+            if (!dragging) return;
+            dragging = false;
+            const dx = e.clientX - startX;
+            if (Math.abs(dx) > 40) navMonth(dx < 0 ? 1 : -1);
+          });
+        })();
+      </script>
 
 </body>
+
 </html>
