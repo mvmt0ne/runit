@@ -842,7 +842,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 6px 20px 10px;
+      padding: 16px 20px 14px;
       flex-shrink: 0;
     }
 
@@ -927,6 +927,103 @@
       font-family: 'Pretendard Variable', sans-serif;
       color: var(--text-3);
       cursor: pointer;
+    }
+
+    /* ─── Month Wheel Picker ──────────────── */
+    .wheel-picker {
+      position: relative;
+      height: 260px;
+      overflow: hidden;
+      margin: 0 -4px;
+    }
+
+    .wheel-picker-scroll {
+      height: 100%;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      scrollbar-width: none;
+    }
+
+    .wheel-picker-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .wheel-spacer {
+      height: 104px;
+      flex-shrink: 0;
+    }
+
+    .wheel-picker-item {
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      scroll-snap-align: center;
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+
+    .wheel-item-month {
+      font-size: 20px;
+      font-weight: 300;
+      font-family: 'Pretendard Variable', sans-serif;
+      color: var(--text-2);
+      letter-spacing: -0.03em;
+      transition: color 0.15s, font-weight 0.15s;
+    }
+
+    .wheel-item-year {
+      font-size: 13px;
+      font-family: 'Urbanist', sans-serif;
+      color: var(--text-2);
+      opacity: 0.55;
+      transition: color 0.15s, opacity 0.15s;
+    }
+
+    .wheel-picker-item.wp-selected .wheel-item-month {
+      color: var(--text-1);
+      font-weight: 500;
+    }
+
+    .wheel-picker-item.wp-selected .wheel-item-year {
+      color: var(--accent);
+      opacity: 1;
+    }
+
+    .wheel-picker-band {
+      position: absolute;
+      top: 104px;
+      left: 4px;
+      right: 4px;
+      height: 52px;
+      background: rgba(128, 128, 128, 0.1);
+      border-radius: 10px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .wheel-picker-scroll {
+      -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        black 30%,
+        black 70%,
+        transparent 100%
+      );
+      mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        black 30%,
+        black 70%,
+        transparent 100%
+      );
+    }
+
+    .wheel-sheet-footer {
+      display: flex;
+      padding: 8px 20px 28px;
+      flex-shrink: 0;
     }
 
     /* ─── Month Label (tappable) ──────────── */
@@ -2239,9 +2336,6 @@
       <!-- ── Month Picker Sheet ── -->
       <div class="sf-backdrop" id="month-backdrop" onclick="closeMonthSheet()"></div>
       <div class="sf-sheet" id="month-sheet">
-        <div class="sf-sheet-handle-area">
-          <div class="sf-sheet-handle"></div>
-        </div>
         <div class="sf-sheet-header">
           <span class="sf-sheet-title">월 선택</span>
           <button class="sf-sheet-close" onclick="closeMonthSheet()">
@@ -2252,8 +2346,11 @@
             </svg>
           </button>
         </div>
-        <div class="sf-sheet-body">
-          <div class="month-list" id="month-list"></div>
+        <div class="sf-sheet-body" style="padding: 8px 20px 28px; overflow: hidden;">
+          <div class="wheel-picker">
+            <div class="wheel-picker-band"></div>
+            <div class="wheel-picker-scroll" id="month-wheel-scroll"></div>
+          </div>
         </div>
       </div>
 
@@ -2476,46 +2573,108 @@
         }
 
         /* ═══════════════════════════════════════
-           MONTH PICKER
+           MONTH WHEEL PICKER
         ═══════════════════════════════════════ */
+        const WHEEL_ITEM_H = 52;
+
+        // April 2026 → January 2025 (16 months)
+        const ALL_MONTHS = (() => {
+          const list = [];
+          let y = 2026, m = 4;
+          while (y > 2025 || (y === 2025 && m >= 1)) {
+            list.push({ year: y, month: m });
+            m--;
+            if (m === 0) { m = 12; y--; }
+          }
+          return list;
+        })();
+
+        // Map wheel index → MONTHS_ORDER index
+        const WHEEL_KEY_MAP = { '2026-4': 1, '2026-3': 0 };
+
+        let wheelPendingIdx = 0; // default: April 2026
+        let wheelScrollTimer = null;
+
         function openMonthSheet() {
-          const list = document.getElementById('month-list');
-          // 최신월이 위로 오도록 역순 렌더링
-          list.innerHTML = [...MONTHS_ORDER].reverse().map((key, i) => {
-            const idx = MONTHS_ORDER.length - 1 - i;
-            const d = MONTH_DATA[key];
-            const active = idx === currentMonthIdx;
-            return `<div class="month-item ${active ? 'active' : ''}" onclick="selectMonth(${idx})">
-              <span class="month-item-label">${d.label}</span>
-              <span class="month-item-meta">${d.km} km · ${d.runCount}</span>
-            </div>`;
-          }).join('');
+          // Sync wheelPendingIdx with currentMonthIdx
+          const key = MONTHS_ORDER[currentMonthIdx];
+          const d = MONTH_DATA[key];
+          // Find matching wheel index
+          const match = ALL_MONTHS.findIndex(m => {
+            const mk = `${m.year}-${m.month}`;
+            return WHEEL_KEY_MAP[mk] === currentMonthIdx;
+          });
+          wheelPendingIdx = match >= 0 ? match : 0;
+
+          const scroll = document.getElementById('month-wheel-scroll');
+          const items = ALL_MONTHS.map((m, i) =>
+            `<div class="wheel-picker-item${i === wheelPendingIdx ? ' wp-selected' : ''}">
+              <span class="wheel-item-month">${m.month}월</span>
+              <span class="wheel-item-year">${m.year}</span>
+            </div>`
+          ).join('');
+          scroll.innerHTML = '<div class="wheel-spacer"></div>' + items + '<div class="wheel-spacer"></div>';
+
           document.getElementById('month-sheet').classList.add('open');
           document.getElementById('month-backdrop').classList.add('open');
+
+          scroll.addEventListener('scroll', onWheelScroll);
+
+          // scrollTo after sheet is in view (CSS transition ~320ms)
+          requestAnimationFrame(() => {
+            scroll.scrollTop = wheelPendingIdx * WHEEL_ITEM_H;
+          });
+        }
+
+        function onWheelScroll() {
+          const scroll = document.getElementById('month-wheel-scroll');
+          clearTimeout(wheelScrollTimer);
+          const idx = Math.round(scroll.scrollTop / WHEEL_ITEM_H);
+          updateWheelHighlight(idx);
+          wheelScrollTimer = setTimeout(() => {
+            const snapped = Math.round(scroll.scrollTop / WHEEL_ITEM_H);
+            wheelPendingIdx = Math.max(0, Math.min(snapped, ALL_MONTHS.length - 1));
+            updateWheelHighlight(wheelPendingIdx);
+            confirmMonthWheel();
+          }, 300);
+        }
+
+        function updateWheelHighlight(idx) {
+          const scroll = document.getElementById('month-wheel-scroll');
+          scroll.querySelectorAll('.wheel-picker-item').forEach((el, i) => {
+            el.classList.toggle('wp-selected', i === idx);
+          });
         }
 
         function closeMonthSheet() {
+          const scroll = document.getElementById('month-wheel-scroll');
+          scroll.removeEventListener('scroll', onWheelScroll);
           document.getElementById('month-sheet').classList.remove('open');
           document.getElementById('month-backdrop').classList.remove('open');
         }
 
-        function selectMonth(idx) {
+        function confirmMonthWheel() {
+          const m = ALL_MONTHS[wheelPendingIdx];
+          const mk = `${m.year}-${m.month}`;
+          const newIdx = WHEEL_KEY_MAP[mk];
           closeMonthSheet();
-          if (idx === currentMonthIdx) return;
-          const dir = idx > currentMonthIdx ? 1 : -1;
+          if (newIdx === undefined || newIdx === currentMonthIdx) return;
+          const dir = newIdx > currentMonthIdx ? 1 : -1;
           const wrap = document.getElementById('cal-slide-wrap');
           wrap.classList.add(dir < 0 ? 'slide-out-right' : 'slide-out-left');
           setTimeout(() => {
             wrap.classList.remove('slide-out-right', 'slide-out-left');
             wrap.style.transition = 'none';
             wrap.classList.add(dir < 0 ? 'slide-in-left' : 'slide-in-right');
-            currentMonthIdx = idx;
+            currentMonthIdx = newIdx;
             renderMonth();
             wrap.getBoundingClientRect();
             wrap.style.transition = '';
             wrap.classList.remove('slide-in-left', 'slide-in-right');
           }, 200);
         }
+
+        function selectMonth(idx) { confirmMonthWheel(); }
 
         /* ── Bottom Sheet drag (legacy — guarded) ── */
         (function () {
