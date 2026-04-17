@@ -823,6 +823,14 @@
       transform: translateY(0);
     }
 
+    /* 위에서 내려오는 시트 */
+    .sf-sheet--top {
+      top: 0;
+      bottom: auto;
+      border-radius: 0 0 20px 20px;
+      transform: translateY(-100%);
+    }
+
     .sf-sheet-handle-area {
       padding: 10px 0 4px;
       display: flex;
@@ -927,6 +935,45 @@
       font-family: 'Pretendard Variable', sans-serif;
       color: var(--text-3);
       cursor: pointer;
+    }
+
+    /* ─── Month Dropdown ──────────────────── */
+    .hero-title {
+      position: relative;
+    }
+
+    .month-dd-backdrop {
+      position: absolute;
+      inset: 0;
+      z-index: 150;
+      display: none;
+    }
+
+    .month-dd-backdrop.open {
+      display: block;
+    }
+
+    .month-dropdown {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: -8px;
+      width: 190px;
+      background: var(--surface-3);
+      border-radius: 16px;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+      z-index: 160;
+      overflow: hidden;
+      opacity: 0;
+      transform: scale(0.88) translateY(-6px);
+      transform-origin: top left;
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.2s cubic-bezier(0.34, 1.4, 0.64, 1);
+    }
+
+    .month-dropdown.open {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      pointer-events: auto;
     }
 
     /* ─── Month Wheel Picker ──────────────── */
@@ -2335,12 +2382,11 @@
 
       <!-- ── Month Picker Sheet ── -->
       <div class="sf-backdrop" id="month-backdrop" onclick="closeMonthSheet()"></div>
-      <div class="sf-sheet" id="month-sheet">
+      <div class="sf-sheet sf-sheet--top" id="month-sheet">
         <div class="sf-sheet-header">
           <span class="sf-sheet-title">월 선택</span>
           <button class="sf-sheet-close" onclick="closeMonthSheet()">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2"
-              stroke-linecap="round">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
               <line x1="2" y1="2" x2="12" y2="12" />
               <line x1="12" y1="2" x2="2" y2="12" />
             </svg>
@@ -2608,7 +2654,7 @@
 
           const scroll = document.getElementById('month-wheel-scroll');
           const items = ALL_MONTHS.map((m, i) =>
-            `<div class="wheel-picker-item${i === wheelPendingIdx ? ' wp-selected' : ''}">
+            `<div class="wheel-picker-item${i === wheelPendingIdx ? ' wp-selected' : ''}" onclick="onWheelItemTap(${i})">
               <span class="wheel-item-month">${m.month}월</span>
               <span class="wheel-item-year">${m.year}</span>
             </div>`
@@ -2620,7 +2666,6 @@
 
           scroll.addEventListener('scroll', onWheelScroll);
 
-          // scrollTo after sheet is in view (CSS transition ~320ms)
           requestAnimationFrame(() => {
             scroll.scrollTop = wheelPendingIdx * WHEEL_ITEM_H;
           });
@@ -2635,8 +2680,7 @@
             const snapped = Math.round(scroll.scrollTop / WHEEL_ITEM_H);
             wheelPendingIdx = Math.max(0, Math.min(snapped, ALL_MONTHS.length - 1));
             updateWheelHighlight(wheelPendingIdx);
-            confirmMonthWheel();
-          }, 300);
+          }, 150);
         }
 
         function updateWheelHighlight(idx) {
@@ -2672,6 +2716,19 @@
             wrap.style.transition = '';
             wrap.classList.remove('slide-in-left', 'slide-in-right');
           }, 200);
+        }
+
+        function onWheelItemTap(i) {
+          if (i === wheelPendingIdx) {
+            confirmMonthWheel();
+          } else {
+            // 다른 아이템 탭 → 스크롤 후 확정
+            const scroll = document.getElementById('month-wheel-scroll');
+            scroll.scrollTo({ top: i * WHEEL_ITEM_H, behavior: 'smooth' });
+            wheelPendingIdx = i;
+            updateWheelHighlight(i);
+            clearTimeout(wheelScrollTimer);
+          }
         }
 
         function selectMonth(idx) { confirmMonthWheel(); }
