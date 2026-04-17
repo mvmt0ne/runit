@@ -911,6 +911,69 @@
       cursor: pointer;
     }
 
+    /* ─── Month Label (tappable) ──────────── */
+    .hero-month-tap {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      border-radius: 8px;
+      padding: 2px 6px 2px 2px;
+      margin-left: -2px;
+      transition: background 0.15s;
+    }
+    .hero-month-tap:active {
+      background: rgba(128,128,128,0.12);
+    }
+    .hero-month-chevron {
+      color: var(--accent);
+      opacity: 0.8;
+      flex-shrink: 0;
+    }
+
+    /* ─── Month Picker Sheet ──────────────── */
+    .month-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .month-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .month-item:active {
+      background: rgba(128,128,128,0.12);
+    }
+    .month-item.active {
+      background: rgba(128,128,128,0.08);
+    }
+    .month-item-label {
+      font-size: 16px;
+      font-weight: 400;
+      font-family: 'Pretendard Variable', sans-serif;
+      color: var(--text-2);
+      letter-spacing: -0.02em;
+      transition: color 0.2s;
+    }
+    .month-item.active .month-item-label {
+      color: var(--text-1);
+      font-weight: 500;
+    }
+    .month-item-meta {
+      font-size: 13px;
+      font-family: 'Urbanist', sans-serif;
+      color: var(--text-3);
+      transition: color 0.2s;
+    }
+    .month-item.active .month-item-meta {
+      color: var(--accent);
+    }
+
     /* 정렬 옵션 */
     .sort-opts {
       display: flex;
@@ -1013,6 +1076,105 @@
       color: var(--accent);
       background: rgba(var(--accent-rgb), 0.12);
       border-color: var(--accent);
+    }
+
+    /* Zone chip (Z1~Z5) */
+    .zone-chip {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: 6px 12px;
+    }
+    .zone-chip .zone-label {
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Urbanist', sans-serif;
+      line-height: 1;
+    }
+    .zone-chip .zone-desc {
+      font-size: 10px;
+      font-family: 'Pretendard Variable', sans-serif;
+      line-height: 1;
+      opacity: 0.7;
+    }
+
+    /* Range Slider */
+    .range-slider-wrap {
+      position: relative;
+      height: 30px;
+      margin: 6px 4px 0;
+    }
+    .range-track {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: rgba(128,128,128,0.15);
+      border-radius: 2px;
+      pointer-events: none;
+    }
+    .range-fill {
+      position: absolute;
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+    input[type='range'].range-input {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 0;
+      width: 100%;
+      height: 3px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      pointer-events: none;
+      outline: none;
+      padding: 0;
+      margin: 0;
+    }
+    input[type='range'].range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      pointer-events: auto;
+      cursor: grab;
+      border: 2.5px solid var(--bg);
+      box-shadow: 0 1px 6px rgba(0,0,0,0.25);
+      transition: transform 0.1s;
+    }
+    input[type='range'].range-input:active::-webkit-slider-thumb {
+      cursor: grabbing;
+      transform: scale(1.15);
+    }
+    input[type='range'].range-input::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2.5px solid var(--bg);
+      box-shadow: 0 1px 6px rgba(0,0,0,0.25);
+      cursor: grab;
+      pointer-events: auto;
+    }
+    .range-val-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      padding: 0 4px;
+    }
+    .range-val {
+      font-size: 12px;
+      font-family: 'Urbanist', sans-serif;
+      color: var(--accent);
+      font-weight: 600;
+      letter-spacing: 0.01em;
     }
 
     .filter-reset-btn {
@@ -1685,7 +1847,7 @@
 
             <div class="hero-section">
               <div class="hero-title">
-                <div class="hero-title-line"><span id="hero-month-label">4월</span>, 워니님의</div>
+                <div class="hero-title-line"><span class="hero-month-tap" onclick="openMonthSheet()"><span id="hero-month-label">4월</span><svg class="hero-month-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>, 워니님의</div>
                 <div class="hero-title-line">마일리지는</div>
               </div>
               <div class="theme-toggle" onclick="toggleTheme()">
@@ -1706,7 +1868,7 @@
               </div>
             </div>
 
-            <div class="hero-km-row" onclick="p1Show('stats')">
+            <div class="hero-km-row" onclick="location.href='stats.html'">
               <span class="hero-km-big">59.7</span>
               <span class="hero-km-unit">km</span>
             </div>
@@ -1731,15 +1893,15 @@
                   <div class="cal-day"></div>
                   <div class="cal-day type-none"><span class="day-num">1</span></div>
                   <div class="cal-day type-none"><span class="day-num">2</span></div>
-                  <div class="cal-day type-easy" onclick="p1Show('detail')"><span class="day-note">8</span></div>
-                  <div class="cal-day type-easy" onclick="p1Show('detail')"><span class="day-note">10</span></div>
-                  <div class="cal-day type-easy" onclick="p1Show('detail')"><span class="day-note">9</span></div>
+                  <div class="cal-day type-easy" onclick="location.href='detail.html'"><span class="day-note">8</span></div>
+                  <div class="cal-day type-easy" onclick="location.href='detail.html'"><span class="day-note">10</span></div>
+                  <div class="cal-day type-easy" onclick="location.href='detail.html'"><span class="day-note">9</span></div>
                   <div class="cal-day type-none"><span class="day-num">6</span></div>
-                  <div class="cal-day type-tempo" onclick="p1Show('detail')"><span class="day-note">T</span></div>
+                  <div class="cal-day type-tempo" onclick="location.href='detail.html'"><span class="day-note">T</span></div>
                   <div class="cal-day type-none"><span class="day-num">8</span></div>
                   <div class="cal-day type-none"><span class="day-num">9</span></div>
-                  <div class="cal-day type-steady" onclick="p1Show('detail')"><span class="day-note">5</span></div>
-                  <div class="cal-day type-race" onclick="p1Show('detail')"><span class="day-note">H</span></div>
+                  <div class="cal-day type-steady" onclick="location.href='detail.html'"><span class="day-note">5</span></div>
+                  <div class="cal-day type-race" onclick="location.href='detail.html'"><span class="day-note">H</span></div>
                   <div class="cal-day type-none"><span class="day-num">12</span></div>
                   <div class="cal-day type-none today"><span class="day-num">13</span></div>
                   <div class="cal-day type-none"><span class="day-num">14</span></div>
@@ -1808,8 +1970,8 @@
 
       </div>
 
-      <!-- ── SCREEN: STATS ── -->
-      <div id="s1-stats" class="screen">
+      <!-- stats.html 로 분리됨 -->
+      <div id="s1-stats" class="screen" style="display:none!important">
         <div class="status-bar">
           <span class="status-time">9:41</span>
           <div class="status-icons">
@@ -1894,8 +2056,8 @@
         </div>
       </div>
 
-      <!-- ── SCREEN: DETAIL ── -->
-      <div id="s1-detail" class="screen">
+      <!-- detail.html 로 분리됨 -->
+      <div id="s1-detail" class="screen" style="display:none!important">
         <div class="status-bar">
           <span class="status-time">9:41</span>
           <div class="status-icons">
@@ -2028,6 +2190,25 @@
         </div>
       </div>
 
+      <!-- ── Month Picker Sheet ── -->
+      <div class="sf-backdrop" id="month-backdrop" onclick="closeMonthSheet()"></div>
+      <div class="sf-sheet" id="month-sheet">
+        <div class="sf-sheet-handle-area">
+          <div class="sf-sheet-handle"></div>
+        </div>
+        <div class="sf-sheet-header">
+          <span class="sf-sheet-title">월 선택</span>
+          <button class="sf-sheet-close" onclick="closeMonthSheet()">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+              <line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/>
+            </svg>
+          </button>
+        </div>
+        <div class="sf-sheet-body">
+          <div class="month-list" id="month-list"></div>
+        </div>
+      </div>
+
     </div><!-- /phone-inner -->
   </div><!-- /phone -->
   </div>
@@ -2036,17 +2217,26 @@
     </div><\!-- /phone -->
 
       <script>
+        // 테마 초기화 (페이지 간 유지)
+        (function() {
+          const saved = localStorage.getItem('runit-theme');
+          if (saved) document.documentElement.setAttribute('data-theme', saved);
+        })();
+
         function toggleTheme() {
           const t = document.documentElement.getAttribute('data-theme');
-          document.documentElement.setAttribute('data-theme', t === 'light' ? 'dark' : 'light');
+          const next = t === 'light' ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', next);
+          localStorage.setItem('runit-theme', next);
         }
 
         /* ── Bottom sheet drag (removed — activity list is now inline) ── */
 
         function p1Show(name) {
-          ['home', 'stats', 'detail'].forEach(s => {
-            document.getElementById('s1-' + s).classList.toggle('active', s === name);
-          });
+          // stats / detail 은 별도 HTML 파일로 분리됨
+          if (name === 'home') {
+            document.getElementById('s1-home').classList.add('active');
+          }
         }
 
         /* ── Month navigation ── */
@@ -2061,79 +2251,79 @@
             runCount: '11 runs',
             calGrid: `
         <div class="cal-day type-none"><span class="day-num">1</span></div>
-        <div class="cal-day type-easy" onclick="p1Show('detail')"><span class="day-note">6</span></div>
-        <div class="cal-day type-easy" onclick="p1Show('detail')"><span class="day-note">9</span></div>
+        <div class="cal-day type-easy" onclick="location.href='detail.html'"><span class="day-note">6</span></div>
+        <div class="cal-day type-easy" onclick="location.href='detail.html'"><span class="day-note">9</span></div>
         <div class="cal-day type-none"><span class="day-num">4</span></div>
         <div class="cal-day type-none"><span class="day-num">5</span></div>
-        <div class="cal-day type-easy" onclick="p1Show('detail')"><span class="day-note">6</span></div>
-        <div class="cal-day type-long" onclick="p1Show('detail')"><span class="day-note">19</span></div>
+        <div class="cal-day type-easy" onclick="location.href='detail.html'"><span class="day-note">6</span></div>
+        <div class="cal-day type-long" onclick="location.href='detail.html'"><span class="day-note">19</span></div>
         <div class="cal-day type-none"><span class="day-num">8</span></div>
-        <div class="cal-day type-easy" onclick="p1Show('detail')"><span class="day-note">6</span></div>
+        <div class="cal-day type-easy" onclick="location.href='detail.html'"><span class="day-note">6</span></div>
         <div class="cal-day type-none"><span class="day-num">10</span></div>
         <div class="cal-day type-none"><span class="day-num">11</span></div>
         <div class="cal-day type-none"><span class="day-num">12</span></div>
-        <div class="cal-day type-easy" onclick="p1Show('detail')"><span class="day-note">4</span></div>
+        <div class="cal-day type-easy" onclick="location.href='detail.html'"><span class="day-note">4</span></div>
         <div class="cal-day type-none"><span class="day-num">14</span></div>
         <div class="cal-day type-none"><span class="day-num">15</span></div>
         <div class="cal-day type-none"><span class="day-num">16</span></div>
         <div class="cal-day type-none"><span class="day-num">17</span></div>
         <div class="cal-day type-none"><span class="day-num">18</span></div>
-        <div class="cal-day type-jogging" onclick="p1Show('detail')"><span class="day-note">5</span></div>
-        <div class="cal-day type-steady" onclick="p1Show('detail')"><span class="day-note">9</span></div>
+        <div class="cal-day type-jogging" onclick="location.href='detail.html'"><span class="day-note">5</span></div>
+        <div class="cal-day type-steady" onclick="location.href='detail.html'"><span class="day-note">9</span></div>
         <div class="cal-day type-none"><span class="day-num">21</span></div>
-        <div class="cal-day type-race" onclick="p1Show('detail')"><span class="day-note">H</span></div>
+        <div class="cal-day type-race" onclick="location.href='detail.html'"><span class="day-note">H</span></div>
         <div class="cal-day type-none"><span class="day-num">23</span></div>
         <div class="cal-day type-none"><span class="day-num">24</span></div>
         <div class="cal-day type-none"><span class="day-num">25</span></div>
         <div class="cal-day type-none"><span class="day-num">26</span></div>
         <div class="cal-day type-none"><span class="day-num">27</span></div>
-        <div class="cal-day type-steady" onclick="p1Show('detail')"><span class="day-note">5</span></div>
+        <div class="cal-day type-steady" onclick="location.href='detail.html'"><span class="day-note">5</span></div>
         <div class="cal-day type-none"><span class="day-num">29</span></div>
-        <div class="cal-day type-steady" onclick="p1Show('detail')"><span class="day-note">6</span></div>
+        <div class="cal-day type-steady" onclick="location.href='detail.html'"><span class="day-note">6</span></div>
         <div class="cal-day type-none"><span class="day-num">31</span></div>
         <div class="cal-day"></div><div class="cal-day"></div><div class="cal-day"></div><div class="cal-day"></div>`,
             runList: `
-        <div class="bs-row" onclick="p1Show('detail')">
+        <div class="bs-row" onclick="location.href='detail.html'">
           <div class="bs-row-info"><div class="bs-row-name">Steady Run</div><div class="bs-row-meta">Mar 30 · 5.7km · 5:36 /km</div></div>
           <div class="bs-badge type-steady"><span>6</span></div>
         </div>
-        <div class="bs-row" onclick="p1Show('detail')">
+        <div class="bs-row" onclick="location.href='detail.html'">
           <div class="bs-row-info"><div class="bs-row-name">Steady Run</div><div class="bs-row-meta">Mar 28 · 5.4km · 5:29 /km</div></div>
           <div class="bs-badge type-steady"><span>5</span></div>
         </div>
-        <div class="bs-row" onclick="p1Show('detail')">
+        <div class="bs-row" onclick="location.href='detail.html'">
           <div class="bs-row-info"><div class="bs-row-name">Half Marathon</div><div class="bs-row-meta">Mar 22 · 21.3km · 5:14 /km</div></div>
           <div class="bs-badge type-race"><span>H</span></div>
         </div>
-        <div class="bs-row" onclick="p1Show('detail')">
+        <div class="bs-row" onclick="location.href='detail.html'">
           <div class="bs-row-info"><div class="bs-row-name">Steady Run</div><div class="bs-row-meta">Mar 20 · 9.2km · 6:10 /km</div></div>
           <div class="bs-badge type-steady"><span>9</span></div>
         </div>
-        <div class="bs-row" onclick="p1Show('detail')">
+        <div class="bs-row" onclick="location.href='detail.html'">
           <div class="bs-row-info"><div class="bs-row-name">Evening Jog</div><div class="bs-row-meta">Mar 19 · 5.0km · 6:41 /km</div></div>
           <div class="bs-badge type-jogging"><span>5</span></div>
         </div>
-        <div class="bs-row" onclick="p1Show('detail')">
+        <div class="bs-row" onclick="location.href='detail.html'">
           <div class="bs-row-info"><div class="bs-row-name">Easy Run</div><div class="bs-row-meta">Mar 13 · 4.1km · 6:22 /km</div></div>
           <div class="bs-badge type-easy"><span>4</span></div>
         </div>
-        <div class="bs-row" onclick="p1Show('detail')">
+        <div class="bs-row" onclick="location.href='detail.html'">
           <div class="bs-row-info"><div class="bs-row-name">Easy Run</div><div class="bs-row-meta">Mar 9 · 5.8km · 6:08 /km</div></div>
           <div class="bs-badge type-easy"><span>6</span></div>
         </div>
-        <div class="bs-row" onclick="p1Show('detail')">
+        <div class="bs-row" onclick="location.href='detail.html'">
           <div class="bs-row-info"><div class="bs-row-name">Long Run</div><div class="bs-row-meta">Mar 7 · 18.5km · 5:52 /km</div></div>
           <div class="bs-badge type-long"><span>19</span></div>
         </div>
-        <div class="bs-row" onclick="p1Show('detail')">
+        <div class="bs-row" onclick="location.href='detail.html'">
           <div class="bs-row-info"><div class="bs-row-name">Easy Run</div><div class="bs-row-meta">Mar 6 · 6.4km · 6:15 /km</div></div>
           <div class="bs-badge type-easy"><span>6</span></div>
         </div>
-        <div class="bs-row" onclick="p1Show('detail')">
+        <div class="bs-row" onclick="location.href='detail.html'">
           <div class="bs-row-info"><div class="bs-row-name">Easy Run</div><div class="bs-row-meta">Mar 3 · 9.1km · 6:04 /km</div></div>
           <div class="bs-badge type-easy"><span>9</span></div>
         </div>
-        <div class="bs-row" onclick="p1Show('detail')">
+        <div class="bs-row" onclick="location.href='detail.html'">
           <div class="bs-row-info"><div class="bs-row-name">Easy Run</div><div class="bs-row-meta">Mar 2 · 6.2km · 6:18 /km</div></div>
           <div class="bs-badge type-easy"><span>6</span></div>
         </div>`
@@ -2147,15 +2337,15 @@
         <div class="cal-day"></div><div class="cal-day"></div><div class="cal-day"></div>
         <div class="cal-day type-none"><span class="day-num">1</span></div>
         <div class="cal-day type-none"><span class="day-num">2</span></div>
-        <div class="cal-day type-easy" onclick="p1Show('detail')"><span class="day-note">8</span></div>
-        <div class="cal-day type-easy" onclick="p1Show('detail')"><span class="day-note">10</span></div>
-        <div class="cal-day type-easy" onclick="p1Show('detail')"><span class="day-note">9</span></div>
+        <div class="cal-day type-easy" onclick="location.href='detail.html'"><span class="day-note">8</span></div>
+        <div class="cal-day type-easy" onclick="location.href='detail.html'"><span class="day-note">10</span></div>
+        <div class="cal-day type-easy" onclick="location.href='detail.html'"><span class="day-note">9</span></div>
         <div class="cal-day type-none"><span class="day-num">6</span></div>
-        <div class="cal-day type-tempo" onclick="p1Show('detail')"><span class="day-note">T</span></div>
+        <div class="cal-day type-tempo" onclick="location.href='detail.html'"><span class="day-note">T</span></div>
         <div class="cal-day type-none"><span class="day-num">8</span></div>
         <div class="cal-day type-none"><span class="day-num">9</span></div>
-        <div class="cal-day type-steady" onclick="p1Show('detail')"><span class="day-note">5</span></div>
-        <div class="cal-day type-race" onclick="p1Show('detail')"><span class="day-note">H</span></div>
+        <div class="cal-day type-steady" onclick="location.href='detail.html'"><span class="day-note">5</span></div>
+        <div class="cal-day type-race" onclick="location.href='detail.html'"><span class="day-note">H</span></div>
         <div class="cal-day type-none"><span class="day-num">12</span></div>
         <div class="cal-day type-none today"><span class="day-num">13</span></div>
         <div class="cal-day type-none"><span class="day-num">14</span></div>
@@ -2177,27 +2367,27 @@
         <div class="cal-day type-none"><span class="day-num">30</span></div>
         <div class="cal-day"></div><div class="cal-day"></div>`,
             runList: `
-        <div class="bs-row" onclick="p1Show('detail')">
+        <div class="bs-row" onclick="location.href='detail.html'">
           <div class="bs-row-info"><div class="bs-row-name">Half Marathon</div><div class="bs-row-meta">Apr 11 · 21.1km · 5:02 /km</div></div>
           <div class="bs-badge type-race"><span>H</span></div>
         </div>
-        <div class="bs-row" onclick="p1Show('detail')">
+        <div class="bs-row" onclick="location.href='detail.html'">
           <div class="bs-row-info"><div class="bs-row-name">Steady Run</div><div class="bs-row-meta">Apr 10 · 5.4km · 5:59 /km</div></div>
           <div class="bs-badge type-steady"><span>5</span></div>
         </div>
-        <div class="bs-row" onclick="p1Show('detail')">
+        <div class="bs-row" onclick="location.href='detail.html'">
           <div class="bs-row-info"><div class="bs-row-name">Tempo Run</div><div class="bs-row-meta">Apr 7 · 6.0km · 5:47 /km</div></div>
           <div class="bs-badge type-tempo"><span>T</span></div>
         </div>
-        <div class="bs-row" onclick="p1Show('detail')">
+        <div class="bs-row" onclick="location.href='detail.html'">
           <div class="bs-row-info"><div class="bs-row-name">Easy Run</div><div class="bs-row-meta">Apr 5 · 9.0km · 6:06 /km</div></div>
           <div class="bs-badge type-easy"><span>9</span></div>
         </div>
-        <div class="bs-row" onclick="p1Show('detail')">
+        <div class="bs-row" onclick="location.href='detail.html'">
           <div class="bs-row-info"><div class="bs-row-name">Easy Run</div><div class="bs-row-meta">Apr 4 · 10.2km · 5:51 /km</div></div>
           <div class="bs-badge type-easy"><span>10</span></div>
         </div>
-        <div class="bs-row" onclick="p1Show('detail')">
+        <div class="bs-row" onclick="location.href='detail.html'">
           <div class="bs-row-info"><div class="bs-row-name">Easy Run</div><div class="bs-row-meta">Apr 3 · 8.2km · 6:12 /km</div></div>
           <div class="bs-badge type-easy"><span>8</span></div>
         </div>`
@@ -2233,10 +2423,50 @@
           if (labelEl) labelEl.textContent = d.monthName;
           const gridEl = document.getElementById('cal-grid-1');
           if (gridEl) gridEl.innerHTML = d.calGrid;
-          // const listEl = document.getElementById('bs-list-1');
-          // if (listEl) listEl.innerHTML = d.runList;
           const countEl = document.getElementById('bs-count-1');
           if (countEl) countEl.textContent = d.runCount;
+        }
+
+        /* ═══════════════════════════════════════
+           MONTH PICKER
+        ═══════════════════════════════════════ */
+        function openMonthSheet() {
+          const list = document.getElementById('month-list');
+          // 최신월이 위로 오도록 역순 렌더링
+          list.innerHTML = [...MONTHS_ORDER].reverse().map((key, i) => {
+            const idx = MONTHS_ORDER.length - 1 - i;
+            const d = MONTH_DATA[key];
+            const active = idx === currentMonthIdx;
+            return `<div class="month-item ${active ? 'active' : ''}" onclick="selectMonth(${idx})">
+              <span class="month-item-label">${d.label}</span>
+              <span class="month-item-meta">${d.km} km · ${d.runCount}</span>
+            </div>`;
+          }).join('');
+          document.getElementById('month-sheet').classList.add('open');
+          document.getElementById('month-backdrop').classList.add('open');
+        }
+
+        function closeMonthSheet() {
+          document.getElementById('month-sheet').classList.remove('open');
+          document.getElementById('month-backdrop').classList.remove('open');
+        }
+
+        function selectMonth(idx) {
+          closeMonthSheet();
+          if (idx === currentMonthIdx) return;
+          const dir = idx > currentMonthIdx ? 1 : -1;
+          const wrap = document.getElementById('cal-slide-wrap');
+          wrap.classList.add(dir < 0 ? 'slide-out-right' : 'slide-out-left');
+          setTimeout(() => {
+            wrap.classList.remove('slide-out-right', 'slide-out-left');
+            wrap.style.transition = 'none';
+            wrap.classList.add(dir < 0 ? 'slide-in-left' : 'slide-in-right');
+            currentMonthIdx = idx;
+            renderMonth();
+            wrap.getBoundingClientRect();
+            wrap.style.transition = '';
+            wrap.classList.remove('slide-in-left', 'slide-in-right');
+          }, 200);
         }
 
         /* ── Bottom Sheet drag (legacy — guarded) ── */
@@ -2382,7 +2612,11 @@
            SORT / FILTER STATE
         ═══════════════════════════════════════ */
         let sortState  = { key: 'date', asc: false }; // 최신순 기본
-        let filterState = { type: null, dist: null, month: null, bpm: null, pace: null };
+        let filterState = {
+          type: null, bpm: null,
+          distMin: 0,   distMax: 42,
+          paceMin: 240, paceMax: 600  // sec/km
+        };
 
         const SORT_OPTS = [
           { key:'date',  label:'날짜',   asc:'오래된순', desc:'최신순'  },
@@ -2392,54 +2626,28 @@
           { key:'spm',   label:'케이던스',asc:'낮은순',  desc:'높은순'  },
         ];
 
-        const FILTER_CATS = [
-          {
-            key: 'type', label: '타입',
-            opts: [
-              { val:'race',    label:'레이스' },
-              { val:'tempo',   label:'템포'   },
-              { val:'steady',  label:'스테디' },
-              { val:'easy',    label:'이지'   },
-              { val:'jogging', label:'조깅'   },
-              { val:'long',    label:'롱런'   },
-            ]
-          },
-          {
-            key: 'dist', label: '거리',
-            opts: [
-              { val:'lt5',   label:'5km 미만'  },
-              { val:'5to10', label:'5–10km'    },
-              { val:'gt10',  label:'10km 이상' },
-            ]
-          },
-          {
-            key: 'month', label: '월',
-            opts: [
-              { val:4, label:'4월' },
-              { val:3, label:'3월' },
-              { val:2, label:'2월' },
-            ]
-          },
-          {
-            key: 'bpm', label: '심박수 구간',
-            opts: [
-              { val:'z1', label:'Zone 1 ~119' },
-              { val:'z2', label:'Zone 2 120–139' },
-              { val:'z3', label:'Zone 3 140–159' },
-              { val:'z4', label:'Zone 4 160–174' },
-              { val:'z5', label:'Zone 5 175+' },
-            ]
-          },
-          {
-            key: 'pace', label: '페이스 구간',
-            opts: [
-              { val:'fast',   label:'~4:59' },
-              { val:'mid',    label:'5:00–5:59' },
-              { val:'steady', label:'6:00–6:59' },
-              { val:'slow',   label:'7:00+' },
-            ]
-          },
+        const FILTER_TYPE_OPTS = [
+          { val:'race',    label:'레이스' },
+          { val:'tempo',   label:'템포'   },
+          { val:'steady',  label:'스테디' },
+          { val:'easy',    label:'이지'   },
+          { val:'jogging', label:'조깅'   },
+          { val:'long',    label:'롱런'   },
         ];
+
+        const FILTER_ZONE_OPTS = [
+          { val:'z1', label:'Z1', desc:'회복'     },
+          { val:'z2', label:'Z2', desc:'유산소'   },
+          { val:'z3', label:'Z3', desc:'유산소+'  },
+          { val:'z4', label:'Z4', desc:'역치'     },
+          { val:'z5', label:'Z5', desc:'최대'     },
+        ];
+
+        function fmtPace(sec) {
+          const m = Math.floor(sec / 60);
+          const s = sec % 60;
+          return `${m}'${String(s).padStart(2,'0')}"`;
+        }
 
         /* ═══════════════════════════════════════
            SORT/FILTER SHEETS
@@ -2498,29 +2706,109 @@
         ═══════════════════════════════════════ */
         function renderFilterPanel() {
           const container = document.getElementById('sf-filter-cats');
-          container.innerHTML = FILTER_CATS.map(cat => `
+          const { distMin, distMax, paceMin, paceMax } = filterState;
+
+          const typeChips = FILTER_TYPE_OPTS.map(o => {
+            const a = filterState.type === o.val;
+            return `<div class="filter-chip ${a?'active':''}" onclick="selectFilter('type','${o.val}')">${o.label}</div>`;
+          }).join('');
+
+          const zoneChips = FILTER_ZONE_OPTS.map(o => {
+            const a = filterState.bpm === o.val;
+            return `<div class="filter-chip zone-chip ${a?'active':''}" onclick="selectFilter('bpm','${o.val}')">
+              <span class="zone-label">${o.label}</span>
+              <span class="zone-desc">${o.desc}</span>
+            </div>`;
+          }).join('');
+
+          container.innerHTML = `
             <div class="filter-cat">
-              <div class="filter-cat-label">${cat.label}</div>
-              <div class="filter-chips">
-                ${cat.opts.map(opt => {
-                  const active = filterState[cat.key] == opt.val;
-                  return `<div class="filter-chip ${active ? 'active' : ''}"
-                    onclick="selectFilter('${cat.key}', '${opt.val}')">${opt.label}</div>`;
-                }).join('')}
+              <div class="filter-cat-label">타입</div>
+              <div class="filter-chips">${typeChips}</div>
+            </div>
+
+            <div class="filter-cat">
+              <div class="filter-cat-label">거리</div>
+              <div class="range-slider-wrap">
+                <div class="range-track"><div class="range-fill" id="dist-fill"></div></div>
+                <input type="range" class="range-input" id="dist-lo" min="0" max="42" step="1" value="${distMin}">
+                <input type="range" class="range-input" id="dist-hi" min="0" max="42" step="1" value="${distMax}">
+              </div>
+              <div class="range-val-row">
+                <span class="range-val" id="dist-lo-val"></span>
+                <span class="range-val" id="dist-hi-val"></span>
               </div>
             </div>
-          `).join('');
+
+            <div class="filter-cat">
+              <div class="filter-cat-label">페이스</div>
+              <div class="range-slider-wrap">
+                <div class="range-track"><div class="range-fill" id="pace-fill"></div></div>
+                <input type="range" class="range-input" id="pace-lo" min="240" max="600" step="10" value="${paceMin}">
+                <input type="range" class="range-input" id="pace-hi" min="240" max="600" step="10" value="${paceMax}">
+              </div>
+              <div class="range-val-row">
+                <span class="range-val" id="pace-lo-val"></span>
+                <span class="range-val" id="pace-hi-val"></span>
+              </div>
+            </div>
+
+            <div class="filter-cat">
+              <div class="filter-cat-label">심박존</div>
+              <div class="filter-chips">${zoneChips}</div>
+            </div>
+          `;
+
+          setupSlider('dist-lo','dist-hi','dist-fill','dist-lo-val','dist-hi-val',
+            0, 42,
+            v => v + ' km',
+            v => v >= 42 ? '42+ km' : v + ' km',
+            v => { filterState.distMin = v; },
+            v => { filterState.distMax = v; }
+          );
+          setupSlider('pace-lo','pace-hi','pace-fill','pace-lo-val','pace-hi-val',
+            240, 600,
+            v => fmtPace(v) + '/km',
+            v => v >= 600 ? '10\'00"+' : fmtPace(v) + '/km',
+            v => { filterState.paceMin = v; },
+            v => { filterState.paceMax = v; }
+          );
+        }
+
+        function setupSlider(loId, hiId, fillId, loValId, hiValId, min, max, fmtLo, fmtHi, onLo, onHi) {
+          const loEl = document.getElementById(loId);
+          const hiEl = document.getElementById(hiId);
+          const fillEl = document.getElementById(fillId);
+          const loValEl = document.getElementById(loValId);
+          const hiValEl = document.getElementById(hiValId);
+          function sync() {
+            const l = +loEl.value, h = +hiEl.value;
+            const pct = v => (v - min) / (max - min) * 100;
+            fillEl.style.left  = pct(l) + '%';
+            fillEl.style.width = (pct(h) - pct(l)) + '%';
+            loValEl.textContent = fmtLo(l);
+            hiValEl.textContent = fmtHi(h);
+          }
+          loEl.addEventListener('input', () => {
+            if (+loEl.value >= +hiEl.value) loEl.value = +hiEl.value - +loEl.step;
+            onLo(+loEl.value); sync(); renderList(); updateBadges();
+          });
+          hiEl.addEventListener('input', () => {
+            if (+hiEl.value <= +loEl.value) hiEl.value = +loEl.value + +hiEl.step;
+            onHi(+hiEl.value); sync(); renderList(); updateBadges();
+          });
+          sync();
         }
 
         function selectFilter(catKey, val) {
-          filterState[catKey] = filterState[catKey] == val ? null : val;
+          filterState[catKey] = filterState[catKey] === val ? null : val;
           renderFilterPanel();
           renderList();
           updateBadges();
         }
 
         function resetFilters() {
-          Object.keys(filterState).forEach(k => filterState[k] = null);
+          filterState = { type: null, bpm: null, distMin: 0, distMax: 42, paceMin: 240, paceMax: 600 };
           renderFilterPanel();
           renderList();
           updateBadges();
@@ -2533,7 +2821,9 @@
           const sortDefault = sortState.key === 'date' && !sortState.asc;
           document.getElementById('sort-badge').classList.toggle('visible', !sortDefault);
 
-          const hasFilter = Object.values(filterState).some(v => v !== null);
+          const hasFilter = filterState.type !== null || filterState.bpm !== null ||
+            filterState.distMin > 0 || filterState.distMax < 42 ||
+            filterState.paceMin > 240 || filterState.paceMax < 600;
           document.getElementById('filter-badge').classList.toggle('visible', hasFilter);
         }
 
@@ -2542,20 +2832,12 @@
         ═══════════════════════════════════════ */
         function applyFilters(runs) {
           return runs.filter(r => {
-            if (filterState.type   && r.type !== filterState.type) return false;
-            if (filterState.month  && r.month != +filterState.month) return false;
-            if (filterState.dist) {
-              if (filterState.dist === 'lt5'   && r.km >= 5)  return false;
-              if (filterState.dist === '5to10' && (r.km < 5 || r.km >= 10)) return false;
-              if (filterState.dist === 'gt10'  && r.km < 10) return false;
-            }
+            if (filterState.type && r.type !== filterState.type) return false;
+            if (r.km < filterState.distMin || r.km > filterState.distMax) return false;
+            if (r.paceV < filterState.paceMin || r.paceV > filterState.paceMax) return false;
             if (filterState.bpm) {
               const z = { z1:[0,119], z2:[120,139], z3:[140,159], z4:[160,174], z5:[175,999] }[filterState.bpm];
               if (r.bpm < z[0] || r.bpm > z[1]) return false;
-            }
-            if (filterState.pace) {
-              const p = { fast:[0,299], mid:[300,359], steady:[360,419], slow:[420,999] }[filterState.pace];
-              if (r.paceV < p[0] || r.paceV > p[1]) return false;
             }
             return true;
           });
@@ -2611,7 +2893,7 @@
         }
 
         function rowHTML(r) {
-          return `<div class="lp-row" onclick="p1Show('detail')">
+          return `<div class="lp-row" onclick="location.href='detail.html'">
             <div class="lp-badge type-${r.type}">${r.label}</div>
             <div class="lp-info">
               <div class="lp-title-row">

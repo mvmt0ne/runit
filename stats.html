@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>runit — Stats</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root, [data-theme="light"] {
+      --bg: #ACACAC;
+      --surface-1: #BCBCBC;
+      --surface-2: #A2A2A2;
+      --surface-3: #989898;
+      --accent: #9CFD32;
+      --accent-rgb: 156, 253, 50;
+      --text-1: #1A1A1A;
+      --text-2: #505050;
+      --text-3: #888888;
+    }
+    [data-theme="dark"] {
+      --bg: #191919;
+      --surface-1: #171910;
+      --surface-2: #202216;
+      --surface-3: #2B2E1E;
+      --accent: #9CFD32;
+      --accent-rgb: 156, 253, 50;
+      --text-1: #F0F0EB;
+      --text-2: #7A7A72;
+      --text-3: #3E3E38;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: 'Pretendard Variable', -apple-system, sans-serif;
+      width: 100vw; height: 100dvh;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+    .phone { width: 100%; }
+    .phone-inner {
+      background: var(--bg);
+      width: 100%; height: 100dvh;
+      max-width: 430px; margin: 0 auto;
+      position: relative;
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+
+    /* ─── Status bar ── */
+    .status-bar {
+      padding: 18px 28px 0;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-shrink: 0;
+    }
+    .status-time {
+      font-size: 15px; font-weight: 600;
+      color: var(--text-1); font-family: 'Urbanist', sans-serif;
+      transition: color 0.3s;
+    }
+    .status-icons svg { color: var(--text-1); transition: color 0.3s; }
+
+    /* ─── Back header ── */
+    .back-header {
+      padding: 14px 22px 0;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-shrink: 0;
+    }
+    .back-btn {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--surface-1); border: none; cursor: pointer;
+      color: var(--text-1);
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.3s, color 0.3s;
+    }
+    .back-title {
+      font-size: 15px; font-weight: 700;
+      color: var(--text-1); transition: color 0.3s;
+    }
+
+    /* ─── Tabs ── */
+    .tab-row {
+      display: flex; gap: 6px;
+      padding: 14px 22px 0; flex-shrink: 0;
+    }
+    .tab {
+      padding: 7px 18px; border-radius: 100px;
+      font-size: 12px; font-weight: 600;
+      font-family: 'Urbanist', sans-serif;
+      color: var(--text-2); background: var(--surface-1);
+      cursor: pointer; transition: background 0.2s, color 0.2s;
+    }
+    .tab.active { background: var(--text-1); color: var(--bg); }
+
+    /* ─── Scroll ── */
+    .scroll-area {
+      flex: 1; overflow-y: auto; padding-bottom: 40px;
+      scrollbar-width: none;
+    }
+    .scroll-area::-webkit-scrollbar { display: none; }
+
+    /* ════════════════════════════════════
+       COMPARISON CHART  (메인 섹션)
+    ════════════════════════════════════ */
+    .chart-block {
+      margin: 20px 22px 0;
+    }
+    .chart-top {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 16px;
+    }
+    .chart-period-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--text-3);
+      font-family: 'Urbanist', sans-serif;
+      transition: color 0.3s;
+    }
+    .chart-avg-line-label {
+      font-size: 11px; font-weight: 500; color: var(--text-3);
+      font-family: 'Urbanist', sans-serif;
+      display: flex; align-items: center; gap: 5px;
+      transition: color 0.3s;
+    }
+    .avg-line-dash {
+      width: 16px; height: 2px;
+      background: repeating-linear-gradient(90deg, var(--text-3) 0 4px, transparent 4px 8px);
+    }
+
+    /* 바 차트 영역 */
+    .cmp-chart {
+      position: relative;
+      height: 160px;
+      display: flex; align-items: flex-end; gap: 4px;
+    }
+    /* 평균선 */
+    .avg-line {
+      position: absolute;
+      left: 0; right: 0;
+      border-top: 1.5px dashed rgba(128,128,128,0.35);
+      pointer-events: none;
+    }
+
+    .cmp-col {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; gap: 3px;
+      min-width: 0;
+    }
+    .cmp-bar {
+      width: 100%; border-radius: 3px 3px 0 0;
+      background: var(--surface-3);
+      transition: background 0.3s, height 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .cmp-col.current .cmp-bar {
+      background: var(--accent);
+    }
+    .cmp-km {
+      font-size: 8px; font-weight: 600;
+      color: var(--text-3); font-family: 'Urbanist', sans-serif;
+      transition: color 0.3s; white-space: nowrap;
+      /* 현재 월만 표시, 나머지는 hover 시 */
+    }
+    .cmp-col:not(.current) .cmp-km { display: none; }
+    .cmp-col.current .cmp-km { color: var(--accent); font-size: 9px; }
+    .cmp-label {
+      font-size: 8px; color: var(--text-3);
+      font-family: 'Urbanist', sans-serif;
+      transition: color 0.3s; white-space: nowrap;
+    }
+    .cmp-col.current .cmp-label { color: var(--text-1); font-weight: 700; font-size: 9px; }
+
+    /* ════════════════════════════════════
+       DELTA CARDS  (핵심 비교 수치)
+    ════════════════════════════════════ */
+    .delta-row {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 8px; margin: 14px 22px 0;
+    }
+    .delta-card {
+      background: var(--surface-1); border-radius: 16px;
+      padding: 14px 16px;
+      transition: background 0.3s;
+    }
+    .delta-vs {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.05em;
+      text-transform: uppercase; color: var(--text-3);
+      margin-bottom: 8px; transition: color 0.3s;
+    }
+    .delta-km {
+      font-size: 28px; font-weight: 900;
+      font-family: 'Urbanist', sans-serif;
+      letter-spacing: -0.02em; line-height: 1;
+      transition: color 0.3s;
+    }
+    .delta-km.up   { color: var(--accent); }
+    .delta-km.down { color: var(--text-1); }
+    .delta-km span { font-size: 13px; font-weight: 500; }
+    .delta-pct {
+      font-size: 12px; font-family: 'Urbanist', sans-serif;
+      margin-top: 4px; font-weight: 600;
+      transition: color 0.3s;
+    }
+    .delta-pct.up   { color: var(--accent); }
+    .delta-pct.down { color: var(--text-3); }
+
+    /* ════════════════════════════════════
+       PACE 요약
+    ════════════════════════════════════ */
+    .pace-block {
+      margin: 14px 22px 0;
+      background: var(--surface-1); border-radius: 16px;
+      padding: 16px; transition: background 0.3s;
+    }
+    .pace-block-title {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.05em;
+      text-transform: uppercase; color: var(--text-3);
+      margin-bottom: 12px; transition: color 0.3s;
+    }
+    .pace-row {
+      display: flex; align-items: baseline; justify-content: space-between;
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(128,128,128,0.08);
+    }
+    .pace-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .pace-row:first-of-type { padding-top: 0; }
+    .pace-name {
+      font-size: 13px; color: var(--text-2);
+      transition: color 0.3s;
+    }
+    .pace-val {
+      font-size: 18px; font-weight: 800;
+      font-family: 'Urbanist', sans-serif;
+      color: var(--text-1); transition: color 0.3s;
+    }
+    .pace-val.accent { color: var(--accent); }
+    .pace-val span {
+      font-size: 11px; font-weight: 400;
+      color: var(--text-3); margin-left: 3px;
+    }
+
+    /* ════════════════════════════════════
+       LONG RUN
+    ════════════════════════════════════ */
+    .longrun-block {
+      margin: 8px 22px 0;
+      background: var(--surface-1); border-radius: 16px;
+      padding: 16px; transition: background 0.3s;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .longrun-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.05em;
+      text-transform: uppercase; color: var(--text-3);
+      transition: color 0.3s;
+    }
+    .longrun-sub {
+      font-size: 12px; color: var(--text-3);
+      margin-top: 3px; transition: color 0.3s;
+    }
+    .longrun-km {
+      font-size: 36px; font-weight: 900;
+      font-family: 'Urbanist', sans-serif;
+      color: var(--text-1); line-height: 1;
+      transition: color 0.3s;
+    }
+    .longrun-km span {
+      font-size: 14px; font-weight: 400;
+      color: var(--text-2);
+    }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="phone-inner">
+
+    <div class="status-bar">
+      <span class="status-time">9:41</span>
+      <div class="status-icons">
+        <svg width="24" height="11" viewBox="0 0 24 11">
+          <rect x="0" y="1" width="20" height="9" rx="2.5" stroke="currentColor" stroke-width="1" fill="none" opacity="0.35"/>
+          <rect x="1.5" y="2.5" width="14" height="6" rx="1.5" fill="currentColor"/>
+          <path d="M21.5 4v3a1.5 1.5 0 000-3z" fill="currentColor" opacity="0.4"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="back-header">
+      <button class="back-btn" onclick="history.back()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <span class="back-title">Statistics</span>
+      <div style="width:34px"></div>
+    </div>
+
+    <div class="tab-row">
+      <div class="tab active" data-tab="month">Month</div>
+      <div class="tab" data-tab="week">Week</div>
+    </div>
+
+    <!-- ── MONTH VIEW ── -->
+    <div class="scroll-area" id="view-month">
+
+      <!-- 비교 차트 (첫 번째) -->
+      <div class="chart-block">
+        <div class="chart-top">
+          <span class="chart-period-label">Monthly Distance</span>
+          <span class="chart-avg-line-label">
+            <span class="avg-line-dash"></span><span id="month-avg-label"></span>
+          </span>
+        </div>
+        <div class="cmp-chart" id="month-chart">
+          <!-- 평균선: JS로 위치 계산 -->
+          <div class="avg-line" id="month-avg-line"></div>
+          <!-- bars: JS 렌더링 -->
+        </div>
+      </div>
+
+      <!-- 비교 수치 카드 -->
+      <div class="delta-row">
+        <div class="delta-card">
+          <div class="delta-vs">vs Last Month</div>
+          <div class="delta-km down">−27.9<span>km</span></div>
+          <div class="delta-pct down">↓ 32% vs March</div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-vs">vs 4mo Avg</div>
+          <div class="delta-km down">−11.7<span>km</span></div>
+          <div class="delta-pct down">↓ 16% vs avg</div>
+        </div>
+      </div>
+
+      <!-- 페이스 -->
+      <div class="pace-block">
+        <div class="pace-block-title">Pace</div>
+        <div class="pace-row">
+          <span class="pace-name">Best</span>
+          <span class="pace-val accent">5:02<span>/km</span></span>
+        </div>
+        <div class="pace-row">
+          <span class="pace-name">Average</span>
+          <span class="pace-val">5:38<span>/km</span></span>
+        </div>
+        <div class="pace-row">
+          <span class="pace-name">Last Month avg</span>
+          <span class="pace-val">5:29<span>/km</span></span>
+        </div>
+      </div>
+
+      <!-- 롱런 -->
+      <div class="longrun-block">
+        <div>
+          <div class="longrun-label">Long Run</div>
+          <div class="longrun-sub">Apr 11 · Half Marathon</div>
+        </div>
+        <div class="longrun-km">21.1<span>km</span></div>
+      </div>
+
+    </div><!-- /view-month -->
+
+    <!-- ── WEEK VIEW ── -->
+    <div class="scroll-area" id="view-week" style="display:none">
+
+      <div class="chart-block">
+        <div class="chart-top">
+          <span class="chart-period-label">Weekly Distance</span>
+          <span class="chart-avg-line-label">
+            <span class="avg-line-dash"></span><span id="week-avg-label"></span>
+          </span>
+        </div>
+        <div class="cmp-chart" id="week-chart">
+          <div class="avg-line" id="week-avg-line"></div>
+        </div>
+      </div>
+
+      <div class="delta-row">
+        <div class="delta-card">
+          <div class="delta-vs">vs Last Week</div>
+          <div class="delta-km down">−19.7<span>km</span></div>
+          <div class="delta-pct down">↓ 78% vs W3</div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-vs">vs 4wk Avg</div>
+          <div class="delta-km down">−9.3<span>km</span></div>
+          <div class="delta-pct down">↓ 62% vs avg</div>
+        </div>
+      </div>
+
+      <div class="pace-block">
+        <div class="pace-block-title">This Week · Pace</div>
+        <div class="pace-row">
+          <span class="pace-name">Best</span>
+          <span class="pace-val accent">5:38<span>/km</span></span>
+        </div>
+        <div class="pace-row">
+          <span class="pace-name">Average</span>
+          <span class="pace-val">5:51<span>/km</span></span>
+        </div>
+        <div class="pace-row">
+          <span class="pace-name">Last Week avg</span>
+          <span class="pace-val">5:33<span>/km</span></span>
+        </div>
+      </div>
+
+    </div><!-- /view-week -->
+
+  </div><!-- /phone-inner -->
+</div><!-- /phone -->
+
+<script>
+  // ── 테마 ──
+  (function() {
+    const s = localStorage.getItem('runit-theme');
+    if (s) document.documentElement.setAttribute('data-theme', s);
+  })();
+
+  // ── 탭 전환 ──
+  const tabs = document.querySelectorAll('.tab');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const t = tab.dataset.tab;
+      document.getElementById('view-month').style.display = t === 'month' ? '' : 'none';
+      document.getElementById('view-week').style.display  = t === 'week'  ? '' : 'none';
+      if (t === 'week') renderWeekChart();
+    });
+  });
+
+  // ── 월별 데이터 (12개월) ──
+  const MONTH_DATA = [
+    { label:'May',  km:61.2 },
+    { label:'Jun',  km:54.8 },
+    { label:'Jul',  km:48.3 },
+    { label:'Aug',  km:43.7 },
+    { label:'Sep',  km:69.4 },
+    { label:'Oct',  km:82.1 },
+    { label:'Nov',  km:76.5 },
+    { label:'Dec',  km:55.0 },
+    { label:'Jan',  km:72.3 },
+    { label:'Feb',  km:68.1 },
+    { label:'Mar',  km:87.6 },
+    { label:'Apr',  km:59.7, current:true },
+  ];
+  const AVG_MONTH = Math.round(MONTH_DATA.reduce((s,d) => s + d.km, 0) / MONTH_DATA.length * 10) / 10;
+
+  // ── 주별 데이터 ──
+  const WEEK_DATA = [
+    { label:'W1', km:18.2 },
+    { label:'W2', km:25.3 },
+    { label:'W3', km:10.6 },
+    { label:'W4', km:5.6, current:true },
+  ];
+  const AVG_WEEK = WEEK_DATA.reduce((s,d) => s + d.km, 0) / WEEK_DATA.length;
+
+  function renderChart(containerId, avgLineId, data, avg) {
+    const container = document.getElementById(containerId);
+    const maxKm = Math.max(...data.map(d => d.km), avg * 1.05);
+
+    // 바 최대 높이 (px) — 차트 160px 중 km 텍스트·월 레이블 공간 제외
+    const BAR_MAX_PX = 110;
+    // 바 하단 기준 (cmp-label 높이 + gap)
+    const LABEL_OFFSET_PX = 18;
+
+    // 평균선 위치 (chart 하단 기준 px)
+    const avgPx = Math.round(avg / maxKm * BAR_MAX_PX) + LABEL_OFFSET_PX;
+    document.getElementById(avgLineId).style.bottom = avgPx + 'px';
+
+    // 바 생성
+    const cols = data.map(d => {
+      const barPx = Math.round(d.km / maxKm * BAR_MAX_PX);
+      const isCurrent = !!d.current;
+      return `<div class="cmp-col${isCurrent ? ' current' : ''}">
+        <span class="cmp-km">${d.km}</span>
+        <div class="cmp-bar" style="height:${barPx}px"></div>
+        <span class="cmp-label">${d.label}</span>
+      </div>`;
+    }).join('');
+
+    // avg-line을 제외한 기존 col 제거 후 추가
+    const avgLine = document.getElementById(avgLineId);
+    container.innerHTML = '';
+    container.appendChild(avgLine);
+    container.insertAdjacentHTML('beforeend', cols);
+  }
+
+  // 초기 렌더
+  renderChart('month-chart', 'month-avg-line', MONTH_DATA, AVG_MONTH);
+  document.getElementById('month-avg-label').textContent = 'avg ' + AVG_MONTH + 'km';
+
+  function renderWeekChart() {
+    renderChart('week-chart', 'week-avg-line', WEEK_DATA, AVG_WEEK);
+    document.getElementById('week-avg-label').textContent = 'avg ' + Math.round(AVG_WEEK * 10) / 10 + 'km';
+  }
+</script>
+</body>
+</html>
