@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>runit — Stats</title>
+  <title>runit — 마일리지</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -91,7 +91,6 @@
     .tab {
       padding: 7px 18px; border-radius: 100px;
       font-size: 12px; font-weight: 600;
-      font-family: 'Urbanist', sans-serif;
       color: var(--text-2); background: var(--surface-1);
       cursor: pointer; transition: background 0.2s, color 0.2s;
     }
@@ -105,19 +104,31 @@
     .scroll-area::-webkit-scrollbar { display: none; }
 
     /* ════════════════════════════════════
-       COMPARISON CHART  (메인 섹션)
+       COMPARISON CHART
     ════════════════════════════════════ */
     .chart-block {
       margin: 20px 22px 0;
     }
     .chart-top {
-      display: flex; justify-content: space-between; align-items: flex-end;
-      margin-bottom: 16px;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 14px;
     }
+    .year-nav {
+      display: flex; align-items: center; gap: 6px;
+    }
+    .year-arrow {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--surface-1); border: none; cursor: pointer;
+      color: var(--text-2);
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, color 0.2s, opacity 0.2s;
+      flex-shrink: 0;
+    }
+    .year-arrow:active { background: var(--surface-3); }
+    .year-arrow.disabled { opacity: 0.2; pointer-events: none; }
     .chart-period-label {
-      font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
-      text-transform: uppercase; color: var(--text-3);
-      font-family: 'Urbanist', sans-serif;
+      font-size: 13px; font-weight: 700;
+      color: var(--text-1);
       transition: color 0.3s;
     }
     .chart-avg-line-label {
@@ -130,51 +141,82 @@
       width: 16px; height: 2px;
       background: repeating-linear-gradient(90deg, var(--text-3) 0 4px, transparent 4px 8px);
     }
+    /* 스와이프 래퍼 */
+    .chart-swipe-wrap {
+      overflow: hidden;
+    }
+    /* 차트 슬라이드 애니메이션 */
+    .cmp-chart {
+      transition: transform 0.28s cubic-bezier(0.16,1,0.3,1), opacity 0.28s;
+    }
 
-    /* 바 차트 영역 */
+    /* 바 차트 */
     .cmp-chart {
       position: relative;
-      height: 160px;
-      display: flex; align-items: flex-end; gap: 4px;
+      height: 170px;
+      display: flex; align-items: flex-end; gap: 0;
     }
-    /* 평균선 */
     .avg-line {
       position: absolute;
       left: 0; right: 0;
       border-top: 1.5px dashed rgba(128,128,128,0.35);
       pointer-events: none;
+      z-index: 1;
     }
-
     .cmp-col {
       flex: 1; display: flex; flex-direction: column;
-      align-items: center; gap: 3px;
+      align-items: center; gap: 4px;
       min-width: 0;
     }
+    /* 슬림 바 */
     .cmp-bar {
-      width: 100%; border-radius: 3px 3px 0 0;
+      width: 7px;
+      border-radius: 3.5px 3.5px 0 0;
       background: var(--surface-3);
-      transition: background 0.3s, height 0.4s cubic-bezier(0.16,1,0.3,1);
+      transition: background 0.3s, height 0.5s cubic-bezier(0.16,1,0.3,1);
     }
+    /* 지나간 달 — 현재 달과 동일 컬러 */
+    .cmp-col.past .cmp-bar {
+      background: var(--accent);
+    }
+    /* 이번 달 — 풀 컬러 */
     .cmp-col.current .cmp-bar {
       background: var(--accent);
     }
+    /* 미래 달 — 스텁 (고정 높이, 매우 흐리게) */
+    .cmp-col.future .cmp-bar {
+      background: var(--surface-3);
+      opacity: 0.4;
+    }
+
+    /* km 수치 — 현재 열만 표시 */
     .cmp-km {
-      font-size: 8px; font-weight: 600;
-      color: var(--text-3); font-family: 'Urbanist', sans-serif;
-      transition: color 0.3s; white-space: nowrap;
-      /* 현재 월만 표시, 나머지는 hover 시 */
+      font-size: 9px; font-weight: 700;
+      font-family: 'Urbanist', sans-serif;
+      white-space: nowrap; transition: color 0.3s;
     }
     .cmp-col:not(.current) .cmp-km { display: none; }
-    .cmp-col.current .cmp-km { color: var(--accent); font-size: 9px; }
+    .cmp-col.current .cmp-km { color: var(--accent); }
+
+    /* 레이블 — 기본 (주간·년간) */
     .cmp-label {
-      font-size: 8px; color: var(--text-3);
+      font-size: 10px; color: var(--text-3);
       font-family: 'Urbanist', sans-serif;
       transition: color 0.3s; white-space: nowrap;
     }
-    .cmp-col.current .cmp-label { color: var(--text-1); font-weight: 700; font-size: 9px; }
+    .cmp-col.current .cmp-label { color: var(--text-1); font-weight: 700; }
+
+    /* 레이블 — 세로쓰기 (월간 12개월) */
+    .cmp-chart.vertical .cmp-label {
+      writing-mode: vertical-lr;
+      font-size: 11px;
+      line-height: 1;
+      height: 34px;       /* 3글자("10월") 기준 고정 — 모든 바 시작점 통일 */
+      overflow: hidden;
+    }
 
     /* ════════════════════════════════════
-       DELTA CARDS  (핵심 비교 수치)
+       DELTA CARDS
     ════════════════════════════════════ */
     .delta-row {
       display: grid; grid-template-columns: 1fr 1fr;
@@ -186,9 +228,9 @@
       transition: background 0.3s;
     }
     .delta-vs {
-      font-size: 10px; font-weight: 600; letter-spacing: 0.05em;
-      text-transform: uppercase; color: var(--text-3);
-      margin-bottom: 8px; transition: color 0.3s;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.04em;
+      color: var(--text-3); margin-bottom: 8px;
+      transition: color 0.3s;
     }
     .delta-km {
       font-size: 28px; font-weight: 900;
@@ -243,7 +285,7 @@
     }
 
     /* ════════════════════════════════════
-       LONG RUN
+       LONG RUN / BEST RUN
     ════════════════════════════════════ */
     .longrun-block {
       margin: 8px 22px 0;
@@ -293,78 +335,20 @@
           <polyline points="15 18 9 12 15 6"/>
         </svg>
       </button>
-      <span class="back-title">Statistics</span>
+      <span class="back-title">마일리지</span>
       <div style="width:34px"></div>
     </div>
 
     <div class="tab-row">
-      <div class="tab active" data-tab="month">Month</div>
-      <div class="tab" data-tab="week">Week</div>
+      <div class="tab" data-tab="week">주간</div>
+      <div class="tab active" data-tab="month">월간</div>
+      <div class="tab" data-tab="year">년간</div>
     </div>
 
-    <!-- ── MONTH VIEW ── -->
-    <div class="scroll-area" id="view-month">
-
-      <!-- 비교 차트 (첫 번째) -->
-      <div class="chart-block">
-        <div class="chart-top">
-          <span class="chart-period-label">Monthly Distance</span>
-          <span class="chart-avg-line-label">
-            <span class="avg-line-dash"></span><span id="month-avg-label"></span>
-          </span>
-        </div>
-        <div class="cmp-chart" id="month-chart">
-          <!-- 평균선: JS로 위치 계산 -->
-          <div class="avg-line" id="month-avg-line"></div>
-          <!-- bars: JS 렌더링 -->
-        </div>
-      </div>
-
-      <!-- 비교 수치 카드 -->
-      <div class="delta-row">
-        <div class="delta-card">
-          <div class="delta-vs">vs Last Month</div>
-          <div class="delta-km down">−27.9<span>km</span></div>
-          <div class="delta-pct down">↓ 32% vs March</div>
-        </div>
-        <div class="delta-card">
-          <div class="delta-vs">vs 4mo Avg</div>
-          <div class="delta-km down">−11.7<span>km</span></div>
-          <div class="delta-pct down">↓ 16% vs avg</div>
-        </div>
-      </div>
-
-      <!-- 페이스 -->
-      <div class="pace-block">
-        <div class="pace-block-title">Pace</div>
-        <div class="pace-row">
-          <span class="pace-name">Best</span>
-          <span class="pace-val accent">5:02<span>/km</span></span>
-        </div>
-        <div class="pace-row">
-          <span class="pace-name">Average</span>
-          <span class="pace-val">5:38<span>/km</span></span>
-        </div>
-        <div class="pace-row">
-          <span class="pace-name">Last Month avg</span>
-          <span class="pace-val">5:29<span>/km</span></span>
-        </div>
-      </div>
-
-      <!-- 롱런 -->
-      <div class="longrun-block">
-        <div>
-          <div class="longrun-label">Long Run</div>
-          <div class="longrun-sub">Apr 11 · Half Marathon</div>
-        </div>
-        <div class="longrun-km">21.1<span>km</span></div>
-      </div>
-
-    </div><!-- /view-month -->
-
-    <!-- ── WEEK VIEW ── -->
+    <!-- ══════════════════════════════
+         WEEK VIEW (주간)
+    ══════════════════════════════ -->
     <div class="scroll-area" id="view-week" style="display:none">
-
       <div class="chart-block">
         <div class="chart-top">
           <span class="chart-period-label">Weekly Distance</span>
@@ -379,19 +363,19 @@
 
       <div class="delta-row">
         <div class="delta-card">
-          <div class="delta-vs">vs Last Week</div>
+          <div class="delta-vs">지난주 대비</div>
           <div class="delta-km down">−19.7<span>km</span></div>
-          <div class="delta-pct down">↓ 78% vs W3</div>
+          <div class="delta-pct down">↓ 78%</div>
         </div>
         <div class="delta-card">
-          <div class="delta-vs">vs 4wk Avg</div>
-          <div class="delta-km down">−9.3<span>km</span></div>
-          <div class="delta-pct down">↓ 62% vs avg</div>
+          <div class="delta-vs">8주 평균 대비</div>
+          <div class="delta-km down">−16.2<span>km</span></div>
+          <div class="delta-pct down">↓ 74%</div>
         </div>
       </div>
 
       <div class="pace-block">
-        <div class="pace-block-title">This Week · Pace</div>
+        <div class="pace-block-title">이번 주 · 페이스</div>
         <div class="pace-row">
           <span class="pace-name">Best</span>
           <span class="pace-val accent">5:38<span>/km</span></span>
@@ -401,12 +385,129 @@
           <span class="pace-val">5:51<span>/km</span></span>
         </div>
         <div class="pace-row">
-          <span class="pace-name">Last Week avg</span>
+          <span class="pace-name">지난주 평균</span>
           <span class="pace-val">5:33<span>/km</span></span>
         </div>
       </div>
-
     </div><!-- /view-week -->
+
+    <!-- ══════════════════════════════
+         MONTH VIEW (월간)
+    ══════════════════════════════ -->
+    <div class="scroll-area" id="view-month">
+      <div class="chart-block">
+        <div class="chart-top">
+          <div class="year-nav">
+            <button class="year-arrow" id="year-prev" onclick="changeYear(-1)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <span class="chart-period-label" id="month-year-label">2026년</span>
+            <button class="year-arrow disabled" id="year-next" onclick="changeYear(1)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+          <span class="chart-avg-line-label">
+            <span class="avg-line-dash"></span><span id="month-avg-label"></span>
+          </span>
+        </div>
+        <div class="chart-swipe-wrap" id="chart-swipe-wrap">
+          <div class="cmp-chart vertical" id="month-chart">
+            <div class="avg-line" id="month-avg-line"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="delta-row">
+        <div class="delta-card">
+          <div class="delta-vs">지난달 대비</div>
+          <div class="delta-km down">−27.9<span>km</span></div>
+          <div class="delta-pct down">↓ 32%</div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-vs">12개월 평균 대비</div>
+          <div class="delta-km down">−9.4<span>km</span></div>
+          <div class="delta-pct down">↓ 14%</div>
+        </div>
+      </div>
+
+      <div class="pace-block">
+        <div class="pace-block-title">이번 달 · 페이스</div>
+        <div class="pace-row">
+          <span class="pace-name">Best</span>
+          <span class="pace-val accent">5:02<span>/km</span></span>
+        </div>
+        <div class="pace-row">
+          <span class="pace-name">Average</span>
+          <span class="pace-val">5:38<span>/km</span></span>
+        </div>
+        <div class="pace-row">
+          <span class="pace-name">지난달 평균</span>
+          <span class="pace-val">5:29<span>/km</span></span>
+        </div>
+      </div>
+
+      <div class="longrun-block">
+        <div>
+          <div class="longrun-label">Long Run</div>
+          <div class="longrun-sub">Apr 11 · Half Marathon</div>
+        </div>
+        <div class="longrun-km">21.1<span>km</span></div>
+      </div>
+    </div><!-- /view-month -->
+
+    <!-- ══════════════════════════════
+         YEAR VIEW (년간)
+    ══════════════════════════════ -->
+    <div class="scroll-area" id="view-year" style="display:none">
+      <div class="chart-block">
+        <div class="chart-top">
+          <span class="chart-period-label">Yearly Distance</span>
+          <span class="chart-avg-line-label">
+            <span class="avg-line-dash"></span><span id="year-avg-label"></span>
+          </span>
+        </div>
+        <div class="cmp-chart" id="year-chart">
+          <div class="avg-line" id="year-avg-line"></div>
+        </div>
+      </div>
+
+      <div class="delta-row">
+        <div class="delta-card">
+          <div class="delta-vs">작년 동기 대비</div>
+          <div class="delta-km up">+14.2<span>km</span></div>
+          <div class="delta-pct up">↑ 5%</div>
+        </div>
+        <div class="delta-card">
+          <div class="delta-vs">3년 평균 대비</div>
+          <div class="delta-km down">−12.6<span>km</span></div>
+          <div class="delta-pct down">↓ 4%</div>
+        </div>
+      </div>
+
+      <div class="pace-block">
+        <div class="pace-block-title">올해 · 페이스</div>
+        <div class="pace-row">
+          <span class="pace-name">Best</span>
+          <span class="pace-val accent">5:02<span>/km</span></span>
+        </div>
+        <div class="pace-row">
+          <span class="pace-name">Average</span>
+          <span class="pace-val">5:34<span>/km</span></span>
+        </div>
+        <div class="pace-row">
+          <span class="pace-name">작년 평균</span>
+          <span class="pace-val">5:41<span>/km</span></span>
+        </div>
+      </div>
+
+      <div class="longrun-block">
+        <div>
+          <div class="longrun-label">Best Run</div>
+          <div class="longrun-sub">Mar 22 · Half Marathon</div>
+        </div>
+        <div class="longrun-km">21.1<span>km</span></div>
+      </div>
+    </div><!-- /view-year -->
 
   </div><!-- /phone-inner -->
 </div><!-- /phone -->
@@ -425,76 +526,213 @@
       tabs.forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       const t = tab.dataset.tab;
-      document.getElementById('view-month').style.display = t === 'month' ? '' : 'none';
       document.getElementById('view-week').style.display  = t === 'week'  ? '' : 'none';
-      if (t === 'week') renderWeekChart();
+      document.getElementById('view-month').style.display = t === 'month' ? '' : 'none';
+      document.getElementById('view-year').style.display  = t === 'year'  ? '' : 'none';
+      if (t === 'week')  renderWeekChart();
+      if (t === 'year')  renderYearChart();
     });
   });
 
-  // ── 월별 데이터 (12개월) ──
-  const MONTH_DATA = [
-    { label:'May',  km:61.2 },
-    { label:'Jun',  km:54.8 },
-    { label:'Jul',  km:48.3 },
-    { label:'Aug',  km:43.7 },
-    { label:'Sep',  km:69.4 },
-    { label:'Oct',  km:82.1 },
-    { label:'Nov',  km:76.5 },
-    { label:'Dec',  km:55.0 },
-    { label:'Jan',  km:72.3 },
-    { label:'Feb',  km:68.1 },
-    { label:'Mar',  km:87.6 },
-    { label:'Apr',  km:59.7, current:true },
-  ];
-  const AVG_MONTH = Math.round(MONTH_DATA.reduce((s,d) => s + d.km, 0) / MONTH_DATA.length * 10) / 10;
+  // ══════════════════════════════════════
+  // 데이터
+  // ══════════════════════════════════════
 
-  // ── 주별 데이터 ──
+  // 주간 (최근 8주)
   const WEEK_DATA = [
-    { label:'W1', km:18.2 },
-    { label:'W2', km:25.3 },
-    { label:'W3', km:10.6 },
-    { label:'W4', km:5.6, current:true },
+    { label:'2.24', km:22.1 },
+    { label:'3.3',  km:18.7 },
+    { label:'3.10', km:26.4 },
+    { label:'3.17', km:31.2 },
+    { label:'3.24', km:19.8 },
+    { label:'3.31', km:28.5 },
+    { label:'4.7',  km:15.3 },
+    { label:'4.14', km:5.6,  current:true },
   ];
-  const AVG_WEEK = WEEK_DATA.reduce((s,d) => s + d.km, 0) / WEEK_DATA.length;
 
-  function renderChart(containerId, avgLineId, data, avg) {
+  // ── 연도별 월간 데이터 ──
+  const YEAR_MONTH_DATA = {
+    2024: [
+      { label:'1월',  km:58.4,  past:true },
+      { label:'2월',  km:62.1,  past:true },
+      { label:'3월',  km:71.8,  past:true },
+      { label:'4월',  km:79.3,  past:true },
+      { label:'5월',  km:74.2,  past:true },
+      { label:'6월',  km:61.5,  past:true },
+      { label:'7월',  km:49.8,  past:true },
+      { label:'8월',  km:44.6,  past:true },
+      { label:'9월',  km:77.1,  past:true },
+      { label:'10월', km:89.4,  past:true },
+      { label:'11월', km:83.7,  past:true },
+      { label:'12월', km:59.2,  past:true },
+    ],
+    2025: [
+      { label:'1월',  km:66.0,  past:true },
+      { label:'2월',  km:71.4,  past:true },
+      { label:'3월',  km:79.8,  past:true },
+      { label:'4월',  km:87.5,  past:true },
+      { label:'5월',  km:75.3,  past:true },
+      { label:'6월',  km:64.2,  past:true },
+      { label:'7월',  km:51.6,  past:true },
+      { label:'8월',  km:47.1,  past:true },
+      { label:'9월',  km:73.8,  past:true },
+      { label:'10월', km:87.9,  past:true },
+      { label:'11월', km:81.4,  past:true },
+      { label:'12월', km:63.6,  past:true },
+    ],
+    2026: [
+      { label:'1월',  km:72.3,  past:true },
+      { label:'2월',  km:68.1,  past:true },
+      { label:'3월',  km:87.6,  past:true },
+      { label:'4월',  km:59.7,  current:true },
+      { label:'5월',  km:0,     future:true },
+      { label:'6월',  km:0,     future:true },
+      { label:'7월',  km:0,     future:true },
+      { label:'8월',  km:0,     future:true },
+      { label:'9월',  km:0,     future:true },
+      { label:'10월', km:0,     future:true },
+      { label:'11월', km:0,     future:true },
+      { label:'12월', km:0,     future:true },
+    ],
+  };
+
+  let currentYear = 2026;
+  const MIN_YEAR = 2024;
+  const MAX_YEAR = 2026;
+
+  // 현재 연도 데이터 접근용 (기존 코드 호환)
+  const MONTH_DATA = YEAR_MONTH_DATA[2026];
+
+  // 년간
+  const YEAR_DATA = [
+    { label:'22년', km:680 },
+    { label:'23년', km:754 },
+    { label:'24년', km:821 },
+    { label:'25년', km:783 },
+    { label:'26년', km:287.7, current:true },
+  ];
+
+  const avg = arr => Math.round(arr.reduce((s,d) => s + d.km, 0) / arr.length * 10) / 10;
+
+  const AVG_WEEK  = avg(WEEK_DATA);
+  // 월간 avg — 완료된 달(past+current)만 계산
+  const AVG_MONTH = avg(MONTH_DATA.filter(d => !d.future));
+  const AVG_YEAR  = avg(YEAR_DATA);
+
+  // ══════════════════════════════════════
+  // 차트 렌더러
+  // opts.barMaxPx  : 바 최대 높이 (px)
+  // opts.labelOffset: 레이블 높이 포함 바닥 오프셋 (px)
+  // ══════════════════════════════════════
+  function renderChart(containerId, avgLineId, data, avg, opts) {
+    const BAR_MAX_PX   = opts.barMaxPx   || 115;
+    const LABEL_OFFSET = opts.labelOffset || 20;
+    const FUTURE_H     = 4; // 미래 달 스텁 높이 (px)
+
     const container = document.getElementById(containerId);
-    const maxKm = Math.max(...data.map(d => d.km), avg * 1.05);
+    // maxKm — 미래(km=0) 제외하고 계산
+    const activeData = data.filter(d => !d.future);
+    const maxKm = Math.max(...activeData.map(d => d.km), avg * 1.05);
 
-    // 바 최대 높이 (px) — 차트 160px 중 km 텍스트·월 레이블 공간 제외
-    const BAR_MAX_PX = 110;
-    // 바 하단 기준 (cmp-label 높이 + gap)
-    const LABEL_OFFSET_PX = 18;
-
-    // 평균선 위치 (chart 하단 기준 px)
-    const avgPx = Math.round(avg / maxKm * BAR_MAX_PX) + LABEL_OFFSET_PX;
+    // 평균선 위치
+    const avgPx = Math.round(avg / maxKm * BAR_MAX_PX) + LABEL_OFFSET;
     document.getElementById(avgLineId).style.bottom = avgPx + 'px';
 
-    // 바 생성
+    // 컬럼 생성
     const cols = data.map(d => {
-      const barPx = Math.round(d.km / maxKm * BAR_MAX_PX);
-      const isCurrent = !!d.current;
-      return `<div class="cmp-col${isCurrent ? ' current' : ''}">
+      let cls = 'cmp-col';
+      if (d.past)    cls += ' past';
+      if (d.current) cls += ' current';
+      if (d.future)  cls += ' future';
+
+      const barPx = d.future
+        ? FUTURE_H
+        : Math.max(3, Math.round(d.km / maxKm * BAR_MAX_PX));
+
+      return `<div class="${cls}">
         <span class="cmp-km">${d.km}</span>
         <div class="cmp-bar" style="height:${barPx}px"></div>
         <span class="cmp-label">${d.label}</span>
       </div>`;
     }).join('');
 
-    // avg-line을 제외한 기존 col 제거 후 추가
     const avgLine = document.getElementById(avgLineId);
     container.innerHTML = '';
     container.appendChild(avgLine);
     container.insertAdjacentHTML('beforeend', cols);
   }
 
-  // 초기 렌더
-  renderChart('month-chart', 'month-avg-line', MONTH_DATA, AVG_MONTH);
-  document.getElementById('month-avg-label').textContent = 'avg ' + AVG_MONTH + 'km';
+  // ── 연도 변경 ──
+  function updateYearNav() {
+    document.getElementById('month-year-label').textContent = currentYear + '년';
+    document.getElementById('year-prev').classList.toggle('disabled', currentYear <= MIN_YEAR);
+    document.getElementById('year-next').classList.toggle('disabled', currentYear >= MAX_YEAR);
+  }
+
+  function updateMonthChart() {
+    const data = YEAR_MONTH_DATA[currentYear];
+    const activeAvg = avg(data.filter(d => !d.future));
+    renderChart('month-chart', 'month-avg-line', data, activeAvg, {
+      barMaxPx: 115, labelOffset: 38
+    });
+    document.getElementById('month-avg-label').textContent = 'avg ' + activeAvg + 'km';
+  }
+
+  function changeYear(dir) {
+    const next = currentYear + dir;
+    if (next < MIN_YEAR || next > MAX_YEAR) return;
+
+    const chart = document.getElementById('month-chart');
+
+    // 슬라이드 아웃
+    chart.style.transition = 'transform 0.22s cubic-bezier(0.4,0,1,1), opacity 0.22s';
+    chart.style.transform = `translateX(${dir > 0 ? '-40px' : '40px'})`;
+    chart.style.opacity = '0';
+
+    setTimeout(() => {
+      currentYear = next;
+      updateYearNav();
+      updateMonthChart();
+
+      // 진입 위치 세팅 (트랜지션 없이)
+      chart.style.transition = 'none';
+      chart.style.transform = `translateX(${dir > 0 ? '40px' : '-40px'})`;
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          chart.style.transition = 'transform 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.3s';
+          chart.style.transform = 'translateX(0)';
+          chart.style.opacity = '1';
+        });
+      });
+    }, 220);
+  }
+
+  // 터치 스와이프
+  let touchStartX = 0;
+  const swipeWrap = document.getElementById('chart-swipe-wrap');
+  swipeWrap.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  swipeWrap.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) changeYear(diff > 0 ? 1 : -1);
+  });
+
+  // ── 초기 렌더 (월간) ──
+  updateYearNav();
+  updateMonthChart();
 
   function renderWeekChart() {
-    renderChart('week-chart', 'week-avg-line', WEEK_DATA, AVG_WEEK);
-    document.getElementById('week-avg-label').textContent = 'avg ' + Math.round(AVG_WEEK * 10) / 10 + 'km';
+    renderChart('week-chart', 'week-avg-line', WEEK_DATA, AVG_WEEK, {
+      barMaxPx: 115, labelOffset: 18
+    });
+    document.getElementById('week-avg-label').textContent = 'avg ' + AVG_WEEK + 'km';
+  }
+
+  function renderYearChart() {
+    renderChart('year-chart', 'year-avg-line', YEAR_DATA, AVG_YEAR, {
+      barMaxPx: 115, labelOffset: 18
+    });
+    document.getElementById('year-avg-label').textContent = 'avg ' + AVG_YEAR + 'km';
   }
 </script>
 </body>
