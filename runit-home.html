@@ -27,6 +27,7 @@
       --surface-3: #989898;
       --surface-4: #C0C0C0;
       --surface-5: #CACACA;
+      --surface-6: #929292;
       --accent: #9CFD32;
       --accent-rgb: 156, 253, 50;
       --accent-dim: rgba(156, 253, 50, 0.2);
@@ -40,13 +41,16 @@
 
     [data-theme="dark"] {
       --bg: #191919;
-      --surface-1: #171910;
-      --surface-2: #202216;
-      --surface-3: #2B2E1E;
+      --surface-1: #1d1d1d;
+      --surface-2: #232323;
+      --surface-3: #363636;
+      --surface-4: #484848;
+      --surface-5: #585858;
+      --surface-6: #d4d4d4;
       --accent: #9CFD32;
       --accent-dim: rgba(156, 253, 50, 0.13);
       --text-1: #F0F0EB;
-      --text-2: #7A7A72;
+      --text-2: #8d8d8d;
       --text-3: #3E3E38;
       --body-bg: #0A0B09;
       --phone-frame: #111209;
@@ -359,7 +363,7 @@
     .hero-title {}
 
     .hero-title-line {
-      font-size: 20px;
+      font-size: 24px;
       font-weight: 300;
       color: var(--text-1);
       letter-spacing: -0.03em;
@@ -787,12 +791,13 @@
     .sf-backdrop {
       position: absolute;
       inset: 0;
-      background: rgba(0,0,0,0.45);
+      background: rgba(0, 0, 0, 0.55);
       z-index: 80;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.28s;
     }
+
     .sf-backdrop.open {
       opacity: 1;
       pointer-events: auto;
@@ -803,7 +808,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: var(--surface-1);
+      background: var(--surface-3);
       border-radius: 20px 20px 0 0;
       z-index: 90;
       display: flex;
@@ -811,24 +816,28 @@
       max-height: 82%;
       transform: translateY(100%);
       transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-                  background 0.3s;
+        background 0.3s;
     }
+
     .sf-sheet.open {
       transform: translateY(0);
     }
+
     .sf-sheet-handle-area {
       padding: 10px 0 4px;
       display: flex;
       justify-content: center;
       flex-shrink: 0;
     }
+
     .sf-sheet-handle {
       width: 36px;
       height: 4px;
       border-radius: 2px;
-      background: var(--surface-3);
+      background: var(--surface-4);
       transition: background 0.3s;
     }
+
     .sf-sheet-header {
       display: flex;
       align-items: center;
@@ -836,14 +845,15 @@
       padding: 6px 20px 10px;
       flex-shrink: 0;
     }
+
     .sf-sheet-title {
-      font-size: 16px;
-      font-weight: 500;
+      font-size: 18px;
+      font-weight: 200;
       font-family: 'Pretendard Variable', sans-serif;
       color: var(--text-1);
-      letter-spacing: -0.03em;
       transition: color 0.3s;
     }
+
     .sf-sheet-close {
       width: 28px;
       height: 28px;
@@ -857,13 +867,18 @@
       color: var(--text-2);
       transition: background 0.3s;
     }
+
     .sf-sheet-body {
       overflow-y: auto;
       scrollbar-width: none;
       flex: 1;
       padding: 4px 20px 12px;
     }
-    .sf-sheet-body::-webkit-scrollbar { display: none; }
+
+    .sf-sheet-body::-webkit-scrollbar {
+      display: none;
+    }
+
     .sf-section-label {
       font-size: 11px;
       font-weight: 600;
@@ -874,40 +889,43 @@
       font-family: 'Urbanist', sans-serif;
       transition: color 0.3s;
     }
+
     .sf-divider {
       height: 1px;
-      background: rgba(128,128,128,0.12);
+      background: rgba(128, 128, 128, 0.12);
       margin: 14px 0;
     }
+
     .sf-sheet-footer {
       display: flex;
       gap: 10px;
       padding: 10px 20px 28px;
       flex-shrink: 0;
-      border-top: 1px solid rgba(128,128,128,0.1);
+      border-top: 1px solid rgba(128, 128, 128, 0.1);
     }
+
     .sf-reset-btn {
       flex: 1;
-      padding: 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(128,128,128,0.2);
+      padding: 14px;
+      border: none;
       background: transparent;
-      font-size: 14px;
+      font-size: 18px;
       font-family: 'Pretendard Variable', sans-serif;
       color: var(--text-2);
       cursor: pointer;
       transition: color 0.3s, background 0.15s;
     }
+
     .sf-apply-btn {
       flex: 2;
-      padding: 12px;
+      padding: 14px;
       border-radius: 12px;
       border: none;
-      background: var(--accent);
-      font-size: 14px;
-      font-weight: 600;
+      background: var(--surface-6);
+      font-size: 18px;
+      font-weight: 500;
       font-family: 'Pretendard Variable', sans-serif;
-      color: #000;
+      color: var(--text-3);
       cursor: pointer;
     }
 
@@ -922,11 +940,13 @@
       margin-left: -2px;
       transition: background 0.15s;
     }
+
     .hero-month-tap:active {
-      background: rgba(128,128,128,0.12);
+      background: rgba(128, 128, 128, 0.12);
     }
+
     .hero-month-chevron {
-      color: var(--accent);
+      color: var(--text-1);
       opacity: 0.8;
       flex-shrink: 0;
     }
@@ -937,6 +957,7 @@
       flex-direction: column;
       gap: 2px;
     }
+
     .month-item {
       display: flex;
       align-items: center;
@@ -946,12 +967,15 @@
       cursor: pointer;
       transition: background 0.15s;
     }
+
     .month-item:active {
-      background: rgba(128,128,128,0.12);
+      background: rgba(128, 128, 128, 0.12);
     }
+
     .month-item.active {
-      background: rgba(128,128,128,0.08);
+      background: rgba(128, 128, 128, 0.08);
     }
+
     .month-item-label {
       font-size: 16px;
       font-weight: 400;
@@ -960,16 +984,19 @@
       letter-spacing: -0.02em;
       transition: color 0.2s;
     }
+
     .month-item.active .month-item-label {
       color: var(--text-1);
       font-weight: 500;
     }
+
     .month-item-meta {
       font-size: 13px;
       font-family: 'Urbanist', sans-serif;
       color: var(--text-3);
       transition: color 0.2s;
     }
+
     .month-item.active .month-item-meta {
       color: var(--accent);
     }
@@ -992,11 +1019,11 @@
     }
 
     .sort-opt:active {
-      background: rgba(128,128,128,0.12);
+      background: rgba(128, 128, 128, 0.12);
     }
 
     .sort-opt.active {
-      background: rgba(128,128,128,0.1);
+      background: rgba(128, 128, 128, 0.1);
     }
 
     .sort-opt-label {
@@ -1029,23 +1056,21 @@
     .filter-cats {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 30px;
     }
 
     .filter-cat {
       display: flex;
       flex-direction: column;
-      gap: 7px;
+      gap: 12px;
     }
 
     .filter-cat-label {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.05em;
+      font-size: 14px;
+      font-weight: 300;
       text-transform: uppercase;
-      color: var(--text-2);
+      color: var(--text-1);
       font-family: 'Urbanist', sans-serif;
-      opacity: 0.6;
     }
 
     .filter-chips {
@@ -1055,14 +1080,13 @@
     }
 
     .filter-chip {
-      padding: 5px 12px;
+      padding: 10px 16px;
       border-radius: 20px;
-      font-size: 13px;
+      font-size: 16px;
       font-weight: 400;
       font-family: 'Pretendard Variable', sans-serif;
       color: var(--text-2);
-      background: rgba(128,128,128,0.1);
-      border: 1px solid transparent;
+      background: rgba(128, 128, 128, 0.1);
       cursor: pointer;
       transition: all 0.15s;
       white-space: nowrap;
@@ -1083,17 +1107,19 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2px;
-      padding: 6px 12px;
+      gap: 6px;
+      padding: 12px 18px;
     }
+
     .zone-chip .zone-label {
-      font-size: 12px;
-      font-weight: 700;
+      font-size: 16px;
+      font-weight: 600;
       font-family: 'Urbanist', sans-serif;
       line-height: 1;
     }
+
     .zone-chip .zone-desc {
-      font-size: 10px;
+      font-size: 13px;
       font-family: 'Pretendard Variable', sans-serif;
       line-height: 1;
       opacity: 0.7;
@@ -1102,9 +1128,9 @@
     /* Range Slider */
     .range-slider-wrap {
       position: relative;
-      height: 30px;
-      margin: 6px 4px 0;
+      margin: 10px 0 0;
     }
+
     .range-track {
       position: absolute;
       top: 50%;
@@ -1112,16 +1138,18 @@
       left: 0;
       right: 0;
       height: 3px;
-      background: rgba(128,128,128,0.15);
+      background: rgba(128, 128, 128, 0.15);
       border-radius: 2px;
       pointer-events: none;
     }
+
     .range-fill {
       position: absolute;
       height: 100%;
       background: var(--accent);
       border-radius: 2px;
     }
+
     input[type='range'].range-input {
       position: absolute;
       top: 50%;
@@ -1137,48 +1165,51 @@
       padding: 0;
       margin: 0;
     }
+
     input[type='range'].range-input::-webkit-slider-thumb {
       -webkit-appearance: none;
       width: 20px;
       height: 20px;
       border-radius: 50%;
-      background: var(--accent);
+      background: var(--surface-6);
       pointer-events: auto;
       cursor: grab;
-      border: 2.5px solid var(--bg);
-      box-shadow: 0 1px 6px rgba(0,0,0,0.25);
+
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
       transition: transform 0.1s;
     }
+
     input[type='range'].range-input:active::-webkit-slider-thumb {
       cursor: grabbing;
-      transform: scale(1.15);
+      transform: scale(1.35);
     }
+
     input[type='range'].range-input::-moz-range-thumb {
       width: 20px;
       height: 20px;
       border-radius: 50%;
       background: var(--accent);
       border: 2.5px solid var(--bg);
-      box-shadow: 0 1px 6px rgba(0,0,0,0.25);
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.85);
       cursor: grab;
       pointer-events: auto;
     }
+
     .range-val-row {
       display: flex;
       justify-content: space-between;
       margin-top: 8px;
-      padding: 0 4px;
     }
+
     .range-val {
-      font-size: 12px;
+      font-size: 14px;
       font-family: 'Urbanist', sans-serif;
-      color: var(--accent);
+      color: var(--text-2);
       font-weight: 600;
-      letter-spacing: 0.01em;
     }
 
     .filter-reset-btn {
-      font-size: 13px;
+      font-size: 14px;
       font-family: 'Pretendard Variable', sans-serif;
       color: var(--text-2);
       background: none;
@@ -1847,7 +1878,12 @@
 
             <div class="hero-section">
               <div class="hero-title">
-                <div class="hero-title-line"><span class="hero-month-tap" onclick="openMonthSheet()"><span id="hero-month-label">4월</span><svg class="hero-month-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>, 워니님의</div>
+                <div class="hero-title-line"><span class="hero-month-tap" onclick="openMonthSheet()"><span
+                      id="hero-month-label">4월</span><svg class="hero-month-chevron" width="14" height="14"
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg></span></div>
                 <div class="hero-title-line">마일리지는</div>
               </div>
               <div class="theme-toggle" onclick="toggleTheme()">
@@ -1893,15 +1929,21 @@
                   <div class="cal-day"></div>
                   <div class="cal-day type-none"><span class="day-num">1</span></div>
                   <div class="cal-day type-none"><span class="day-num">2</span></div>
-                  <div class="cal-day type-easy" onclick="location.href='detail.html'"><span class="day-note">8</span></div>
-                  <div class="cal-day type-easy" onclick="location.href='detail.html'"><span class="day-note">10</span></div>
-                  <div class="cal-day type-easy" onclick="location.href='detail.html'"><span class="day-note">9</span></div>
+                  <div class="cal-day type-easy" onclick="location.href='detail.html'"><span class="day-note">8</span>
+                  </div>
+                  <div class="cal-day type-easy" onclick="location.href='detail.html'"><span class="day-note">10</span>
+                  </div>
+                  <div class="cal-day type-easy" onclick="location.href='detail.html'"><span class="day-note">9</span>
+                  </div>
                   <div class="cal-day type-none"><span class="day-num">6</span></div>
-                  <div class="cal-day type-tempo" onclick="location.href='detail.html'"><span class="day-note">T</span></div>
+                  <div class="cal-day type-tempo" onclick="location.href='detail.html'"><span class="day-note">T</span>
+                  </div>
                   <div class="cal-day type-none"><span class="day-num">8</span></div>
                   <div class="cal-day type-none"><span class="day-num">9</span></div>
-                  <div class="cal-day type-steady" onclick="location.href='detail.html'"><span class="day-note">5</span></div>
-                  <div class="cal-day type-race" onclick="location.href='detail.html'"><span class="day-note">H</span></div>
+                  <div class="cal-day type-steady" onclick="location.href='detail.html'"><span class="day-note">5</span>
+                  </div>
+                  <div class="cal-day type-race" onclick="location.href='detail.html'"><span class="day-note">H</span>
+                  </div>
                   <div class="cal-day type-none"><span class="day-num">12</span></div>
                   <div class="cal-day type-none today"><span class="day-num">13</span></div>
                   <div class="cal-day type-none"><span class="day-num">14</span></div>
@@ -2155,8 +2197,10 @@
         <div class="sf-sheet-header">
           <span class="sf-sheet-title">정렬</span>
           <button class="sf-sheet-close" onclick="closeSFSheet()">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-              <line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round">
+              <line x1="2" y1="2" x2="12" y2="12" />
+              <line x1="12" y1="2" x2="2" y2="12" />
             </svg>
           </button>
         </div>
@@ -2176,8 +2220,10 @@
         <div class="sf-sheet-header">
           <span class="sf-sheet-title">필터</span>
           <button class="sf-sheet-close" onclick="closeSFSheet()">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-              <line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round">
+              <line x1="2" y1="2" x2="12" y2="12" />
+              <line x1="12" y1="2" x2="2" y2="12" />
             </svg>
           </button>
         </div>
@@ -2199,8 +2245,10 @@
         <div class="sf-sheet-header">
           <span class="sf-sheet-title">월 선택</span>
           <button class="sf-sheet-close" onclick="closeMonthSheet()">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-              <line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round">
+              <line x1="2" y1="2" x2="12" y2="12" />
+              <line x1="12" y1="2" x2="2" y2="12" />
             </svg>
           </button>
         </div>
@@ -2218,7 +2266,7 @@
 
       <script>
         // 테마 초기화 (페이지 간 유지)
-        (function() {
+        (function () {
           const saved = localStorage.getItem('runit-theme');
           if (saved) document.documentElement.setAttribute('data-theme', saved);
         })();
@@ -2585,68 +2633,68 @@
         ═══════════════════════════════════════ */
         const RUNS = [
           // 4월
-          { id:1,  date:'2026-04-11', label:'4/11', month:4, type:'race',    name:'2026 인천하프',  time:'08:00', km:21.2, pace:'5:02', paceV:302, bpm:176, spm:174 },
-          { id:2,  date:'2026-04-10', label:'4/10', month:4, type:'jogging', name:'회복 조깅',      time:'07:30', km:5.4,  pace:'6:52', paceV:412, bpm:142, spm:163 },
-          { id:3,  date:'2026-04-07', label:'4/7',  month:4, type:'tempo',   name:'템포 런',        time:'06:15', km:8.0,  pace:'4:45', paceV:285, bpm:169, spm:180 },
-          { id:4,  date:'2026-04-05', label:'4/5',  month:4, type:'easy',    name:'이지 런',        time:'06:30', km:7.2,  pace:'6:15', paceV:375, bpm:138, spm:162 },
-          { id:5,  date:'2026-04-04', label:'4/4',  month:4, type:'easy',    name:'이지 런',        time:'18:00', km:6.8,  pace:'6:20', paceV:380, bpm:135, spm:160 },
-          { id:6,  date:'2026-04-03', label:'4/3',  month:4, type:'easy',    name:'이지 런',        time:'07:00', km:5.0,  pace:'6:40', paceV:400, bpm:132, spm:158 },
+          { id: 1, date: '2026-04-11', label: '4/11', month: 4, type: 'race', name: '2026 인천하프', time: '08:00', km: 21.2, pace: '5:02', paceV: 302, bpm: 176, spm: 174 },
+          { id: 2, date: '2026-04-10', label: '4/10', month: 4, type: 'jogging', name: '회복 조깅', time: '07:30', km: 5.4, pace: '6:52', paceV: 412, bpm: 142, spm: 163 },
+          { id: 3, date: '2026-04-07', label: '4/7', month: 4, type: 'tempo', name: '템포 런', time: '06:15', km: 8.0, pace: '4:45', paceV: 285, bpm: 169, spm: 180 },
+          { id: 4, date: '2026-04-05', label: '4/5', month: 4, type: 'easy', name: '이지 런', time: '06:30', km: 7.2, pace: '6:15', paceV: 375, bpm: 138, spm: 162 },
+          { id: 5, date: '2026-04-04', label: '4/4', month: 4, type: 'easy', name: '이지 런', time: '18:00', km: 6.8, pace: '6:20', paceV: 380, bpm: 135, spm: 160 },
+          { id: 6, date: '2026-04-03', label: '4/3', month: 4, type: 'easy', name: '이지 런', time: '07:00', km: 5.0, pace: '6:40', paceV: 400, bpm: 132, spm: 158 },
           // 3월
-          { id:7,  date:'2026-03-30', label:'3/30', month:3, type:'steady',  name:'스테디 런',      time:'07:30', km:10.5, pace:'5:30', paceV:330, bpm:158, spm:170 },
-          { id:8,  date:'2026-03-28', label:'3/28', month:3, type:'steady',  name:'스테디 런',      time:'07:00', km:9.8,  pace:'5:38', paceV:338, bpm:155, spm:168 },
-          { id:9,  date:'2026-03-22', label:'3/22', month:3, type:'race',    name:'서울 10K',       time:'09:00', km:10.0, pace:'4:52', paceV:292, bpm:172, spm:177 },
-          { id:10, date:'2026-03-20', label:'3/20', month:3, type:'steady',  name:'스테디 런',      time:'07:15', km:11.2, pace:'5:25', paceV:325, bpm:160, spm:171 },
-          { id:11, date:'2026-03-19', label:'3/19', month:3, type:'jogging', name:'회복 조깅',      time:'07:30', km:4.8,  pace:'7:05', paceV:425, bpm:138, spm:161 },
-          { id:12, date:'2026-03-13', label:'3/13', month:3, type:'easy',    name:'이지 런',        time:'06:45', km:8.5,  pace:'6:08', paceV:368, bpm:141, spm:164 },
-          { id:13, date:'2026-03-09', label:'3/9',  month:3, type:'easy',    name:'이지 런',        time:'07:00', km:6.0,  pace:'6:22', paceV:382, bpm:136, spm:160 },
+          { id: 7, date: '2026-03-30', label: '3/30', month: 3, type: 'steady', name: '스테디 런', time: '07:30', km: 10.5, pace: '5:30', paceV: 330, bpm: 158, spm: 170 },
+          { id: 8, date: '2026-03-28', label: '3/28', month: 3, type: 'steady', name: '스테디 런', time: '07:00', km: 9.8, pace: '5:38', paceV: 338, bpm: 155, spm: 168 },
+          { id: 9, date: '2026-03-22', label: '3/22', month: 3, type: 'race', name: '서울 10K', time: '09:00', km: 10.0, pace: '4:52', paceV: 292, bpm: 172, spm: 177 },
+          { id: 10, date: '2026-03-20', label: '3/20', month: 3, type: 'steady', name: '스테디 런', time: '07:15', km: 11.2, pace: '5:25', paceV: 325, bpm: 160, spm: 171 },
+          { id: 11, date: '2026-03-19', label: '3/19', month: 3, type: 'jogging', name: '회복 조깅', time: '07:30', km: 4.8, pace: '7:05', paceV: 425, bpm: 138, spm: 161 },
+          { id: 12, date: '2026-03-13', label: '3/13', month: 3, type: 'easy', name: '이지 런', time: '06:45', km: 8.5, pace: '6:08', paceV: 368, bpm: 141, spm: 164 },
+          { id: 13, date: '2026-03-09', label: '3/9', month: 3, type: 'easy', name: '이지 런', time: '07:00', km: 6.0, pace: '6:22', paceV: 382, bpm: 136, spm: 160 },
           // 2월
-          { id:14, date:'2026-02-25', label:'2/25', month:2, type:'long',    name:'롱 런',          time:'07:00', km:18.0, pace:'5:48', paceV:348, bpm:155, spm:168 },
-          { id:15, date:'2026-02-18', label:'2/18', month:2, type:'tempo',   name:'템포 런',        time:'06:30', km:7.5,  pace:'4:52', paceV:292, bpm:167, spm:178 },
-          { id:16, date:'2026-02-10', label:'2/10', month:2, type:'steady',  name:'스테디 런',      time:'07:15', km:9.2,  pace:'5:42', paceV:342, bpm:152, spm:167 },
-          { id:17, date:'2026-02-02', label:'2/2',  month:2, type:'easy',    name:'이지 런',        time:'08:00', km:5.5,  pace:'6:28', paceV:388, bpm:133, spm:159 },
+          { id: 14, date: '2026-02-25', label: '2/25', month: 2, type: 'long', name: '롱 런', time: '07:00', km: 18.0, pace: '5:48', paceV: 348, bpm: 155, spm: 168 },
+          { id: 15, date: '2026-02-18', label: '2/18', month: 2, type: 'tempo', name: '템포 런', time: '06:30', km: 7.5, pace: '4:52', paceV: 292, bpm: 167, spm: 178 },
+          { id: 16, date: '2026-02-10', label: '2/10', month: 2, type: 'steady', name: '스테디 런', time: '07:15', km: 9.2, pace: '5:42', paceV: 342, bpm: 152, spm: 167 },
+          { id: 17, date: '2026-02-02', label: '2/2', month: 2, type: 'easy', name: '이지 런', time: '08:00', km: 5.5, pace: '6:28', paceV: 388, bpm: 133, spm: 159 },
         ];
 
-        const MONTH_LABELS = { 4:'4월', 3:'3월', 2:'2월' };
+        const MONTH_LABELS = { 4: '4월', 3: '3월', 2: '2월' };
 
         /* ═══════════════════════════════════════
            SORT / FILTER STATE
         ═══════════════════════════════════════ */
-        let sortState  = { key: 'date', asc: false }; // 최신순 기본
+        let sortState = { key: 'date', asc: false }; // 최신순 기본
         let filterState = {
           type: null, bpm: null,
-          distMin: 0,   distMax: 42,
+          distMin: 0, distMax: 42,
           paceMin: 240, paceMax: 600  // sec/km
         };
 
         const SORT_OPTS = [
-          { key:'date',  label:'날짜',   asc:'오래된순', desc:'최신순'  },
-          { key:'km',    label:'거리',   asc:'짧은순',   desc:'긴 순'   },
-          { key:'paceV', label:'페이스', asc:'느린순',   desc:'빠른순'  },
-          { key:'bpm',   label:'심박수', asc:'낮은순',   desc:'높은순'  },
-          { key:'spm',   label:'케이던스',asc:'낮은순',  desc:'높은순'  },
+          { key: 'date', label: '날짜', asc: '오래된순', desc: '최신순' },
+          { key: 'km', label: '거리', asc: '짧은순', desc: '긴 순' },
+          { key: 'paceV', label: '페이스', asc: '느린순', desc: '빠른순' },
+          { key: 'bpm', label: '심박수', asc: '낮은순', desc: '높은순' },
+          { key: 'spm', label: '케이던스', asc: '낮은순', desc: '높은순' },
         ];
 
         const FILTER_TYPE_OPTS = [
-          { val:'race',    label:'레이스' },
-          { val:'tempo',   label:'템포'   },
-          { val:'steady',  label:'스테디' },
-          { val:'easy',    label:'이지'   },
-          { val:'jogging', label:'조깅'   },
-          { val:'long',    label:'롱런'   },
+          { val: 'race', label: '레이스' },
+          { val: 'tempo', label: '템포' },
+          { val: 'steady', label: '스테디' },
+          { val: 'easy', label: '이지' },
+          { val: 'jogging', label: '조깅' },
+          { val: 'long', label: '롱런' },
         ];
 
         const FILTER_ZONE_OPTS = [
-          { val:'z1', label:'Z1', desc:'회복'     },
-          { val:'z2', label:'Z2', desc:'유산소'   },
-          { val:'z3', label:'Z3', desc:'유산소+'  },
-          { val:'z4', label:'Z4', desc:'역치'     },
-          { val:'z5', label:'Z5', desc:'최대'     },
+          { val: 'z1', label: 'Z1', desc: '회복' },
+          { val: 'z2', label: 'Z2', desc: '유산소' },
+          { val: 'z3', label: 'Z3', desc: '유산소+' },
+          { val: 'z4', label: 'Z4', desc: '역치' },
+          { val: 'z5', label: 'Z5', desc: '최대' },
         ];
 
         function fmtPace(sec) {
           const m = Math.floor(sec / 60);
           const s = sec % 60;
-          return `${m}'${String(s).padStart(2,'0')}"`;
+          return `${m}'${String(s).padStart(2, '0')}"`;
         }
 
         /* ═══════════════════════════════════════
@@ -2710,12 +2758,12 @@
 
           const typeChips = FILTER_TYPE_OPTS.map(o => {
             const a = filterState.type === o.val;
-            return `<div class="filter-chip ${a?'active':''}" onclick="selectFilter('type','${o.val}')">${o.label}</div>`;
+            return `<div class="filter-chip ${a ? 'active' : ''}" onclick="selectFilter('type','${o.val}')">${o.label}</div>`;
           }).join('');
 
           const zoneChips = FILTER_ZONE_OPTS.map(o => {
             const a = filterState.bpm === o.val;
-            return `<div class="filter-chip zone-chip ${a?'active':''}" onclick="selectFilter('bpm','${o.val}')">
+            return `<div class="filter-chip zone-chip ${a ? 'active' : ''}" onclick="selectFilter('bpm','${o.val}')">
               <span class="zone-label">${o.label}</span>
               <span class="zone-desc">${o.desc}</span>
             </div>`;
@@ -2729,27 +2777,27 @@
 
             <div class="filter-cat">
               <div class="filter-cat-label">거리</div>
-              <div class="range-slider-wrap">
-                <div class="range-track"><div class="range-fill" id="dist-fill"></div></div>
-                <input type="range" class="range-input" id="dist-lo" min="0" max="42" step="1" value="${distMin}">
-                <input type="range" class="range-input" id="dist-hi" min="0" max="42" step="1" value="${distMax}">
-              </div>
               <div class="range-val-row">
                 <span class="range-val" id="dist-lo-val"></span>
                 <span class="range-val" id="dist-hi-val"></span>
               </div>
+              <div class="range-slider-wrap">
+                <div class="range-track"><div class="range-fill" id="dist-fill"></div></div>
+                <input type="range" class="range-input" id="dist-lo" min="0" max="42" step="1" value="${distMin}">
+                <input type="range" class="range-input" id="dist-hi" min="0" max="42" step="1" value="${distMax}">
+              </div>              
             </div>
 
             <div class="filter-cat">
               <div class="filter-cat-label">페이스</div>
+              <div class="range-val-row">
+                <span class="range-val" id="pace-lo-val"></span>
+                <span class="range-val" id="pace-hi-val"></span>
+              </div>
               <div class="range-slider-wrap">
                 <div class="range-track"><div class="range-fill" id="pace-fill"></div></div>
                 <input type="range" class="range-input" id="pace-lo" min="240" max="600" step="10" value="${paceMin}">
                 <input type="range" class="range-input" id="pace-hi" min="240" max="600" step="10" value="${paceMax}">
-              </div>
-              <div class="range-val-row">
-                <span class="range-val" id="pace-lo-val"></span>
-                <span class="range-val" id="pace-hi-val"></span>
               </div>
             </div>
 
@@ -2759,14 +2807,14 @@
             </div>
           `;
 
-          setupSlider('dist-lo','dist-hi','dist-fill','dist-lo-val','dist-hi-val',
+          setupSlider('dist-lo', 'dist-hi', 'dist-fill', 'dist-lo-val', 'dist-hi-val',
             0, 42,
             v => v + ' km',
             v => v >= 42 ? '42+ km' : v + ' km',
             v => { filterState.distMin = v; },
             v => { filterState.distMax = v; }
           );
-          setupSlider('pace-lo','pace-hi','pace-fill','pace-lo-val','pace-hi-val',
+          setupSlider('pace-lo', 'pace-hi', 'pace-fill', 'pace-lo-val', 'pace-hi-val',
             240, 600,
             v => fmtPace(v) + '/km',
             v => v >= 600 ? '10\'00"+' : fmtPace(v) + '/km',
@@ -2784,7 +2832,7 @@
           function sync() {
             const l = +loEl.value, h = +hiEl.value;
             const pct = v => (v - min) / (max - min) * 100;
-            fillEl.style.left  = pct(l) + '%';
+            fillEl.style.left = pct(l) + '%';
             fillEl.style.width = (pct(h) - pct(l)) + '%';
             loValEl.textContent = fmtLo(l);
             hiValEl.textContent = fmtHi(h);
@@ -2836,7 +2884,7 @@
             if (r.km < filterState.distMin || r.km > filterState.distMax) return false;
             if (r.paceV < filterState.paceMin || r.paceV > filterState.paceMax) return false;
             if (filterState.bpm) {
-              const z = { z1:[0,119], z2:[120,139], z3:[140,159], z4:[160,174], z5:[175,999] }[filterState.bpm];
+              const z = { z1: [0, 119], z2: [120, 139], z3: [140, 159], z4: [160, 174], z5: [175, 999] }[filterState.bpm];
               if (r.bpm < z[0] || r.bpm > z[1]) return false;
             }
             return true;
@@ -2850,7 +2898,7 @@
           const { key, asc } = sortState;
           return [...runs].sort((a, b) => {
             let va = a[key], vb = b[key];
-            if (key === 'date') { va = va.replace(/-/g,''); vb = vb.replace(/-/g,''); }
+            if (key === 'date') { va = va.replace(/-/g, ''); vb = vb.replace(/-/g, ''); }
             return asc ? (va > vb ? 1 : -1) : (va < vb ? 1 : -1);
           });
         }
@@ -2860,7 +2908,7 @@
         ═══════════════════════════════════════ */
         function renderList() {
           const container = document.getElementById('runs-list-container');
-          const sorted  = applySort(applyFilters(RUNS));
+          const sorted = applySort(applyFilters(RUNS));
 
           if (sorted.length === 0) {
             container.innerHTML = '<div class="empty-result">해당하는 활동이 없습니다</div>';
@@ -2876,7 +2924,7 @@
               if (!groups[r.month]) groups[r.month] = [];
               groups[r.month].push(r);
             });
-            const months = Object.keys(groups).sort((a,b) => sortState.asc ? a-b : b-a);
+            const months = Object.keys(groups).sort((a, b) => sortState.asc ? a - b : b - a);
             container.innerHTML = months.map(m => {
               const runs = groups[m];
               const totalKm = runs.reduce((s, r) => s + r.km, 0).toFixed(1);
