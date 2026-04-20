@@ -679,9 +679,6 @@
       justify-content: space-between;
       padding: 20px;
       flex-shrink: 0;
-      position: sticky;
-      top: 0;
-      z-index: 10;
       background: #CACACA;
       transition: background 0.3s;
     }
@@ -763,6 +760,44 @@
       cursor: pointer;
     }
 
+    /* ─── 하단 플로팅 정렬/필터 바 ──────────── */
+    .float-sf-bar {
+      position: absolute;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      background: var(--surface-3);
+      border-radius: 100px;
+      padding: 10px 20px;
+      z-index: 50;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.25s cubic-bezier(0.16,1,0.3,1);
+    }
+    .float-sf-bar.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+    .float-sf-bar .sf-divider {
+      width: 1px; height: 18px;
+      background: rgba(128,128,128,0.3);
+    }
+    .float-sf-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 14px; font-weight: 400;
+      font-family: 'Pretendard Variable', sans-serif;
+      color: var(--text-2);
+      cursor: pointer;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .float-sf-item.active { color: var(--accent); }
+
     /* ─── Sort / Filter ────────────────────── */
     .sf-btn {
       position: relative;
@@ -791,7 +826,9 @@
     .sf-backdrop {
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.55);
+      background: transparent;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       z-index: 80;
       opacity: 0;
       pointer-events: none;
@@ -829,6 +866,28 @@
       bottom: auto;
       border-radius: 0 0 20px 20px;
       transform: translateY(-100%);
+    }
+
+    /* 중앙 모달 */
+    .month-modal {
+      position: absolute;
+      left: 20px; right: 20px;
+      top: 50%; transform: translateY(calc(-50% + 20px));
+      background: var(--surface-2);
+      border-radius: 20px;
+      z-index: 90;
+      display: flex;
+      flex-direction: column;
+      max-height: 70%;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.22s cubic-bezier(0.16,1,0.3,1);
+    }
+    .month-modal.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(-50%);
     }
 
     .sf-sheet-handle-area {
@@ -976,96 +1035,50 @@
       pointer-events: auto;
     }
 
-    /* ─── Month Wheel Picker ──────────────── */
-    .wheel-picker {
-      position: relative;
-      height: 260px;
-      overflow: hidden;
-      margin: 0 -4px;
-    }
-
-    .wheel-picker-scroll {
-      height: 100%;
-      overflow-y: scroll;
-      scroll-snap-type: y mandatory;
+    /* ─── Month List Picker ──────────────── */
+    .month-list {
+      max-height: 300px;
+      overflow-y: auto;
       scrollbar-width: none;
     }
+    .month-list::-webkit-scrollbar { display: none; }
 
-    .wheel-picker-scroll::-webkit-scrollbar {
-      display: none;
-    }
-
-    .wheel-spacer {
-      height: 104px;
-      flex-shrink: 0;
-    }
-
-    .wheel-picker-item {
-      height: 52px;
+    .month-list-item {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 6px;
-      scroll-snap-align: center;
+      justify-content: space-between;
+      padding: 14px 4px;
+      border-bottom: 1px solid rgba(128,128,128,0.08);
       cursor: pointer;
-      transition: color 0.15s;
+      transition: opacity 0.15s;
     }
+    .month-list-item:last-child { border-bottom: none; }
+    .month-list-item:active { opacity: 0.5; }
 
-    .wheel-item-month {
-      font-size: 20px;
+    .month-list-label {
+      font-size: 17px;
       font-weight: 300;
       font-family: 'Pretendard Variable', sans-serif;
-      color: var(--text-2);
-      letter-spacing: -0.03em;
-      transition: color 0.15s, font-weight 0.15s;
+      color: var(--text-1);
+      letter-spacing: -0.02em;
     }
-
-    .wheel-item-year {
+    .month-list-year {
       font-size: 13px;
       font-family: 'Urbanist', sans-serif;
       color: var(--text-2);
-      opacity: 0.55;
-      transition: color 0.15s, opacity 0.15s;
     }
-
-    .wheel-picker-item.wp-selected .wheel-item-month {
-      color: var(--text-1);
+    .month-list-item.ml-selected .month-list-label {
+      color: var(--accent);
       font-weight: 500;
     }
-
-    .wheel-picker-item.wp-selected .wheel-item-year {
+    .month-list-check {
+      width: 18px; height: 18px;
       color: var(--accent);
-      opacity: 1;
+      opacity: 0;
+      transition: opacity 0.15s;
+      flex-shrink: 0;
     }
-
-    .wheel-picker-band {
-      position: absolute;
-      top: 104px;
-      left: 4px;
-      right: 4px;
-      height: 52px;
-      background: rgba(128, 128, 128, 0.1);
-      border-radius: 10px;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .wheel-picker-scroll {
-      -webkit-mask-image: linear-gradient(
-        to bottom,
-        transparent 0%,
-        black 30%,
-        black 70%,
-        transparent 100%
-      );
-      mask-image: linear-gradient(
-        to bottom,
-        transparent 0%,
-        black 30%,
-        black 70%,
-        transparent 100%
-      );
-    }
+    .month-list-item.ml-selected .month-list-check { opacity: 1; }
 
     .wheel-sheet-footer {
       display: flex;
@@ -1379,7 +1392,7 @@
       background: #CACACA;
       transition: background 0.3s;
       position: sticky;
-      top: 60px;
+      top: 0;
       z-index: 5;
       display: flex;
       justify-content: space-between;
@@ -2121,34 +2134,13 @@
             <!-- 섹션 헤더 -->
             <div class="list-sheet-handle" id="list-sheet-handle-1">
               <div class="list-sheet-title">러닝 활동</div>
-              <div class="list-sheet-actions lp-actions">
-                <div class="lp-action-btn sf-btn" id="sort-btn" onclick="openSortSheet()">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M8 6l4-4 4 4" />
-                    <line x1="12" y1="2" x2="12" y2="14" />
-                    <path d="M16 18l-4 4-4-4" />
-                    <line x1="12" y1="22" x2="12" y2="10" />
-                  </svg>
-                  <span class="sf-badge" id="sort-badge"></span>
-                </div>
-                <div class="lp-action-btn sf-btn" id="filter-btn" onclick="openFilterSheet()">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-                    stroke-linecap="round">
-                    <line x1="4" y1="6" x2="20" y2="6" />
-                    <line x1="7" y1="12" x2="17" y2="12" />
-                    <line x1="10" y1="18" x2="14" y2="18" />
-                  </svg>
-                  <span class="sf-badge" id="filter-badge"></span>
-                </div>
-              </div>
             </div>
 
 
             <!-- 시트 본문 -->
             <div class="list-sheet-content" id="runs-list-container">
               <!-- 동적 렌더링 -->
-            </div><\!-- /runs-list-container -->
+            </div><!-- /runs-list-container -->
 
           </div><!-- /list-sheet -->
 
@@ -2334,47 +2326,33 @@
       <!-- ── Sort Sheet ── -->
       <div class="sf-backdrop" id="sf-backdrop" onclick="closeSFSheet()"></div>
 
-      <div class="sf-sheet" id="sort-sheet">
-        <div class="sf-sheet-handle-area">
-          <div class="sf-sheet-handle"></div>
-        </div>
-        <div class="sf-sheet-header">
+      <div class="month-modal" id="sort-sheet">
+        <div class="sf-sheet-header" style="padding: 18px 20px 14px; flex-shrink:0;">
           <span class="sf-sheet-title">정렬</span>
           <button class="sf-sheet-close" onclick="closeSFSheet()">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2"
-              stroke-linecap="round">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
               <line x1="2" y1="2" x2="12" y2="12" />
               <line x1="12" y1="2" x2="2" y2="12" />
             </svg>
           </button>
         </div>
-        <div class="sf-sheet-body">
-          <div class="sort-opts" id="sf-sort-opts"></div>
-        </div>
-        <div class="sf-sheet-footer">
-          <button class="sf-apply-btn" onclick="closeSFSheet()">적용</button>
-        </div>
+        <div class="month-list" id="sf-sort-opts" style="padding: 0 20px 20px;"></div>
       </div>
 
-      <!-- ── Filter Sheet ── -->
-      <div class="sf-sheet" id="filter-sheet">
-        <div class="sf-sheet-handle-area">
-          <div class="sf-sheet-handle"></div>
-        </div>
-        <div class="sf-sheet-header">
+      <div class="month-modal" id="filter-sheet">
+        <div class="sf-sheet-header" style="padding: 18px 20px 14px; flex-shrink:0;">
           <span class="sf-sheet-title">필터</span>
           <button class="sf-sheet-close" onclick="closeSFSheet()">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2"
-              stroke-linecap="round">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
               <line x1="2" y1="2" x2="12" y2="12" />
               <line x1="12" y1="2" x2="2" y2="12" />
             </svg>
           </button>
         </div>
-        <div class="sf-sheet-body">
+        <div class="sf-sheet-body" style="padding: 0 20px 8px;">
           <div class="filter-cats" id="sf-filter-cats"></div>
         </div>
-        <div class="sf-sheet-footer">
+        <div class="sf-sheet-footer" style="padding: 8px 20px 20px;">
           <button class="sf-reset-btn" onclick="resetFilters()">초기화</button>
           <button class="sf-apply-btn" onclick="closeSFSheet()">적용</button>
         </div>
@@ -2382,8 +2360,8 @@
 
       <!-- ── Month Picker Sheet ── -->
       <div class="sf-backdrop" id="month-backdrop" onclick="closeMonthSheet()"></div>
-      <div class="sf-sheet sf-sheet--top" id="month-sheet">
-        <div class="sf-sheet-header">
+      <div class="month-modal" id="month-sheet">
+        <div class="sf-sheet-header" style="padding: 18px 20px 14px; flex-shrink:0;">
           <span class="sf-sheet-title">월 선택</span>
           <button class="sf-sheet-close" onclick="closeMonthSheet()">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
@@ -2392,37 +2370,28 @@
             </svg>
           </button>
         </div>
-        <!-- 비교 토글 -->
-        <div style="display:flex; align-items:center; justify-content:space-between; padding: 0 20px 12px;">
-          <span style="font-size:13px; color:var(--text-2); font-family:'Urbanist',sans-serif;">네이티브 OS 피커</span>
-          <label style="position:relative; width:44px; height:26px; cursor:pointer;">
-            <input type="checkbox" id="picker-toggle" onchange="togglePickerMode(this.checked)"
-              style="opacity:0; width:0; height:0; position:absolute;">
-            <span id="picker-toggle-track" style="
-              position:absolute; inset:0; border-radius:13px;
-              background:var(--surface-3); transition:background 0.2s;"></span>
-            <span id="picker-toggle-thumb" style="
-              position:absolute; top:3px; left:3px; width:20px; height:20px;
-              border-radius:50%; background:#fff; transition:transform 0.2s;"></span>
-          </label>
-        </div>
+        <div class="month-list" id="month-list-scroll" style="padding: 0 20px 20px;"></div>
+      </div>
 
-        <div class="sf-sheet-body" style="padding: 0 20px 28px; overflow: hidden;">
-          <!-- 커스텀 피커 -->
-          <div class="wheel-picker" id="custom-picker-wrap">
-            <div class="wheel-picker-band"></div>
-            <div class="wheel-picker-scroll" id="month-wheel-scroll"></div>
-          </div>
-          <!-- 네이티브 피커 -->
-          <div id="native-picker-wrap" style="display:none; padding: 20px 0; text-align:center;">
-            <input type="month" id="native-month-input"
-              style="
-                font-size:17px; font-family:'Pretendard Variable',sans-serif;
-                background:transparent; border:none; color:var(--text-1);
-                outline:none; width:100%;
-              "
-              onchange="onNativeMonthChange(this.value)">
-          </div>
+      <!-- 하단 플로팅 정렬/필터 바 -->
+      <div class="float-sf-bar" id="float-sf-bar">
+        <div class="float-sf-item" id="float-sort-btn" onclick="openSortSheet()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 6l4-4 4 4"/><line x1="12" y1="2" x2="12" y2="14"/>
+            <path d="M16 18l-4 4-4-4"/><line x1="12" y1="22" x2="12" y2="10"/>
+          </svg>
+          정렬
+          <span class="sf-badge" id="float-sort-badge"></span>
+        </div>
+        <div class="sf-divider"></div>
+        <div class="float-sf-item" id="float-filter-btn" onclick="openFilterSheet()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <line x1="4" y1="6" x2="20" y2="6"/>
+            <line x1="7" y1="12" x2="17" y2="12"/>
+            <line x1="10" y1="18" x2="14" y2="18"/>
+          </svg>
+          필터
+          <span class="sf-badge" id="float-filter-badge"></span>
         </div>
       </div>
 
@@ -2430,31 +2399,10 @@
   </div><!-- /phone -->
   </div>
 
-  </div><\!-- /phone-inner -->
-    </div><\!-- /phone -->
+  </div><!-- /phone-inner -->
+    </div><!-- /phone -->
 
       <script>
-        // ── 피커 모드 토글 ──
-        function togglePickerMode(isNative) {
-          const custom = document.getElementById('custom-picker-wrap');
-          const native = document.getElementById('native-picker-wrap');
-          const track  = document.getElementById('picker-toggle-track');
-          const thumb  = document.getElementById('picker-toggle-thumb');
-          custom.style.display = isNative ? 'none' : '';
-          native.style.display = isNative ? '' : 'none';
-          track.style.background = isNative ? 'var(--accent)' : 'var(--surface-3)';
-          thumb.style.transform  = isNative ? 'translateX(18px)' : 'translateX(0)';
-          if (isNative) {
-            // 현재 선택된 월을 네이티브 input에 반영
-            const inp = document.getElementById('native-month-input');
-            const now = new Date();
-            inp.value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-          }
-        }
-        function onNativeMonthChange(val) {
-          // 필요 시 앱 상태에 연결 가능
-          console.log('native selected:', val);
-        }
 
         // 테마 초기화 (페이지 간 유지)
         (function () {
@@ -2667,88 +2615,50 @@
         }
 
         /* ═══════════════════════════════════════
-           MONTH WHEEL PICKER
+           MONTH LIST PICKER
         ═══════════════════════════════════════ */
-        const WHEEL_ITEM_H = 52;
-
-        // April 2026 → January 2025 (16 months)
         const ALL_MONTHS = (() => {
           const list = [];
           let y = 2026, m = 4;
           while (y > 2025 || (y === 2025 && m >= 1)) {
             list.push({ year: y, month: m });
-            m--;
-            if (m === 0) { m = 12; y--; }
+            m--; if (m === 0) { m = 12; y--; }
           }
           return list;
         })();
 
-        // Map wheel index → MONTHS_ORDER index
-        const WHEEL_KEY_MAP = { '2026-4': 1, '2026-3': 0 };
-
-        let wheelPendingIdx = 0; // default: April 2026
-        let wheelScrollTimer = null;
+        const MONTH_KEY_MAP = { '2026-4': 1, '2026-3': 0 };
 
         function openMonthSheet() {
-          // Sync wheelPendingIdx with currentMonthIdx
-          const key = MONTHS_ORDER[currentMonthIdx];
-          const d = MONTH_DATA[key];
-          // Find matching wheel index
-          const match = ALL_MONTHS.findIndex(m => {
+          const list = document.getElementById('month-list-scroll');
+          list.innerHTML = ALL_MONTHS.map((m, i) => {
             const mk = `${m.year}-${m.month}`;
-            return WHEEL_KEY_MAP[mk] === currentMonthIdx;
-          });
-          wheelPendingIdx = match >= 0 ? match : 0;
-
-          const scroll = document.getElementById('month-wheel-scroll');
-          const items = ALL_MONTHS.map((m, i) =>
-            `<div class="wheel-picker-item${i === wheelPendingIdx ? ' wp-selected' : ''}" onclick="onWheelItemTap(${i})">
-              <span class="wheel-item-month">${m.month}월</span>
-              <span class="wheel-item-year">${m.year}</span>
-            </div>`
-          ).join('');
-          scroll.innerHTML = '<div class="wheel-spacer"></div>' + items + '<div class="wheel-spacer"></div>';
+            const isSel = MONTH_KEY_MAP[mk] === currentMonthIdx;
+            return `<div class="month-list-item${isSel ? ' ml-selected' : ''}" onclick="selectListItem(${i})">
+              <div>
+                <span class="month-list-label">${m.month}월</span>
+                ${m.month === 1 ? `<span class="month-list-year"> · ${m.year}</span>` : ''}
+              </div>
+              <svg class="month-list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>`;
+          }).join('');
 
           document.getElementById('month-sheet').classList.add('open');
           document.getElementById('month-backdrop').classList.add('open');
 
-          scroll.addEventListener('scroll', onWheelScroll);
-
+          // 선택된 항목으로 스크롤
           requestAnimationFrame(() => {
-            scroll.scrollTop = wheelPendingIdx * WHEEL_ITEM_H;
+            const sel = list.querySelector('.ml-selected');
+            if (sel) sel.scrollIntoView({ block: 'center' });
           });
         }
 
-        function onWheelScroll() {
-          const scroll = document.getElementById('month-wheel-scroll');
-          clearTimeout(wheelScrollTimer);
-          const idx = Math.round(scroll.scrollTop / WHEEL_ITEM_H);
-          updateWheelHighlight(idx);
-          wheelScrollTimer = setTimeout(() => {
-            const snapped = Math.round(scroll.scrollTop / WHEEL_ITEM_H);
-            wheelPendingIdx = Math.max(0, Math.min(snapped, ALL_MONTHS.length - 1));
-            updateWheelHighlight(wheelPendingIdx);
-          }, 150);
-        }
-
-        function updateWheelHighlight(idx) {
-          const scroll = document.getElementById('month-wheel-scroll');
-          scroll.querySelectorAll('.wheel-picker-item').forEach((el, i) => {
-            el.classList.toggle('wp-selected', i === idx);
-          });
-        }
-
-        function closeMonthSheet() {
-          const scroll = document.getElementById('month-wheel-scroll');
-          scroll.removeEventListener('scroll', onWheelScroll);
-          document.getElementById('month-sheet').classList.remove('open');
-          document.getElementById('month-backdrop').classList.remove('open');
-        }
-
-        function confirmMonthWheel() {
-          const m = ALL_MONTHS[wheelPendingIdx];
+        function selectListItem(i) {
+          const m = ALL_MONTHS[i];
           const mk = `${m.year}-${m.month}`;
-          const newIdx = WHEEL_KEY_MAP[mk];
+          const newIdx = MONTH_KEY_MAP[mk];
           closeMonthSheet();
           if (newIdx === undefined || newIdx === currentMonthIdx) return;
           const dir = newIdx > currentMonthIdx ? 1 : -1;
@@ -2766,20 +2676,10 @@
           }, 200);
         }
 
-        function onWheelItemTap(i) {
-          if (i === wheelPendingIdx) {
-            confirmMonthWheel();
-          } else {
-            // 다른 아이템 탭 → 스크롤 후 확정
-            const scroll = document.getElementById('month-wheel-scroll');
-            scroll.scrollTo({ top: i * WHEEL_ITEM_H, behavior: 'smooth' });
-            wheelPendingIdx = i;
-            updateWheelHighlight(i);
-            clearTimeout(wheelScrollTimer);
-          }
+        function closeMonthSheet() {
+          document.getElementById('month-sheet').classList.remove('open');
+          document.getElementById('month-backdrop').classList.remove('open');
         }
-
-        function selectMonth(idx) { confirmMonthWheel(); }
 
         /* ── Bottom Sheet drag (legacy — guarded) ── */
         (function () {
@@ -2931,11 +2831,16 @@
         };
 
         const SORT_OPTS = [
-          { key: 'date', label: '날짜', asc: '오래된순', desc: '최신순' },
-          { key: 'km', label: '거리', asc: '짧은순', desc: '긴 순' },
-          { key: 'paceV', label: '페이스', asc: '느린순', desc: '빠른순' },
-          { key: 'bpm', label: '심박수', asc: '낮은순', desc: '높은순' },
-          { key: 'spm', label: '케이던스', asc: '낮은순', desc: '높은순' },
+          { key: 'date', asc: false, label: '날짜 최신순' },
+          { key: 'date', asc: true,  label: '날짜 오래된순' },
+          { key: 'km',   asc: false, label: '거리 긴순' },
+          { key: 'km',   asc: true,  label: '거리 짧은순' },
+          { key: 'paceV',asc: true,  label: '페이스 빠른순' },
+          { key: 'paceV',asc: false, label: '페이스 느린순' },
+          { key: 'bpm',  asc: false, label: '심박수 높은순' },
+          { key: 'bpm',  asc: true,  label: '심박수 낮은순' },
+          { key: 'spm',  asc: false, label: '케이던스 높은순' },
+          { key: 'spm',  asc: true,  label: '케이던스 낮은순' },
         ];
 
         const FILTER_TYPE_OPTS = [
@@ -2968,22 +2873,22 @@
           renderSortPanel();
           document.getElementById('sort-sheet').classList.add('open');
           document.getElementById('sf-backdrop').classList.add('open');
-          document.getElementById('sort-btn').classList.add('active');
+          document.getElementById('float-sort-btn').classList.add('active');
         }
 
         function openFilterSheet() {
           renderFilterPanel();
           document.getElementById('filter-sheet').classList.add('open');
           document.getElementById('sf-backdrop').classList.add('open');
-          document.getElementById('filter-btn').classList.add('active');
+          document.getElementById('float-filter-btn').classList.add('active');
         }
 
         function closeSFSheet() {
           document.getElementById('sort-sheet').classList.remove('open');
           document.getElementById('filter-sheet').classList.remove('open');
           document.getElementById('sf-backdrop').classList.remove('open');
-          document.getElementById('sort-btn').classList.remove('active');
-          document.getElementById('filter-btn').classList.remove('active');
+          document.getElementById('float-sort-btn').classList.remove('active');
+          document.getElementById('float-filter-btn').classList.remove('active');
         }
 
         /* ═══════════════════════════════════════
@@ -2991,26 +2896,24 @@
         ═══════════════════════════════════════ */
         function renderSortPanel() {
           const container = document.getElementById('sf-sort-opts');
-          container.innerHTML = SORT_OPTS.map(opt => {
-            const active = sortState.key === opt.key;
-            const dir = active ? (sortState.asc ? opt.asc : opt.desc) : '';
-            return `<div class="sort-opt ${active ? 'active' : ''}" onclick="selectSort('${opt.key}')">
-              <span class="sort-opt-label">${opt.label}</span>
-              <span class="sort-opt-dir">${dir}</span>
+          container.innerHTML = SORT_OPTS.map((opt, i) => {
+            const active = sortState.key === opt.key && sortState.asc === opt.asc;
+            return `<div class="month-list-item${active ? ' ml-selected' : ''}" onclick="selectSort(${i})">
+              <span class="month-list-label">${opt.label}</span>
+              <svg class="month-list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
             </div>`;
           }).join('');
         }
 
-        function selectSort(key) {
-          if (sortState.key === key) {
-            sortState.asc = !sortState.asc; // 방향 토글
-          } else {
-            sortState.key = key;
-            sortState.asc = key === 'paceV'; // 페이스는 낮을수록 빠름
-          }
-          renderSortPanel();
+        function selectSort(i) {
+          const opt = SORT_OPTS[i];
+          sortState.key = opt.key;
+          sortState.asc = opt.asc;
           renderList();
           updateBadges();
+          closeSFSheet();
         }
 
         /* ═══════════════════════════════════════
@@ -3131,12 +3034,12 @@
         ═══════════════════════════════════════ */
         function updateBadges() {
           const sortDefault = sortState.key === 'date' && !sortState.asc;
-          document.getElementById('sort-badge').classList.toggle('visible', !sortDefault);
+          document.getElementById('float-sort-badge').classList.toggle('visible', !sortDefault);
 
           const hasFilter = filterState.type !== null || filterState.bpm !== null ||
             filterState.distMin > 0 || filterState.distMax < 42 ||
             filterState.paceMin > 240 || filterState.paceMax < 600;
-          document.getElementById('filter-badge').classList.toggle('visible', hasFilter);
+          document.getElementById('float-filter-badge').classList.toggle('visible', hasFilter);
         }
 
         /* ═══════════════════════════════════════
@@ -3221,6 +3124,25 @@
             </div>
           </div>`;
         }
+
+        /* ═══════════════════════════════════════
+           FLOATING BAR — IntersectionObserver
+        ═══════════════════════════════════════ */
+        (function initFloatBar() {
+          const handle = document.getElementById('list-sheet-handle-1');
+          const floatBar = document.getElementById('float-sf-bar');
+          const scrollRoot = document.querySelector('.cal-area');
+          if (!handle || !floatBar || !scrollRoot) return;
+
+          const observer = new IntersectionObserver(
+            ([entry]) => {
+              // handle이 scroll root 위로 올라가면(intersecting=false) 플로팅바 표시
+              floatBar.classList.toggle('visible', !entry.isIntersecting);
+            },
+            { root: scrollRoot, threshold: 0 }
+          );
+          observer.observe(handle);
+        })();
 
         /* ═══════════════════════════════════════
            INIT
