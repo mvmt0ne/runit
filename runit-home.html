@@ -2392,10 +2392,36 @@
             </svg>
           </button>
         </div>
-        <div class="sf-sheet-body" style="padding: 8px 20px 28px; overflow: hidden;">
-          <div class="wheel-picker">
+        <!-- 비교 토글 -->
+        <div style="display:flex; align-items:center; justify-content:space-between; padding: 0 20px 12px;">
+          <span style="font-size:13px; color:var(--text-2); font-family:'Urbanist',sans-serif;">네이티브 OS 피커</span>
+          <label style="position:relative; width:44px; height:26px; cursor:pointer;">
+            <input type="checkbox" id="picker-toggle" onchange="togglePickerMode(this.checked)"
+              style="opacity:0; width:0; height:0; position:absolute;">
+            <span id="picker-toggle-track" style="
+              position:absolute; inset:0; border-radius:13px;
+              background:var(--surface-3); transition:background 0.2s;"></span>
+            <span id="picker-toggle-thumb" style="
+              position:absolute; top:3px; left:3px; width:20px; height:20px;
+              border-radius:50%; background:#fff; transition:transform 0.2s;"></span>
+          </label>
+        </div>
+
+        <div class="sf-sheet-body" style="padding: 0 20px 28px; overflow: hidden;">
+          <!-- 커스텀 피커 -->
+          <div class="wheel-picker" id="custom-picker-wrap">
             <div class="wheel-picker-band"></div>
             <div class="wheel-picker-scroll" id="month-wheel-scroll"></div>
+          </div>
+          <!-- 네이티브 피커 -->
+          <div id="native-picker-wrap" style="display:none; padding: 20px 0; text-align:center;">
+            <input type="month" id="native-month-input"
+              style="
+                font-size:17px; font-family:'Pretendard Variable',sans-serif;
+                background:transparent; border:none; color:var(--text-1);
+                outline:none; width:100%;
+              "
+              onchange="onNativeMonthChange(this.value)">
           </div>
         </div>
       </div>
@@ -2408,6 +2434,28 @@
     </div><\!-- /phone -->
 
       <script>
+        // ── 피커 모드 토글 ──
+        function togglePickerMode(isNative) {
+          const custom = document.getElementById('custom-picker-wrap');
+          const native = document.getElementById('native-picker-wrap');
+          const track  = document.getElementById('picker-toggle-track');
+          const thumb  = document.getElementById('picker-toggle-thumb');
+          custom.style.display = isNative ? 'none' : '';
+          native.style.display = isNative ? '' : 'none';
+          track.style.background = isNative ? 'var(--accent)' : 'var(--surface-3)';
+          thumb.style.transform  = isNative ? 'translateX(18px)' : 'translateX(0)';
+          if (isNative) {
+            // 현재 선택된 월을 네이티브 input에 반영
+            const inp = document.getElementById('native-month-input');
+            const now = new Date();
+            inp.value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+          }
+        }
+        function onNativeMonthChange(val) {
+          // 필요 시 앱 상태에 연결 가능
+          console.log('native selected:', val);
+        }
+
         // 테마 초기화 (페이지 간 유지)
         (function () {
           const saved = localStorage.getItem('runit-theme');
