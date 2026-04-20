@@ -86,6 +86,20 @@
       justify-content: space-between;
       align-items: center;
       flex-shrink: 0;
+      background: rgba(25, 25, 25, 0.08);
+      backdrop-filter: blur(12px) saturate(150%);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      z-index: 10;
+    }
+
+    [data-theme="light"] .back-header {
+      background: rgba(172, 172, 172, 0.06);
     }
 
     .back-btn {
@@ -116,6 +130,20 @@
       gap: 10px;
       padding: 12px 20px;
       flex-shrink: 0;
+      background: rgba(25, 25, 25, 0.08);
+      backdrop-filter: blur(12px) saturate(150%);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+      position: fixed;
+      top: 52px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      z-index: 9;
+    }
+
+    [data-theme="light"] .tab-row {
+      background: rgba(172, 172, 172, 0.06);
     }
 
     .tab {
@@ -140,6 +168,7 @@
       flex: 1;
       overflow-y: auto;
       padding-bottom: 40px;
+      padding-top: 96px;
       scrollbar-width: none;
     }
 
@@ -990,7 +1019,7 @@
     function renderChart(containerId, avgLineId, data, avg, opts) {
       const BAR_MAX_PX = opts.barMaxPx || 115;
       const LABEL_OFFSET = opts.labelOffset || 20;
-      const FUTURE_H = 4; // 미래 달 스텁 높이 (px)
+      const FUTURE_H = 0; // 미래 달 스텁 높이 (px)
 
       const container = document.getElementById(containerId);
       // maxKm — 미래(km=0) 제외하고 계산
@@ -1014,7 +1043,7 @@
 
         const clickable = !d.future && d.km > 0;
         return `<div class="${cls}" data-idx="${i}" ${clickable ? 'style="cursor:pointer"' : ''}>
-        <span class="cmp-km">${d.km}</span>
+        ${d.km > 0 ? `<span class="cmp-km">${d.km}</span>` : ''}
         <div class="cmp-bar" style="height:${barPx}px"></div>
         <span class="cmp-label">${d.label}</span>
       </div>`;
@@ -1158,11 +1187,17 @@
         <span class="detail-stat-label">러닝 횟수</span>
       </div>`;
 
-      document.getElementById('detail-types').innerHTML = det.types.map(t => `
+      const sortedTypes = [...det.types].sort((a, b) => b.pct - a.pct);
+      const typesWithColor = det.types.map(t => ({
+        ...t,
+        displayColor: sortedTypes.slice(0, 2).some(s => s.label === t.label) ? 'var(--accent)' : 'var(--surface-3)'
+      }));
+
+      document.getElementById('detail-types').innerHTML = typesWithColor.map(t => `
       <div class="type-row">
         <span class="type-name">${t.label}</span>
         <div class="type-track">
-          <div class="type-fill" style="width:0%;background:${t.color}" data-pct="${t.pct}"></div>
+          <div class="type-fill" style="width:0%;background:${t.displayColor}" data-pct="${t.pct}"></div>
         </div>
         <span class="type-pct">${t.pct}%</span>
       </div>`).join('');
@@ -1173,6 +1208,7 @@
           el.style.width = el.dataset.pct + '%';
         });
       }, isDefault ? 300 : 60);
+
     }
 
     function selectMonth(idx) {
