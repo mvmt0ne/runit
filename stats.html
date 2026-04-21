@@ -81,11 +81,12 @@
 
     /* ─── Back header ── */
     .back-header {
-      padding: 14px 22px;
+      padding: 14px 20px;
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
       flex-shrink: 0;
+      position: fixed;
       background: rgba(25, 25, 25, 0.08);
       backdrop-filter: blur(12px) saturate(150%);
       -webkit-backdrop-filter: blur(12px) saturate(150%);
@@ -103,7 +104,7 @@
     }
 
     .back-btn {
-      width: 34px;
+      width: auto;
       height: 34px;
       background: transparent;
       border: none;
@@ -111,7 +112,8 @@
       color: var(--text-1);
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
+      padding: 0;
       transition: background 0.3s, color 0.3s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -120,11 +122,15 @@
     }
 
     .back-title {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
       font-size: 20px;
       font-weight: 200;
       font-family: 'Pretendard Variable', sans-serif;
       color: var(--text-2);
       transition: color 0.3s;
+      pointer-events: none;
     }
 
     /* ─── Tabs ── */
@@ -208,19 +214,18 @@
       width: 26px;
       height: 26px;
       border-radius: 50%;
-      background: var(--surface-2);
+      background: transparent;
       border: none;
       cursor: pointer;
       color: var(--text-2);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s, color 0.2s, opacity 0.2s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.2s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
       flex-shrink: 0;
     }
 
     .year-arrow:active {
-      background: var(--surface-3);
       transform: scale(0.92);
     }
 
@@ -379,142 +384,92 @@
        MONTH DETAIL (바 탭 시)
     ════════════════════════════════════ */
     .month-detail {
-      margin: 36px 22px 0;
+      margin: 40px 0 0;
     }
 
-    .month-detail-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
+
+
+    /* 강도 분포 */
+    .intensity-breakdown {
+      padding: 32px 22px 20px;
     }
 
-    .month-detail-title {
-      font-size: 14px;
-      font-weight: 600;
-      font-family: 'Pretendard Variable', sans-serif;
-      letter-spacing: -0.02em;
-      color: var(--text-1);
-      transition: color 0.3s;
-    }
-
-    .month-detail-close {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background: var(--surface-3);
-      border: none;
-      cursor: pointer;
-      color: var(--text-2);
-      font-size: 14px;
-      line-height: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
-    }
-
-    /* 평균 스탯 3칸 */
-    .detail-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      margin-bottom: 10px;
-    }
-
-    .detail-stat {
-      background: var(--surface-1);
-      border-radius: 16px;
-      padding: 12px 14px;
-      transition: background 0.3s;
-    }
-
-    .detail-stat-val {
-      display: block;
-      font-size: 20px;
-      font-weight: 600;
-      font-family: 'Urbanist', sans-serif;
-      color: var(--text-1);
-      line-height: 1.1;
-      transition: color 0.3s;
-    }
-
-    .detail-stat-val span {
-      font-size: 14px;
-      font-weight: 300;
-      color: var(--text-2);
-      margin-left: 6px;
-    }
-
-    .detail-stat-label {
-      display: block;
-      margin-top: 4px;
-      font-size: 14px;
+    .intensity-breakdown-title {
+      font-size: 13px;
       font-weight: 400;
-      letter-spacing: -0.01em;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
       color: var(--text-2);
+      margin-bottom: 20px;
       transition: color 0.3s;
     }
 
-    /* 종류별 비율 */
-    .type-breakdown {
-      background: var(--surface-1);
-      border-radius: 16px;
-      padding: 14px 16px;
-      transition: background 0.3s;
-    }
-
-    .type-breakdown-title {
-      font-size: 14px;
-      font-weight: 400;
-      letter-spacing: -0.01em;
-      color: var(--text-2);
-      margin-bottom: 12px;
-      transition: color 0.3s;
-    }
-
-    .type-row {
+    .intensity-row {
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 9px;
+      gap: 12px;
+      margin-bottom: 16px;
     }
 
-    .type-row:last-child {
-      margin-bottom: 0;
-    }
+    .intensity-row:last-child { margin-bottom: 0; }
 
-    .type-name {
-      font-size: 14px;
+    .intensity-label {
+      font-size: 13px;
       color: var(--text-2);
-      width: 42px;
+      width: 40px;
       flex-shrink: 0;
       transition: color 0.3s;
     }
 
-    .type-track {
+    .intensity-track {
       flex: 1;
-      height: 3px;
+      height: 2px;
       border-radius: 2px;
-      background: var(--surface-3);
-      overflow: hidden;
-      transition: background 0.3s;
+      background: rgba(128, 128, 128, 0.15);
+      position: relative;
     }
 
-    .type-fill {
+    .intensity-fill {
       height: 100%;
       border-radius: 2px;
+      background: var(--accent);
       transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .type-pct {
+    /* 목표 마커 */
+    .intensity-target-marker {
+      position: absolute;
+      top: -3px;
+      width: 2px;
+      height: 8px;
+      border-radius: 1px;
+      background: rgba(128, 128, 128, 0.4);
+      transform: translateX(-50%);
+      transition: left 0.3s;
+    }
+
+    .intensity-pct {
       font-size: 14px;
-      font-weight: 500;
-      width: 34px;
+      font-weight: 400;
+      font-family: 'Urbanist', sans-serif;
+      color: var(--text-1);
+      width: 30px;
       text-align: right;
+      flex-shrink: 0;
+      transition: color 0.3s;
+    }
+
+    .intensity-pct.over  { color: var(--accent); }
+    .intensity-pct.under { color: var(--text-2); }
+
+    .intensity-target-label {
+      font-size: 12px;
       font-family: 'Urbanist', sans-serif;
       color: var(--text-2);
-      transition: color 0.3s;
+      width: 30px;
+      text-align: right;
+      flex-shrink: 0;
+      opacity: 0.5;
     }
 
     /* 선택된 바만 강조 */
@@ -544,29 +499,33 @@
     .delta-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin: 14px 22px 0;
+      gap: 0;
+      margin: 0;
+      padding: 32px 22px 0;
     }
 
     .delta-card {
-      background: var(--surface-1);
-      border-radius: 16px;
-      padding: 14px 16px;
+      padding: 0;
       transition: background 0.3s;
     }
 
+    .delta-card + .delta-card {
+      padding-left: 20px;
+    }
+
     .delta-vs {
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 400;
-      letter-spacing: -0.01em;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
       color: var(--text-2);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       transition: color 0.3s;
     }
 
     .delta-km {
-      font-size: 30px;
-      font-weight: 600;
+      font-size: 32px;
+      font-weight: 300;
       font-family: 'Urbanist', sans-serif;
       line-height: 1;
       transition: color 0.3s;
@@ -583,14 +542,15 @@
     .delta-km span {
       font-size: 14px;
       font-weight: 400;
+      color: var(--text-2);
+      margin-left: 2px;
     }
 
     .delta-pct {
-      font-size: 14px;
+      font-size: 13px;
       font-family: 'Urbanist', sans-serif;
-      margin-top: 5px;
-      font-weight: 500;
-      letter-spacing: -0.01em;
+      margin-top: 6px;
+      font-weight: 400;
       transition: color 0.3s;
     }
 
@@ -606,19 +566,16 @@
        PACE 요약
     ════════════════════════════════════ */
     .pace-block {
-      margin: 14px 22px 0;
-      background: var(--surface-1);
-      border-radius: 16px;
-      padding: 16px;
-      transition: background 0.3s;
+      padding: 32px 22px 0;
     }
 
     .pace-block-title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 400;
-      letter-spacing: -0.01em;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
       color: var(--text-2);
-      margin-bottom: 14px;
+      margin-bottom: 16px;
       transition: color 0.3s;
     }
 
@@ -626,12 +583,10 @@
       display: flex;
       align-items: baseline;
       justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px solid rgba(128, 128, 128, 0.08);
+      padding: 12px 0;
     }
 
     .pace-row:last-child {
-      border-bottom: none;
       padding-bottom: 0;
     }
 
@@ -640,15 +595,15 @@
     }
 
     .pace-name {
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 400;
       color: var(--text-2);
       transition: color 0.3s;
     }
 
     .pace-val {
-      font-size: 20px;
-      font-weight: 600;
+      font-size: 22px;
+      font-weight: 300;
       font-family: 'Urbanist', sans-serif;
       color: var(--text-1);
       transition: color 0.3s;
@@ -659,29 +614,27 @@
     }
 
     .pace-val span {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 400;
-      color: var(--text-3);
-      margin-left: 6px;
+      color: var(--text-2);
+      margin-left: 4px;
     }
 
     /* ════════════════════════════════════
        LONG RUN / BEST RUN
     ════════════════════════════════════ */
     .longrun-block {
-      margin: 8px 22px 0;
-      background: var(--surface-1);
-      border-radius: 16px;
-      padding: 16px;
-      transition: background 0.3s;
+      padding: 32px 22px 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
     .longrun-label {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
       color: var(--text-2);
       transition: color 0.3s;
     }
@@ -689,15 +642,14 @@
     .longrun-sub {
       font-size: 14px;
       font-weight: 400;
-      letter-spacing: -0.01em;
       color: var(--text-2);
-      margin-top: 4px;
+      margin-top: 6px;
       transition: color 0.3s;
     }
 
     .longrun-km {
-      font-size: 40px;
-      font-weight: 600;
+      font-size: 44px;
+      font-weight: 300;
       font-family: 'Urbanist', sans-serif;
       color: var(--text-1);
       line-height: 1;
@@ -707,8 +659,8 @@
     .longrun-km span {
       font-size: 16px;
       font-weight: 400;
-      color: var(--text-3);
-      margin-left: 6px;
+      color: var(--text-2);
+      margin-left: 4px;
     }
   </style>
 </head>
@@ -719,13 +671,13 @@
 
       <div class="back-header">
         <button class="back-btn" onclick="history.back()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
             stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6" />
+            <line x1="20" y1="12" x2="4" y2="12" />
+            <polyline points="10 18 4 12 10 6" />
           </svg>
         </button>
         <span class="back-title">마일리지</span>
-        <div style="width:34px"></div>
       </div>
 
       <div class="tab-row">
@@ -812,23 +764,11 @@
           </div>
         </div>
 
-        <!-- 월 상세 — 디폴트 현재달, 탭 시 해당 달로 업데이트 -->
+        <!-- 강도 분포 -->
         <div class="month-detail" id="month-detail">
-          <div class="month-detail-header">
-            <span class="month-detail-title" id="detail-title"></span>
-            <button class="month-detail-close" onclick="resetToCurrentMonth()" id="detail-close-btn"
-              style="display:none">
-              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round">
-                <line x1="1" y1="1" x2="11" y2="11" />
-                <line x1="11" y1="1" x2="1" y2="11" />
-              </svg>
-            </button>
-          </div>
-          <div class="detail-stats" id="detail-stats"></div>
-          <div class="type-breakdown">
-            <div class="type-breakdown-title">러닝 종류</div>
-            <div id="detail-types"></div>
+          <div class="intensity-breakdown">
+            <div class="intensity-breakdown-title">강도 분포</div>
+            <div id="detail-intensity"></div>
           </div>
         </div>
 
@@ -1151,41 +1091,63 @@
     }
 
     // ══════════════════════════════════════
+    // 존 설정 & 강도 분포
+    // ══════════════════════════════════════
+
+    // 사용자 설정 (추후 settings에서 변경 가능)
+    const ZONE_CONFIG = {
+      z1Max: 120,   // Z1: ~120
+      z2Max: 140,   // Z2: 121~140
+      z3Max: 160,   // Z3: 141~160
+      z4Max: 175,   // Z4: 161~175
+                    // Z5: 176+
+    };
+
+    // 목표 비율
+    const INTENSITY_TARGET = { low: 80, mid: 15, high: 5 };
+
+    // 실제 RUNS 데이터 (avg bpm 기준)
+    const RUNS_BPM = {
+      // month: [bpm, bpm, ...]
+      4: [176, 142, 169, 138, 135, 132],
+      3: [158, 155, 172, 160, 138, 141, 136],
+      2: [155, 167, 152, 133],
+    };
+
+    function bpmToIntensity(bpm) {
+      if (bpm <= ZONE_CONFIG.z2Max) return 'low';
+      if (bpm <= ZONE_CONFIG.z3Max) return 'mid';
+      return 'high';
+    }
+
+    function calcIntensity(mIdx) {
+      const bpms = RUNS_BPM[mIdx];
+      if (bpms) {
+        // 실제 데이터 기반 계산
+        const total = bpms.length;
+        let low = 0, mid = 0, high = 0;
+        bpms.forEach(b => {
+          const i = bpmToIntensity(b);
+          if (i === 'low') low++;
+          else if (i === 'mid') mid++;
+          else high++;
+        });
+        return {
+          low:  Math.round(low  / total * 100),
+          mid:  Math.round(mid  / total * 100),
+          high: Math.round(high / total * 100),
+        };
+      }
+      // 실데이터 없는 달 — mock
+      if (mIdx >= 6 && mIdx <= 8) return { low: 72, mid: 20, high: 8 };
+      if (mIdx === 12 || mIdx <= 2) return { low: 68, mid: 24, high: 8 };
+      return { low: 60, mid: 28, high: 12 };
+    }
+
+    // ══════════════════════════════════════
     // 월 상세 패널
     // ══════════════════════════════════════
     let selectedIdx = -1;
-
-    function getMonthDetail(km, mIdx) {
-      const count = Math.max(1, Math.round(km / 9.8));
-      const avgKm = (km / count).toFixed(1);
-      const pSec = 328 + (mIdx >= 6 && mIdx <= 8 ? 18 : 0) + (mIdx % 7) * 2;
-      const avgPace = `${Math.floor(pSec / 60)}:${String(pSec % 60).padStart(2, '0')}`;
-      let types;
-      if (mIdx >= 6 && mIdx <= 8) {
-        types = [
-          { label: '이지', pct: 42, color: '#9CFD32' },
-          { label: '조깅', pct: 30, color: '#4FC3F7' },
-          { label: '스테디', pct: 18, color: '#FFB74D' },
-          { label: '롱런', pct: 10, color: '#CE93D8' },
-        ];
-      } else if (mIdx === 12 || mIdx <= 2) {
-        types = [
-          { label: '이지', pct: 35, color: '#9CFD32' },
-          { label: '조깅', pct: 28, color: '#4FC3F7' },
-          { label: '스테디', pct: 22, color: '#FFB74D' },
-          { label: '롱런', pct: 15, color: '#CE93D8' },
-        ];
-      } else {
-        types = [
-          { label: '스테디', pct: 30, color: '#FFB74D' },
-          { label: '이지', pct: 26, color: '#9CFD32' },
-          { label: '템포', pct: 20, color: '#FF7043' },
-          { label: '롱런', pct: 16, color: '#CE93D8' },
-          { label: '레이스', pct: 8, color: '#FFEE58' },
-        ];
-      }
-      return { avgKm, avgPace, count, types };
-    }
 
     // 패널 콘텐츠만 업데이트 (show/hide 없이)
     function showDetailContent(idx, isDefault) {
@@ -1194,47 +1156,31 @@
       if (!d || d.future || d.km === 0) return;
 
       const mIdx = idx + 1;
-      const det = getMonthDetail(d.km, mIdx);
-      const titleSuffix = isDefault ? ' · 이번 달' : ' 평균';
-      document.getElementById('detail-title').textContent = d.label + titleSuffix;
-      document.getElementById('detail-close-btn').style.display = isDefault ? 'none' : '';
+      const intensity = calcIntensity(mIdx);
 
-      document.getElementById('detail-stats').innerHTML = `
-      <div class="detail-stat">
-        <span class="detail-stat-val">${det.avgKm}<span>km</span></span>
-        <span class="detail-stat-label">평균 거리</span>
-      </div>
-      <div class="detail-stat">
-        <span class="detail-stat-val">${det.avgPace}<span>/km</span></span>
-        <span class="detail-stat-label">평균 페이스</span>
-      </div>
-      <div class="detail-stat">
-        <span class="detail-stat-val">${det.count}<span>회</span></span>
-        <span class="detail-stat-label">러닝 횟수</span>
-      </div>`;
+      const rows = [
+        { label: '저강도', pct: intensity.low,  target: INTENSITY_TARGET.low  },
+        { label: '중강도', pct: intensity.mid,  target: INTENSITY_TARGET.mid  },
+        { label: '고강도', pct: intensity.high, target: INTENSITY_TARGET.high },
+      ];
 
-      const sortedTypes = [...det.types].sort((a, b) => b.pct - a.pct);
-      const typesWithColor = det.types.map(t => ({
-        ...t,
-        displayColor: sortedTypes.slice(0, 2).some(s => s.label === t.label) ? 'var(--accent)' : 'var(--surface-3)'
-      }));
+      document.getElementById('detail-intensity').innerHTML = rows.map(r => `
+        <div class="intensity-row">
+          <span class="intensity-label">${r.label}</span>
+          <div class="intensity-track">
+            <div class="intensity-fill" style="width:0%" data-pct="${r.pct}"></div>
+            <div class="intensity-target-marker" style="left:${r.target}%"></div>
+          </div>
+          <span class="intensity-pct ${r.pct >= r.target ? 'over' : 'under'}">${r.pct}%</span>
+          <span class="intensity-target-label">${r.target}%</span>
+        </div>`).join('');
 
-      document.getElementById('detail-types').innerHTML = typesWithColor.map(t => `
-      <div class="type-row">
-        <span class="type-name">${t.label}</span>
-        <div class="type-track">
-          <div class="type-fill" style="width:0%;background:${t.displayColor}" data-pct="${t.pct}"></div>
-        </div>
-        <span class="type-pct">${t.pct}%</span>
-      </div>`).join('');
-
-      // type 바 애니메이션
+      // 바 애니메이션
       setTimeout(() => {
-        document.querySelectorAll('#detail-types .type-fill').forEach(el => {
+        document.querySelectorAll('#detail-intensity .intensity-fill').forEach(el => {
           el.style.width = el.dataset.pct + '%';
         });
       }, isDefault ? 300 : 60);
-
     }
 
     function selectMonth(idx) {

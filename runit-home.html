@@ -710,7 +710,7 @@
     .list-sheet-content {
       display: flex;
       flex-direction: column;
-      padding-bottom: 80px;
+      padding-bottom: 0;
     }
 
     /* ─── List panel 내부 스타일 ────────────── */
@@ -958,16 +958,20 @@
     }
 
     .sf-sheet-close {
-      width: 28px;
-      height: 28px;
+      width: 40px;
+      height: 40px;
       background: transparent;
       border: none;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       color: var(--text-2);
-      transition: background 0.3s;
+      transition: background 0.15s;
+    }
+    .sf-sheet-close:active {
+      background: rgba(0,0,0,0.25);
     }
 
     .sf-sheet-body {
@@ -1082,14 +1086,16 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 4px;
+      padding: 14px 12px;
+      margin: 0 -12px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: background 0.15s, opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
       gap: 12px;
     }
     .month-list-item:active {
-      opacity: 0.5;
-      transform: scale(0.97);
+      background: rgba(0, 0, 0, 0.25);
+      transform: scale(0.98);
     }
 
     .month-list-content {
@@ -1426,6 +1432,34 @@
       padding: 6px 10px;
       cursor: pointer;
       opacity: 0.7;
+    }
+
+    /* ─── 전체 활동 보기 버튼 ─── */
+    .view-all-wrap {
+      background: #CACACA;
+      transition: background 0.3s;
+    }
+    [data-theme="dark"] .view-all-wrap {
+      background: #292929;
+    }
+    .view-all-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 24px 20px;
+      background: transparent;
+      color: var(--text-2);
+      font-size: 15px;
+      font-weight: 400;
+      font-family: 'Pretendard Variable', sans-serif;
+      text-decoration: none;
+      letter-spacing: -0.02em;
+      border-top: 1px solid rgba(128, 128, 128, 0.12);
+      transition: background 0.15s;
+    }
+    .view-all-btn:active {
+      background: rgba(0, 0, 0, 0.15);
     }
 
     /* 빈 결과 */
@@ -2385,7 +2419,7 @@
 
           </div><!-- /cal-page -->
 
-          <!-- 러닝 활동 목록 (인라인) -->
+          <!-- 러닝 활동 목록 (이번 달) -->
           <div class="list-sheet" id="list-sheet-1">
 
             <!-- 섹션 헤더 -->
@@ -2393,11 +2427,15 @@
               <div class="list-sheet-title">러닝 활동</div>
             </div>
 
-
             <!-- 시트 본문 -->
             <div class="list-sheet-content" id="runs-list-container">
               <!-- 동적 렌더링 -->
             </div><!-- /runs-list-container -->
+
+            <!-- 전체 활동 보기 CTA -->
+            <div class="view-all-wrap">
+              <a class="view-all-btn" href="list.html">전체 활동 보기</a>
+            </div>
 
           </div><!-- /list-sheet -->
 
@@ -2587,7 +2625,7 @@
         <div class="sf-sheet-header" style="padding: 18px 20px 14px; flex-shrink:0;">
           <span class="sf-sheet-title">정렬</span>
           <button class="sf-sheet-close" onclick="closeSFSheet()">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
               <line x1="2" y1="2" x2="12" y2="12" />
               <line x1="12" y1="2" x2="2" y2="12" />
             </svg>
@@ -2600,7 +2638,7 @@
         <div class="sf-sheet-header" style="padding: 18px 20px 14px; flex-shrink:0;">
           <span class="sf-sheet-title">필터</span>
           <button class="sf-sheet-close" onclick="closeSFSheet()">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
               <line x1="2" y1="2" x2="12" y2="12" />
               <line x1="12" y1="2" x2="2" y2="12" />
             </svg>
@@ -2621,7 +2659,7 @@
         <div class="sf-sheet-header" style="padding: 18px 20px 14px; flex-shrink:0;">
           <span class="sf-sheet-title">월 선택</span>
           <button class="sf-sheet-close" onclick="closeMonthSheet()">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
               <line x1="2" y1="2" x2="12" y2="12" />
               <line x1="12" y1="2" x2="2" y2="12" />
             </svg>
@@ -2630,36 +2668,7 @@
         <div class="month-list" id="month-list-scroll" style="padding: 0 20px 20px;"></div>
       </div>
 
-      <!-- 하단 플로팅 바 묶음 -->
-      <div class="float-bar-wrap" id="float-sf-bar">
-        <div class="float-view-bar" id="float-view-bar">
-          <div class="float-sf-item" id="float-view-btn" onclick="toggleViewMode()">
-            <svg id="view-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-              <rect x="3" y="3" width="18" height="18" rx="1"/>
-            </svg>
-          </div>
-        </div>
-        <div class="float-sf-inner" id="float-sf-inner">
-          <div class="float-sf-item" id="float-sort-btn" onclick="openSortSheet()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M8 6l4-4 4 4"/><line x1="12" y1="2" x2="12" y2="14"/>
-              <path d="M16 18l-4 4-4-4"/><line x1="12" y1="22" x2="12" y2="10"/>
-            </svg>
-            정렬
-            <span class="sf-badge" id="float-sort-badge"></span>
-          </div>
-          <div class="sf-divider"></div>
-          <div class="float-sf-item" id="float-filter-btn" onclick="openFilterSheet()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-              <line x1="4" y1="6" x2="20" y2="6"/>
-              <line x1="7" y1="12" x2="17" y2="12"/>
-              <line x1="10" y1="18" x2="14" y2="18"/>
-            </svg>
-            필터
-            <span class="sf-badge" id="float-filter-badge"></span>
-          </div>
-        </div>
-      </div>
+      <!-- 플로팅 바: list.html 로 이동 -->
 
     </div><!-- /phone-inner -->
   </div><!-- /phone -->
@@ -3082,25 +3091,25 @@
         ═══════════════════════════════════════ */
         const RUNS = [
           // 4월
-          { id: 1, date: '2026-04-11', label: '4/11', month: 4, type: 'race', name: '2026 인천하프', time: '08:00', km: 21.2, pace: '5:02', paceV: 302, bpm: 176, spm: 174 },
-          { id: 2, date: '2026-04-10', label: '4/10', month: 4, type: 'jogging', name: '회복 조깅', time: '07:30', km: 5.4, pace: '6:52', paceV: 412, bpm: 142, spm: 163 },
-          { id: 3, date: '2026-04-07', label: '4/7', month: 4, type: 'tempo', name: '템포 런', time: '06:15', km: 8.0, pace: '4:45', paceV: 285, bpm: 169, spm: 180 },
-          { id: 4, date: '2026-04-05', label: '4/5', month: 4, type: 'easy', name: '이지 런', time: '06:30', km: 7.2, pace: '6:15', paceV: 375, bpm: 138, spm: 162 },
-          { id: 5, date: '2026-04-04', label: '4/4', month: 4, type: 'easy', name: '이지 런', time: '18:00', km: 6.8, pace: '6:20', paceV: 380, bpm: 135, spm: 160 },
-          { id: 6, date: '2026-04-03', label: '4/3', month: 4, type: 'easy', name: '이지 런', time: '07:00', km: 5.0, pace: '6:40', paceV: 400, bpm: 132, spm: 158 },
+          { id: 1,  date: '2026-04-11', label: '4/11', month: 4, type: 'race',    group: 'race',      name: '2026 인천하프', time: '08:00', km: 21.2, pace: '5:02', paceV: 302, bpm: 176, spm: 174, stride: 107 },
+          { id: 2,  date: '2026-04-10', label: '4/10', month: 4, type: 'jogging', group: 'easy',      name: '회복 조깅',     time: '07:30', km: 5.4,  pace: '6:52', paceV: 412, bpm: 142, spm: 163, stride: 88  },
+          { id: 3,  date: '2026-04-07', label: '4/7',  month: 4, type: 'tempo',   group: 'speed',     name: '템포 런',       time: '06:15', km: 8.0,  pace: '4:45', paceV: 285, bpm: 169, spm: 180, stride: 112 },
+          { id: 4,  date: '2026-04-05', label: '4/5',  month: 4, type: 'easy',    group: 'easy',      name: '이지 런',       time: '06:30', km: 7.2,  pace: '6:15', paceV: 375, bpm: 138, spm: 162, stride: 91  },
+          { id: 5,  date: '2026-04-04', label: '4/4',  month: 4, type: 'easy',    group: 'easy',      name: '이지 런',       time: '18:00', km: 6.8,  pace: '6:20', paceV: 380, bpm: 135, spm: 160, stride: 89  },
+          { id: 6,  date: '2026-04-03', label: '4/3',  month: 4, type: 'easy',    group: 'easy',      name: '이지 런',       time: '07:00', km: 5.0,  pace: '6:40', paceV: 400, bpm: 132, spm: 158, stride: 86  },
           // 3월
-          { id: 7, date: '2026-03-30', label: '3/30', month: 3, type: 'steady', name: '스테디 런', time: '07:30', km: 10.5, pace: '5:30', paceV: 330, bpm: 158, spm: 170 },
-          { id: 8, date: '2026-03-28', label: '3/28', month: 3, type: 'steady', name: '스테디 런', time: '07:00', km: 9.8, pace: '5:38', paceV: 338, bpm: 155, spm: 168 },
-          { id: 9, date: '2026-03-22', label: '3/22', month: 3, type: 'race', name: '서울 10K', time: '09:00', km: 10.0, pace: '4:52', paceV: 292, bpm: 172, spm: 177 },
-          { id: 10, date: '2026-03-20', label: '3/20', month: 3, type: 'steady', name: '스테디 런', time: '07:15', km: 11.2, pace: '5:25', paceV: 325, bpm: 160, spm: 171 },
-          { id: 11, date: '2026-03-19', label: '3/19', month: 3, type: 'jogging', name: '회복 조깅', time: '07:30', km: 4.8, pace: '7:05', paceV: 425, bpm: 138, spm: 161 },
-          { id: 12, date: '2026-03-13', label: '3/13', month: 3, type: 'easy', name: '이지 런', time: '06:45', km: 8.5, pace: '6:08', paceV: 368, bpm: 141, spm: 164 },
-          { id: 13, date: '2026-03-09', label: '3/9', month: 3, type: 'easy', name: '이지 런', time: '07:00', km: 6.0, pace: '6:22', paceV: 382, bpm: 136, spm: 160 },
+          { id: 7,  date: '2026-03-30', label: '3/30', month: 3, type: 'steady',  group: 'endurance', name: '스테디 런',     time: '07:30', km: 10.5, pace: '5:30', paceV: 330, bpm: 158, spm: 170, stride: 98  },
+          { id: 8,  date: '2026-03-28', label: '3/28', month: 3, type: 'steady',  group: 'endurance', name: '스테디 런',     time: '07:00', km: 9.8,  pace: '5:38', paceV: 338, bpm: 155, spm: 168, stride: 96  },
+          { id: 9,  date: '2026-03-22', label: '3/22', month: 3, type: 'race',    group: 'race',      name: '서울 10K',      time: '09:00', km: 10.0, pace: '4:52', paceV: 292, bpm: 172, spm: 177, stride: 105 },
+          { id: 10, date: '2026-03-20', label: '3/20', month: 3, type: 'steady',  group: 'endurance', name: '스테디 런',     time: '07:15', km: 11.2, pace: '5:25', paceV: 325, bpm: 160, spm: 171, stride: 100 },
+          { id: 11, date: '2026-03-19', label: '3/19', month: 3, type: 'jogging', group: 'easy',      name: '회복 조깅',     time: '07:30', km: 4.8,  pace: '7:05', paceV: 425, bpm: 138, spm: 161, stride: 85  },
+          { id: 12, date: '2026-03-13', label: '3/13', month: 3, type: 'easy',    group: 'easy',      name: '이지 런',       time: '06:45', km: 8.5,  pace: '6:08', paceV: 368, bpm: 141, spm: 164, stride: 93  },
+          { id: 13, date: '2026-03-09', label: '3/9',  month: 3, type: 'easy',    group: 'easy',      name: '이지 런',       time: '07:00', km: 6.0,  pace: '6:22', paceV: 382, bpm: 136, spm: 160, stride: 90  },
           // 2월
-          { id: 14, date: '2026-02-25', label: '2/25', month: 2, type: 'long', name: '롱 런', time: '07:00', km: 18.0, pace: '5:48', paceV: 348, bpm: 155, spm: 168 },
-          { id: 15, date: '2026-02-18', label: '2/18', month: 2, type: 'tempo', name: '템포 런', time: '06:30', km: 7.5, pace: '4:52', paceV: 292, bpm: 167, spm: 178 },
-          { id: 16, date: '2026-02-10', label: '2/10', month: 2, type: 'steady', name: '스테디 런', time: '07:15', km: 9.2, pace: '5:42', paceV: 342, bpm: 152, spm: 167 },
-          { id: 17, date: '2026-02-02', label: '2/2', month: 2, type: 'easy', name: '이지 런', time: '08:00', km: 5.5, pace: '6:28', paceV: 388, bpm: 133, spm: 159 },
+          { id: 14, date: '2026-02-25', label: '2/25', month: 2, type: 'long',    group: 'endurance', name: '롱 런',         time: '07:00', km: 18.0, pace: '5:48', paceV: 348, bpm: 155, spm: 168, stride: 97  },
+          { id: 15, date: '2026-02-18', label: '2/18', month: 2, type: 'tempo',   group: 'speed',     name: '템포 런',       time: '06:30', km: 7.5,  pace: '4:52', paceV: 292, bpm: 167, spm: 178, stride: 110 },
+          { id: 16, date: '2026-02-10', label: '2/10', month: 2, type: 'steady',  group: 'endurance', name: '스테디 런',     time: '07:15', km: 9.2,  pace: '5:42', paceV: 342, bpm: 152, spm: 167, stride: 95  },
+          { id: 17, date: '2026-02-02', label: '2/2',  month: 2, type: 'easy',    group: 'easy',      name: '이지 런',       time: '08:00', km: 5.5,  pace: '6:28', paceV: 388, bpm: 133, spm: 159, stride: 87  },
         ];
 
         const MONTH_LABELS = { 4: '4월', 3: '3월', 2: '2월' };
@@ -3126,6 +3135,8 @@
           { key: 'bpm',  asc: true,  label: '심박수 낮은순' },
           { key: 'spm',  asc: false, label: '케이던스 높은순' },
           { key: 'spm',  asc: true,  label: '케이던스 낮은순' },
+          { key: 'stride', asc: false, label: '보행길이 긴 순' },
+          { key: 'stride', asc: true,  label: '보행길이 짧은 순' },
         ];
 
         const FILTER_TYPE_OPTS = [
@@ -3356,44 +3367,24 @@
         }
 
         /* ═══════════════════════════════════════
-           RENDER LIST
+           RENDER LIST (홈: 이번 달만, compact)
         ═══════════════════════════════════════ */
+        const CURRENT_MONTH = 4; // April
+
         function renderList() {
           const container = document.getElementById('runs-list-container');
-          const sorted = applySort(applyFilters(RUNS));
+          const thisMonth = RUNS.filter(r => r.month === CURRENT_MONTH)
+                               .sort((a, b) => a.date < b.date ? 1 : -1);
 
-          if (sorted.length === 0) {
-            container.innerHTML = '<div class="empty-result">해당하는 활동이 없습니다</div>';
+          if (thisMonth.length === 0) {
+            container.innerHTML = '<div class="empty-result">이번 달 활동이 없습니다</div>';
             return;
           }
-
-          // 정렬 기준이 날짜면 월별 그룹핑, 아니면 단일 리스트
-          const groupByMonth = sortState.key === 'date';
-
-          if (groupByMonth) {
-            const groups = {};
-            sorted.forEach(r => {
-              if (!groups[r.month]) groups[r.month] = [];
-              groups[r.month].push(r);
-            });
-            const months = Object.keys(groups).sort((a, b) => sortState.asc ? a - b : b - a);
-            container.innerHTML = months.map(m => {
-              const runs = groups[m];
-              const totalKm = runs.reduce((s, r) => s + r.km, 0).toFixed(1);
-              return `
-                <div class="lp-month-section">
-                  <div class="lp-month-label">${MONTH_LABELS[m]}</div>
-                  <div class="lp-month-km">${totalKm}km</div>
-                </div>
-                <div class="lp-list">${runs.map(rowHTML).join('')}</div>`;
-            }).join('');
-          } else {
-            container.innerHTML = `<div class="lp-list">${sorted.map(rowHTML).join('')}</div>`;
-          }
+          container.innerHTML = `<div class="lp-list">${thisMonth.map(rowHTML).join('')}</div>`;
         }
 
         function rowHTML(r) {
-          return `<div class="lp-row expanded" onclick="location.href='detail.html'" data-view="expanded">
+          return `<div class="lp-row expanded" onclick="location.href='detail.html'">
             <div class="lp-badge type-${r.type}"></div>
             <div class="lp-info">
               <div class="lp-title-row">
@@ -3405,30 +3396,12 @@
                 </div>
               </div>
               <div class="lp-stats">
-                <div class="lp-stat">
-                  <span class="lp-stat-label">시간</span>
-                  <strong class="lp-stat-value">${r.time}</strong>
-                </div>
-                <div class="lp-stat">
-                  <span class="lp-stat-label">거리</span>
-                  <strong class="lp-stat-value">${r.km} <span class="lp-stat-unit">km</span></strong>
-                </div>
-                <div class="lp-stat">
-                  <span class="lp-stat-label">페이스</span>
-                  <strong class="lp-stat-value">${r.pace} <span class="lp-stat-unit">/km</span></strong>
-                </div>
-                <div class="lp-stat">
-                  <span class="lp-stat-label">심박수</span>
-                  <strong class="lp-stat-value">${r.bpm} <span class="lp-stat-unit">bpm</span></strong>
-                </div>
-                <div class="lp-stat">
-                  <span class="lp-stat-label">케이던스</span>
-                  <strong class="lp-stat-value">${r.spm} <span class="lp-stat-unit">spm</span></strong>
-                </div>
-                <div class="lp-stat">
-                  <span class="lp-stat-label">보행길이</span>
-                  <strong class="lp-stat-value">98 <span class="lp-stat-unit">cm</span></strong>
-                </div>
+                <div class="lp-stat"><span class="lp-stat-label">시간</span><strong class="lp-stat-value">${r.time}</strong></div>
+                <div class="lp-stat"><span class="lp-stat-label">거리</span><strong class="lp-stat-value">${r.km} <span class="lp-stat-unit">km</span></strong></div>
+                <div class="lp-stat"><span class="lp-stat-label">페이스</span><strong class="lp-stat-value">${r.pace} <span class="lp-stat-unit">/km</span></strong></div>
+                <div class="lp-stat"><span class="lp-stat-label">심박수</span><strong class="lp-stat-value">${r.bpm} <span class="lp-stat-unit">bpm</span></strong></div>
+                <div class="lp-stat"><span class="lp-stat-label">케이던스</span><strong class="lp-stat-value">${r.spm} <span class="lp-stat-unit">spm</span></strong></div>
+                <div class="lp-stat"><span class="lp-stat-label">보행길이</span><strong class="lp-stat-value">${r.stride} <span class="lp-stat-unit">cm</span></strong></div>
               </div>
             </div>
           </div>`;
@@ -3457,31 +3430,13 @@
           }
         }
 
-        /* ═══════════════════════════════════════
-           FLOATING BAR — IntersectionObserver
-        ═══════════════════════════════════════ */
-        (function initFloatBar() {
-          const handle = document.getElementById('list-sheet-handle-1');
-          const floatBar = document.getElementById('float-sf-bar');
-          const scrollRoot = document.querySelector('.cal-area');
-          if (!handle || !floatBar || !scrollRoot) return;
-
-          const observer = new IntersectionObserver(
-            ([entry]) => {
-              floatBar.classList.toggle('visible', !entry.isIntersecting);
-            },
-            { root: scrollRoot, threshold: 0 }
-          );
-          observer.observe(handle);
-        })();
+        /* 플로팅 바 제거 — list.html 로 이동 */
 
         /* ═══════════════════════════════════════
            INIT
         ═══════════════════════════════════════ */
         (function init() {
           renderMonth();
-          renderSortPanel();
-          renderFilterPanel();
           renderList();
         })();
       </script>
