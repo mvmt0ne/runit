@@ -26,6 +26,8 @@
       --surface-2: #A2A2A2;
       --surface-3: #989898;
       --surface-4: #C0C0C0;
+      --surface-5: #CACACA;
+      --surface-6: #929292;
       --accent: #9CFD32;
       --accent-rgb: 156, 253, 50;
       --accent-dim: rgba(156, 253, 50, 0.2);
@@ -40,6 +42,8 @@
       --surface-2: #232323;
       --surface-3: #363636;
       --surface-4: #484848;
+      --surface-5: #585858;
+      --surface-6: #d4d4d4;
       --accent: #9CFD32;
       --accent-rgb: 156, 253, 50;
       --accent-dim: rgba(156, 253, 50, 0.13);
@@ -194,14 +198,14 @@
        COMPARISON CHART
     ════════════════════════════════════ */
     .chart-block {
-      margin: 24px 22px 0;
+      margin: 34px 22px 0;
     }
 
     .chart-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 14px;
+      margin-bottom: 24px;
     }
 
     .year-nav {
@@ -384,14 +388,14 @@
        MONTH DETAIL (바 탭 시)
     ════════════════════════════════════ */
     .month-detail {
-      margin: 40px 0 0;
+      margin: 0;
     }
 
 
 
     /* 강도 분포 */
     .intensity-breakdown {
-      padding: 32px 22px 20px;
+      padding: 40px 22px 0;
     }
 
     .intensity-breakdown-title {
@@ -431,12 +435,29 @@
       white-space: nowrap;
     }
 
-    .isb-low  { background: #646464; }
-    .isb-low  span { color: #1a1a1a; }
-    .isb-mid  { background: #2d2d2d; }
-    .isb-mid  span { color: var(--text-2); }
-    .isb-high { background: var(--accent); }
-    .isb-high span { color: #000; }
+    .isb-low {
+      background: #646464;
+    }
+
+    .isb-low span {
+      color: #1a1a1a;
+    }
+
+    .isb-mid {
+      background: #2d2d2d;
+    }
+
+    .isb-mid span {
+      color: var(--text-2);
+    }
+
+    .isb-high {
+      background: var(--accent);
+    }
+
+    .isb-high span {
+      color: #000;
+    }
 
     .isb-axis {
       display: flex;
@@ -445,8 +466,8 @@
     }
 
     .isb-axis-label {
-      font-size: 13px;
-      color: var(--text-2);
+      font-size: 14px;
+      color: var(--text-3);
       font-family: 'Pretendard Variable', sans-serif;
       transition: color 0.3s;
     }
@@ -480,7 +501,7 @@
       grid-template-columns: 1fr 1fr;
       gap: 0;
       margin: 0;
-      padding: 32px 22px 0;
+      padding: 40px 20px 0;
     }
 
     .delta-card {
@@ -488,7 +509,7 @@
       transition: background 0.3s;
     }
 
-    .delta-card + .delta-card {
+    .delta-card+.delta-card {
       padding-left: 20px;
     }
 
@@ -546,7 +567,7 @@
        PACE 요약
     ════════════════════════════════════ */
     .pace-block {
-      padding: 32px 22px 0;
+      padding: 40px 20px 0;
     }
 
     .pace-block-title {
@@ -555,8 +576,6 @@
       letter-spacing: 0;
       text-transform: uppercase;
       color: var(--text-2);
-      opacity: 0.65;
-      margin-bottom: 16px;
       transition: color 0.3s;
     }
 
@@ -576,9 +595,9 @@
     }
 
     .pace-name {
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 400;
-      color: var(--text-2);
+      color: var(--text-1);
       transition: color 0.3s;
     }
 
@@ -605,7 +624,7 @@
        ACTIVITY LIST
     ════════════════════════════════════ */
     .month-runs {
-      padding: 16px 22px 0;
+      padding: 40px 20px 0;
     }
 
     .month-runs-title {
@@ -614,8 +633,6 @@
       letter-spacing: 0;
       text-transform: uppercase;
       color: var(--text-2);
-      opacity: 0.65;
-      margin-bottom: 16px;
       transition: color 0.3s;
     }
 
@@ -702,10 +719,10 @@
       margin-left: -22px;
       padding: 22px;
       margin-top: 16px;
-      background: var(--surface-2);
-      color: var(--text-1);
-      font-size: 15px;
-      font-weight: 400;
+      background: var(--surface-6);
+      color: var(--text-3);
+      font-size: 16px;
+      font-weight: 500;
       font-family: 'Pretendard Variable', sans-serif;
       text-decoration: none;
       transition: background 0.15s;
@@ -819,7 +836,7 @@
         <!-- 강도 분포 + 활동 리스트 -->
         <div class="month-detail" id="month-detail">
           <div class="intensity-breakdown">
-            <div class="intensity-breakdown-title">강도 분포</div>
+            <div class="intensity-breakdown-title">러닝 강도</div>
             <div id="detail-intensity"></div>
           </div>
         </div>
@@ -1139,24 +1156,24 @@
     const RUNS = [
       // 4월
       { date: '2026-04-11', month: 4, name: '2026 인천하프', km: 21.2, pace: '5:02', bpm: 176 },
-      { date: '2026-04-10', month: 4, name: '회복 조깅',     km: 5.4,  pace: '6:52', bpm: 142 },
-      { date: '2026-04-07', month: 4, name: '템포 런',       km: 8.0,  pace: '4:45', bpm: 169 },
-      { date: '2026-04-05', month: 4, name: '이지 런',       km: 7.2,  pace: '6:15', bpm: 138 },
-      { date: '2026-04-04', month: 4, name: '이지 런',       km: 6.8,  pace: '6:20', bpm: 135 },
-      { date: '2026-04-03', month: 4, name: '이지 런',       km: 5.0,  pace: '6:40', bpm: 132 },
+      { date: '2026-04-10', month: 4, name: '회복 조깅', km: 5.4, pace: '6:52', bpm: 142 },
+      { date: '2026-04-07', month: 4, name: '템포 런', km: 8.0, pace: '4:45', bpm: 169 },
+      { date: '2026-04-05', month: 4, name: '이지 런', km: 7.2, pace: '6:15', bpm: 138 },
+      { date: '2026-04-04', month: 4, name: '이지 런', km: 6.8, pace: '6:20', bpm: 135 },
+      { date: '2026-04-03', month: 4, name: '이지 런', km: 5.0, pace: '6:40', bpm: 132 },
       // 3월
-      { date: '2026-03-30', month: 3, name: '스테디 런',     km: 10.5, pace: '5:30', bpm: 158 },
-      { date: '2026-03-28', month: 3, name: '스테디 런',     km: 9.8,  pace: '5:38', bpm: 155 },
-      { date: '2026-03-22', month: 3, name: '서울 10K',      km: 10.0, pace: '4:52', bpm: 172 },
-      { date: '2026-03-20', month: 3, name: '스테디 런',     km: 11.2, pace: '5:25', bpm: 160 },
-      { date: '2026-03-19', month: 3, name: '회복 조깅',     km: 4.8,  pace: '7:05', bpm: 138 },
-      { date: '2026-03-13', month: 3, name: '이지 런',       km: 8.5,  pace: '6:08', bpm: 141 },
-      { date: '2026-03-09', month: 3, name: '이지 런',       km: 6.0,  pace: '6:22', bpm: 136 },
+      { date: '2026-03-30', month: 3, name: '스테디 런', km: 10.5, pace: '5:30', bpm: 158 },
+      { date: '2026-03-28', month: 3, name: '스테디 런', km: 9.8, pace: '5:38', bpm: 155 },
+      { date: '2026-03-22', month: 3, name: '서울 10K', km: 10.0, pace: '4:52', bpm: 172 },
+      { date: '2026-03-20', month: 3, name: '스테디 런', km: 11.2, pace: '5:25', bpm: 160 },
+      { date: '2026-03-19', month: 3, name: '회복 조깅', km: 4.8, pace: '7:05', bpm: 138 },
+      { date: '2026-03-13', month: 3, name: '이지 런', km: 8.5, pace: '6:08', bpm: 141 },
+      { date: '2026-03-09', month: 3, name: '이지 런', km: 6.0, pace: '6:22', bpm: 136 },
       // 2월
-      { date: '2026-02-25', month: 2, name: '롱 런',         km: 18.0, pace: '5:48', bpm: 155 },
-      { date: '2026-02-18', month: 2, name: '템포 런',       km: 7.5,  pace: '4:52', bpm: 167 },
-      { date: '2026-02-10', month: 2, name: '스테디 런',     km: 9.2,  pace: '5:42', bpm: 152 },
-      { date: '2026-02-02', month: 2, name: '이지 런',       km: 5.5,  pace: '6:28', bpm: 133 },
+      { date: '2026-02-25', month: 2, name: '롱 런', km: 18.0, pace: '5:48', bpm: 155 },
+      { date: '2026-02-18', month: 2, name: '템포 런', km: 7.5, pace: '4:52', bpm: 167 },
+      { date: '2026-02-10', month: 2, name: '스테디 런', km: 9.2, pace: '5:42', bpm: 152 },
+      { date: '2026-02-02', month: 2, name: '이지 런', km: 5.5, pace: '6:28', bpm: 133 },
     ];
 
     function fmtDate(dateStr) {
@@ -1174,7 +1191,7 @@
       z2Max: 140,   // Z2: 121~140
       z3Max: 160,   // Z3: 141~160
       z4Max: 175,   // Z4: 161~175
-                    // Z5: 176+
+      // Z5: 176+
     };
 
     // 목표 비율
@@ -1207,8 +1224,8 @@
           else high++;
         });
         return {
-          low:  Math.round(low  / total * 100),
-          mid:  Math.round(mid  / total * 100),
+          low: Math.round(low / total * 100),
+          mid: Math.round(mid / total * 100),
           high: Math.round(high / total * 100),
         };
       }
@@ -1233,8 +1250,8 @@
       const intensity = calcIntensity(mIdx);
 
       const rows = [
-        { label: '저강도', pct: intensity.low,  target: INTENSITY_TARGET.low  },
-        { label: '중강도', pct: intensity.mid,  target: INTENSITY_TARGET.mid  },
+        { label: '저강도', pct: intensity.low, target: INTENSITY_TARGET.low },
+        { label: '중강도', pct: intensity.mid, target: INTENSITY_TARGET.mid },
         { label: '고강도', pct: intensity.high, target: INTENSITY_TARGET.high },
       ];
 
@@ -1251,7 +1268,7 @@
 
       // 순차 reveal — 저 → 중 → 고 (clip-path 커튼)
       const baseDelay = isDefault ? 300 : 60;
-      const stagger   = isDefault ? 280 : 160;
+      const stagger = isDefault ? 280 : 160;
       document.querySelectorAll('#detail-intensity .isb-seg').forEach((el, i) => {
         setTimeout(() => { el.style.clipPath = 'inset(0 0% 0 0)'; }, baseDelay + i * stagger);
       });
@@ -1271,7 +1288,7 @@
               <svg class="run-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
             </div>
           </a>`).join('')
-          + `<a class="runs-view-all" href="list.html">전체 목록 보기</a>`
+        + `<a class="runs-view-all" href="list.html">전체 목록 보기</a>`
         : `<div class="run-item"><span class="run-sub">데이터 없음</span></div>`;
     }
 
@@ -1316,7 +1333,7 @@
     });
 
     // 터치 스와이프
-    (function() {
+    (function () {
       let touchStartX = 0;
       const swipeWrap = document.querySelector('.chart-swipe-wrap');
 
