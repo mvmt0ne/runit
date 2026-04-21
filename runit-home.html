@@ -762,21 +762,15 @@
       cursor: pointer;
     }
 
-    /* ─── 하단 플로팅 정렬/필터 바 ──────────── */
-    .float-sf-bar {
+    /* ─── 하단 플로팅 바 래퍼 ──────────── */
+    .float-bar-wrap {
       position: absolute;
       bottom: 28px;
       left: 50%;
       transform: translateX(-50%) translateY(20px);
       display: flex;
-      gap: 10px;
       align-items: center;
-      background: rgba(54, 54, 54, 0.25);
-      backdrop-filter: blur(40px) saturate(200%);
-      -webkit-backdrop-filter: blur(40px) saturate(200%);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 100px;
-      padding: 6px 16px;
+      gap: 0;
       z-index: 50;
       opacity: 0;
       pointer-events: none;
@@ -784,16 +778,46 @@
                   transform 0.25s cubic-bezier(0.16,1,0.3,1);
     }
 
-    [data-theme="light"] .float-sf-bar {
-      background: rgba(192, 192, 192, 0.2);
-      border-color: rgba(0, 0, 0, 0.12);
-    }
-    .float-sf-bar.visible {
+    .float-bar-wrap.visible {
       opacity: 1;
       pointer-events: auto;
       transform: translateX(-50%) translateY(0);
     }
-    .float-sf-bar .sf-divider {
+
+    .float-view-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(54, 54, 54, 0.25);
+      backdrop-filter: blur(40px) saturate(200%);
+      -webkit-backdrop-filter: blur(40px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 100px;
+      padding: 0 14px;
+      height: 48px;
+    }
+
+    .float-sf-inner {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+      background: rgba(54, 54, 54, 0.25);
+      backdrop-filter: blur(40px) saturate(200%);
+      -webkit-backdrop-filter: blur(40px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 100px;
+      padding: 0 14px;
+      height: 48px;
+    }
+
+    [data-theme="light"] .float-view-bar,
+    [data-theme="light"] .float-sf-inner {
+      background: rgba(192, 192, 192, 0.2);
+      border-color: rgba(0, 0, 0, 0.12);
+    }
+
+    .float-sf-inner .sf-divider {
       width: 1px; height: 18px;
       background: rgba(128,128,128,0.3);
     }
@@ -1555,6 +1579,185 @@
       font-size: 12px;
       font-weight: 300;
       color: var(--text-2);
+    }
+
+    /* ─── View modes ── */
+    /* COMPACT MODE */
+    .lp-row.compact {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 24px 20px;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+      margin-left: -20px;
+      margin-right: -20px;
+    }
+
+    .lp-row.compact .lp-badge {
+      width: 12px;
+      height: 12px;
+      flex-shrink: 0;
+      border-radius: 50%;
+    }
+
+    .lp-row.compact .lp-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .lp-row.compact .lp-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .lp-row.compact .lp-run-name {
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--text-1);
+      font-family: 'Pretendard Variable', sans-serif;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .lp-row.compact .lp-right-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+
+    .lp-row.compact .lp-compact-date {
+      font-size: 12px;
+      color: var(--text-2);
+      font-family: 'Urbanist', sans-serif;
+      white-space: nowrap;
+      line-height: 1.2;
+    }
+
+    .lp-row.compact .lp-compact-time {
+      font-size: 12px;
+      color: var(--text-2);
+      font-family: 'Urbanist', sans-serif;
+      white-space: nowrap;
+      line-height: 1.2;
+    }
+
+    .lp-row.compact .lp-expanded-date {
+      display: none;
+    }
+
+    .lp-row.compact .lp-stats {
+      display: none !important;
+    }
+
+    /* EXPANDED MODE */
+    .lp-row.expanded {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 20px 20px;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+      margin-left: -20px;
+      margin-right: -20px;
+    }
+
+    .lp-row.expanded .lp-badge {
+      width: 12px;
+      height: 12px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      margin-top: 6px;
+    }
+
+    .lp-row.expanded .lp-info {
+      flex: 1;
+      min-width: 0;
+      margin: 0;
+    }
+
+    .lp-row.expanded .lp-title-row {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      margin-bottom: 14px;
+      gap: 0;
+      width: 100%;
+    }
+
+    .lp-row.expanded .lp-run-name {
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--text-1);
+      font-family: 'Pretendard Variable', sans-serif;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .lp-row.expanded .lp-right-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      flex-shrink: 0;
+    }
+
+    .lp-row.expanded .lp-compact-time {
+      display: none;
+    }
+
+    .lp-row.expanded .lp-compact-date {
+      display: none;
+    }
+
+    .lp-row.expanded .lp-expanded-date {
+      display: block;
+      font-size: 12px;
+      color: var(--text-2);
+      font-family: 'Urbanist', sans-serif;
+      white-space: nowrap;
+    }
+
+    .lp-row.expanded .lp-stats {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px 16px;
+      width: 100%;
+      margin: 0;
+    }
+
+    .lp-row.expanded .lp-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-start;
+    }
+
+    .lp-row.expanded .lp-stat-label {
+      font-size: 11px;
+      color: var(--text-2);
+      font-weight: 400;
+      font-family: 'Pretendard Variable', sans-serif;
+      margin-bottom: 3px;
+    }
+
+    .lp-row.expanded .lp-stat-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-1);
+      line-height: 1;
+      font-family: 'Urbanist', sans-serif;
+    }
+
+    .lp-row.expanded .lp-stat-unit {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-2);
+      font-family: 'Urbanist', sans-serif;
     }
 
     /* ─── Bottom Sheet ────────────────────── */
@@ -2427,25 +2630,34 @@
         <div class="month-list" id="month-list-scroll" style="padding: 0 20px 20px;"></div>
       </div>
 
-      <!-- 하단 플로팅 정렬/필터 바 -->
-      <div class="float-sf-bar" id="float-sf-bar">
-        <div class="float-sf-item" id="float-sort-btn" onclick="openSortSheet()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M8 6l4-4 4 4"/><line x1="12" y1="2" x2="12" y2="14"/>
-            <path d="M16 18l-4 4-4-4"/><line x1="12" y1="22" x2="12" y2="10"/>
-          </svg>
-          정렬
-          <span class="sf-badge" id="float-sort-badge"></span>
+      <!-- 하단 플로팅 바 묶음 -->
+      <div class="float-bar-wrap" id="float-sf-bar">
+        <div class="float-view-bar" id="float-view-bar">
+          <div class="float-sf-item" id="float-view-btn" onclick="toggleViewMode()">
+            <svg id="view-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <rect x="3" y="3" width="18" height="18" rx="1"/>
+            </svg>
+          </div>
         </div>
-        <div class="sf-divider"></div>
-        <div class="float-sf-item" id="float-filter-btn" onclick="openFilterSheet()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-            <line x1="4" y1="6" x2="20" y2="6"/>
-            <line x1="7" y1="12" x2="17" y2="12"/>
-            <line x1="10" y1="18" x2="14" y2="18"/>
-          </svg>
-          필터
-          <span class="sf-badge" id="float-filter-badge"></span>
+        <div class="float-sf-inner" id="float-sf-inner">
+          <div class="float-sf-item" id="float-sort-btn" onclick="openSortSheet()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 6l4-4 4 4"/><line x1="12" y1="2" x2="12" y2="14"/>
+              <path d="M16 18l-4 4-4-4"/><line x1="12" y1="22" x2="12" y2="10"/>
+            </svg>
+            정렬
+            <span class="sf-badge" id="float-sort-badge"></span>
+          </div>
+          <div class="sf-divider"></div>
+          <div class="float-sf-item" id="float-filter-btn" onclick="openFilterSheet()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <line x1="4" y1="6" x2="20" y2="6"/>
+              <line x1="7" y1="12" x2="17" y2="12"/>
+              <line x1="10" y1="18" x2="14" y2="18"/>
+            </svg>
+            필터
+            <span class="sf-badge" id="float-filter-badge"></span>
+          </div>
         </div>
       </div>
 
@@ -3181,21 +3393,68 @@
         }
 
         function rowHTML(r) {
-          return `<div class="lp-row" onclick="location.href='detail.html'">
-            <div class="lp-badge type-${r.type}">${r.label}</div>
+          return `<div class="lp-row expanded" onclick="location.href='detail.html'" data-view="expanded">
+            <div class="lp-badge type-${r.type}"></div>
             <div class="lp-info">
               <div class="lp-title-row">
                 <div class="lp-run-name">${r.name}</div>
-                <div class="lp-run-time">${r.time}</div>
+                <div class="lp-right-content">
+                  <div class="lp-compact-date">${r.date}</div>
+                  <div class="lp-compact-time">${r.time}</div>
+                  <div class="lp-expanded-date">${r.date}</div>
+                </div>
               </div>
               <div class="lp-stats">
-                <div class="lp-stat"><strong>${r.km}</strong><span>km</span></div>
-                <div class="lp-stat"><strong>${r.pace}</strong><span>/km</span></div>
-                <div class="lp-stat"><strong>${r.bpm}</strong><span>bpm</span></div>
-                <div class="lp-stat"><strong>${r.spm}</strong><span>spm</span></div>
+                <div class="lp-stat">
+                  <span class="lp-stat-label">시간</span>
+                  <strong class="lp-stat-value">${r.time}</strong>
+                </div>
+                <div class="lp-stat">
+                  <span class="lp-stat-label">거리</span>
+                  <strong class="lp-stat-value">${r.km} <span class="lp-stat-unit">km</span></strong>
+                </div>
+                <div class="lp-stat">
+                  <span class="lp-stat-label">페이스</span>
+                  <strong class="lp-stat-value">${r.pace} <span class="lp-stat-unit">/km</span></strong>
+                </div>
+                <div class="lp-stat">
+                  <span class="lp-stat-label">심박수</span>
+                  <strong class="lp-stat-value">${r.bpm} <span class="lp-stat-unit">bpm</span></strong>
+                </div>
+                <div class="lp-stat">
+                  <span class="lp-stat-label">케이던스</span>
+                  <strong class="lp-stat-value">${r.spm} <span class="lp-stat-unit">spm</span></strong>
+                </div>
+                <div class="lp-stat">
+                  <span class="lp-stat-label">보행길이</span>
+                  <strong class="lp-stat-value">98 <span class="lp-stat-unit">cm</span></strong>
+                </div>
               </div>
             </div>
           </div>`;
+        }
+
+        /* ─── View Mode Toggle ───────────────── */
+        let viewMode = 'expanded'; // 기본값 (크게보기)
+
+        function toggleViewMode() {
+          viewMode = viewMode === 'compact' ? 'expanded' : 'compact';
+
+          // 모든 lp-row 요소 업데이트
+          document.querySelectorAll('.lp-row').forEach(row => {
+            row.classList.remove('compact', 'expanded');
+            row.classList.add(viewMode);
+          });
+
+          // 아이콘 업데이트
+          const icon = document.getElementById('view-icon');
+          if (viewMode === 'compact') {
+            icon.setAttribute('viewBox', '0 0 24 24');
+            icon.innerHTML = '<rect x="3" y="6" width="18" height="3" rx="0.5"/><rect x="3" y="15" width="18" height="3" rx="0.5"/>';
+          } else {
+            icon.setAttribute('viewBox', '0 0 24 24');
+            icon.innerHTML = '<rect x="3" y="3" width="18" height="18" rx="1"/>';
+          }
         }
 
         /* ═══════════════════════════════════════
@@ -3209,7 +3468,6 @@
 
           const observer = new IntersectionObserver(
             ([entry]) => {
-              // handle이 scroll root 위로 올라가면(intersecting=false) 플로팅바 표시
               floatBar.classList.toggle('visible', !entry.isIntersecting);
             },
             { root: scrollRoot, threshold: 0 }
