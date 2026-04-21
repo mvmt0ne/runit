@@ -935,8 +935,7 @@
     .sf-sheet-close {
       width: 28px;
       height: 28px;
-      border-radius: 50%;
-      background: var(--surface-3);
+      background: transparent;
       border: none;
       display: flex;
       align-items: center;
@@ -1057,13 +1056,16 @@
     .month-list-item {
       display: flex;
       align-items: center;
-      justify-content: flex-start;
+      justify-content: space-between;
       padding: 14px 4px;
       cursor: pointer;
-      transition: opacity 0.15s;
+      transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
       gap: 12px;
     }
-    .month-list-item:active { opacity: 0.5; }
+    .month-list-item:active {
+      opacity: 0.5;
+      transform: scale(0.97);
+    }
 
     .month-list-content {
       display: flex;
@@ -1079,7 +1081,6 @@
       color: var(--text-2);
       letter-spacing: -0.02em;
       min-width: 40px;
-      margin-left: auto;
     }
 
     .month-list-label {
@@ -1117,11 +1118,12 @@
       border-radius: 8px;
       padding: 2px 6px 2px 2px;
       margin-left: -2px;
-      transition: background 0.15s;
+      transition: background 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .hero-month-tap:active {
       background: rgba(128, 128, 128, 0.12);
+      transform: scale(0.94);
     }
 
     .hero-month-chevron {
@@ -1144,11 +1146,12 @@
       padding: 13px 14px;
       border-radius: 10px;
       cursor: pointer;
-      transition: background 0.15s;
+      transition: background 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .month-item:active {
-      background: rgba(128, 128, 128, 0.12);
+      background: rgba(128, 128, 128, 0.18);
+      transform: scale(0.97);
     }
 
     .month-item.active {
@@ -1194,11 +1197,12 @@
       padding: 11px 14px;
       border-radius: 10px;
       cursor: pointer;
-      transition: background 0.15s;
+      transition: background 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .sort-opt:active {
-      background: rgba(128, 128, 128, 0.12);
+      background: rgba(128, 128, 128, 0.18);
+      transform: scale(0.97);
     }
 
     .sort-opt.active {
@@ -1267,12 +1271,13 @@
       color: var(--text-2);
       background: rgba(128, 128, 128, 0.1);
       cursor: pointer;
-      transition: all 0.15s;
+      transition: all 0.1s cubic-bezier(0.16, 1, 0.3, 1);
       white-space: nowrap;
     }
 
     .filter-chip:active {
-      transform: scale(0.95);
+      transform: scale(0.92);
+      background: rgba(128, 128, 128, 0.18);
     }
 
     .filter-chip.active {
@@ -1460,13 +1465,14 @@
       gap: 16px;
       padding: 24px 20px;
       cursor: pointer;
-      transition: opacity 0.15s;
+      transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
       margin-left: -20px;
       margin-right: -20px;
     }
 
     .lp-row:active {
-      opacity: 0.6;
+      opacity: 0.8;
+      transform: scale(0.98);
     }
 
     .lp-badge {
@@ -1586,6 +1592,8 @@
 
     .bs-handle-area:active {
       cursor: grabbing;
+      transform: scale(0.94);
+      transition: transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .bs-handle {
@@ -1639,7 +1647,7 @@
       border-bottom: 1px solid var(--surface-2);
       cursor: pointer;
       gap: 12px;
-      transition: opacity 0.15s;
+      transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
       border-radius: 8px;
     }
 
@@ -1656,7 +1664,8 @@
     }
 
     .bs-row:active {
-      opacity: 0.6;
+      opacity: 0.8;
+      transform: scale(0.97);
     }
 
     .bs-row-info {
@@ -1732,7 +1741,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.3s, color 0.3s;
+      transition: background 0.3s, color 0.3s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .back-btn:active {
+      transform: scale(0.92);
     }
 
     .back-title {
@@ -1759,12 +1772,17 @@
       background: var(--surface-1);
       color: var(--text-2);
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+      border: none;
     }
 
     .tab.active {
       background: var(--text-1);
       color: var(--bg);
+    }
+
+    .tab:active {
+      transform: scale(0.93);
     }
 
     .chart-section {
@@ -2687,11 +2705,13 @@
             const showYear = i === 0 || m.month === 12;
             const yearDisplay = showYear ? m.year : '';
             return `<div class="month-list-item${isSel ? ' ml-selected' : ''}" onclick="selectListItem(${i})">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="month-list-label">${m.month}월</span>
+                <span class="month-list-year">${yearDisplay}</span>
+              </div>
               <svg class="month-list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
-              <span class="month-list-label">${m.month}월</span>
-              <span class="month-list-year">${yearDisplay}</span>
             </div>`;
           }).join('');
 
@@ -2949,10 +2969,10 @@
           container.innerHTML = SORT_OPTS.map((opt, i) => {
             const active = sortState.key === opt.key && sortState.asc === opt.asc;
             return `<div class="month-list-item${active ? ' ml-selected' : ''}" onclick="selectSort(${i})">
+              <span class="month-list-label">${opt.label}</span>
               <svg class="month-list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
-              <span class="month-list-label">${opt.label}</span>
             </div>`;
           }).join('');
         }

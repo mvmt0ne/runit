@@ -105,15 +105,18 @@
     .back-btn {
       width: 34px;
       height: 34px;
-      border-radius: 50%;
-      background: var(--surface-1);
+      background: transparent;
       border: none;
       cursor: pointer;
       color: var(--text-1);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.3s, color 0.3s;
+      transition: background 0.3s, color 0.3s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .back-btn:active {
+      transform: scale(0.92);
     }
 
     .back-title {
@@ -155,12 +158,17 @@
       color: var(--text-2);
       background: var(--surface-2);
       cursor: pointer;
-      transition: background 0.2s, color 0.2s;
+      transition: background 0.1s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+      border: none;
     }
 
     .tab.active {
       background: var(--text-1);
       color: var(--bg);
+    }
+
+    .tab:active {
+      transform: scale(0.93);
     }
 
     /* ─── Scroll ── */
@@ -207,12 +215,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s, color 0.2s, opacity 0.2s;
+      transition: background 0.2s, color 0.2s, opacity 0.2s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
       flex-shrink: 0;
     }
 
     .year-arrow:active {
       background: var(--surface-3);
+      transform: scale(0.92);
     }
 
     .year-arrow.disabled {
