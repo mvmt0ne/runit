@@ -162,7 +162,7 @@
 
     /* ─── List ── */
     .lp-list {
-      padding: 0 20px;
+      padding: 8px 10px 0;
       background: #CACACA;
     }
     [data-theme="dark"] .lp-list { background: #292929; }
@@ -174,8 +174,8 @@
       padding: 24px 20px;
       cursor: pointer;
       transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-      margin-left: -20px;
-      margin-right: -20px;
+      margin-left: -10px;
+      margin-right: -10px;
     }
     .lp-row:active {
       opacity: 0.8;
@@ -228,38 +228,42 @@
 
     /* ─── Compact mode ── */
     .lp-row.compact {
-      display: flex; align-items: center; gap: 16px;
-      padding: 24px 20px;
-      margin-left: -20px; margin-right: -20px;
+      display: flex; align-items: center; gap: 8px;
+      padding: 14px 20px;
+      margin-left: -10px; margin-right: -10px;
     }
     .lp-row.compact .lp-badge { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
     .lp-row.compact .lp-info { flex: 1; min-width: 0; }
     .lp-row.compact .lp-title-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-    .lp-row.compact .lp-run-name { font-size: 18px; font-weight: 300; color: var(--text-1); font-family: 'Pretendard Variable', sans-serif; flex: 1; min-width: 0; }
+    .lp-row.compact .lp-run-name { font-size: 16px; font-weight: 300; color: var(--text-1); font-family: 'Pretendard Variable', sans-serif; flex: 1; min-width: 0; }
     .lp-row.compact .lp-right-content { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; }
-    .lp-row.compact .lp-compact-date { font-size: 12px; color: var(--text-2); font-family: 'Urbanist', sans-serif; white-space: nowrap; line-height: 1.2; }
-    .lp-row.compact .lp-compact-time { font-size: 12px; color: var(--text-2); font-family: 'Urbanist', sans-serif; white-space: nowrap; line-height: 1.2; }
+    .lp-row.compact .lp-compact-date { font-size: 15px; color: var(--text-2); font-family: 'Urbanist', sans-serif; white-space: nowrap; line-height: 1.2; }
+    .lp-row.compact .lp-compact-time { font-size: 15px; color: var(--text-1); font-family: 'Urbanist', sans-serif; white-space: nowrap; line-height: 1.2; }
     .lp-row.compact .lp-expanded-date { display: none; }
     .lp-row.compact .lp-stats { display: none !important; }
 
     /* ─── Expanded mode ── */
     .lp-row.expanded {
       display: flex; flex-direction: row; align-items: flex-start;
-      gap: 10px; padding: 20px 20px;
-      margin-left: -20px; margin-right: -20px;
+      gap: 8px; padding: 20px;
+      background: #2f2f2f; border-radius: 16px;
+      margin-left: 0; margin-right: 0; margin-bottom: 10px;
     }
+    [data-theme="light"] .lp-row.expanded { background: var(--surface-3); }
+    .lp-row.expanded:active { background: #383838; border-radius: 16px; opacity: 1; }
+    [data-theme="light"] .lp-row.expanded:active { background: var(--surface-4); }
     .lp-row.expanded .lp-badge { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
     .lp-row.expanded .lp-info { flex: 1; min-width: 0; margin: 0; }
-    .lp-row.expanded .lp-title-row { display: flex; justify-content: flex-start; align-items: flex-start; margin-bottom: 14px; gap: 0; width: 100%; }
+    .lp-row.expanded .lp-title-row { display: flex; justify-content: flex-start; align-items: flex-start; margin-bottom: 24px; gap: 0; width: 100%; }
     .lp-row.expanded .lp-run-name { font-size: 18px; font-weight: 300; color: var(--text-1); font-family: 'Pretendard Variable', sans-serif; flex: 1; min-width: 0; }
     .lp-row.expanded .lp-right-content { display: flex; flex-direction: column; align-items: flex-end; flex-shrink: 0; }
     .lp-row.expanded .lp-compact-time { display: none; }
     .lp-row.expanded .lp-compact-date { display: none; }
-    .lp-row.expanded .lp-expanded-date { display: block; font-size: 12px; color: var(--text-2); font-family: 'Urbanist', sans-serif; white-space: nowrap; }
+    .lp-row.expanded .lp-expanded-date { display: block; font-size: 15px; color: var(--text-2); font-family: 'Urbanist', sans-serif; white-space: nowrap; }
     .lp-row.expanded .lp-stats { display: grid !important; grid-template-columns: repeat(3, 1fr); gap: 20px 16px; width: 100%; margin: 0; }
     .lp-row.expanded .lp-stat { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
-    .lp-row.expanded .lp-stat-label { font-size: 11px; color: var(--text-2); font-weight: 400; font-family: 'Pretendard Variable', sans-serif; margin-bottom: 3px; }
-    .lp-row.expanded .lp-stat-value { font-size: 18px; font-weight: 700; color: var(--text-1); line-height: 1; font-family: 'Urbanist', sans-serif; }
+    .lp-row.expanded .lp-stat-label { font-size: 13px; color: var(--text-2); font-weight: 400; font-family: 'Pretendard Variable', sans-serif; margin-bottom: 0; order: 2; }
+    .lp-row.expanded .lp-stat-value { font-size: 18px; font-weight: 700; color: var(--text-1); line-height: 1; font-family: 'Urbanist', sans-serif; order: 1; }
     .lp-row.expanded .lp-stat-unit { font-size: 13px; font-weight: 400; color: var(--text-2); font-family: 'Urbanist', sans-serif; }
 
     /* ─── Type colors ── */
@@ -661,9 +665,9 @@
           <div class="lp-title-row">
             <div class="lp-run-name">${r.name}</div>
             <div class="lp-right-content">
-              <div class="lp-compact-date">${r.date}</div>
+              <div class="lp-compact-date">${r.date.replace(/-/g, '.')}</div>
               <div class="lp-compact-time">${r.time}</div>
-              <div class="lp-expanded-date">${r.date}</div>
+              <div class="lp-expanded-date">${r.date.replace(/-/g, '.')}</div>
             </div>
           </div>
           <div class="lp-stats">

@@ -1448,18 +1448,17 @@
       justify-content: center;
       width: 100%;
       padding: 24px 20px;
-      background: transparent;
-      color: var(--text-2);
+      background: var(--surface-3);
+      color: var(--text-1);
       font-size: 15px;
       font-weight: 400;
       font-family: 'Pretendard Variable', sans-serif;
       text-decoration: none;
       letter-spacing: -0.02em;
-      border-top: 1px solid rgba(128, 128, 128, 0.12);
       transition: background 0.15s;
     }
     .view-all-btn:active {
-      background: rgba(0, 0, 0, 0.15);
+      background: var(--surface-4);
     }
 
     /* 빈 결과 */
@@ -1506,7 +1505,7 @@
 
     .lp-list {
       flex: 1;
-      padding: 0 20px;
+      padding: 8px 10px 0;
       background: #CACACA;
     }
 
@@ -1525,8 +1524,8 @@
       padding: 24px 20px;
       cursor: pointer;
       transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-      margin-left: -20px;
-      margin-right: -20px;
+      margin-left: -10px;
+      margin-right: -10px;
     }
 
     .lp-row:active {
@@ -1621,11 +1620,11 @@
       display: flex;
       align-items: center;
       gap: 16px;
-      padding: 24px 20px;
+      padding: 14px 20px;
       cursor: pointer;
       transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-      margin-left: -20px;
-      margin-right: -20px;
+      margin-left: -10px;
+      margin-right: -10px;
     }
 
     .lp-row.compact .lp-badge {
@@ -1648,7 +1647,7 @@
     }
 
     .lp-row.compact .lp-run-name {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 300;
       color: var(--text-1);
       font-family: 'Pretendard Variable', sans-serif;
@@ -1665,7 +1664,7 @@
     }
 
     .lp-row.compact .lp-compact-date {
-      font-size: 12px;
+      font-size: 15px;
       color: var(--text-2);
       font-family: 'Urbanist', sans-serif;
       white-space: nowrap;
@@ -1673,8 +1672,8 @@
     }
 
     .lp-row.compact .lp-compact-time {
-      font-size: 12px;
-      color: var(--text-2);
+      font-size: 15px;
+      color: var(--text-1);
       font-family: 'Urbanist', sans-serif;
       white-space: nowrap;
       line-height: 1.2;
@@ -1693,13 +1692,26 @@
       display: flex;
       flex-direction: row;
       align-items: flex-start;
-      gap: 10px;
-      padding: 20px 20px;
+      gap: 8px;
+      padding: 20px;
       cursor: pointer;
-      transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-      margin-left: -20px;
-      margin-right: -20px;
+      transition: background 0.15s, opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+      background: #2f2f2f;
+      border-radius: 16px;
+      margin-left: 0;
+      margin-right: 0;
+      margin-bottom: 10px;
     }
+
+    [data-theme="light"] .lp-row.expanded { background: var(--surface-3); }
+
+    .lp-row.expanded:active {
+      background: #383838;
+      border-radius: 16px;
+      opacity: 1;
+    }
+
+    [data-theme="light"] .lp-row.expanded:active { background: var(--surface-4); }
 
     .lp-row.expanded .lp-badge {
       width: 12px;
@@ -1719,7 +1731,7 @@
       display: flex;
       justify-content: flex-start;
       align-items: flex-start;
-      margin-bottom: 14px;
+      margin-bottom: 24px;
       gap: 0;
       width: 100%;
     }
@@ -1750,7 +1762,7 @@
 
     .lp-row.expanded .lp-expanded-date {
       display: block;
-      font-size: 12px;
+      font-size: 15px;
       color: var(--text-2);
       font-family: 'Urbanist', sans-serif;
       white-space: nowrap;
@@ -1772,11 +1784,12 @@
     }
 
     .lp-row.expanded .lp-stat-label {
-      font-size: 11px;
+      font-size: 13px;
       color: var(--text-2);
       font-weight: 400;
       font-family: 'Pretendard Variable', sans-serif;
-      margin-bottom: 3px;
+      margin-bottom: 0;
+      order: 2;
     }
 
     .lp-row.expanded .lp-stat-value {
@@ -1785,6 +1798,7 @@
       color: var(--text-1);
       line-height: 1;
       font-family: 'Urbanist', sans-serif;
+      order: 1;
     }
 
     .lp-row.expanded .lp-stat-unit {
@@ -3390,9 +3404,9 @@
               <div class="lp-title-row">
                 <div class="lp-run-name">${r.name}</div>
                 <div class="lp-right-content">
-                  <div class="lp-compact-date">${r.date}</div>
+                  <div class="lp-compact-date">${r.date.replace(/-/g, '.')}</div>
                   <div class="lp-compact-time">${r.time}</div>
-                  <div class="lp-expanded-date">${r.date}</div>
+                  <div class="lp-expanded-date">${r.date.replace(/-/g, '.')}</div>
                 </div>
               </div>
               <div class="lp-stats">
