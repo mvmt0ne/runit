@@ -49,7 +49,7 @@
       --surface-6: #d4d4d4;
       --accent: #9CFD32;
       --accent-dim: rgba(156, 253, 50, 0.13);
-      --text-1: #F0F0EB;
+      --text-1: #cdcdcd;
       --text-2: #8d8d8d;
       --text-3: #3E3E38;
       --body-bg: #0A0B09;
@@ -774,8 +774,8 @@
       z-index: 50;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.25s cubic-bezier(0.16,1,0.3,1),
-                  transform 0.25s cubic-bezier(0.16,1,0.3,1);
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .float-bar-wrap.visible {
@@ -818,19 +818,27 @@
     }
 
     .float-sf-inner .sf-divider {
-      width: 1px; height: 18px;
-      background: rgba(128,128,128,0.3);
+      width: 1px;
+      height: 18px;
+      background: rgba(128, 128, 128, 0.3);
     }
+
     .float-sf-item {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 14px; font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 400;
       font-family: 'Pretendard Variable', sans-serif;
       color: var(--text-2);
       cursor: pointer;
       transition: color 0.2s;
       position: relative;
     }
-    .float-sf-item.active { color: var(--accent); }
+
+    .float-sf-item.active {
+      color: var(--accent);
+    }
 
     /* ─── Sort / Filter ────────────────────── */
     .sf-btn {
@@ -861,7 +869,7 @@
       position: fixed;
       inset: 0;
       background: transparent;
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(40px);
       -webkit-backdrop-filter: blur(8px);
       z-index: 80;
       opacity: 0;
@@ -905,11 +913,12 @@
     /* 중앙 모달 */
     .month-modal {
       position: fixed;
-      left: 50%; top: 50%;
+      left: 50%;
+      top: 50%;
       transform: translate(-50%, calc(-50% + 20px));
       width: calc(100% - 40px);
       max-width: 390px;
-      background: var(--surface-2);
+      background: var(--surface-5);
       border-radius: 20px;
       z-index: 999;
       display: flex;
@@ -917,9 +926,10 @@
       max-height: 70%;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.22s cubic-bezier(0.16,1,0.3,1),
-                  transform 0.22s cubic-bezier(0.16,1,0.3,1);
+      transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     }
+
     .month-modal.open {
       opacity: 1;
       pointer-events: auto;
@@ -950,15 +960,14 @@
     }
 
     .sf-sheet-title {
-      font-size: 18px;
-      font-weight: 200;
+      font-size: 16px;
+      font-weight: 300;
       font-family: 'Pretendard Variable', sans-serif;
       color: var(--text-1);
       transition: color 0.3s;
     }
 
     .sf-sheet-close {
-      width: 40px;
       height: 40px;
       background: transparent;
       border: none;
@@ -967,11 +976,12 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      color: var(--text-2);
+      color: var(--text-1);
       transition: background 0.15s;
     }
+
     .sf-sheet-close:active {
-      background: rgba(0,0,0,0.25);
+      background: rgba(0, 0, 0, 0.25);
     }
 
     .sf-sheet-body {
@@ -1080,19 +1090,23 @@
       overflow-y: auto;
       scrollbar-width: none;
     }
-    .month-list::-webkit-scrollbar { display: none; }
+
+    .month-list::-webkit-scrollbar {
+      display: none;
+    }
 
     .month-list-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 12px;
+      padding: 16px 12px;
       margin: 0 -12px;
       border-radius: 10px;
       cursor: pointer;
       transition: background 0.15s, opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
       gap: 12px;
     }
+
     .month-list-item:active {
       background: rgba(0, 0, 0, 0.25);
       transform: scale(0.98);
@@ -1106,33 +1120,37 @@
     }
 
     .month-list-year {
-      font-size: 17px;
-      font-weight: 300;
+      font-size: 18px;
+      font-weight: 400;
       font-family: 'Pretendard Variable', sans-serif;
       color: var(--text-2);
-      letter-spacing: -0.02em;
       min-width: 40px;
     }
 
     .month-list-label {
-      font-size: 17px;
+      font-size: 18px;
       font-weight: 300;
       font-family: 'Pretendard Variable', sans-serif;
       color: var(--text-1);
-      letter-spacing: -0.02em;
     }
+
     .month-list-item.ml-selected .month-list-label {
       color: var(--accent);
       font-weight: 500;
     }
+
     .month-list-check {
-      width: 18px; height: 18px;
+      width: 18px;
+      height: 18px;
       color: var(--accent);
       opacity: 0;
       transition: opacity 0.15s;
       flex-shrink: 0;
     }
-    .month-list-item.ml-selected .month-list-check { opacity: 1; }
+
+    .month-list-item.ml-selected .month-list-check {
+      opacity: 1;
+    }
 
     .wheel-sheet-footer {
       display: flex;
@@ -1439,24 +1457,26 @@
       background: #CACACA;
       transition: background 0.3s;
     }
+
     [data-theme="dark"] .view-all-wrap {
       background: #292929;
     }
+
     .view-all-btn {
       display: flex;
       align-items: center;
       justify-content: center;
       width: 100%;
       padding: 24px 20px;
-      background: var(--surface-3);
-      color: var(--text-1);
-      font-size: 15px;
-      font-weight: 400;
+      background: var(--surface-6);
+      color: var(--text-3);
+      font-size: 16px;
+      font-weight: 500;
       font-family: 'Pretendard Variable', sans-serif;
       text-decoration: none;
-      letter-spacing: -0.02em;
       transition: background 0.15s;
     }
+
     .view-all-btn:active {
       background: var(--surface-4);
     }
@@ -1505,7 +1525,7 @@
 
     .lp-list {
       flex: 1;
-      padding: 8px 10px 0;
+      padding: 8px 10px 30px;
       background: #CACACA;
     }
 
@@ -1563,7 +1583,7 @@
     }
 
     .lp-run-name {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 300;
       color: var(--text-1);
       font-family: 'Pretendard Variable', sans-serif;
@@ -1703,7 +1723,9 @@
       margin-bottom: 10px;
     }
 
-    [data-theme="light"] .lp-row.expanded { background: var(--surface-3); }
+    [data-theme="light"] .lp-row.expanded {
+      background: var(--surface-3);
+    }
 
     .lp-row.expanded:active {
       background: #383838;
@@ -1711,14 +1733,16 @@
       opacity: 1;
     }
 
-    [data-theme="light"] .lp-row.expanded:active { background: var(--surface-4); }
+    [data-theme="light"] .lp-row.expanded:active {
+      background: var(--surface-4);
+    }
 
     .lp-row.expanded .lp-badge {
       width: 12px;
       height: 12px;
       flex-shrink: 0;
       border-radius: 50%;
-      margin-top: 6px;
+      margin-top: 3px;
     }
 
     .lp-row.expanded .lp-info {
@@ -1737,7 +1761,6 @@
     }
 
     .lp-row.expanded .lp-run-name {
-      font-size: 18px;
       font-weight: 300;
       color: var(--text-1);
       font-family: 'Pretendard Variable', sans-serif;
@@ -1793,8 +1816,8 @@
     }
 
     .lp-row.expanded .lp-stat-value {
-      font-size: 18px;
-      font-weight: 700;
+      font-size: 20px;
+      font-weight: 500;
       color: var(--text-1);
       line-height: 1;
       font-family: 'Urbanist', sans-serif;
@@ -2639,7 +2662,8 @@
         <div class="sf-sheet-header" style="padding: 18px 20px 14px; flex-shrink:0;">
           <span class="sf-sheet-title">정렬</span>
           <button class="sf-sheet-close" onclick="closeSFSheet()">
-            <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round">
               <line x1="2" y1="2" x2="12" y2="12" />
               <line x1="12" y1="2" x2="2" y2="12" />
             </svg>
@@ -2652,7 +2676,8 @@
         <div class="sf-sheet-header" style="padding: 18px 20px 14px; flex-shrink:0;">
           <span class="sf-sheet-title">필터</span>
           <button class="sf-sheet-close" onclick="closeSFSheet()">
-            <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round">
               <line x1="2" y1="2" x2="12" y2="12" />
               <line x1="12" y1="2" x2="2" y2="12" />
             </svg>
@@ -2673,7 +2698,8 @@
         <div class="sf-sheet-header" style="padding: 18px 20px 14px; flex-shrink:0;">
           <span class="sf-sheet-title">월 선택</span>
           <button class="sf-sheet-close" onclick="closeMonthSheet()">
-            <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round">
               <line x1="2" y1="2" x2="12" y2="12" />
               <line x1="12" y1="2" x2="2" y2="12" />
             </svg>
@@ -2689,43 +2715,43 @@
   </div>
 
   </div><!-- /phone-inner -->
-    </div><!-- /phone -->
+  </div><!-- /phone -->
 
-      <script>
+  <script>
 
-        // 테마 초기화 (페이지 간 유지)
-        (function () {
-          const saved = localStorage.getItem('runit-theme');
-          if (saved) document.documentElement.setAttribute('data-theme', saved);
-        })();
+    // 테마 초기화 (페이지 간 유지)
+    (function () {
+      const saved = localStorage.getItem('runit-theme');
+      if (saved) document.documentElement.setAttribute('data-theme', saved);
+    })();
 
-        function toggleTheme() {
-          const t = document.documentElement.getAttribute('data-theme');
-          const next = t === 'light' ? 'dark' : 'light';
-          document.documentElement.setAttribute('data-theme', next);
-          localStorage.setItem('runit-theme', next);
-        }
+    function toggleTheme() {
+      const t = document.documentElement.getAttribute('data-theme');
+      const next = t === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('runit-theme', next);
+    }
 
-        /* ── Bottom sheet drag (removed — activity list is now inline) ── */
+    /* ── Bottom sheet drag (removed — activity list is now inline) ── */
 
-        function p1Show(name) {
-          // stats / detail 은 별도 HTML 파일로 분리됨
-          if (name === 'home') {
-            document.getElementById('s1-home').classList.add('active');
-          }
-        }
+    function p1Show(name) {
+      // stats / detail 은 별도 HTML 파일로 분리됨
+      if (name === 'home') {
+        document.getElementById('s1-home').classList.add('active');
+      }
+    }
 
-        /* ── Month navigation ── */
-        const MONTHS_ORDER = ['march', 'april'];
-        let currentMonthIdx = 1; // april
+    /* ── Month navigation ── */
+    const MONTHS_ORDER = ['march', 'april'];
+    let currentMonthIdx = 1; // april
 
-        const MONTH_DATA = {
-          march: {
-            monthName: '3월',
-            label: 'March 2026',
-            km: '96.2',
-            runCount: '11 runs',
-            calGrid: `
+    const MONTH_DATA = {
+      march: {
+        monthName: '3월',
+        label: 'March 2026',
+        km: '96.2',
+        runCount: '11 runs',
+        calGrid: `
         <div class="cal-day type-none"><span class="day-num">1</span></div>
         <div class="cal-day type-easy" onclick="location.href='detail.html'"><span class="day-note">6</span></div>
         <div class="cal-day type-easy" onclick="location.href='detail.html'"><span class="day-note">9</span></div>
@@ -2758,7 +2784,7 @@
         <div class="cal-day type-steady" onclick="location.href='detail.html'"><span class="day-note">6</span></div>
         <div class="cal-day type-none"><span class="day-num">31</span></div>
         <div class="cal-day"></div><div class="cal-day"></div><div class="cal-day"></div><div class="cal-day"></div>`,
-            runList: `
+        runList: `
         <div class="bs-row" onclick="location.href='detail.html'">
           <div class="bs-row-info"><div class="bs-row-name">Steady Run</div><div class="bs-row-meta">Mar 30 · 5.7km · 5:36 /km</div></div>
           <div class="bs-badge type-steady"><span>6</span></div>
@@ -2803,13 +2829,13 @@
           <div class="bs-row-info"><div class="bs-row-name">Easy Run</div><div class="bs-row-meta">Mar 2 · 6.2km · 6:18 /km</div></div>
           <div class="bs-badge type-easy"><span>6</span></div>
         </div>`
-          },
-          april: {
-            monthName: '4월',
-            label: 'April 2026',
-            km: '59.7',
-            runCount: '6 runs',
-            calGrid: `
+      },
+      april: {
+        monthName: '4월',
+        label: 'April 2026',
+        km: '59.7',
+        runCount: '6 runs',
+        calGrid: `
         <div class="cal-day"></div><div class="cal-day"></div><div class="cal-day"></div>
         <div class="cal-day type-none"><span class="day-num">1</span></div>
         <div class="cal-day type-none"><span class="day-num">2</span></div>
@@ -2842,7 +2868,7 @@
         <div class="cal-day type-none"><span class="day-num">29</span></div>
         <div class="cal-day type-none"><span class="day-num">30</span></div>
         <div class="cal-day"></div><div class="cal-day"></div>`,
-            runList: `
+        runList: `
         <div class="bs-row" onclick="location.href='detail.html'">
           <div class="bs-row-info"><div class="bs-row-name">Half Marathon</div><div class="bs-row-meta">Apr 11 · 21.1km · 5:02 /km</div></div>
           <div class="bs-badge type-race"><span>H</span></div>
@@ -2867,83 +2893,83 @@
           <div class="bs-row-info"><div class="bs-row-name">Easy Run</div><div class="bs-row-meta">Apr 3 · 8.2km · 6:12 /km</div></div>
           <div class="bs-badge type-easy"><span>8</span></div>
         </div>`
-          }
-        };
+      }
+    };
 
-        function navMonth(dir) {
-          const next = currentMonthIdx + dir;
-          if (next < 0 || next >= MONTHS_ORDER.length) return;
-          const wrap = document.getElementById('cal-slide-wrap');
-          // slide out
-          wrap.classList.add(dir < 0 ? 'slide-out-right' : 'slide-out-left');
-          setTimeout(() => {
-            wrap.classList.remove('slide-out-right', 'slide-out-left');
-            // prepare slide-in from opposite side (no transition)
-            wrap.style.transition = 'none';
-            wrap.classList.add(dir < 0 ? 'slide-in-left' : 'slide-in-right');
-            currentMonthIdx = next;
-            renderMonth();
-            // force reflow then animate in
-            wrap.getBoundingClientRect();
-            wrap.style.transition = '';
-            wrap.classList.remove('slide-in-left', 'slide-in-right');
-          }, 200);
-        }
+    function navMonth(dir) {
+      const next = currentMonthIdx + dir;
+      if (next < 0 || next >= MONTHS_ORDER.length) return;
+      const wrap = document.getElementById('cal-slide-wrap');
+      // slide out
+      wrap.classList.add(dir < 0 ? 'slide-out-right' : 'slide-out-left');
+      setTimeout(() => {
+        wrap.classList.remove('slide-out-right', 'slide-out-left');
+        // prepare slide-in from opposite side (no transition)
+        wrap.style.transition = 'none';
+        wrap.classList.add(dir < 0 ? 'slide-in-left' : 'slide-in-right');
+        currentMonthIdx = next;
+        renderMonth();
+        // force reflow then animate in
+        wrap.getBoundingClientRect();
+        wrap.style.transition = '';
+        wrap.classList.remove('slide-in-left', 'slide-in-right');
+      }, 200);
+    }
 
-        function renderMonth() {
-          const key = MONTHS_ORDER[currentMonthIdx];
-          const d = MONTH_DATA[key];
-          const kmEl = document.querySelector('.hero-km-big');
-          if (kmEl) kmEl.textContent = d.km;
-          const labelEl = document.getElementById('hero-month-label');
-          if (labelEl) labelEl.textContent = d.monthName;
-          const gridEl = document.getElementById('cal-grid-1');
-          if (gridEl) gridEl.innerHTML = d.calGrid;
-          const countEl = document.getElementById('bs-count-1');
-          if (countEl) countEl.textContent = d.runCount;
-        }
+    function renderMonth() {
+      const key = MONTHS_ORDER[currentMonthIdx];
+      const d = MONTH_DATA[key];
+      const kmEl = document.querySelector('.hero-km-big');
+      if (kmEl) kmEl.textContent = d.km;
+      const labelEl = document.getElementById('hero-month-label');
+      if (labelEl) labelEl.textContent = d.monthName;
+      const gridEl = document.getElementById('cal-grid-1');
+      if (gridEl) gridEl.innerHTML = d.calGrid;
+      const countEl = document.getElementById('bs-count-1');
+      if (countEl) countEl.textContent = d.runCount;
+    }
 
-        function animateCounter(el, start, end, duration) {
-          const startTime = performance.now();
+    function animateCounter(el, start, end, duration) {
+      const startTime = performance.now();
 
-          function updateCounter(currentTime) {
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            const current = start + (end - start) * progress;
-            el.textContent = current.toFixed(1);
+      function updateCounter(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const current = start + (end - start) * progress;
+        el.textContent = current.toFixed(1);
 
-            if (progress < 1) {
-              requestAnimationFrame(updateCounter);
-            }
-          }
-
+        if (progress < 1) {
           requestAnimationFrame(updateCounter);
         }
+      }
 
-        /* ═══════════════════════════════════════
-           MONTH LIST PICKER
-        ═══════════════════════════════════════ */
-        const ALL_MONTHS = (() => {
-          const list = [];
-          let y = 2026, m = 4;
-          while (y > 2025 || (y === 2025 && m >= 1)) {
-            list.push({ year: y, month: m });
-            m--; if (m === 0) { m = 12; y--; }
-          }
-          return list;
-        })();
+      requestAnimationFrame(updateCounter);
+    }
 
-        const MONTH_KEY_MAP = { '2026-4': 1, '2026-3': 0 };
+    /* ═══════════════════════════════════════
+       MONTH LIST PICKER
+    ═══════════════════════════════════════ */
+    const ALL_MONTHS = (() => {
+      const list = [];
+      let y = 2026, m = 4;
+      while (y > 2025 || (y === 2025 && m >= 1)) {
+        list.push({ year: y, month: m });
+        m--; if (m === 0) { m = 12; y--; }
+      }
+      return list;
+    })();
 
-        function openMonthSheet() {
-          const list = document.getElementById('month-list-scroll');
-          list.innerHTML = ALL_MONTHS.map((m, i) => {
-            const mk = `${m.year}-${m.month}`;
-            const isSel = MONTH_KEY_MAP[mk] === currentMonthIdx;
-            const showYear = i === 0 || m.month === 12;
-            const yearDisplay = showYear ? m.year : '';
-            return `<div class="month-list-item${isSel ? ' ml-selected' : ''}" onclick="selectListItem(${i})">
-              <div style="display: flex; align-items: center; gap: 8px;">
+    const MONTH_KEY_MAP = { '2026-4': 1, '2026-3': 0 };
+
+    function openMonthSheet() {
+      const list = document.getElementById('month-list-scroll');
+      list.innerHTML = ALL_MONTHS.map((m, i) => {
+        const mk = `${m.year}-${m.month}`;
+        const isSel = MONTH_KEY_MAP[mk] === currentMonthIdx;
+        const showYear = i === 0 || m.month === 12;
+        const yearDisplay = showYear ? m.year : '';
+        return `<div class="month-list-item${isSel ? ' ml-selected' : ''}" onclick="selectListItem(${i})">
+              <div style="display: flex; align-items: center; gap: 16px;">
                 <span class="month-list-label">${m.month}월</span>
                 <span class="month-list-year">${yearDisplay}</span>
               </div>
@@ -2951,302 +2977,302 @@
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
             </div>`;
-          }).join('');
+      }).join('');
 
-          document.getElementById('month-sheet').classList.add('open');
-          document.getElementById('month-backdrop').classList.add('open');
+      document.getElementById('month-sheet').classList.add('open');
+      document.getElementById('month-backdrop').classList.add('open');
 
-          // 선택된 항목으로 스크롤
-          requestAnimationFrame(() => {
-            const sel = list.querySelector('.ml-selected');
-            if (sel) sel.scrollIntoView({ block: 'center' });
-          });
-        }
+      // 선택된 항목으로 스크롤
+      requestAnimationFrame(() => {
+        const sel = list.querySelector('.ml-selected');
+        if (sel) sel.scrollIntoView({ block: 'center' });
+      });
+    }
 
-        function selectListItem(i) {
-          const m = ALL_MONTHS[i];
-          const mk = `${m.year}-${m.month}`;
-          const newIdx = MONTH_KEY_MAP[mk];
-          closeMonthSheet();
-          if (newIdx === undefined || newIdx === currentMonthIdx) return;
-          const dir = newIdx > currentMonthIdx ? 1 : -1;
-          const wrap = document.getElementById('cal-slide-wrap');
-          wrap.classList.add(dir < 0 ? 'slide-out-right' : 'slide-out-left');
-          setTimeout(() => {
-            wrap.classList.remove('slide-out-right', 'slide-out-left');
-            wrap.style.transition = 'none';
-            wrap.classList.add(dir < 0 ? 'slide-in-left' : 'slide-in-right');
-            currentMonthIdx = newIdx;
-            renderMonth();
-            wrap.getBoundingClientRect();
-            wrap.style.transition = '';
-            wrap.classList.remove('slide-in-left', 'slide-in-right');
-          }, 200);
-        }
+    function selectListItem(i) {
+      const m = ALL_MONTHS[i];
+      const mk = `${m.year}-${m.month}`;
+      const newIdx = MONTH_KEY_MAP[mk];
+      closeMonthSheet();
+      if (newIdx === undefined || newIdx === currentMonthIdx) return;
+      const dir = newIdx > currentMonthIdx ? 1 : -1;
+      const wrap = document.getElementById('cal-slide-wrap');
+      wrap.classList.add(dir < 0 ? 'slide-out-right' : 'slide-out-left');
+      setTimeout(() => {
+        wrap.classList.remove('slide-out-right', 'slide-out-left');
+        wrap.style.transition = 'none';
+        wrap.classList.add(dir < 0 ? 'slide-in-left' : 'slide-in-right');
+        currentMonthIdx = newIdx;
+        renderMonth();
+        wrap.getBoundingClientRect();
+        wrap.style.transition = '';
+        wrap.classList.remove('slide-in-left', 'slide-in-right');
+      }, 200);
+    }
 
-        function closeMonthSheet() {
-          document.getElementById('month-sheet').classList.remove('open');
-          document.getElementById('month-backdrop').classList.remove('open');
-        }
+    function closeMonthSheet() {
+      document.getElementById('month-sheet').classList.remove('open');
+      document.getElementById('month-backdrop').classList.remove('open');
+    }
 
-        /* ── Bottom Sheet drag (legacy — guarded) ── */
-        (function () {
-          const sheet = document.getElementById('bottom-sheet-1');
-          const handle = document.getElementById('bs-handle-1');
-          if (!sheet || !handle) return; // elements removed — skip
-          const PEEK = 104;   // collapsed peek height (px)
-          let isDragging = false;
-          let startY = 0;
-          let startTranslate = 0;
+    /* ── Bottom Sheet drag (legacy — guarded) ── */
+    (function () {
+      const sheet = document.getElementById('bottom-sheet-1');
+      const handle = document.getElementById('bs-handle-1');
+      if (!sheet || !handle) return; // elements removed — skip
+      const PEEK = 104;   // collapsed peek height (px)
+      let isDragging = false;
+      let startY = 0;
+      let startTranslate = 0;
 
-          function getCollapsedY() {
-            return sheet.offsetHeight - PEEK;
-          }
+      function getCollapsedY() {
+        return sheet.offsetHeight - PEEK;
+      }
 
-          function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+      function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 
-          function setY(y, animate) {
-            sheet.style.transition = animate
-              ? 'transform 0.42s cubic-bezier(0.4,0,0.2,1), background 0.3s'
-              : 'background 0.3s';
-            sheet.style.transform = `translateY(${y}px)`;
-          }
+      function setY(y, animate) {
+        sheet.style.transition = animate
+          ? 'transform 0.42s cubic-bezier(0.4,0,0.2,1), background 0.3s'
+          : 'background 0.3s';
+        sheet.style.transform = `translateY(${y}px)`;
+      }
 
-          function snapSheet(velocity) {
-            // velocity > 0 = moving down = close; < 0 = moving up = open
-            const mid = getCollapsedY() / 2;
-            const currentY = parseFloat(sheet.style.transform.replace(/[^0-9.-]/g, '')) || getCollapsedY();
-            const open = velocity < -0.3 || (velocity >= -0.3 && currentY < mid);
-            setY(open ? 0 : getCollapsedY(), true);
-            sheet.classList.toggle('bs-open', open);
-          }
+      function snapSheet(velocity) {
+        // velocity > 0 = moving down = close; < 0 = moving up = open
+        const mid = getCollapsedY() / 2;
+        const currentY = parseFloat(sheet.style.transform.replace(/[^0-9.-]/g, '')) || getCollapsedY();
+        const open = velocity < -0.3 || (velocity >= -0.3 && currentY < mid);
+        setY(open ? 0 : getCollapsedY(), true);
+        sheet.classList.toggle('bs-open', open);
+      }
 
-          function onStart(clientY) {
-            isDragging = true;
-            startY = clientY;
-            const m = sheet.style.transform.match(/-?[\d.]+/);
-            startTranslate = m ? parseFloat(m[0]) : getCollapsedY();
-            sheet.style.transition = 'background 0.3s';
-          }
+      function onStart(clientY) {
+        isDragging = true;
+        startY = clientY;
+        const m = sheet.style.transform.match(/-?[\d.]+/);
+        startTranslate = m ? parseFloat(m[0]) : getCollapsedY();
+        sheet.style.transition = 'background 0.3s';
+      }
 
-          function onMove(clientY) {
-            if (!isDragging) return;
-            const dy = clientY - startY;
-            const next = clamp(startTranslate + dy, 0, getCollapsedY());
-            sheet.style.transform = `translateY(${next}px)`;
-          }
+      function onMove(clientY) {
+        if (!isDragging) return;
+        const dy = clientY - startY;
+        const next = clamp(startTranslate + dy, 0, getCollapsedY());
+        sheet.style.transform = `translateY(${next}px)`;
+      }
 
-          function onEnd(clientY) {
-            if (!isDragging) return;
-            isDragging = false;
-            const dy = clientY - startY;
-            const velocity = dy / (Date.now() - startTime + 1); // rough
-            snapSheet(dy < -40 ? -1 : dy > 40 ? 1 : 0);
-          }
+      function onEnd(clientY) {
+        if (!isDragging) return;
+        isDragging = false;
+        const dy = clientY - startY;
+        const velocity = dy / (Date.now() - startTime + 1); // rough
+        snapSheet(dy < -40 ? -1 : dy > 40 ? 1 : 0);
+      }
 
-          let startTime = 0;
+      let startTime = 0;
 
-          handle.addEventListener('touchstart', e => {
-            startTime = Date.now();
-            onStart(e.touches[0].clientY);
-          }, { passive: true });
-          window.addEventListener('touchmove', e => {
-            if (isDragging) onMove(e.touches[0].clientY);
-          }, { passive: true });
-          window.addEventListener('touchend', e => {
-            onEnd(e.changedTouches[0].clientY);
-          });
+      handle.addEventListener('touchstart', e => {
+        startTime = Date.now();
+        onStart(e.touches[0].clientY);
+      }, { passive: true });
+      window.addEventListener('touchmove', e => {
+        if (isDragging) onMove(e.touches[0].clientY);
+      }, { passive: true });
+      window.addEventListener('touchend', e => {
+        onEnd(e.changedTouches[0].clientY);
+      });
 
-          handle.addEventListener('mousedown', e => {
-            startTime = Date.now();
-            onStart(e.clientY);
-            e.preventDefault();
-          });
-          window.addEventListener('mousemove', e => {
-            if (isDragging) onMove(e.clientY);
-          });
-          window.addEventListener('mouseup', e => {
-            if (isDragging) onEnd(e.clientY);
-          });
-        })();
+      handle.addEventListener('mousedown', e => {
+        startTime = Date.now();
+        onStart(e.clientY);
+        e.preventDefault();
+      });
+      window.addEventListener('mousemove', e => {
+        if (isDragging) onMove(e.clientY);
+      });
+      window.addEventListener('mouseup', e => {
+        if (isDragging) onEnd(e.clientY);
+      });
+    })();
 
-        // Swipe (touch + mouse) on calendar
-        (function () {
-          const cal = document.getElementById('calendar-1');
-          let startX = 0;
-          let dragging = false;
+    // Swipe (touch + mouse) on calendar
+    (function () {
+      const cal = document.getElementById('calendar-1');
+      let startX = 0;
+      let dragging = false;
 
-          // Touch
-          cal.addEventListener('touchstart', e => {
-            startX = e.touches[0].clientX;
-          }, { passive: true });
-          cal.addEventListener('touchend', e => {
-            const dx = e.changedTouches[0].clientX - startX;
-            if (Math.abs(dx) > 40) navMonth(dx < 0 ? 1 : -1);
-          }, { passive: true });
+      // Touch
+      cal.addEventListener('touchstart', e => {
+        startX = e.touches[0].clientX;
+      }, { passive: true });
+      cal.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 40) navMonth(dx < 0 ? 1 : -1);
+      }, { passive: true });
 
-          // Mouse (for desktop testing)
-          cal.addEventListener('mousedown', e => {
-            startX = e.clientX;
-            dragging = true;
-          });
-          window.addEventListener('mouseup', e => {
-            if (!dragging) return;
-            dragging = false;
-            const dx = e.clientX - startX;
-            if (Math.abs(dx) > 40) navMonth(dx < 0 ? 1 : -1);
-          });
-        })();
-      </script>
+      // Mouse (for desktop testing)
+      cal.addEventListener('mousedown', e => {
+        startX = e.clientX;
+        dragging = true;
+      });
+      window.addEventListener('mouseup', e => {
+        if (!dragging) return;
+        dragging = false;
+        const dx = e.clientX - startX;
+        if (Math.abs(dx) > 40) navMonth(dx < 0 ? 1 : -1);
+      });
+    })();
+  </script>
 
-      <script>
-        /* ═══════════════════════════════════════
-           RUNS DATA
-        ═══════════════════════════════════════ */
-        const RUNS = [
-          // 4월
-          { id: 1,  date: '2026-04-11', label: '4/11', month: 4, type: 'race',    group: 'race',      name: '2026 인천하프', time: '08:00', km: 21.2, pace: '5:02', paceV: 302, bpm: 176, spm: 174, stride: 107 },
-          { id: 2,  date: '2026-04-10', label: '4/10', month: 4, type: 'jogging', group: 'easy',      name: '회복 조깅',     time: '07:30', km: 5.4,  pace: '6:52', paceV: 412, bpm: 142, spm: 163, stride: 88  },
-          { id: 3,  date: '2026-04-07', label: '4/7',  month: 4, type: 'tempo',   group: 'speed',     name: '템포 런',       time: '06:15', km: 8.0,  pace: '4:45', paceV: 285, bpm: 169, spm: 180, stride: 112 },
-          { id: 4,  date: '2026-04-05', label: '4/5',  month: 4, type: 'easy',    group: 'easy',      name: '이지 런',       time: '06:30', km: 7.2,  pace: '6:15', paceV: 375, bpm: 138, spm: 162, stride: 91  },
-          { id: 5,  date: '2026-04-04', label: '4/4',  month: 4, type: 'easy',    group: 'easy',      name: '이지 런',       time: '18:00', km: 6.8,  pace: '6:20', paceV: 380, bpm: 135, spm: 160, stride: 89  },
-          { id: 6,  date: '2026-04-03', label: '4/3',  month: 4, type: 'easy',    group: 'easy',      name: '이지 런',       time: '07:00', km: 5.0,  pace: '6:40', paceV: 400, bpm: 132, spm: 158, stride: 86  },
-          // 3월
-          { id: 7,  date: '2026-03-30', label: '3/30', month: 3, type: 'steady',  group: 'endurance', name: '스테디 런',     time: '07:30', km: 10.5, pace: '5:30', paceV: 330, bpm: 158, spm: 170, stride: 98  },
-          { id: 8,  date: '2026-03-28', label: '3/28', month: 3, type: 'steady',  group: 'endurance', name: '스테디 런',     time: '07:00', km: 9.8,  pace: '5:38', paceV: 338, bpm: 155, spm: 168, stride: 96  },
-          { id: 9,  date: '2026-03-22', label: '3/22', month: 3, type: 'race',    group: 'race',      name: '서울 10K',      time: '09:00', km: 10.0, pace: '4:52', paceV: 292, bpm: 172, spm: 177, stride: 105 },
-          { id: 10, date: '2026-03-20', label: '3/20', month: 3, type: 'steady',  group: 'endurance', name: '스테디 런',     time: '07:15', km: 11.2, pace: '5:25', paceV: 325, bpm: 160, spm: 171, stride: 100 },
-          { id: 11, date: '2026-03-19', label: '3/19', month: 3, type: 'jogging', group: 'easy',      name: '회복 조깅',     time: '07:30', km: 4.8,  pace: '7:05', paceV: 425, bpm: 138, spm: 161, stride: 85  },
-          { id: 12, date: '2026-03-13', label: '3/13', month: 3, type: 'easy',    group: 'easy',      name: '이지 런',       time: '06:45', km: 8.5,  pace: '6:08', paceV: 368, bpm: 141, spm: 164, stride: 93  },
-          { id: 13, date: '2026-03-09', label: '3/9',  month: 3, type: 'easy',    group: 'easy',      name: '이지 런',       time: '07:00', km: 6.0,  pace: '6:22', paceV: 382, bpm: 136, spm: 160, stride: 90  },
-          // 2월
-          { id: 14, date: '2026-02-25', label: '2/25', month: 2, type: 'long',    group: 'endurance', name: '롱 런',         time: '07:00', km: 18.0, pace: '5:48', paceV: 348, bpm: 155, spm: 168, stride: 97  },
-          { id: 15, date: '2026-02-18', label: '2/18', month: 2, type: 'tempo',   group: 'speed',     name: '템포 런',       time: '06:30', km: 7.5,  pace: '4:52', paceV: 292, bpm: 167, spm: 178, stride: 110 },
-          { id: 16, date: '2026-02-10', label: '2/10', month: 2, type: 'steady',  group: 'endurance', name: '스테디 런',     time: '07:15', km: 9.2,  pace: '5:42', paceV: 342, bpm: 152, spm: 167, stride: 95  },
-          { id: 17, date: '2026-02-02', label: '2/2',  month: 2, type: 'easy',    group: 'easy',      name: '이지 런',       time: '08:00', km: 5.5,  pace: '6:28', paceV: 388, bpm: 133, spm: 159, stride: 87  },
-        ];
+  <script>
+    /* ═══════════════════════════════════════
+       RUNS DATA
+    ═══════════════════════════════════════ */
+    const RUNS = [
+      // 4월
+      { id: 1, date: '2026-04-11', label: '4/11', month: 4, type: 'race', group: 'race', name: '2026 인천하프', time: '08:00', km: 21.2, pace: '5:02', paceV: 302, bpm: 176, spm: 174, stride: 107 },
+      { id: 2, date: '2026-04-10', label: '4/10', month: 4, type: 'jogging', group: 'easy', name: '회복 조깅', time: '07:30', km: 5.4, pace: '6:52', paceV: 412, bpm: 142, spm: 163, stride: 88 },
+      { id: 3, date: '2026-04-07', label: '4/7', month: 4, type: 'tempo', group: 'speed', name: '템포 런', time: '06:15', km: 8.0, pace: '4:45', paceV: 285, bpm: 169, spm: 180, stride: 112 },
+      { id: 4, date: '2026-04-05', label: '4/5', month: 4, type: 'easy', group: 'easy', name: '이지 런', time: '06:30', km: 7.2, pace: '6:15', paceV: 375, bpm: 138, spm: 162, stride: 91 },
+      { id: 5, date: '2026-04-04', label: '4/4', month: 4, type: 'easy', group: 'easy', name: '이지 런', time: '18:00', km: 6.8, pace: '6:20', paceV: 380, bpm: 135, spm: 160, stride: 89 },
+      { id: 6, date: '2026-04-03', label: '4/3', month: 4, type: 'easy', group: 'easy', name: '이지 런', time: '07:00', km: 5.0, pace: '6:40', paceV: 400, bpm: 132, spm: 158, stride: 86 },
+      // 3월
+      { id: 7, date: '2026-03-30', label: '3/30', month: 3, type: 'steady', group: 'endurance', name: '스테디 런', time: '07:30', km: 10.5, pace: '5:30', paceV: 330, bpm: 158, spm: 170, stride: 98 },
+      { id: 8, date: '2026-03-28', label: '3/28', month: 3, type: 'steady', group: 'endurance', name: '스테디 런', time: '07:00', km: 9.8, pace: '5:38', paceV: 338, bpm: 155, spm: 168, stride: 96 },
+      { id: 9, date: '2026-03-22', label: '3/22', month: 3, type: 'race', group: 'race', name: '서울 10K', time: '09:00', km: 10.0, pace: '4:52', paceV: 292, bpm: 172, spm: 177, stride: 105 },
+      { id: 10, date: '2026-03-20', label: '3/20', month: 3, type: 'steady', group: 'endurance', name: '스테디 런', time: '07:15', km: 11.2, pace: '5:25', paceV: 325, bpm: 160, spm: 171, stride: 100 },
+      { id: 11, date: '2026-03-19', label: '3/19', month: 3, type: 'jogging', group: 'easy', name: '회복 조깅', time: '07:30', km: 4.8, pace: '7:05', paceV: 425, bpm: 138, spm: 161, stride: 85 },
+      { id: 12, date: '2026-03-13', label: '3/13', month: 3, type: 'easy', group: 'easy', name: '이지 런', time: '06:45', km: 8.5, pace: '6:08', paceV: 368, bpm: 141, spm: 164, stride: 93 },
+      { id: 13, date: '2026-03-09', label: '3/9', month: 3, type: 'easy', group: 'easy', name: '이지 런', time: '07:00', km: 6.0, pace: '6:22', paceV: 382, bpm: 136, spm: 160, stride: 90 },
+      // 2월
+      { id: 14, date: '2026-02-25', label: '2/25', month: 2, type: 'long', group: 'endurance', name: '롱 런', time: '07:00', km: 18.0, pace: '5:48', paceV: 348, bpm: 155, spm: 168, stride: 97 },
+      { id: 15, date: '2026-02-18', label: '2/18', month: 2, type: 'tempo', group: 'speed', name: '템포 런', time: '06:30', km: 7.5, pace: '4:52', paceV: 292, bpm: 167, spm: 178, stride: 110 },
+      { id: 16, date: '2026-02-10', label: '2/10', month: 2, type: 'steady', group: 'endurance', name: '스테디 런', time: '07:15', km: 9.2, pace: '5:42', paceV: 342, bpm: 152, spm: 167, stride: 95 },
+      { id: 17, date: '2026-02-02', label: '2/2', month: 2, type: 'easy', group: 'easy', name: '이지 런', time: '08:00', km: 5.5, pace: '6:28', paceV: 388, bpm: 133, spm: 159, stride: 87 },
+    ];
 
-        const MONTH_LABELS = { 4: '4월', 3: '3월', 2: '2월' };
+    const MONTH_LABELS = { 4: '4월', 3: '3월', 2: '2월' };
 
-        /* ═══════════════════════════════════════
-           SORT / FILTER STATE
-        ═══════════════════════════════════════ */
-        let sortState = { key: 'date', asc: false }; // 최신순 기본
-        let filterState = {
-          type: null, bpm: null,
-          distMin: 0, distMax: 42,
-          paceMin: 240, paceMax: 600  // sec/km
-        };
+    /* ═══════════════════════════════════════
+       SORT / FILTER STATE
+    ═══════════════════════════════════════ */
+    let sortState = { key: 'date', asc: false }; // 최신순 기본
+    let filterState = {
+      type: null, bpm: null,
+      distMin: 0, distMax: 42,
+      paceMin: 240, paceMax: 600  // sec/km
+    };
 
-        const SORT_OPTS = [
-          { key: 'date', asc: false, label: '날짜 최신순' },
-          { key: 'date', asc: true,  label: '날짜 오래된순' },
-          { key: 'km',   asc: false, label: '거리 긴순' },
-          { key: 'km',   asc: true,  label: '거리 짧은순' },
-          { key: 'paceV',asc: true,  label: '페이스 빠른순' },
-          { key: 'paceV',asc: false, label: '페이스 느린순' },
-          { key: 'bpm',  asc: false, label: '심박수 높은순' },
-          { key: 'bpm',  asc: true,  label: '심박수 낮은순' },
-          { key: 'spm',  asc: false, label: '케이던스 높은순' },
-          { key: 'spm',  asc: true,  label: '케이던스 낮은순' },
-          { key: 'stride', asc: false, label: '보행길이 긴 순' },
-          { key: 'stride', asc: true,  label: '보행길이 짧은 순' },
-        ];
+    const SORT_OPTS = [
+      { key: 'date', asc: false, label: '날짜 최신순' },
+      { key: 'date', asc: true, label: '날짜 오래된순' },
+      { key: 'km', asc: false, label: '거리 긴순' },
+      { key: 'km', asc: true, label: '거리 짧은순' },
+      { key: 'paceV', asc: true, label: '페이스 빠른순' },
+      { key: 'paceV', asc: false, label: '페이스 느린순' },
+      { key: 'bpm', asc: false, label: '심박수 높은순' },
+      { key: 'bpm', asc: true, label: '심박수 낮은순' },
+      { key: 'spm', asc: false, label: '케이던스 높은순' },
+      { key: 'spm', asc: true, label: '케이던스 낮은순' },
+      { key: 'stride', asc: false, label: '보행길이 긴 순' },
+      { key: 'stride', asc: true, label: '보행길이 짧은 순' },
+    ];
 
-        const FILTER_TYPE_OPTS = [
-          { val: 'race', label: '레이스' },
-          { val: 'tempo', label: '템포' },
-          { val: 'steady', label: '스테디' },
-          { val: 'easy', label: '이지' },
-          { val: 'jogging', label: '조깅' },
-          { val: 'long', label: '롱런' },
-        ];
+    const FILTER_TYPE_OPTS = [
+      { val: 'race', label: '레이스' },
+      { val: 'tempo', label: '템포' },
+      { val: 'steady', label: '스테디' },
+      { val: 'easy', label: '이지' },
+      { val: 'jogging', label: '조깅' },
+      { val: 'long', label: '롱런' },
+    ];
 
-        const FILTER_ZONE_OPTS = [
-          { val: 'z1', label: 'Z1', desc: '회복' },
-          { val: 'z2', label: 'Z2', desc: '유산소' },
-          { val: 'z3', label: 'Z3', desc: '유산소+' },
-          { val: 'z4', label: 'Z4', desc: '역치' },
-          { val: 'z5', label: 'Z5', desc: '최대' },
-        ];
+    const FILTER_ZONE_OPTS = [
+      { val: 'z1', label: 'Z1', desc: '회복' },
+      { val: 'z2', label: 'Z2', desc: '유산소' },
+      { val: 'z3', label: 'Z3', desc: '유산소+' },
+      { val: 'z4', label: 'Z4', desc: '역치' },
+      { val: 'z5', label: 'Z5', desc: '최대' },
+    ];
 
-        function fmtPace(sec) {
-          const m = Math.floor(sec / 60);
-          const s = sec % 60;
-          return `${m}'${String(s).padStart(2, '0')}"`;
-        }
+    function fmtPace(sec) {
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return `${m}'${String(s).padStart(2, '0')}"`;
+    }
 
-        /* ═══════════════════════════════════════
-           SORT/FILTER SHEETS
-        ═══════════════════════════════════════ */
-        function openSortSheet() {
-          renderSortPanel();
-          document.getElementById('sort-sheet').classList.add('open');
-          document.getElementById('sf-backdrop').classList.add('open');
-          document.getElementById('float-sort-btn').classList.add('active');
-        }
+    /* ═══════════════════════════════════════
+       SORT/FILTER SHEETS
+    ═══════════════════════════════════════ */
+    function openSortSheet() {
+      renderSortPanel();
+      document.getElementById('sort-sheet').classList.add('open');
+      document.getElementById('sf-backdrop').classList.add('open');
+      document.getElementById('float-sort-btn').classList.add('active');
+    }
 
-        function openFilterSheet() {
-          renderFilterPanel();
-          document.getElementById('filter-sheet').classList.add('open');
-          document.getElementById('sf-backdrop').classList.add('open');
-          document.getElementById('float-filter-btn').classList.add('active');
-        }
+    function openFilterSheet() {
+      renderFilterPanel();
+      document.getElementById('filter-sheet').classList.add('open');
+      document.getElementById('sf-backdrop').classList.add('open');
+      document.getElementById('float-filter-btn').classList.add('active');
+    }
 
-        function closeSFSheet() {
-          document.getElementById('sort-sheet').classList.remove('open');
-          document.getElementById('filter-sheet').classList.remove('open');
-          document.getElementById('sf-backdrop').classList.remove('open');
-          document.getElementById('float-sort-btn').classList.remove('active');
-          document.getElementById('float-filter-btn').classList.remove('active');
-        }
+    function closeSFSheet() {
+      document.getElementById('sort-sheet').classList.remove('open');
+      document.getElementById('filter-sheet').classList.remove('open');
+      document.getElementById('sf-backdrop').classList.remove('open');
+      document.getElementById('float-sort-btn').classList.remove('active');
+      document.getElementById('float-filter-btn').classList.remove('active');
+    }
 
-        /* ═══════════════════════════════════════
-           SORT PANEL RENDER
-        ═══════════════════════════════════════ */
-        function renderSortPanel() {
-          const container = document.getElementById('sf-sort-opts');
-          container.innerHTML = SORT_OPTS.map((opt, i) => {
-            const active = sortState.key === opt.key && sortState.asc === opt.asc;
-            return `<div class="month-list-item${active ? ' ml-selected' : ''}" onclick="selectSort(${i})">
+    /* ═══════════════════════════════════════
+       SORT PANEL RENDER
+    ═══════════════════════════════════════ */
+    function renderSortPanel() {
+      const container = document.getElementById('sf-sort-opts');
+      container.innerHTML = SORT_OPTS.map((opt, i) => {
+        const active = sortState.key === opt.key && sortState.asc === opt.asc;
+        return `<div class="month-list-item${active ? ' ml-selected' : ''}" onclick="selectSort(${i})">
               <span class="month-list-label">${opt.label}</span>
               <svg class="month-list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
             </div>`;
-          }).join('');
-        }
+      }).join('');
+    }
 
-        function selectSort(i) {
-          const opt = SORT_OPTS[i];
-          sortState.key = opt.key;
-          sortState.asc = opt.asc;
-          renderList();
-          updateBadges();
-          closeSFSheet();
-        }
+    function selectSort(i) {
+      const opt = SORT_OPTS[i];
+      sortState.key = opt.key;
+      sortState.asc = opt.asc;
+      renderList();
+      updateBadges();
+      closeSFSheet();
+    }
 
-        /* ═══════════════════════════════════════
-           FILTER PANEL RENDER
-        ═══════════════════════════════════════ */
-        function renderFilterPanel() {
-          const container = document.getElementById('sf-filter-cats');
-          const { distMin, distMax, paceMin, paceMax } = filterState;
+    /* ═══════════════════════════════════════
+       FILTER PANEL RENDER
+    ═══════════════════════════════════════ */
+    function renderFilterPanel() {
+      const container = document.getElementById('sf-filter-cats');
+      const { distMin, distMax, paceMin, paceMax } = filterState;
 
-          const typeChips = FILTER_TYPE_OPTS.map(o => {
-            const a = filterState.type === o.val;
-            return `<div class="filter-chip ${a ? 'active' : ''}" onclick="selectFilter('type','${o.val}')">${o.label}</div>`;
-          }).join('');
+      const typeChips = FILTER_TYPE_OPTS.map(o => {
+        const a = filterState.type === o.val;
+        return `<div class="filter-chip ${a ? 'active' : ''}" onclick="selectFilter('type','${o.val}')">${o.label}</div>`;
+      }).join('');
 
-          const zoneChips = FILTER_ZONE_OPTS.map(o => {
-            const a = filterState.bpm === o.val;
-            return `<div class="filter-chip zone-chip ${a ? 'active' : ''}" onclick="selectFilter('bpm','${o.val}')">
+      const zoneChips = FILTER_ZONE_OPTS.map(o => {
+        const a = filterState.bpm === o.val;
+        return `<div class="filter-chip zone-chip ${a ? 'active' : ''}" onclick="selectFilter('bpm','${o.val}')">
               <span class="zone-label">${o.label}</span>
               <span class="zone-desc">${o.desc}</span>
             </div>`;
-          }).join('');
+      }).join('');
 
-          container.innerHTML = `
+      container.innerHTML = `
             <div class="filter-cat">
               <div class="filter-cat-label">타입</div>
               <div class="filter-chips">${typeChips}</div>
@@ -3284,121 +3310,121 @@
             </div>
           `;
 
-          setupSlider('dist-lo', 'dist-hi', 'dist-fill', 'dist-lo-val', 'dist-hi-val',
-            0, 42,
-            v => v + ' km',
-            v => v >= 42 ? '42+ km' : v + ' km',
-            v => { filterState.distMin = v; },
-            v => { filterState.distMax = v; }
-          );
-          setupSlider('pace-lo', 'pace-hi', 'pace-fill', 'pace-lo-val', 'pace-hi-val',
-            240, 600,
-            v => fmtPace(v) + '/km',
-            v => v >= 600 ? '10\'00"+' : fmtPace(v) + '/km',
-            v => { filterState.paceMin = v; },
-            v => { filterState.paceMax = v; }
-          );
+      setupSlider('dist-lo', 'dist-hi', 'dist-fill', 'dist-lo-val', 'dist-hi-val',
+        0, 42,
+        v => v + ' km',
+        v => v >= 42 ? '42+ km' : v + ' km',
+        v => { filterState.distMin = v; },
+        v => { filterState.distMax = v; }
+      );
+      setupSlider('pace-lo', 'pace-hi', 'pace-fill', 'pace-lo-val', 'pace-hi-val',
+        240, 600,
+        v => fmtPace(v) + '/km',
+        v => v >= 600 ? '10\'00"+' : fmtPace(v) + '/km',
+        v => { filterState.paceMin = v; },
+        v => { filterState.paceMax = v; }
+      );
+    }
+
+    function setupSlider(loId, hiId, fillId, loValId, hiValId, min, max, fmtLo, fmtHi, onLo, onHi) {
+      const loEl = document.getElementById(loId);
+      const hiEl = document.getElementById(hiId);
+      const fillEl = document.getElementById(fillId);
+      const loValEl = document.getElementById(loValId);
+      const hiValEl = document.getElementById(hiValId);
+      function sync() {
+        const l = +loEl.value, h = +hiEl.value;
+        const pct = v => (v - min) / (max - min) * 100;
+        fillEl.style.left = pct(l) + '%';
+        fillEl.style.width = (pct(h) - pct(l)) + '%';
+        loValEl.textContent = fmtLo(l);
+        hiValEl.textContent = fmtHi(h);
+      }
+      loEl.addEventListener('input', () => {
+        if (+loEl.value >= +hiEl.value) loEl.value = +hiEl.value - +loEl.step;
+        onLo(+loEl.value); sync(); renderList(); updateBadges();
+      });
+      hiEl.addEventListener('input', () => {
+        if (+hiEl.value <= +loEl.value) hiEl.value = +loEl.value + +hiEl.step;
+        onHi(+hiEl.value); sync(); renderList(); updateBadges();
+      });
+      sync();
+    }
+
+    function selectFilter(catKey, val) {
+      filterState[catKey] = filterState[catKey] === val ? null : val;
+      renderFilterPanel();
+      renderList();
+      updateBadges();
+    }
+
+    function resetFilters() {
+      filterState = { type: null, bpm: null, distMin: 0, distMax: 42, paceMin: 240, paceMax: 600 };
+      renderFilterPanel();
+      renderList();
+      updateBadges();
+    }
+
+    /* ═══════════════════════════════════════
+       BADGES
+    ═══════════════════════════════════════ */
+    function updateBadges() {
+      const sortDefault = sortState.key === 'date' && !sortState.asc;
+      document.getElementById('float-sort-badge').classList.toggle('visible', !sortDefault);
+
+      const hasFilter = filterState.type !== null || filterState.bpm !== null ||
+        filterState.distMin > 0 || filterState.distMax < 42 ||
+        filterState.paceMin > 240 || filterState.paceMax < 600;
+      document.getElementById('float-filter-badge').classList.toggle('visible', hasFilter);
+    }
+
+    /* ═══════════════════════════════════════
+       FILTER LOGIC
+    ═══════════════════════════════════════ */
+    function applyFilters(runs) {
+      return runs.filter(r => {
+        if (filterState.type && r.type !== filterState.type) return false;
+        if (r.km < filterState.distMin || r.km > filterState.distMax) return false;
+        if (r.paceV < filterState.paceMin || r.paceV > filterState.paceMax) return false;
+        if (filterState.bpm) {
+          const z = { z1: [0, 119], z2: [120, 139], z3: [140, 159], z4: [160, 174], z5: [175, 999] }[filterState.bpm];
+          if (r.bpm < z[0] || r.bpm > z[1]) return false;
         }
+        return true;
+      });
+    }
 
-        function setupSlider(loId, hiId, fillId, loValId, hiValId, min, max, fmtLo, fmtHi, onLo, onHi) {
-          const loEl = document.getElementById(loId);
-          const hiEl = document.getElementById(hiId);
-          const fillEl = document.getElementById(fillId);
-          const loValEl = document.getElementById(loValId);
-          const hiValEl = document.getElementById(hiValId);
-          function sync() {
-            const l = +loEl.value, h = +hiEl.value;
-            const pct = v => (v - min) / (max - min) * 100;
-            fillEl.style.left = pct(l) + '%';
-            fillEl.style.width = (pct(h) - pct(l)) + '%';
-            loValEl.textContent = fmtLo(l);
-            hiValEl.textContent = fmtHi(h);
-          }
-          loEl.addEventListener('input', () => {
-            if (+loEl.value >= +hiEl.value) loEl.value = +hiEl.value - +loEl.step;
-            onLo(+loEl.value); sync(); renderList(); updateBadges();
-          });
-          hiEl.addEventListener('input', () => {
-            if (+hiEl.value <= +loEl.value) hiEl.value = +loEl.value + +hiEl.step;
-            onHi(+hiEl.value); sync(); renderList(); updateBadges();
-          });
-          sync();
-        }
+    /* ═══════════════════════════════════════
+       SORT LOGIC
+    ═══════════════════════════════════════ */
+    function applySort(runs) {
+      const { key, asc } = sortState;
+      return [...runs].sort((a, b) => {
+        let va = a[key], vb = b[key];
+        if (key === 'date') { va = va.replace(/-/g, ''); vb = vb.replace(/-/g, ''); }
+        return asc ? (va > vb ? 1 : -1) : (va < vb ? 1 : -1);
+      });
+    }
 
-        function selectFilter(catKey, val) {
-          filterState[catKey] = filterState[catKey] === val ? null : val;
-          renderFilterPanel();
-          renderList();
-          updateBadges();
-        }
+    /* ═══════════════════════════════════════
+       RENDER LIST (홈: 이번 달만, compact)
+    ═══════════════════════════════════════ */
+    const CURRENT_MONTH = 4; // April
 
-        function resetFilters() {
-          filterState = { type: null, bpm: null, distMin: 0, distMax: 42, paceMin: 240, paceMax: 600 };
-          renderFilterPanel();
-          renderList();
-          updateBadges();
-        }
+    function renderList() {
+      const container = document.getElementById('runs-list-container');
+      const thisMonth = RUNS.filter(r => r.month === CURRENT_MONTH)
+        .sort((a, b) => a.date < b.date ? 1 : -1);
 
-        /* ═══════════════════════════════════════
-           BADGES
-        ═══════════════════════════════════════ */
-        function updateBadges() {
-          const sortDefault = sortState.key === 'date' && !sortState.asc;
-          document.getElementById('float-sort-badge').classList.toggle('visible', !sortDefault);
+      if (thisMonth.length === 0) {
+        container.innerHTML = '<div class="empty-result">이번 달 활동이 없습니다</div>';
+        return;
+      }
+      container.innerHTML = `<div class="lp-list">${thisMonth.map(rowHTML).join('')}</div>`;
+    }
 
-          const hasFilter = filterState.type !== null || filterState.bpm !== null ||
-            filterState.distMin > 0 || filterState.distMax < 42 ||
-            filterState.paceMin > 240 || filterState.paceMax < 600;
-          document.getElementById('float-filter-badge').classList.toggle('visible', hasFilter);
-        }
-
-        /* ═══════════════════════════════════════
-           FILTER LOGIC
-        ═══════════════════════════════════════ */
-        function applyFilters(runs) {
-          return runs.filter(r => {
-            if (filterState.type && r.type !== filterState.type) return false;
-            if (r.km < filterState.distMin || r.km > filterState.distMax) return false;
-            if (r.paceV < filterState.paceMin || r.paceV > filterState.paceMax) return false;
-            if (filterState.bpm) {
-              const z = { z1: [0, 119], z2: [120, 139], z3: [140, 159], z4: [160, 174], z5: [175, 999] }[filterState.bpm];
-              if (r.bpm < z[0] || r.bpm > z[1]) return false;
-            }
-            return true;
-          });
-        }
-
-        /* ═══════════════════════════════════════
-           SORT LOGIC
-        ═══════════════════════════════════════ */
-        function applySort(runs) {
-          const { key, asc } = sortState;
-          return [...runs].sort((a, b) => {
-            let va = a[key], vb = b[key];
-            if (key === 'date') { va = va.replace(/-/g, ''); vb = vb.replace(/-/g, ''); }
-            return asc ? (va > vb ? 1 : -1) : (va < vb ? 1 : -1);
-          });
-        }
-
-        /* ═══════════════════════════════════════
-           RENDER LIST (홈: 이번 달만, compact)
-        ═══════════════════════════════════════ */
-        const CURRENT_MONTH = 4; // April
-
-        function renderList() {
-          const container = document.getElementById('runs-list-container');
-          const thisMonth = RUNS.filter(r => r.month === CURRENT_MONTH)
-                               .sort((a, b) => a.date < b.date ? 1 : -1);
-
-          if (thisMonth.length === 0) {
-            container.innerHTML = '<div class="empty-result">이번 달 활동이 없습니다</div>';
-            return;
-          }
-          container.innerHTML = `<div class="lp-list">${thisMonth.map(rowHTML).join('')}</div>`;
-        }
-
-        function rowHTML(r) {
-          return `<div class="lp-row expanded" onclick="location.href='detail.html'">
+    function rowHTML(r) {
+      return `<div class="lp-row expanded" onclick="location.href='detail.html'">
             <div class="lp-badge type-${r.type}"></div>
             <div class="lp-info">
               <div class="lp-title-row">
@@ -3419,41 +3445,41 @@
               </div>
             </div>
           </div>`;
-        }
+    }
 
-        /* ─── View Mode Toggle ───────────────── */
-        let viewMode = 'expanded'; // 기본값 (크게보기)
+    /* ─── View Mode Toggle ───────────────── */
+    let viewMode = 'expanded'; // 기본값 (크게보기)
 
-        function toggleViewMode() {
-          viewMode = viewMode === 'compact' ? 'expanded' : 'compact';
+    function toggleViewMode() {
+      viewMode = viewMode === 'compact' ? 'expanded' : 'compact';
 
-          // 모든 lp-row 요소 업데이트
-          document.querySelectorAll('.lp-row').forEach(row => {
-            row.classList.remove('compact', 'expanded');
-            row.classList.add(viewMode);
-          });
+      // 모든 lp-row 요소 업데이트
+      document.querySelectorAll('.lp-row').forEach(row => {
+        row.classList.remove('compact', 'expanded');
+        row.classList.add(viewMode);
+      });
 
-          // 아이콘 업데이트
-          const icon = document.getElementById('view-icon');
-          if (viewMode === 'compact') {
-            icon.setAttribute('viewBox', '0 0 24 24');
-            icon.innerHTML = '<rect x="3" y="6" width="18" height="3" rx="0.5"/><rect x="3" y="15" width="18" height="3" rx="0.5"/>';
-          } else {
-            icon.setAttribute('viewBox', '0 0 24 24');
-            icon.innerHTML = '<rect x="3" y="3" width="18" height="18" rx="1"/>';
-          }
-        }
+      // 아이콘 업데이트
+      const icon = document.getElementById('view-icon');
+      if (viewMode === 'compact') {
+        icon.setAttribute('viewBox', '0 0 24 24');
+        icon.innerHTML = '<rect x="3" y="6" width="18" height="3" rx="0.5"/><rect x="3" y="15" width="18" height="3" rx="0.5"/>';
+      } else {
+        icon.setAttribute('viewBox', '0 0 24 24');
+        icon.innerHTML = '<rect x="3" y="3" width="18" height="18" rx="1"/>';
+      }
+    }
 
-        /* 플로팅 바 제거 — list.html 로 이동 */
+    /* 플로팅 바 제거 — list.html 로 이동 */
 
-        /* ═══════════════════════════════════════
-           INIT
-        ═══════════════════════════════════════ */
-        (function init() {
-          renderMonth();
-          renderList();
-        })();
-      </script>
+    /* ═══════════════════════════════════════
+       INIT
+    ═══════════════════════════════════════ */
+    (function init() {
+      renderMonth();
+      renderList();
+    })();
+  </script>
 
 </body>
 
