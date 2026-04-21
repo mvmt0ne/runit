@@ -1,18 +1,26 @@
 <!DOCTYPE html>
 <html lang="ko" data-theme="dark">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>runit — 전체 활동</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable.min.css"
+    rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     /* ─── Tokens ── */
-    :root, [data-theme="light"] {
+    :root,
+    [data-theme="light"] {
       --bg: #ACACAC;
       --surface-1: #BCBCBC;
       --surface-2: #A2A2A2;
@@ -27,6 +35,7 @@
       --text-2: #505050;
       --text-3: #888888;
     }
+
     [data-theme="dark"] {
       --bg: #191919;
       --surface-1: #1d1d1d;
@@ -57,6 +66,7 @@
       --type-long-bg: #9CFD32;
       --type-long-text: #191919;
     }
+
     [data-theme="dark"] {
       --type-none-border: #282828;
       --type-none-text: #555550;
@@ -65,13 +75,20 @@
     body {
       background: var(--bg);
       font-family: 'Pretendard Variable', -apple-system, sans-serif;
-      margin: 0; padding: 0;
-      width: 100vw; height: 100dvh;
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100dvh;
       overflow: hidden;
       transition: background 0.3s;
     }
 
-    .phone { width: 100%; background: transparent; padding: 0; }
+    .phone {
+      width: 100%;
+      background: transparent;
+      padding: 0;
+    }
+
     .phone-inner {
       background: var(--bg);
       overflow: hidden;
@@ -88,18 +105,30 @@
     /* ─── Back header ── */
     .back-header {
       padding: 18px 22px 0;
-      display: flex; justify-content: space-between; align-items: center;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       flex-shrink: 0;
     }
+
     .back-btn {
-      width: 34px; height: 34px;
-      background: transparent; border: none; cursor: pointer;
-      font-size: 18px; color: var(--text-1);
-      display: flex; align-items: center; justify-content: center;
+      width: 34px;
+      height: 34px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      color: var(--text-1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       border-radius: 50%;
       transition: background 0.3s, color 0.3s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .back-btn:active { transform: scale(0.92); }
+
+    .back-btn:active {
+      transform: scale(0.92);
+    }
 
     .back-title {
       font-size: 17px;
@@ -119,6 +148,7 @@
       background: #CACACA;
       transition: background 0.3s;
     }
+
     [data-theme="dark"] .list-page {
       background: #292929;
     }
@@ -129,7 +159,10 @@
       scrollbar-width: none;
       padding-bottom: 80px;
     }
-    .list-scroll::-webkit-scrollbar { display: none; }
+
+    .list-scroll::-webkit-scrollbar {
+      display: none;
+    }
 
     /* ─── Month section header ── */
     .lp-month-section {
@@ -144,7 +177,10 @@
       justify-content: space-between;
       align-items: center;
     }
-    [data-theme="dark"] .lp-month-section { background: #202020; }
+
+    [data-theme="dark"] .lp-month-section {
+      background: #202020;
+    }
 
     .lp-month-label {
       font-size: 16px;
@@ -153,6 +189,7 @@
       font-family: 'Pretendard Variable', sans-serif;
       transition: color 0.3s;
     }
+
     .lp-month-km {
       font-size: 16px;
       font-weight: 400;
@@ -165,18 +202,22 @@
       padding: 8px 10px 0;
       background: #CACACA;
     }
-    [data-theme="dark"] .lp-list { background: #292929; }
+
+    [data-theme="dark"] .lp-list {
+      background: #292929;
+    }
 
     .lp-row {
       display: flex;
       align-items: center;
       gap: 16px;
-      padding: 24px 20px;
+      padding: 24px 20px 24px 14px;
       cursor: pointer;
       transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
       margin-left: -10px;
       margin-right: -10px;
     }
+
     .lp-row:active {
       opacity: 0.8;
       transform: scale(0.98);
@@ -185,277 +226,724 @@
     }
 
     .lp-badge {
-      width: 48px; height: 48px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
-      font-size: 12px; font-weight: 700;
+      font-size: 12px;
+      font-weight: 700;
       font-family: 'Urbanist', sans-serif;
     }
-    .lp-info { flex: 1; min-width: 0; }
+
+    .lp-info {
+      flex: 1;
+      min-width: 0;
+    }
+
     .lp-title-row {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
     }
+
     .lp-run-name {
-      font-size: 18px; font-weight: 300;
+      font-size: 18px;
+      font-weight: 300;
       color: var(--text-1);
       font-family: 'Pretendard Variable', sans-serif;
       transition: color 0.3s;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       margin-right: 8px;
     }
+
     .lp-stats {
       display: flex;
       justify-content: space-between;
       margin-top: 10px;
     }
+
     .lp-stat {
-      display: flex; flex-direction: column; gap: 2px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
       font-family: 'Pretendard Variable', sans-serif;
       transition: color 0.3s;
     }
-    .lp-stat:last-child { align-items: flex-end; }
+
+    .lp-stat:last-child {
+      align-items: flex-end;
+    }
+
     .lp-stat strong {
-      font-size: 14px; font-weight: 700;
-      color: var(--text-1); line-height: 1;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-1);
+      line-height: 1;
       transition: color 0.3s;
     }
+
     .lp-stat span {
-      font-size: 12px; font-weight: 300; color: var(--text-2);
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--text-2);
     }
 
     /* ─── Compact mode ── */
     .lp-row.compact {
-      display: flex; align-items: center; gap: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
       padding: 14px 20px;
-      margin-left: -10px; margin-right: -10px;
+      margin-left: -10px;
+      margin-right: -10px;
     }
-    .lp-row.compact .lp-badge { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
-    .lp-row.compact .lp-info { flex: 1; min-width: 0; }
-    .lp-row.compact .lp-title-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-    .lp-row.compact .lp-run-name { font-size: 16px; font-weight: 300; color: var(--text-1); font-family: 'Pretendard Variable', sans-serif; flex: 1; min-width: 0; }
-    .lp-row.compact .lp-right-content { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; }
-    .lp-row.compact .lp-compact-date { font-size: 15px; color: var(--text-2); font-family: 'Urbanist', sans-serif; white-space: nowrap; line-height: 1.2; }
-    .lp-row.compact .lp-compact-time { font-size: 15px; color: var(--text-1); font-family: 'Urbanist', sans-serif; white-space: nowrap; line-height: 1.2; }
-    .lp-row.compact .lp-expanded-date { display: none; }
-    .lp-row.compact .lp-stats { display: none !important; }
+
+    .lp-row.compact .lp-badge {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .lp-row.compact .lp-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .lp-row.compact .lp-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .lp-row.compact .lp-run-name {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--text-1);
+      font-family: 'Pretendard Variable', sans-serif;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .lp-row.compact .lp-right-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+
+    .lp-row.compact .lp-compact-date {
+      font-size: 15px;
+      color: var(--text-2);
+      font-family: 'Urbanist', sans-serif;
+      white-space: nowrap;
+      line-height: 1.2;
+    }
+
+    .lp-row.compact .lp-compact-time {
+      font-size: 15px;
+      color: var(--text-1);
+      font-family: 'Urbanist', sans-serif;
+      white-space: nowrap;
+      line-height: 1.2;
+    }
+
+    .lp-row.compact .lp-expanded-date {
+      display: none;
+    }
+
+    .lp-row.compact .lp-stats {
+      display: none !important;
+    }
 
     /* ─── Expanded mode ── */
     .lp-row.expanded {
-      display: flex; flex-direction: row; align-items: flex-start;
-      gap: 8px; padding: 20px;
-      background: #2f2f2f; border-radius: 16px;
-      margin-left: 0; margin-right: 0; margin-bottom: 10px;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 8px;
+      background: #2f2f2f;
+      border-radius: 16px;
+      margin-left: 0;
+      margin-right: 0;
+      margin-bottom: 10px;
     }
-    [data-theme="light"] .lp-row.expanded { background: var(--surface-3); }
-    .lp-row.expanded:active { background: #383838; border-radius: 16px; opacity: 1; }
-    [data-theme="light"] .lp-row.expanded:active { background: var(--surface-4); }
-    .lp-row.expanded .lp-badge { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
-    .lp-row.expanded .lp-info { flex: 1; min-width: 0; margin: 0; }
-    .lp-row.expanded .lp-title-row { display: flex; justify-content: flex-start; align-items: flex-start; margin-bottom: 24px; gap: 0; width: 100%; }
-    .lp-row.expanded .lp-run-name { font-size: 18px; font-weight: 300; color: var(--text-1); font-family: 'Pretendard Variable', sans-serif; flex: 1; min-width: 0; }
-    .lp-row.expanded .lp-right-content { display: flex; flex-direction: column; align-items: flex-end; flex-shrink: 0; }
-    .lp-row.expanded .lp-compact-time { display: none; }
-    .lp-row.expanded .lp-compact-date { display: none; }
-    .lp-row.expanded .lp-expanded-date { display: block; font-size: 15px; color: var(--text-2); font-family: 'Urbanist', sans-serif; white-space: nowrap; }
-    .lp-row.expanded .lp-stats { display: grid !important; grid-template-columns: repeat(3, 1fr); gap: 20px 16px; width: 100%; margin: 0; }
-    .lp-row.expanded .lp-stat { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
-    .lp-row.expanded .lp-stat-label { font-size: 13px; color: var(--text-2); font-weight: 400; font-family: 'Pretendard Variable', sans-serif; margin-bottom: 0; order: 2; }
-    .lp-row.expanded .lp-stat-value { font-size: 18px; font-weight: 700; color: var(--text-1); line-height: 1; font-family: 'Urbanist', sans-serif; order: 1; }
-    .lp-row.expanded .lp-stat-unit { font-size: 13px; font-weight: 400; color: var(--text-2); font-family: 'Urbanist', sans-serif; }
+
+    [data-theme="light"] .lp-row.expanded {
+      background: var(--surface-3);
+    }
+
+    .lp-row.expanded:active {
+      background: #383838;
+      border-radius: 16px;
+      opacity: 1;
+    }
+
+    [data-theme="light"] .lp-row.expanded:active {
+      background: var(--surface-4);
+    }
+
+    .lp-row.expanded .lp-badge {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    .lp-row.expanded .lp-info {
+      flex: 1;
+      min-width: 0;
+      margin: 0;
+    }
+
+    .lp-row.expanded .lp-title-row {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      margin-bottom: 24px;
+      gap: 0;
+      width: 100%;
+    }
+
+    .lp-row.expanded .lp-run-name {
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--text-1);
+      font-family: 'Pretendard Variable', sans-serif;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .lp-row.expanded .lp-right-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      flex-shrink: 0;
+    }
+
+    .lp-row.expanded .lp-compact-time {
+      display: none;
+    }
+
+    .lp-row.expanded .lp-compact-date {
+      display: none;
+    }
+
+    .lp-row.expanded .lp-expanded-date {
+      display: block;
+      font-size: 15px;
+      color: var(--text-2);
+      font-family: 'Urbanist', sans-serif;
+      white-space: nowrap;
+    }
+
+    .lp-row.expanded .lp-stats {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px 16px;
+      width: 100%;
+      margin: 0;
+    }
+
+    .lp-row.expanded .lp-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-start;
+    }
+
+    .lp-row.expanded .lp-stat-label {
+      font-size: 13px;
+      color: var(--text-2);
+      font-weight: 400;
+      font-family: 'Pretendard Variable', sans-serif;
+      margin-bottom: 0;
+      order: 2;
+    }
+
+    .lp-row.expanded .lp-stat-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-1);
+      line-height: 1;
+      font-family: 'Urbanist', sans-serif;
+      order: 1;
+    }
+
+    .lp-row.expanded .lp-stat-unit {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-2);
+      font-family: 'Urbanist', sans-serif;
+    }
 
     /* ─── Type colors ── */
-    .type-race { background: var(--type-race-bg); color: var(--type-race-text); }
-    .type-tempo { background: var(--type-dark-bg); color: var(--type-dark-text); }
-    .type-interval { background: var(--type-dark-bg); color: var(--type-dark-text); }
-    .type-steady { background: var(--type-steady-bg); color: var(--type-steady-text); }
-    .type-easy { background: var(--type-easy-bg); color: var(--type-easy-text); }
-    .type-jogging { background: var(--type-jog-bg); color: var(--type-jog-text); }
-    .type-long { background: var(--type-long-bg); color: var(--type-long-text); }
+    .type-race {
+      background: var(--type-race-bg);
+      color: var(--type-race-text);
+    }
+
+    .type-tempo {
+      background: var(--type-dark-bg);
+      color: var(--type-dark-text);
+    }
+
+    .type-interval {
+      background: var(--type-dark-bg);
+      color: var(--type-dark-text);
+    }
+
+    .type-steady {
+      background: var(--type-steady-bg);
+      color: var(--type-steady-text);
+    }
+
+    .type-easy {
+      background: var(--type-easy-bg);
+      color: var(--type-easy-text);
+    }
+
+    .type-jogging {
+      background: var(--type-jog-bg);
+      color: var(--type-jog-text);
+    }
+
+    .type-long {
+      background: var(--type-long-bg);
+      color: var(--type-long-text);
+    }
 
     /* ─── Empty ── */
     .empty-result {
-      padding: 48px 20px; text-align: center;
-      font-size: 14px; color: var(--text-2);
-      font-family: 'Pretendard Variable', sans-serif; opacity: 0.5;
+      padding: 48px 20px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-2);
+      font-family: 'Pretendard Variable', sans-serif;
+      opacity: 0.5;
     }
 
     /* ─── Floating bar ── */
     .float-bar-wrap {
       position: absolute;
-      bottom: 28px; left: 50%;
+      bottom: 28px;
+      left: 50%;
       transform: translateX(-50%) translateY(20px);
-      display: flex; align-items: center; gap: 0;
-      z-index: 50; opacity: 0; pointer-events: none;
-      transition: opacity 0.25s cubic-bezier(0.16,1,0.3,1),
-                  transform 0.25s cubic-bezier(0.16,1,0.3,1);
+      display: flex;
+      align-items: center;
+      gap: 0;
+      z-index: 50;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
+
     .float-bar-wrap.visible {
-      opacity: 1; pointer-events: auto;
+      opacity: 1;
+      pointer-events: auto;
       transform: translateX(-50%) translateY(0);
     }
+
     .float-view-bar {
-      display: flex; align-items: center; justify-content: center;
-      background: rgba(54,54,54,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(54, 54, 54, 0.25);
       backdrop-filter: blur(40px) saturate(200%);
       -webkit-backdrop-filter: blur(40px) saturate(200%);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 100px; padding: 0 14px; height: 48px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 100px;
+      padding: 0 14px;
+      height: 48px;
     }
+
     .float-sf-inner {
-      display: flex; flex-direction: row; align-items: center; gap: 10px;
-      background: rgba(54,54,54,0.25);
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+      background: rgba(54, 54, 54, 0.25);
       backdrop-filter: blur(40px) saturate(200%);
       -webkit-backdrop-filter: blur(40px) saturate(200%);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 100px; padding: 0 14px; height: 48px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 100px;
+      padding: 0 14px;
+      height: 48px;
     }
+
     [data-theme="light"] .float-view-bar,
     [data-theme="light"] .float-sf-inner {
-      background: rgba(192,192,192,0.2); border-color: rgba(0,0,0,0.12);
+      background: rgba(192, 192, 192, 0.2);
+      border-color: rgba(0, 0, 0, 0.12);
     }
-    .float-sf-inner .sf-divider { width: 1px; height: 18px; background: rgba(128,128,128,0.3); }
+
+    .float-sf-inner .sf-divider {
+      width: 1px;
+      height: 18px;
+      background: rgba(128, 128, 128, 0.3);
+    }
+
     .float-sf-item {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 14px; font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 400;
       font-family: 'Pretendard Variable', sans-serif;
-      color: var(--text-2); cursor: pointer; transition: color 0.2s; position: relative;
+      color: var(--text-2);
+      cursor: pointer;
+      transition: color 0.2s;
+      position: relative;
     }
-    .float-sf-item.active { color: var(--accent); }
+
+    .float-sf-item.active {
+      color: var(--accent);
+    }
+
     .sf-badge {
-      position: absolute; top: -3px; right: -4px;
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--accent); display: none;
+      position: absolute;
+      top: -3px;
+      right: -4px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: none;
     }
-    .sf-badge.visible { display: block; }
+
+    .sf-badge.visible {
+      display: block;
+    }
 
     /* ─── Sort/Filter sheets ── */
     .sf-backdrop {
-      position: fixed; inset: 0;
+      position: fixed;
+      inset: 0;
       background: transparent;
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      z-index: 80; opacity: 0; pointer-events: none;
+      z-index: 80;
+      opacity: 0;
+      pointer-events: none;
       transition: opacity 0.28s;
     }
-    .sf-backdrop.open { opacity: 1; pointer-events: auto; }
+
+    .sf-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
 
     .month-modal {
-      position: fixed; left: 50%; top: 50%;
+      position: fixed;
+      left: 50%;
+      top: 50%;
       transform: translate(-50%, calc(-50% + 20px));
-      width: calc(100% - 40px); max-width: 390px;
+      width: calc(100% - 40px);
+      max-width: 390px;
       background: var(--surface-2);
-      border-radius: 20px; z-index: 999;
-      display: flex; flex-direction: column; max-height: 70%;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.22s cubic-bezier(0.16,1,0.3,1),
-                  transform 0.22s cubic-bezier(0.16,1,0.3,1);
+      border-radius: 20px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      max-height: 70%;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     }
+
     .month-modal.open {
-      opacity: 1; pointer-events: auto;
+      opacity: 1;
+      pointer-events: auto;
       transform: translate(-50%, -50%);
     }
 
     .sf-sheet-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 18px 20px 14px; flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 20px 14px;
+      flex-shrink: 0;
     }
+
     .sf-sheet-title {
-      font-size: 18px; font-weight: 200;
+      font-size: 18px;
+      font-weight: 200;
       font-family: 'Pretendard Variable', sans-serif;
-      color: var(--text-1); transition: color 0.3s;
+      color: var(--text-1);
+      transition: color 0.3s;
     }
+
     .sf-sheet-close {
-      width: 40px; height: 40px;
-      background: transparent; border: none; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; color: var(--text-2); transition: background 0.15s;
+      width: 40px;
+      height: 40px;
+      background: transparent;
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-2);
+      transition: background 0.15s;
     }
-    .sf-sheet-close:active { background: rgba(0,0,0,0.25); }
+
+    .sf-sheet-close:active {
+      background: rgba(0, 0, 0, 0.25);
+    }
 
     .sf-sheet-body {
-      overflow-y: auto; scrollbar-width: none;
-      flex: 1; padding: 4px 20px 12px;
+      overflow-y: auto;
+      scrollbar-width: none;
+      flex: 1;
+      padding: 4px 20px 12px;
     }
-    .sf-sheet-body::-webkit-scrollbar { display: none; }
+
+    .sf-sheet-body::-webkit-scrollbar {
+      display: none;
+    }
 
     .sf-sheet-footer {
-      display: flex; gap: 10px;
-      padding: 10px 20px 28px; flex-shrink: 0;
-      border-top: 1px solid rgba(128,128,128,0.1);
+      display: flex;
+      gap: 10px;
+      padding: 10px 20px 28px;
+      flex-shrink: 0;
+      border-top: 1px solid rgba(128, 128, 128, 0.1);
     }
+
     .sf-reset-btn {
-      flex: 1; padding: 14px; border: none; background: transparent;
-      font-size: 18px; font-family: 'Pretendard Variable', sans-serif;
-      color: var(--text-2); cursor: pointer;
-    }
-    .sf-apply-btn {
-      flex: 2; padding: 14px; border-radius: 12px; border: none;
-      background: var(--surface-6); font-size: 18px; font-weight: 500;
+      flex: 1;
+      padding: 14px;
+      border: none;
+      background: transparent;
+      font-size: 18px;
       font-family: 'Pretendard Variable', sans-serif;
-      color: var(--text-3); cursor: pointer;
+      color: var(--text-2);
+      cursor: pointer;
+    }
+
+    .sf-apply-btn {
+      flex: 2;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      background: var(--surface-6);
+      font-size: 18px;
+      font-weight: 500;
+      font-family: 'Pretendard Variable', sans-serif;
+      color: var(--text-3);
+      cursor: pointer;
     }
 
     .month-list {
-      max-height: 300px; overflow-y: auto; scrollbar-width: none;
-      display: flex; flex-direction: column; gap: 2px;
+      max-height: 300px;
+      overflow-y: auto;
+      scrollbar-width: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
-    .month-list::-webkit-scrollbar { display: none; }
+
+    .month-list::-webkit-scrollbar {
+      display: none;
+    }
 
     .month-list-item {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 12px; margin: 0 -12px;
-      border-radius: 10px; cursor: pointer;
-      transition: background 0.15s, transform 0.1s cubic-bezier(0.16,1,0.3,1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 12px;
+      margin: 0 -12px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
       gap: 12px;
     }
-    .month-list-item:active { background: rgba(0,0,0,0.25); transform: scale(0.98); }
+
+    .month-list-item:active {
+      background: rgba(0, 0, 0, 0.25);
+      transform: scale(0.98);
+    }
+
     .month-list-label {
-      font-size: 17px; font-weight: 300;
+      font-size: 17px;
+      font-weight: 300;
       font-family: 'Pretendard Variable', sans-serif;
-      color: var(--text-1); letter-spacing: -0.02em;
+      color: var(--text-1);
+      letter-spacing: -0.02em;
     }
-    .month-list-item.ml-selected .month-list-label { color: var(--accent); font-weight: 500; }
+
+    .month-list-item.ml-selected .month-list-label {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
     .month-list-check {
-      width: 18px; height: 18px; color: var(--accent);
-      opacity: 0; transition: opacity 0.15s; flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      color: var(--accent);
+      opacity: 0;
+      transition: opacity 0.15s;
+      flex-shrink: 0;
     }
-    .month-list-item.ml-selected .month-list-check { opacity: 1; }
+
+    .month-list-item.ml-selected .month-list-check {
+      opacity: 1;
+    }
 
     /* Filter */
-    .filter-cats { display: flex; flex-direction: column; gap: 30px; }
-    .filter-cat { display: flex; flex-direction: column; gap: 12px; }
-    .filter-cat-label {
-      font-size: 14px; font-weight: 300; text-transform: uppercase;
-      color: var(--text-1); font-family: 'Urbanist', sans-serif;
+    .filter-cats {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
     }
-    .filter-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    .filter-cat {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .filter-cat-label {
+      font-size: 14px;
+      font-weight: 300;
+      text-transform: uppercase;
+      color: var(--text-1);
+      font-family: 'Urbanist', sans-serif;
+    }
+
+    .filter-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
     .filter-chip {
-      padding: 10px 16px; border-radius: 20px;
-      font-size: 16px; font-weight: 400;
+      padding: 10px 16px;
+      border-radius: 20px;
+      font-size: 16px;
+      font-weight: 400;
       font-family: 'Pretendard Variable', sans-serif;
-      color: var(--text-2); background: rgba(128,128,128,0.1);
-      cursor: pointer; transition: all 0.1s cubic-bezier(0.16,1,0.3,1);
+      color: var(--text-2);
+      background: rgba(128, 128, 128, 0.1);
+      cursor: pointer;
+      transition: all 0.1s cubic-bezier(0.16, 1, 0.3, 1);
       white-space: nowrap;
     }
-    .filter-chip:active { transform: scale(0.92); background: rgba(128,128,128,0.18); }
-    .filter-chip.active { color: var(--accent); background: rgba(156,253,50,0.12); }
-    .zone-chip { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 18px; }
-    .zone-chip .zone-label { font-size: 16px; font-weight: 600; font-family: 'Urbanist', sans-serif; line-height: 1; }
-    .zone-chip .zone-desc { font-size: 13px; font-family: 'Pretendard Variable', sans-serif; line-height: 1; opacity: 0.7; }
 
-    .range-slider-wrap { position: relative; margin: 10px 0 0; }
-    .range-track { position: absolute; top: 50%; transform: translateY(-50%); left: 0; right: 0; height: 3px; background: rgba(128,128,128,0.15); border-radius: 2px; pointer-events: none; }
-    .range-fill { position: absolute; height: 100%; background: var(--accent); border-radius: 2px; }
-    input[type='range'].range-input { position: absolute; top: 50%; transform: translateY(-50%); left: 0; width: 100%; height: 3px; -webkit-appearance: none; appearance: none; background: transparent; pointer-events: none; outline: none; padding: 0; margin: 0; }
-    input[type='range'].range-input::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--surface-6); pointer-events: auto; cursor: grab; box-shadow: 0 1px 6px rgba(0,0,0,0.25); transition: transform 0.1s; }
-    input[type='range'].range-input:active::-webkit-slider-thumb { cursor: grabbing; transform: scale(1.35); }
-    .range-val-row { display: flex; justify-content: space-between; margin-top: 8px; }
-    .range-val { font-size: 14px; font-family: 'Urbanist', sans-serif; color: var(--text-2); font-weight: 600; }
+    .filter-chip:active {
+      transform: scale(0.92);
+      background: rgba(128, 128, 128, 0.18);
+    }
+
+    .filter-chip.active {
+      color: var(--accent);
+      background: rgba(156, 253, 50, 0.12);
+    }
+
+    .zone-chip {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 18px;
+    }
+
+    .zone-chip .zone-label {
+      font-size: 16px;
+      font-weight: 600;
+      font-family: 'Urbanist', sans-serif;
+      line-height: 1;
+    }
+
+    .zone-chip .zone-desc {
+      font-size: 13px;
+      font-family: 'Pretendard Variable', sans-serif;
+      line-height: 1;
+      opacity: 0.7;
+    }
+
+    .range-slider-wrap {
+      position: relative;
+      margin: 10px 0 0;
+    }
+
+    .range-track {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: rgba(128, 128, 128, 0.15);
+      border-radius: 2px;
+      pointer-events: none;
+    }
+
+    .range-fill {
+      position: absolute;
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    input[type='range'].range-input {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 0;
+      width: 100%;
+      height: 3px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      pointer-events: none;
+      outline: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    input[type='range'].range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--surface-6);
+      pointer-events: auto;
+      cursor: grab;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+      transition: transform 0.1s;
+    }
+
+    input[type='range'].range-input:active::-webkit-slider-thumb {
+      cursor: grabbing;
+      transform: scale(1.35);
+    }
+
+    .range-val-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+    }
+
+    .range-val {
+      font-size: 14px;
+      font-family: 'Urbanist', sans-serif;
+      color: var(--text-2);
+      font-weight: 600;
+    }
   </style>
 </head>
+
 <body>
   <div class="phone">
     <div class="phone-inner">
@@ -463,8 +951,9 @@
       <!-- 헤더 -->
       <div class="back-header">
         <button class="back-btn" onclick="history.back()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"/>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6" />
           </svg>
         </button>
         <span class="back-title">전체 활동</span>
@@ -482,27 +971,32 @@
       <div class="float-bar-wrap visible" id="float-sf-bar">
         <div class="float-view-bar" id="float-view-bar">
           <div class="float-sf-item" id="float-view-btn" onclick="toggleViewMode()">
-            <svg id="view-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-              <rect x="3" y="3" width="18" height="18" rx="1"/>
+            <svg id="view-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.5" stroke-linecap="round">
+              <rect x="3" y="3" width="18" height="18" rx="1" />
             </svg>
           </div>
         </div>
         <div style="width:8px"></div>
         <div class="float-sf-inner" id="float-sf-inner">
           <div class="float-sf-item" id="float-sort-btn" onclick="openSortSheet()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M8 6l4-4 4 4"/><line x1="12" y1="2" x2="12" y2="14"/>
-              <path d="M16 18l-4 4-4-4"/><line x1="12" y1="22" x2="12" y2="10"/>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 6l4-4 4 4" />
+              <line x1="12" y1="2" x2="12" y2="14" />
+              <path d="M16 18l-4 4-4-4" />
+              <line x1="12" y1="22" x2="12" y2="10" />
             </svg>
             정렬
             <span class="sf-badge" id="float-sort-badge"></span>
           </div>
           <div class="sf-divider" style="width:1px;height:18px;background:rgba(128,128,128,0.3)"></div>
           <div class="float-sf-item" id="float-filter-btn" onclick="openFilterSheet()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-              <line x1="4" y1="6" x2="20" y2="6"/>
-              <line x1="7" y1="12" x2="17" y2="12"/>
-              <line x1="10" y1="18" x2="14" y2="18"/>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round">
+              <line x1="4" y1="6" x2="20" y2="6" />
+              <line x1="7" y1="12" x2="17" y2="12" />
+              <line x1="10" y1="18" x2="14" y2="18" />
             </svg>
             필터
             <span class="sf-badge" id="float-filter-badge"></span>
@@ -516,8 +1010,10 @@
         <div class="sf-sheet-header">
           <span class="sf-sheet-title">정렬</span>
           <button class="sf-sheet-close" onclick="closeSFSheet()">
-            <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-              <line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/>
+            <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round">
+              <line x1="2" y1="2" x2="12" y2="12" />
+              <line x1="12" y1="2" x2="2" y2="12" />
             </svg>
           </button>
         </div>
@@ -529,8 +1025,10 @@
         <div class="sf-sheet-header">
           <span class="sf-sheet-title">필터</span>
           <button class="sf-sheet-close" onclick="closeSFSheet()">
-            <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-              <line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/>
+            <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round">
+              <line x1="2" y1="2" x2="12" y2="12" />
+              <line x1="12" y1="2" x2="2" y2="12" />
             </svg>
           </button>
         </div>
@@ -548,30 +1046,30 @@
 
   <script>
     // 테마 유지
-    (function() {
+    (function () {
       const saved = localStorage.getItem('runit-theme');
       if (saved) document.documentElement.setAttribute('data-theme', saved);
     })();
 
     /* ─── Data ── */
     const RUNS = [
-      { id: 1,  date: '2026-04-11', label: '4/11', month: 4, type: 'race',    group: 'race',       name: '2026 인천하프', time: '08:00', km: 21.2, pace: '5:02', paceV: 302, bpm: 176, spm: 174, stride: 107 },
-      { id: 2,  date: '2026-04-10', label: '4/10', month: 4, type: 'jogging', group: 'easy',       name: '회복 조깅',     time: '07:30', km: 5.4,  pace: '6:52', paceV: 412, bpm: 142, spm: 163, stride: 88  },
-      { id: 3,  date: '2026-04-07', label: '4/7',  month: 4, type: 'tempo',   group: 'speed',      name: '템포 런',       time: '06:15', km: 8.0,  pace: '4:45', paceV: 285, bpm: 169, spm: 180, stride: 112 },
-      { id: 4,  date: '2026-04-05', label: '4/5',  month: 4, type: 'easy',    group: 'easy',       name: '이지 런',       time: '06:30', km: 7.2,  pace: '6:15', paceV: 375, bpm: 138, spm: 162, stride: 91  },
-      { id: 5,  date: '2026-04-04', label: '4/4',  month: 4, type: 'easy',    group: 'easy',       name: '이지 런',       time: '18:00', km: 6.8,  pace: '6:20', paceV: 380, bpm: 135, spm: 160, stride: 89  },
-      { id: 6,  date: '2026-04-03', label: '4/3',  month: 4, type: 'easy',    group: 'easy',       name: '이지 런',       time: '07:00', km: 5.0,  pace: '6:40', paceV: 400, bpm: 132, spm: 158, stride: 86  },
-      { id: 7,  date: '2026-03-30', label: '3/30', month: 3, type: 'steady',  group: 'endurance',  name: '스테디 런',     time: '07:30', km: 10.5, pace: '5:30', paceV: 330, bpm: 158, spm: 170, stride: 98  },
-      { id: 8,  date: '2026-03-28', label: '3/28', month: 3, type: 'steady',  group: 'endurance',  name: '스테디 런',     time: '07:00', km: 9.8,  pace: '5:38', paceV: 338, bpm: 155, spm: 168, stride: 96  },
-      { id: 9,  date: '2026-03-22', label: '3/22', month: 3, type: 'race',    group: 'race',       name: '서울 10K',      time: '09:00', km: 10.0, pace: '4:52', paceV: 292, bpm: 172, spm: 177, stride: 105 },
-      { id: 10, date: '2026-03-20', label: '3/20', month: 3, type: 'steady',  group: 'endurance',  name: '스테디 런',     time: '07:15', km: 11.2, pace: '5:25', paceV: 325, bpm: 160, spm: 171, stride: 100 },
-      { id: 11, date: '2026-03-19', label: '3/19', month: 3, type: 'jogging', group: 'easy',       name: '회복 조깅',     time: '07:30', km: 4.8,  pace: '7:05', paceV: 425, bpm: 138, spm: 161, stride: 85  },
-      { id: 12, date: '2026-03-13', label: '3/13', month: 3, type: 'easy',    group: 'easy',       name: '이지 런',       time: '06:45', km: 8.5,  pace: '6:08', paceV: 368, bpm: 141, spm: 164, stride: 93  },
-      { id: 13, date: '2026-03-09', label: '3/9',  month: 3, type: 'easy',    group: 'easy',       name: '이지 런',       time: '07:00', km: 6.0,  pace: '6:22', paceV: 382, bpm: 136, spm: 160, stride: 90  },
-      { id: 14, date: '2026-02-25', label: '2/25', month: 2, type: 'long',    group: 'endurance',  name: '롱 런',         time: '07:00', km: 18.0, pace: '5:48', paceV: 348, bpm: 155, spm: 168, stride: 97  },
-      { id: 15, date: '2026-02-18', label: '2/18', month: 2, type: 'tempo',   group: 'speed',      name: '템포 런',       time: '06:30', km: 7.5,  pace: '4:52', paceV: 292, bpm: 167, spm: 178, stride: 110 },
-      { id: 16, date: '2026-02-10', label: '2/10', month: 2, type: 'steady',  group: 'endurance',  name: '스테디 런',     time: '07:15', km: 9.2,  pace: '5:42', paceV: 342, bpm: 152, spm: 167, stride: 95  },
-      { id: 17, date: '2026-02-02', label: '2/2',  month: 2, type: 'easy',    group: 'easy',       name: '이지 런',       time: '08:00', km: 5.5,  pace: '6:28', paceV: 388, bpm: 133, spm: 159, stride: 87  },
+      { id: 1, date: '2026-04-11', label: '4/11', month: 4, type: 'race', group: 'race', name: '2026 인천하프', time: '08:00', km: 21.2, pace: '5:02', paceV: 302, bpm: 176, spm: 174, stride: 107 },
+      { id: 2, date: '2026-04-10', label: '4/10', month: 4, type: 'jogging', group: 'easy', name: '회복 조깅', time: '07:30', km: 5.4, pace: '6:52', paceV: 412, bpm: 142, spm: 163, stride: 88 },
+      { id: 3, date: '2026-04-07', label: '4/7', month: 4, type: 'tempo', group: 'speed', name: '템포 런', time: '06:15', km: 8.0, pace: '4:45', paceV: 285, bpm: 169, spm: 180, stride: 112 },
+      { id: 4, date: '2026-04-05', label: '4/5', month: 4, type: 'easy', group: 'easy', name: '이지 런', time: '06:30', km: 7.2, pace: '6:15', paceV: 375, bpm: 138, spm: 162, stride: 91 },
+      { id: 5, date: '2026-04-04', label: '4/4', month: 4, type: 'easy', group: 'easy', name: '이지 런', time: '18:00', km: 6.8, pace: '6:20', paceV: 380, bpm: 135, spm: 160, stride: 89 },
+      { id: 6, date: '2026-04-03', label: '4/3', month: 4, type: 'easy', group: 'easy', name: '이지 런', time: '07:00', km: 5.0, pace: '6:40', paceV: 400, bpm: 132, spm: 158, stride: 86 },
+      { id: 7, date: '2026-03-30', label: '3/30', month: 3, type: 'steady', group: 'endurance', name: '스테디 런', time: '07:30', km: 10.5, pace: '5:30', paceV: 330, bpm: 158, spm: 170, stride: 98 },
+      { id: 8, date: '2026-03-28', label: '3/28', month: 3, type: 'steady', group: 'endurance', name: '스테디 런', time: '07:00', km: 9.8, pace: '5:38', paceV: 338, bpm: 155, spm: 168, stride: 96 },
+      { id: 9, date: '2026-03-22', label: '3/22', month: 3, type: 'race', group: 'race', name: '서울 10K', time: '09:00', km: 10.0, pace: '4:52', paceV: 292, bpm: 172, spm: 177, stride: 105 },
+      { id: 10, date: '2026-03-20', label: '3/20', month: 3, type: 'steady', group: 'endurance', name: '스테디 런', time: '07:15', km: 11.2, pace: '5:25', paceV: 325, bpm: 160, spm: 171, stride: 100 },
+      { id: 11, date: '2026-03-19', label: '3/19', month: 3, type: 'jogging', group: 'easy', name: '회복 조깅', time: '07:30', km: 4.8, pace: '7:05', paceV: 425, bpm: 138, spm: 161, stride: 85 },
+      { id: 12, date: '2026-03-13', label: '3/13', month: 3, type: 'easy', group: 'easy', name: '이지 런', time: '06:45', km: 8.5, pace: '6:08', paceV: 368, bpm: 141, spm: 164, stride: 93 },
+      { id: 13, date: '2026-03-09', label: '3/9', month: 3, type: 'easy', group: 'easy', name: '이지 런', time: '07:00', km: 6.0, pace: '6:22', paceV: 382, bpm: 136, spm: 160, stride: 90 },
+      { id: 14, date: '2026-02-25', label: '2/25', month: 2, type: 'long', group: 'endurance', name: '롱 런', time: '07:00', km: 18.0, pace: '5:48', paceV: 348, bpm: 155, spm: 168, stride: 97 },
+      { id: 15, date: '2026-02-18', label: '2/18', month: 2, type: 'tempo', group: 'speed', name: '템포 런', time: '06:30', km: 7.5, pace: '4:52', paceV: 292, bpm: 167, spm: 178, stride: 110 },
+      { id: 16, date: '2026-02-10', label: '2/10', month: 2, type: 'steady', group: 'endurance', name: '스테디 런', time: '07:15', km: 9.2, pace: '5:42', paceV: 342, bpm: 152, spm: 167, stride: 95 },
+      { id: 17, date: '2026-02-02', label: '2/2', month: 2, type: 'easy', group: 'easy', name: '이지 런', time: '08:00', km: 5.5, pace: '6:28', paceV: 388, bpm: 133, spm: 159, stride: 87 },
     ];
 
     const MONTH_LABELS = { 4: '4월', 3: '3월', 2: '2월' };
@@ -580,25 +1078,25 @@
     let filterState = { type: null, bpm: null, distMin: 0, distMax: 42, paceMin: 240, paceMax: 600 };
 
     const SORT_OPTS = [
-      { key: 'date',   asc: false, label: '날짜 최신순' },
-      { key: 'date',   asc: true,  label: '날짜 오래된순' },
-      { key: 'km',     asc: false, label: '거리 긴순' },
-      { key: 'km',     asc: true,  label: '거리 짧은순' },
-      { key: 'paceV',  asc: true,  label: '페이스 빠른순' },
-      { key: 'paceV',  asc: false, label: '페이스 느린순' },
-      { key: 'bpm',    asc: false, label: '심박수 높은순' },
-      { key: 'bpm',    asc: true,  label: '심박수 낮은순' },
-      { key: 'spm',    asc: false, label: '케이던스 높은순' },
-      { key: 'spm',    asc: true,  label: '케이던스 낮은순' },
+      { key: 'date', asc: false, label: '날짜 최신순' },
+      { key: 'date', asc: true, label: '날짜 오래된순' },
+      { key: 'km', asc: false, label: '거리 긴순' },
+      { key: 'km', asc: true, label: '거리 짧은순' },
+      { key: 'paceV', asc: true, label: '페이스 빠른순' },
+      { key: 'paceV', asc: false, label: '페이스 느린순' },
+      { key: 'bpm', asc: false, label: '심박수 높은순' },
+      { key: 'bpm', asc: true, label: '심박수 낮은순' },
+      { key: 'spm', asc: false, label: '케이던스 높은순' },
+      { key: 'spm', asc: true, label: '케이던스 낮은순' },
       { key: 'stride', asc: false, label: '보행길이 긴 순' },
-      { key: 'stride', asc: true,  label: '보행길이 짧은 순' },
+      { key: 'stride', asc: true, label: '보행길이 짧은 순' },
     ];
 
     const FILTER_TYPE_OPTS = [
-      { val: 'race',      label: '레이스' },
-      { val: 'speed',     label: '스피드' },
+      { val: 'race', label: '레이스' },
+      { val: 'speed', label: '스피드' },
       { val: 'endurance', label: '지구력' },
-      { val: 'easy',      label: '이지' },
+      { val: 'easy', label: '이지' },
     ];
     const FILTER_ZONE_OPTS = [
       { val: 'z1', label: 'Z1', desc: '회복' }, { val: 'z2', label: 'Z2', desc: '유산소' },
@@ -613,7 +1111,7 @@
         if (r.km < filterState.distMin || r.km > filterState.distMax) return false;
         if (r.paceV < filterState.paceMin || r.paceV > filterState.paceMax) return false;
         if (filterState.bpm) {
-          const z = { z1:[0,119], z2:[120,139], z3:[140,159], z4:[160,174], z5:[175,999] }[filterState.bpm];
+          const z = { z1: [0, 119], z2: [120, 139], z3: [140, 159], z4: [160, 174], z5: [175, 999] }[filterState.bpm];
           if (r.bpm < z[0] || r.bpm > z[1]) return false;
         }
         return true;
@@ -624,7 +1122,7 @@
       const { key, asc } = sortState;
       return [...runs].sort((a, b) => {
         let va = a[key], vb = b[key];
-        if (key === 'date') { va = va.replace(/-/g,''); vb = vb.replace(/-/g,''); }
+        if (key === 'date') { va = va.replace(/-/g, ''); vb = vb.replace(/-/g, ''); }
         return asc ? (va > vb ? 1 : -1) : (va < vb ? 1 : -1);
       });
     }
@@ -643,10 +1141,10 @@
       if (groupByMonth) {
         const groups = {};
         sorted.forEach(r => { if (!groups[r.month]) groups[r.month] = []; groups[r.month].push(r); });
-        const months = Object.keys(groups).sort((a,b) => sortState.asc ? a-b : b-a);
+        const months = Object.keys(groups).sort((a, b) => sortState.asc ? a - b : b - a);
         container.innerHTML = months.map(m => {
           const runs = groups[m];
-          const totalKm = runs.reduce((s,r) => s + r.km, 0).toFixed(1);
+          const totalKm = runs.reduce((s, r) => s + r.km, 0).toFixed(1);
           return `<div class="lp-month-section">
             <div class="lp-month-label">${MONTH_LABELS[m]}</div>
             <div class="lp-month-km">${totalKm}km</div>
@@ -686,7 +1184,7 @@
     function toggleViewMode() {
       viewMode = viewMode === 'compact' ? 'expanded' : 'compact';
       document.querySelectorAll('.lp-row').forEach(row => {
-        row.classList.remove('compact','expanded');
+        row.classList.remove('compact', 'expanded');
         row.classList.add(viewMode);
       });
       const icon = document.getElementById('view-icon');
@@ -744,11 +1242,11 @@
       const { distMin, distMax, paceMin, paceMax } = filterState;
       const typeChips = FILTER_TYPE_OPTS.map(o => {
         const a = filterState.type === o.val;
-        return `<div class="filter-chip ${a?'active':''}" onclick="selectFilter('type','${o.val}')">${o.label}</div>`;
+        return `<div class="filter-chip ${a ? 'active' : ''}" onclick="selectFilter('type','${o.val}')">${o.label}</div>`;
       }).join('');
       const zoneChips = FILTER_ZONE_OPTS.map(o => {
         const a = filterState.bpm === o.val;
-        return `<div class="filter-chip zone-chip ${a?'active':''}" onclick="selectFilter('bpm','${o.val}')">
+        return `<div class="filter-chip zone-chip ${a ? 'active' : ''}" onclick="selectFilter('bpm','${o.val}')">
           <span class="zone-label">${o.label}</span><span class="zone-desc">${o.desc}</span>
         </div>`;
       }).join('');
@@ -779,24 +1277,24 @@
 
     function selectFilter(key, val) {
       if (key === 'type') filterState.type = filterState.type === val ? null : val;
-      if (key === 'bpm')  filterState.bpm  = filterState.bpm  === val ? null : val;
+      if (key === 'bpm') filterState.bpm = filterState.bpm === val ? null : val;
       renderFilterPanel();
       renderList();
       updateBadges();
     }
 
     function onRangeInput(key) {
-      const lo = document.getElementById(key+'-lo');
-      const hi = document.getElementById(key+'-hi');
+      const lo = document.getElementById(key + '-lo');
+      const hi = document.getElementById(key + '-hi');
       if (+lo.value >= +hi.value) lo.value = +hi.value - +lo.step;
       if (key === 'dist') {
         filterState.distMin = +lo.value; filterState.distMax = +hi.value;
-        document.getElementById('dist-lo-val').textContent = lo.value+'km';
-        document.getElementById('dist-hi-val').textContent = hi.value+'km';
+        document.getElementById('dist-lo-val').textContent = lo.value + 'km';
+        document.getElementById('dist-hi-val').textContent = hi.value + 'km';
       } else {
         filterState.paceMin = +lo.value; filterState.paceMax = +hi.value;
-        document.getElementById('pace-lo-val').textContent = fmtPace(+lo.value)+'/km';
-        document.getElementById('pace-hi-val').textContent = fmtPace(+hi.value)+'/km';
+        document.getElementById('pace-lo-val').textContent = fmtPace(+lo.value) + '/km';
+        document.getElementById('pace-hi-val').textContent = fmtPace(+hi.value) + '/km';
       }
       updateRangeFill(key);
       renderList();
@@ -804,19 +1302,19 @@
     }
 
     function updateRangeFill(key) {
-      const lo = document.getElementById(key+'-lo');
-      const hi = document.getElementById(key+'-hi');
-      const fill = document.getElementById(key+'-fill');
-      if (!lo||!hi||!fill) return;
+      const lo = document.getElementById(key + '-lo');
+      const hi = document.getElementById(key + '-hi');
+      const fill = document.getElementById(key + '-fill');
+      if (!lo || !hi || !fill) return;
       const min = +lo.min, max = +lo.max;
-      const l = ((+lo.value-min)/(max-min))*100;
-      const r = ((+hi.value-min)/(max-min))*100;
-      fill.style.left = l+'%'; fill.style.width = (r-l)+'%';
+      const l = ((+lo.value - min) / (max - min)) * 100;
+      const r = ((+hi.value - min) / (max - min)) * 100;
+      fill.style.left = l + '%'; fill.style.width = (r - l) + '%';
     }
 
     function fmtPace(sec) {
-      const m = Math.floor(sec/60), s = sec%60;
-      return `${m}:${String(s).padStart(2,'0')}`;
+      const m = Math.floor(sec / 60), s = sec % 60;
+      return `${m}:${String(s).padStart(2, '0')}`;
     }
 
     function resetFilters() {
@@ -841,4 +1339,5 @@
     renderFilterPanel();
   </script>
 </body>
+
 </html>
