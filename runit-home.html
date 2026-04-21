@@ -1465,14 +1465,6 @@
       margin-right: -20px;
     }
 
-    .lp-row:nth-child(odd) {
-      background: var(--surface-1);
-    }
-
-    .lp-row:nth-child(even) {
-      background: var(--surface-2);
-    }
-
     .lp-row:active {
       opacity: 0.6;
     }
@@ -2655,6 +2647,23 @@
           if (countEl) countEl.textContent = d.runCount;
         }
 
+        function animateCounter(el, start, end, duration) {
+          const startTime = performance.now();
+
+          function updateCounter(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const current = start + (end - start) * progress;
+            el.textContent = current.toFixed(1);
+
+            if (progress < 1) {
+              requestAnimationFrame(updateCounter);
+            }
+          }
+
+          requestAnimationFrame(updateCounter);
+        }
+
         /* ═══════════════════════════════════════
            MONTH LIST PICKER
         ═══════════════════════════════════════ */
@@ -3189,6 +3198,7 @@
            INIT
         ═══════════════════════════════════════ */
         (function init() {
+          renderMonth();
           renderSortPanel();
           renderFilterPanel();
           renderList();

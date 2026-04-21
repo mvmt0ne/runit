@@ -306,18 +306,31 @@
       opacity: 0.4;
     }
 
+    /* 비활성화 (0km) */
+    .cmp-col.inactive .cmp-bar {
+      background: var(--surface-3);
+    }
+
+    .cmp-col.inactive .cmp-label {
+      color: var(--text-3);
+    }
+
     /* km 수치 — 전체 표시, past/current 동일 스타일 */
     .cmp-km {
       font-size: 14px;
       font-weight: 500;
       font-family: 'Urbanist', sans-serif;
-      color: var(--text-2);
+      color: var(--accent);
       white-space: nowrap;
       transition: color 0.2s, opacity 0.2s;
     }
 
     .cmp-col.future .cmp-km {
       display: none;
+    }
+
+    .cmp-col.future .cmp-label {
+      color: var(--text-3) !important;
     }
 
     /* 레이블 — 기본 (주간·년간), past/current 동일 스타일 */
@@ -340,16 +353,17 @@
       align-items: center;
       justify-content: center;
       white-space: nowrap;
-      color: var(--text-2);
       transition: color 0.2s;
     }
 
-    .cmp-chart.vertical .cmp-km {
-      margin-bottom: 2px;
+    .cmp-chart.vertical .cmp-label {
+      color: var(--text-2);
+      margin-top: 2px;
     }
 
-    .cmp-chart.vertical .cmp-label {
-      margin-top: 2px;
+    .cmp-chart.vertical .cmp-km {
+      color: var(--accent);
+      margin-bottom: 2px;
     }
 
     /* ════════════════════════════════════
@@ -1036,14 +1050,17 @@
         if (d.past) cls += ' past';
         if (d.current) cls += ' current';
         if (d.future) cls += ' future';
+        if (d.km === 0) cls += ' inactive';
 
         const barPx = d.future
           ? FUTURE_H
           : Math.max(3, Math.round(d.km / maxKm * BAR_MAX_PX));
 
         const clickable = !d.future && d.km > 0;
+        const kmDisplay = Math.floor(d.km);
+
         return `<div class="${cls}" data-idx="${i}" ${clickable ? 'style="cursor:pointer"' : ''}>
-        ${d.km > 0 ? `<span class="cmp-km">${d.km}</span>` : ''}
+        ${d.km > 0 ? `<span class="cmp-km">${kmDisplay}</span>` : ''}
         <div class="cmp-bar" style="height:${barPx}px"></div>
         <span class="cmp-label">${d.label}</span>
       </div>`;
@@ -1252,13 +1269,30 @@
     });
 
     // 터치 스와이프
-    let touchStartX = 0;
-    const swipeWrap = document.getElementById('chart-swipe-wrap');
-    swipeWrap.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
-    swipeWrap.addEventListener('touchend', e => {
-      const diff = touchStartX - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 40) changeYear(diff > 0 ? 1 : -1);
-    });
+    (function() {
+      let touchStartX = 0;
+      const swipeWrap = document.querySelector('.chart-swipe-wrap');
+
+      if (!swipeWrap) return;
+
+      swipeWrap.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+      }, false);
+
+      swipeWrap.addEventListener('touchmove', (e) => {
+        // 이벤트 전파 방지
+      }, false);
+
+      swipeWrap.addEventListener('touchend', (e) => {
+        const touchEndX = e.changedTouches[0].clientX;
+        const diff = touchStartX - touchEndX;
+        console.log('터치 드래그:', diff);
+        if (Math.abs(diff) > 50) {
+          console.log('연도 변경:', diff > 0 ? '다음' : '이전');
+          changeYear(diff > 0 ? 1 : -1);
+        }
+      }, false);
+    })();
 
     // ── 초기 렌더 (월간) — 진입 애니메이션 포함 ──
     updateYearNav();

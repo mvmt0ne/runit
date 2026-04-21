@@ -85,6 +85,20 @@
       padding: 18px 22px 0;
       display: flex; justify-content: space-between; align-items: center;
       flex-shrink: 0;
+      background: rgba(25, 25, 25, 0.08);
+      backdrop-filter: blur(12px) saturate(150%);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      z-index: 10;
+    }
+
+    [data-theme="light"] .back-header {
+      background: rgba(172, 172, 172, 0.06);
     }
     .back-btn {
       width: 34px; height: 34px; border-radius: 50%;
@@ -102,6 +116,7 @@
     /* ─── Scroll area ── */
     .scroll-area {
       flex: 1; overflow-y: auto; padding-bottom: 40px;
+      padding-top: 60px;
       scrollbar-width: none;
     }
     .scroll-area::-webkit-scrollbar { display: none; }
@@ -123,10 +138,11 @@
     /* ─── Hero ── */
     .detail-hero { padding: 12px 22px 0; }
     .detail-km {
-      font-size: 80px; font-weight: 900; color: var(--text-1);
+      font-size: 80px; font-weight: 300; color: var(--text-1);
       letter-spacing: 0; line-height: 1; transition: color 0.3s;
+      font-family: 'Urbanist', -apple-system, sans-serif;
     }
-    .detail-km span { font-size: 24px; font-weight: 500; color: var(--text-2); }
+    .detail-km span { font-size: 24px; font-weight: 300; color: var(--text-2); font-family: 'Urbanist', -apple-system, sans-serif; }
     .detail-meta { font-size: 13px; color: var(--text-2); margin-top: 4px; transition: color 0.3s; }
 
     /* ─── Stat grid ── */
@@ -146,8 +162,9 @@
       margin-bottom: 5px; transition: color 0.3s;
     }
     .dsc-value {
-      font-size: 20px; font-weight: 800; color: var(--text-1);
+      font-size: 20px; font-weight: 300; color: var(--text-1);
       letter-spacing: 0; transition: color 0.3s;
+      font-family: 'Urbanist', -apple-system, sans-serif;
     }
     .dsc-value.accent { color: var(--accent); }
 
