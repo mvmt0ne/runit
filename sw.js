@@ -6,6 +6,7 @@ const CORE = [
   './stats.html',
   './manifest.json',
   './icon.svg',
+  './ptr.js',
 ];
 
 self.addEventListener('install', e => {
