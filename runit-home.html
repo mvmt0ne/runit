@@ -670,7 +670,7 @@
     }
 
     [data-theme="dark"] .list-sheet {
-      background: var(--surface-1);
+      background: var(--surface-6);
     }
 
     /* 섹션 헤더 */
@@ -680,19 +680,16 @@
       justify-content: space-between;
       padding: 20px;
       flex-shrink: 0;
-      background: #CACACA;
       transition: background 0.3s;
     }
 
     [data-theme="dark"] .list-sheet-handle {
-      background: #292929;
+      background: none;
     }
 
     .list-sheet-title {
       font-size: 18px;
       font-weight: 400;
-      letter-spacing: -0.03em;
-      color: #949494;
       font-family: 'Pretendard Variable', sans-serif;
       transition: color 0.3s;
     }
@@ -710,7 +707,7 @@
     .list-sheet-content {
       display: flex;
       flex-direction: column;
-      padding-bottom: 0;
+      padding-bottom: 32px;
     }
 
     /* ─── List panel 내부 스타일 ────────────── */
@@ -1525,12 +1522,12 @@
 
     .lp-list {
       flex: 1;
-      padding: 8px 10px 30px;
+      padding: 0 14px;
       background: #CACACA;
     }
 
     [data-theme="dark"] .lp-list {
-      background: #292929;
+      background: none;
     }
 
     .lp-list::-webkit-scrollbar {
