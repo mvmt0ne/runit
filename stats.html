@@ -91,10 +91,9 @@
       align-items: center;
       flex-shrink: 0;
       position: fixed;
-      background: rgba(25, 25, 25, 0.08);
-      backdrop-filter: blur(12px) saturate(150%);
-      -webkit-backdrop-filter: blur(12px) saturate(150%);
-      position: fixed;
+      background: rgba(25, 25, 25, 0.12);
+      backdrop-filter: blur(40px) saturate(100%);
+      -webkit-backdrop-filter: blur(40px) saturate(100%);
       top: 0;
       left: 50%;
       transform: translateX(-50%);
@@ -140,12 +139,8 @@
     /* ─── Tabs ── */
     .tab-row {
       display: flex;
-      gap: 10px;
       padding: 12px 20px;
       flex-shrink: 0;
-      background: rgba(25, 25, 25, 0.08);
-      backdrop-filter: blur(12px) saturate(150%);
-      -webkit-backdrop-filter: blur(12px) saturate(150%);
       position: fixed;
       top: 52px;
       left: 50%;
@@ -160,21 +155,17 @@
     }
 
     .tab {
-      padding: 12px 24px;
-      border-radius: 100px;
-      font-size: 16px;
-      font-weight: 500;
+      padding: 12px;
+      font-size: 18px;
+      font-weight: 600;
       font-family: 'Pretendard Variable', sans-serif;
-      color: var(--text-2);
-      background: var(--surface-2);
+      color: var(--text-3);
       cursor: pointer;
-      transition: background 0.1s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
       border: none;
     }
 
     .tab.active {
-      background: var(--text-1);
-      color: var(--bg);
+      color: var(--text-1);
     }
 
     .tab:active {
@@ -185,6 +176,7 @@
     .scroll-area {
       flex: 1;
       overflow-y: auto;
+      overflow-x: hidden;
       padding-bottom: 40px;
       padding-top: 96px;
       scrollbar-width: none;
@@ -240,15 +232,15 @@
 
     .chart-period-label {
       font-size: 16px;
-      font-weight: 400;
+      font-weight: 500;
       font-family: 'Pretendard Variable', sans-serif;
       color: var(--text-2);
       transition: color 0.3s;
     }
 
     .chart-avg-line-label {
-      font-size: 14px;
-      font-weight: 400;
+      font-size: 16px;
+      font-weight: 300;
       color: var(--text-2);
       font-family: 'Pretendard Variable', sans-serif;
       display: flex;
@@ -467,7 +459,7 @@
 
     .isb-axis-label {
       font-size: 14px;
-      color: var(--text-3);
+      color: var(--text-2);
       font-family: 'Pretendard Variable', sans-serif;
       transition: color 0.3s;
     }
@@ -1335,27 +1327,41 @@
     // 터치 스와이프
     (function () {
       let touchStartX = 0;
+      let touchStartY = 0;
+      let isHorizontal = null; // null = 아직 판별 안 됨
       const swipeWrap = document.querySelector('.chart-swipe-wrap');
 
       if (!swipeWrap) return;
 
       swipeWrap.addEventListener('touchstart', (e) => {
         touchStartX = e.touches[0].clientX;
-      }, false);
+        touchStartY = e.touches[0].clientY;
+        isHorizontal = null;
+      }, { passive: true });
 
       swipeWrap.addEventListener('touchmove', (e) => {
-        // 이벤트 전파 방지
-      }, false);
+        const dx = Math.abs(e.touches[0].clientX - touchStartX);
+        const dy = Math.abs(e.touches[0].clientY - touchStartY);
+
+        // 처음 움직임으로 방향 판별
+        if (isHorizontal === null && (dx > 4 || dy > 4)) {
+          isHorizontal = dx > dy;
+        }
+
+        // 수평 스와이프 확정 시 페이지 스크롤 막기
+        if (isHorizontal) {
+          e.preventDefault();
+        }
+      }, { passive: false });
 
       swipeWrap.addEventListener('touchend', (e) => {
-        const touchEndX = e.changedTouches[0].clientX;
-        const diff = touchStartX - touchEndX;
-        console.log('터치 드래그:', diff);
-        if (Math.abs(diff) > 50) {
-          console.log('연도 변경:', diff > 0 ? '다음' : '이전');
-          changeYear(diff > 0 ? 1 : -1);
+        if (!isHorizontal) return;
+        const dx = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(dx) > 60) {
+          changeYear(dx > 0 ? 1 : -1);
         }
-      }, false);
+        isHorizontal = null;
+      }, { passive: true });
     })();
 
     // ── 초기 렌더 (월간) — 진입 애니메이션 포함 ──
