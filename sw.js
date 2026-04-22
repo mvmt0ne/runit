@@ -1,37 +1,24 @@
-const CACHE = 'runit-v2';
-const CORE = [
-  './runit-home.html',
-  './list.html',
-  './detail.html',
-  './stats.html',
-  './manifest.json',
-  './icon.svg',
-  './ptr.js',
-];
+const CACHE = 'runit-v1';
+const HTML  = ['/runit-home.html', '/list.html', '/detail.html', '/stats.html'];
 
 self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE)
-      .then(c => c.addAll(CORE))
-      .then(() => self.skipWaiting())
-  );
+  e.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(
-        keys.filter(k => k !== CACHE).map(k => caches.delete(k))
-      ))
+      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
 
 self.addEventListener('fetch', e => {
-  const url = e.request.url;
+  const url  = new URL(e.request.url);
+  const path = url.pathname;
 
-  // CDN 리소스 (폰트 등) — 네트워크 우선, 캐시 폴백
-  if (!url.startsWith(self.location.origin)) {
+  // HTML 페이지 — 네트워크 우선 (pull-to-refresh로 항상 최신 버전)
+  if (HTML.some(p => path.endsWith(p)) || path === '/' || path.endsWith('index.html')) {
     e.respondWith(
       fetch(e.request)
         .then(res => {
@@ -44,7 +31,7 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // 로컬 파일 — 캐시 우선, 네트워크 폴백
+  // 나머지 (JS, SVG, 폰트 등) — 캐시 우선, 네트워크 폴백
   e.respondWith(
     caches.match(e.request).then(cached => {
       if (cached) return cached;
