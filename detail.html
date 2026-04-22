@@ -82,8 +82,10 @@
 
     /* ─── Back header ── */
     .back-header {
-      padding: 18px 22px 0;
-      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
       flex-shrink: 0;
       background: rgba(25, 25, 25, 0.08);
       backdrop-filter: blur(12px) saturate(150%);
@@ -100,20 +102,34 @@
     [data-theme="light"] .back-header {
       background: rgba(172, 172, 172, 0.06);
     }
+
     .back-btn {
-      width: 34px; height: 34px;
-      background: transparent; border: none; cursor: pointer;
-      font-size: 18px; color: var(--text-1);
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.3s, color 0.3s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+      width: auto;
+      height: 34px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--text-1);
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0;
+      transition: color 0.3s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .back-btn:active {
       transform: scale(0.92);
     }
+
     .back-title {
-      font-size: 15px; font-weight: 700;
-      color: var(--text-1); letter-spacing: 0;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 20px;
+      font-weight: 200;
+      font-family: 'Pretendard Variable', sans-serif;
+      color: var(--text-2);
+      pointer-events: none;
       transition: color 0.3s;
     }
 
@@ -287,12 +303,12 @@
 
       <div class="back-header">
         <button class="back-btn" onclick="history.back()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"/>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="20" y1="12" x2="4" y2="12"/>
+            <polyline points="10 18 4 12 10 6"/>
           </svg>
         </button>
         <span class="back-title">April 11</span>
-        <div style="width:34px"></div>
       </div>
 
       <div class="scroll-area">
