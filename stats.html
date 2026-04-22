@@ -5,6 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>runit — 마일리지</title>
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#191919">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="runit">
+  <link rel="apple-touch-icon" href="./icon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800;900&display=swap"
@@ -1377,6 +1384,12 @@
         barMaxPx: 115, labelOffset: 18
       });
       document.getElementById('year-avg-label').textContent = 'avg ' + AVG_YEAR + 'km';
+    }
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js');
     }
   </script>
 </body>

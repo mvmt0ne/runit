@@ -1,0 +1,19 @@
+{
+  "name": "runit",
+  "short_name": "runit",
+  "description": "러닝 활동 트래커",
+  "start_url": "./runit-home.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#191919",
+  "theme_color": "#191919",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
