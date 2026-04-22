@@ -1,5 +1,13 @@
-const CACHE = 'runit-v1';
-const HTML  = ['/runit-home.html', '/list.html', '/detail.html', '/stats.html'];
+const CACHE = 'runit-v3';
+const CORE = [
+  './runit-home.html',
+  './list.html',
+  './detail.html',
+  './stats.html',
+  './manifest.json',
+  './icon.svg',
+  './ptr.js',
+];
 
 self.addEventListener('install', e => {
   e.waitUntil(self.skipWaiting());
@@ -14,7 +22,7 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  const url  = new URL(e.request.url);
+  const url = new URL(e.request.url);
   const path = url.pathname;
 
   // HTML 페이지 — 네트워크 우선 (pull-to-refresh로 항상 최신 버전)
