@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="dark">
+<html lang="ko" data-theme="light">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>runit — Home</title>
   <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#191919">
+  <meta name="theme-color" content="#ACACAC">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -46,23 +46,7 @@
       --label-color: #666666;
     }
 
-    [data-theme="dark"] {
-      --bg: #191919;
-      --surface-1: #1d1d1d;
-      --surface-2: #232323;
-      --surface-3: #363636;
-      --surface-4: #484848;
-      --surface-5: #585858;
-      --surface-6: #d4d4d4;
-      --accent: #9CFD32;
-      --accent-dim: rgba(156, 253, 50, 0.13);
-      --text-1: #cdcdcd;
-      --text-2: #8d8d8d;
-      --text-3: #3E3E38;
-      --body-bg: #0A0B09;
-      --phone-frame: #111209;
-      --label-color: #4A4A44;
-    }
+
 
     /* ─── Run type palette (fixed, theme-independent) */
     :root {
@@ -256,91 +240,55 @@
       transition: color 0.3s;
     }
 
-    /* ─── Theme toggle ────────────────────── */
-    .theme-toggle {
+    /* ─── Weather Widget ─────────────────── */
+    .weather-widget {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+      font-family: 'Urbanist', sans-serif;
+      text-align: right;
+    }
+
+    .weather-top {
       display: flex;
       align-items: center;
-      cursor: pointer;
-      user-select: none;
+      gap: 6px;
+      line-height: 1;
     }
 
-    .t-track {
-      width: 56px;
-      height: 30px;
-      border-radius: 100px;
-      background: #DEDEDE;
-      position: relative;
-      display: block;
-      transition: background 0.25s;
+    .weather-temp {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--text-1);
     }
 
-    [data-theme="dark"] .t-track {
-      background: #333333;
+    .weather-desc {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-2);
     }
 
-    /* 아이콘 존: 절대 위치 */
-    .t-zone-l {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 30px;
-      height: 30px;
+    .weather-bottom {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--text-3);
+      font-weight: 500;
     }
 
-    .t-zone-r {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1;
+    .weather-pm-val {
+      font-weight: 700;
     }
 
-    /* 라이트: 왼쪽 sun / 다크: 오른쪽 moon */
-    .t-icon-sun {
-      display: flex;
-      color: #484848;
+    .weather-pm-label {
+      opacity: 0.8;
+      margin-right: 2px;
     }
 
-    .t-icon-moon {
-      display: none;
-      color: rgba(240, 240, 240, 0.85);
-    }
-
-    [data-theme="dark"] .t-icon-sun {
-      display: none;
-    }
-
-    [data-theme="dark"] .t-icon-moon {
-      display: flex;
-    }
-
-    /* 슬라이딩 썸: 라이트=오른쪽, 다크=왼쪽 */
-    .t-thumb {
-      position: absolute;
-      top: 4px;
-      right: 4px;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: #ACACAC;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), background 0.25s;
-      z-index: 3;
-    }
-
-    [data-theme="dark"] .t-thumb {
-      transform: translateX(-26px);
-      background: #191919;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-    }
+    .pm-good { color: #00b894; }
+    .pm-moderate { color: #e1b12c; }
+    .pm-bad { color: #e17055; }
 
     .hero-km {
       font-size: 68px;
@@ -1529,7 +1477,7 @@
 
     .lp-list {
       flex: 1;
-      padding: 0 14px;
+      padding: 0;
       background: #CACACA;
     }
 
@@ -1545,18 +1493,16 @@
       display: flex;
       align-items: center;
       gap: 16px;
-      padding: 24px 20px;
+      padding: 24px 22px;
       cursor: pointer;
       transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-      margin-left: -10px;
-      margin-right: -10px;
+      border-bottom: 1px solid rgba(128, 128, 128, 0.15);
     }
 
     .lp-row:active {
       opacity: 0.8;
       transform: scale(0.98);
-      background: rgba(50, 50, 50, 0.4);
-      border-radius: 12px;
+      background: rgba(128, 128, 128, 0.08);
     }
 
     .lp-badge {
@@ -1643,12 +1589,11 @@
     .lp-row.compact {
       display: flex;
       align-items: center;
-      gap: 16px;
-      padding: 14px 20px;
+      gap: 8px;
+      padding: 14px 22px;
       cursor: pointer;
       transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-      margin-left: -10px;
-      margin-right: -10px;
+      border-bottom: 1px solid rgba(128, 128, 128, 0.15);
     }
 
     .lp-row.compact .lp-badge {
@@ -1717,28 +1662,27 @@
       flex-direction: row;
       align-items: flex-start;
       gap: 8px;
-      padding: 20px;
+      padding: 24px 22px;
       cursor: pointer;
       transition: background 0.15s, opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-      background: #2f2f2f;
-      border-radius: 16px;
-      margin-left: 0;
-      margin-right: 0;
-      margin-bottom: 10px;
+      background: transparent;
+      border-radius: 0;
+      margin: 0;
+      border-bottom: 1px solid rgba(128, 128, 128, 0.12);
     }
 
     [data-theme="light"] .lp-row.expanded {
-      background: var(--surface-3);
+      background: transparent;
     }
 
     .lp-row.expanded:active {
-      background: #383838;
-      border-radius: 16px;
-      opacity: 1;
+      opacity: 0.8;
+      transform: scale(0.98);
+      background: rgba(128, 128, 128, 0.08);
     }
 
     [data-theme="light"] .lp-row.expanded:active {
-      background: var(--surface-4);
+      background: rgba(0, 0, 0, 0.05);
     }
 
     .lp-row.expanded .lp-badge {
@@ -2373,19 +2317,14 @@
                     </svg></span></div>
                 <div class="hero-title-line">마일리지는</div>
               </div>
-              <div class="theme-toggle" onclick="toggleTheme()">
-                <div class="t-track">
-                  <div class="t-zone-l">
-                    <svg class="t-icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
-                    </svg>
-                  </div>
-                  <div class="t-zone-r">
-                    <svg class="t-icon-moon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
-                    </svg>
-                  </div>
-                  <div class="t-thumb"></div>
+              <div class="weather-widget" id="weather-widget">
+                <div class="weather-top">
+                  <span class="weather-temp" id="w-temp">--°</span>
+                  <span class="weather-desc" id="w-desc">--</span>
+                </div>
+                <div class="weather-bottom">
+                  <span class="weather-hum" id="w-hum">--%</span>
+                  <span class="weather-pm" id="w-pm">--</span>
                 </div>
               </div>
             </div>
@@ -2714,17 +2653,45 @@
 
   <script>
 
-    // 테마 초기화 (페이지 간 유지)
-    (function () {
-      const saved = localStorage.getItem('runit-theme');
-      if (saved) document.documentElement.setAttribute('data-theme', saved);
-    })();
+    async function fetchWeather() {
+      try {
+        const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej));
+        const { latitude: lat, longitude: lon } = pos.coords;
 
-    function toggleTheme() {
-      const t = document.documentElement.getAttribute('data-theme');
-      const next = t === 'light' ? 'dark' : 'light';
-      document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('runit-theme', next);
+        // Weather + Air Quality
+        const [wRes, aRes] = await Promise.all([
+          fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code`),
+          fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=pm2_5`)
+        ]);
+        const wData = await wRes.json();
+        const aData = await aRes.json();
+
+        const temp = Math.round(wData.current.temperature_2m);
+        const hum = wData.current.relative_humidity_2m;
+        const code = wData.current.weather_code;
+        const pm25 = aData.current.pm2_5;
+
+        const codes = {
+          0: '맑음', 1: '대체로 맑음', 2: '부분 구름', 3: '흐림',
+          45: '안개', 48: '서리 안개', 51: '가벼운 이슬비', 61: '비',
+          71: '눈', 95: '뇌우'
+        };
+        const desc = codes[code] || '맑음';
+
+        document.getElementById('w-temp').textContent = temp + '°';
+        document.getElementById('w-desc').textContent = desc;
+        document.getElementById('w-hum').textContent = '습도 ' + hum + '%';
+
+        let pmClass = 'pm-good';
+        let pmLabel = '좋음';
+        if (pm25 > 35) { pmClass = 'pm-bad'; pmLabel = '나쁨'; }
+        else if (pm25 > 15) { pmClass = 'pm-moderate'; pmLabel = '보통'; }
+
+        document.getElementById('w-pm').innerHTML = `<span class="weather-pm-label">미세</span><span class="weather-pm-val ${pmClass}">${pmLabel}</span>`;
+      } catch (err) {
+        console.error(err);
+        document.getElementById('weather-widget').style.opacity = '0.5';
+      }
     }
 
     /* ── Bottom sheet drag (removed — activity list is now inline) ── */
@@ -3473,6 +3440,7 @@
     (function init() {
       renderMonth();
       renderList();
+      fetchWeather();
     })();
   </script>
 
