@@ -37,6 +37,7 @@
   --body-bg: #b9b9b9;
   --phone-frame: #111209;
   --label-color: #4A4A44;
+  --slate-gray: #b9b9b9;
   --cloudy-gray: #818181;
   --asphalt-black: #222222;
 
@@ -59,7 +60,7 @@
 
 /* ─── Body / Phone ──────────────────────── */
 body {
-  background: var(--bg);
+  background: var(--slate-gray);
   font-family: 'Pretendard Variable', -apple-system, sans-serif;
   width: 100vw;
   height: 100dvh;
@@ -136,22 +137,23 @@ body {
 .lp-row {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 20px 20px 10px;
+  gap: 8px;
+  padding: 20px;
   cursor: pointer;
   transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+  border-bottom: var(--cloudy-gray) 1px solid;
 }
 
 .lp-row:active {
   opacity: 0.8;
   transform: scale(0.98);
-  background: rgba(50, 50, 50, 0.4);
-  border-radius: 0;
+  background: rgba(50, 50, 50, 0.1);
 }
 
 .lp-badge {
   width: 6px;
   height: 6px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -159,6 +161,10 @@ body {
 
 .lp-title-row {
   align-items: baseline;
+}
+
+.lp-list {
+  gap: 10px;
 }
 
 .lp-run-name {

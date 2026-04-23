@@ -28,8 +28,6 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      background: #2f2f2f;
-      transition: background 0.3s;
     }
 
     .list-scroll {
@@ -181,95 +179,6 @@
       display: none !important;
     }
 
-    /* ─── Expanded mode ── */
-    .lp-row.expanded {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      background: #2f2f2f;
-      border-radius: 0;
-    }
-
-    .lp-row.expanded:active {
-      background: #383838;
-      border-radius: 0;
-      opacity: 1;
-    }
-
-    .lp-row.expanded .lp-info {
-      flex: 1;
-      width: 100%;
-    }
-
-    .lp-row.expanded .lp-title-row {
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-start;
-      margin-bottom: 20px;
-      gap: 0;
-      width: 100%;
-    }
-
-    .lp-row.expanded .lp-run-name {
-      font-size: 18px;
-      font-weight: 300;
-      color: var(--text-1);
-      font-family: 'Pretendard Variable', sans-serif;
-      flex: 1;
-      min-width: 0;
-    }
-
-    .lp-right-content {
-      font-size: 14px;
-      font-weight: 200;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      flex-shrink: 0;
-      color: var(--text-2);
-      font-family: 'Space Grotesk', sans-serif;
-      white-space: nowrap;
-    }
-
-    .lp-row.expanded .lp-stats {
-      display: grid !important;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      width: 100%;
-      margin: 0;
-    }
-
-    .lp-row.expanded .lp-stat {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      align-items: flex-start;
-    }
-
-    .lp-row.expanded .lp-stat-label {
-      font-size: 13px;
-      color: var(--text-2);
-      font-weight: 400;
-      font-family: 'Pretendard Variable', sans-serif;
-      margin-bottom: 0;
-      order: 2;
-    }
-
-    .lp-row.expanded .lp-stat-value {
-      font-size: 16px;
-      font-weight: 500;
-      color: var(--text-1);
-      line-height: 1;
-      font-family: 'Space Grotesk', sans-serif;
-      order: 1;
-    }
-
-    .lp-row.expanded .lp-stat-unit {
-      font-size: 13px;
-      font-weight: 400;
-      color: var(--text-2);
-      font-family: 'Space Grotesk', sans-serif;
-    }
 
     /* ─── Type colors ── */
     .type-race {
