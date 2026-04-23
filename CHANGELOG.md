@@ -16,12 +16,50 @@
 - **Run Type Palette**: race / dark / long 계열 orange 통일
 - **accent-rgb**: `156, 253, 50` → `255, 88, 65`
 
-### 다음 단계 후보
-- Data readout에 Space Mono 적용 (pace, km, time)
-- 라벨/네비 ALL CAPS + tracking +0.14em
-- 01. 02. 03. zero-padded numbered 구조 도입
-- Light theme을 Cream(`#F8F4EB`) 기반으로 재정의
-- `runit.png` 아이콘 Shift5 컬러로 리디자인
+### Step 1 — Data Readout → Space Mono ✅
+- `</style>` 직전 override 블록 주입
+- runit-home: `.hero-km-big`, `.day-num`, `.lp-month-km`, `.lp-stat-value` 등
+- list: `.lp-compact-date/time`, `.lp-stat-value`, `.range-val`
+- detail: `.status-time`, `.detail-km`, `.dsc-value`, `.hr-pct`, `.split-*`
+- stats: `.cmp-km`, `.delta-*`, `.pace-val`, `.run-km`
+- `font-feature-settings: "tnum"` — 탭 너비 숫자
+
+### Step 2 — Label Tracking ✅
+- uppercase 라벨 전체에 `letter-spacing: 0.14em` + Space Mono 400
+- `.dsc-label`, `.chart-label`, `.cal-month-label`, `.sf-section-label` 등
+
+### Step 3 — Zero-padded Numbered Index ✅
+- `list.html` renderList에 `(r, i) => rowHTML(r, i+1)` 인덱스 전달
+- `.lp-run-name` 앞에 `<span class="lp-idx">01.</span>` 주입 (월별 리셋)
+- `.lp-idx` 스타일: accent orange, Space Mono, 0.85em
+
+### Step 4 — Light Theme Cream ✅
+- `--bg: #ACACAC` (gray) → `#F8F4EB` (Bone/Cream)
+- `--surface-1: #FFFFFF` (white cards)
+- `--text-1: #202020` (Tactical Black)
+- `--text-2: #8B8B8B` (Steel Gray)
+- `--text-3: #B9B9B9` (Slate Gray)
+- 홈 페이지 (기본 light 테마) 에디토리얼 크림 톤으로 전환
+
+### Home List Unification & Dead Code Cleanup ✅
+- `runit-home.html` `rowHTML` → `(r, idx)` 시그니처로 list.html과 통일
+- `.lp-idx` zero-padded 인덱스 적용 (이번 달 리스트)
+- `.lp-idx` 스타일 블록 home에도 추가
+- **Dead code 삭제:**
+  - `.bottom-sheet`, `.bs-row*`, `.bs-badge`, `.bs-handle*`, `.bs-title`, `.bs-count`, `.bs-list`, `.bs-header-row` CSS (≈140줄)
+  - `.list-sheet-actions` CSS (미사용)
+  - `MONTH_DATA.{march,april}.runList` 템플릿 (미사용, perl multiline 삭제)
+  - Legacy `Bottom Sheet drag` IIFE (guarded 상태로 dead, ≈80줄)
+  - `toggleViewMode` 함수 + `viewMode` 변수 (미사용 — 홈은 expanded 고정)
+- 파일 라인: ≈3500 → 3205
+
+### Step 5 — Icon Redesign ✅
+- `icon.svg` Shift5 스타일 신규 생성
+  - Tactical Black `#202020` BG
+  - Orange `#FF5841` "R" 워드마크 (Space Grotesk 700)
+  - 좌상 chevron 코너 마커 (Shift5 tribute)
+  - 하단 `01 · RUNIT` / `/` 메타 스트립 (Space Mono)
+- 4개 HTML `apple-touch-icon` + `rel="icon"` → `icon.svg`
 
 ---
 

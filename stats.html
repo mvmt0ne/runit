@@ -11,7 +11,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="runit">
-  <link rel="apple-touch-icon" href="./runit.png">
+  <link rel="apple-touch-icon" href="./icon.svg">
+  <link rel="icon" type="image/svg+xml" href="./icon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
@@ -28,19 +29,19 @@
     /* ─── 홈화면 동기화 토큰 ── */
     :root,
     [data-theme="light"] {
-      --bg: #ACACAC;
-      --surface-1: #BCBCBC;
-      --surface-2: #A2A2A2;
-      --surface-3: #989898;
-      --surface-4: #C0C0C0;
-      --surface-5: #CACACA;
-      --surface-6: #929292;
+      --bg: #F8F4EB;
+      --surface-1: #FFFFFF;
+      --surface-2: #EFEADF;
+      --surface-3: #E2DDD2;
+      --surface-4: #F0ECE2;
+      --surface-5: #F8F4EB;
+      --surface-6: #C8C2B5;
       --accent: #FF5841;
       --accent-rgb: 255, 88, 65;
       --accent-dim: rgba(255, 88, 65, 0.2);
-      --text-1: #1A1A1A;
-      --text-2: #505050;
-      --text-3: #888888;
+      --text-1: #202020;
+      --text-2: #8B8B8B;
+      --text-3: #B9B9B9;
     }
 
     [data-theme="dark"] {
@@ -729,6 +730,25 @@
 
     .runs-view-all:active {
       background: var(--surface-3);
+    }
+
+    /* ─── Shift5 Data Readout Override ── */
+    .cmp-km,
+    .delta-km, .delta-km span,
+    .delta-pct,
+    .pace-val,
+    .run-km,
+    .isb-seg span {
+      font-family: 'Space Mono', ui-monospace, monospace;
+      font-feature-settings: "tnum";
+    }
+
+    /* ─── Shift5 Label Tracking ── */
+    .delta-vs, .intensity-breakdown-title,
+    .month-runs-title, .pace-block-title {
+      letter-spacing: 0.14em;
+      font-family: 'Space Mono', ui-monospace, monospace;
+      font-weight: 400;
     }
   </style>
 </head>

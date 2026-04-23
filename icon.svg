@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#202020"/>
+  <!-- Corner markers (Shift5 chevron tribute) -->
+  <g stroke="#FF5841" stroke-width="8" fill="none">
+    <path d="M 40 72 L 64 48 L 88 72"/>
+    <path d="M 40 104 L 64 80 L 88 104"/>
+  </g>
+  <!-- Wordmark "R" -->
+  <text x="50%" y="58%" text-anchor="middle" dominant-baseline="middle"
+        font-family="'Space Grotesk', 'Helvetica Neue', Arial, sans-serif"
+        font-weight="700"
+        font-size="320"
+        letter-spacing="-8"
+        fill="#FF5841">R</text>
+  <!-- Mono meta strip -->
+  <text x="48" y="472"
+        font-family="'Space Mono', ui-monospace, monospace"
+        font-size="22"
+        letter-spacing="4"
+        fill="#8B8B8B">01 · RUNIT</text>
+  <text x="464" y="472" text-anchor="end"
+        font-family="'Space Mono', ui-monospace, monospace"
+        font-size="22"
+        letter-spacing="4"
+        fill="#FF5841">/</text>
+</svg>
