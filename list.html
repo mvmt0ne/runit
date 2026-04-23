@@ -190,11 +190,8 @@
 
     /* ─── Month section header ── */
     .lp-month-section {
-      flex-shrink: 0;
       padding: 12px 20px;
       background: rgba(41, 41, 41);
-      backdrop-filter: blur(24px) saturate(150%);
-      -webkit-backdrop-filter: blur(24px) saturate(150%);
       transition: background 0.3s;
       position: sticky;
       top: 0;
@@ -229,12 +226,10 @@
     .lp-row {
       display: flex;
       align-items: center;
-      gap: 16px;
-      padding: 24px 20px 24px 14px;
+      gap: 20px;
+      padding: 20px;
       cursor: pointer;
       transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-      margin-left: -10px;
-      margin-right: -10px;
     }
 
     .lp-row:active {
@@ -245,26 +240,12 @@
     }
 
     .lp-badge {
-      width: 48px;
-      height: 48px;
-      border-radius: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
-      font-size: 12px;
-      font-weight: 700;
-      font-family: 'Space Grotesk', sans-serif;
-    }
-
-    .lp-info {
-      flex: 1;
-      min-width: 0;
     }
 
     .lp-title-row {
-      display: flex;
-      justify-content: space-between;
       align-items: baseline;
     }
 
@@ -350,34 +331,6 @@
       min-width: 0;
     }
 
-    .lp-row.compact .lp-right-content {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 2px;
-      flex-shrink: 0;
-    }
-
-    .lp-row.compact .lp-compact-date {
-      font-size: 15px;
-      color: var(--text-2);
-      font-family: 'Space Grotesk', sans-serif;
-      white-space: nowrap;
-      line-height: 1.2;
-    }
-
-    .lp-row.compact .lp-compact-time {
-      font-size: 15px;
-      color: var(--text-1);
-      font-family: 'Space Grotesk', sans-serif;
-      white-space: nowrap;
-      line-height: 1.2;
-    }
-
-    .lp-row.compact .lp-expanded-date {
-      display: none;
-    }
-
     .lp-row.compact .lp-stats {
       display: none !important;
     }
@@ -385,14 +338,10 @@
     /* ─── Expanded mode ── */
     .lp-row.expanded {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       align-items: flex-start;
-      gap: 8px;
       background: #2f2f2f;
       border-radius: 0;
-      margin-left: 0;
-      margin-right: 0;
-      margin-bottom: 1px;
     }
 
     [data-theme="light"] .lp-row.expanded {
@@ -410,24 +359,22 @@
     }
 
     .lp-row.expanded .lp-badge {
-      width: 12px;
-      height: 12px;
+      width: 8px;
+      height: 8px;
       border-radius: 0;
       flex-shrink: 0;
-      margin-top: 6px;
     }
 
     .lp-row.expanded .lp-info {
       flex: 1;
-      min-width: 0;
-      margin: 0;
+      width: 100%;
     }
 
     .lp-row.expanded .lp-title-row {
       display: flex;
       justify-content: flex-start;
       align-items: flex-start;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       gap: 0;
       width: 100%;
     }
@@ -441,24 +388,13 @@
       min-width: 0;
     }
 
-    .lp-row.expanded .lp-right-content {
+    .lp-right-content {
+      font-size: 14px;
+      font-weight: 200;
       display: flex;
       flex-direction: column;
       align-items: flex-end;
       flex-shrink: 0;
-    }
-
-    .lp-row.expanded .lp-compact-time {
-      display: none;
-    }
-
-    .lp-row.expanded .lp-compact-date {
-      display: none;
-    }
-
-    .lp-row.expanded .lp-expanded-date {
-      display: block;
-      font-size: 15px;
       color: var(--text-2);
       font-family: 'Space Grotesk', sans-serif;
       white-space: nowrap;
@@ -467,7 +403,7 @@
     .lp-row.expanded .lp-stats {
       display: grid !important;
       grid-template-columns: repeat(3, 1fr);
-      gap: 20px 16px;
+      gap: 20px;
       width: 100%;
       margin: 0;
     }
@@ -1219,11 +1155,7 @@
         <div class="lp-info">
           <div class="lp-title-row">
             <div class="lp-run-name"><span class="lp-idx">${n}.</span>${r.name}</div>
-            <div class="lp-right-content">
-              <div class="lp-compact-date">${r.date.replace(/-/g, '.')}</div>
-              <div class="lp-compact-time">${r.time}</div>
-              <div class="lp-expanded-date">${r.date.replace(/-/g, '.')}</div>
-            </div>
+            <div class="lp-right-content">${r.date.replace(/-/g, '.')}</div>
           </div>
           <div class="lp-stats">
             <div class="lp-stat"><span class="lp-stat-label">시간</span><strong class="lp-stat-value">${r.time}</strong></div>
