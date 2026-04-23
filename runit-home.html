@@ -540,28 +540,38 @@
       min-height: 32px;
     }
 
-    /* ─── 러닝 활동 인라인 섹션 ──────────────── */
+    /* ─── 러닝 활동 하단 고정 버튼 ──────────────── */
     .list-sheet {
       display: flex;
       flex-direction: column;
-      background-color: #b9b9b9;
+      flex-shrink: 0;
+      background-color: var(--accent);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
     }
 
-    /* 섹션 헤더 */
+    /* 섹션 헤더 → 리스트 진입 버튼 */
     .list-sheet-handle {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 20px;
       flex-shrink: 0;
-      background-color: #b9b9b9;
-      transition: background 0.3s;
+      background-color: var(--accent);
+      color: #202020;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+
+    .list-sheet-handle:active {
+      background-color: rgba(var(--accent-rgb), 0.85);
+      transform: scale(0.99);
     }
 
     .list-sheet-title {
       font-size: 18px;
-      font-weight: 400;
-      color: var(--asphalt-black);
+      font-weight: 500;
+      color: #202020;
       font-family: 'Pretendard Variable', sans-serif;
       transition: color 0.3s;
     }
@@ -1684,27 +1694,15 @@
 
           </div><!-- /cal-page -->
 
-          <!-- 러닝 활동 목록 (이번 달) -->
-          <div class="list-sheet" id="list-sheet-1">
-
-            <!-- 섹션 헤더 -->
-            <div class="list-sheet-handle" id="list-sheet-handle-1">
-              <div class="list-sheet-title">러닝 활동</div>
-            </div>
-
-            <!-- 시트 본문 -->
-            <div class="list-sheet-content" id="runs-list-container">
-              <!-- 동적 렌더링 -->
-            </div><!-- /runs-list-container -->
-
-            <!-- 전체 활동 보기 CTA -->
-            <div class="view-all-wrap">
-              <a class="view-all-btn" href="list.html">전체 활동 보기</a>
-            </div>
-
-          </div><!-- /list-sheet -->
-
         </div><!-- /cal-area -->
+
+        <!-- 러닝 활동 → 리스트 페이지 진입 버튼 (하단 고정) -->
+        <div class="list-sheet" id="list-sheet-1">
+          <a class="list-sheet-handle" id="list-sheet-handle-1" href="list.html">
+            <div class="list-sheet-title">러닝 활동</div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+        </div><!-- /list-sheet -->
 
       </div>
 
