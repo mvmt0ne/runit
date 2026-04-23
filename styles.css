@@ -108,7 +108,7 @@ body {
   background: transparent;
   border: none;
   cursor: pointer;
-  color: var(--text-1);
+  color: var(--asphalt-black);
   display: flex;
   align-items: center;
   justify-content: flex-start;
