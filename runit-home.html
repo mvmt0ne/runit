@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="./runit.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800;900&display=swap"
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
     rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable.min.css"
     rel="stylesheet">
@@ -35,9 +35,9 @@
       --surface-4: #C0C0C0;
       --surface-5: #CACACA;
       --surface-6: #929292;
-      --accent: #9CFD32;
-      --accent-rgb: 156, 253, 50;
-      --accent-dim: rgba(156, 253, 50, 0.2);
+      --accent: #FF5841;
+      --accent-rgb: 255, 88, 65;
+      --accent-dim: rgba(255, 88, 65, 0.2);
       --text-1: #1A1A1A;
       --text-2: #505050;
       --text-3: #888888;
@@ -51,18 +51,18 @@
     /* ─── Run type palette (fixed, theme-independent) */
     :root {
       --type-race-bg: #000000;
-      --type-race-text: #9CFD2E;
-      --type-dark-bg: #9CFD35;
+      --type-race-text: #FF5841;
+      --type-dark-bg: #FF5841;
       /* TT / Tempo / Interval */
       --type-dark-text: #000000;
       --type-steady-bg: #515151;
       --type-steady-text: #FFFFFF;
       --type-easy-bg: #c2c2c2;
-      --type-easy-text: #191919;
+      --type-easy-text: #202020;
       --type-jog-bg: #767676;
-      --type-jog-text: #191919;
-      --type-long-bg: #9CFD32;
-      --type-long-text: #191919;
+      --type-jog-text: #202020;
+      --type-long-bg: #FF5841;
+      --type-long-text: #202020;
     }
 
     [data-theme="dark"] {
@@ -176,7 +176,7 @@
     .profile-avatar {
       width: 34px;
       height: 34px;
-      border-radius: 50%;
+      border-radius: 0;
       background: var(--surface-3);
       display: flex;
       align-items: center;
@@ -246,7 +246,7 @@
       flex-direction: column;
       align-items: flex-end;
       gap: 2px;
-      font-family: 'Urbanist', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       text-align: right;
     }
 
@@ -351,7 +351,7 @@
       letter-spacing: -2px;
       line-height: 1;
       transition: color 0.3s;
-      font-family: 'Urbanist', -apple-system, sans-serif;
+      font-family: 'Space Grotesk', -apple-system, sans-serif;
     }
 
     .hero-km-unit {
@@ -360,7 +360,7 @@
       color: var(--text-2);
       letter-spacing: 0;
       transition: color 0.3s;
-      font-family: 'Urbanist', -apple-system, sans-serif;
+      font-family: 'Space Grotesk', -apple-system, sans-serif;
     }
 
     /* ─── Bottom Nav ──────────────────────────── */
@@ -417,7 +417,7 @@
     .cal-nav-btn {
       width: 28px;
       height: 28px;
-      border-radius: 50%;
+      border-radius: 0;
       background: var(--surface-1);
       border: none;
       color: var(--text-2);
@@ -484,7 +484,7 @@
 
     /* ─── Calendar day cell ───────────────── */
     .cal-day {
-      border-radius: 50%;
+      border-radius: 0;
       aspect-ratio: 1;
       display: flex;
       align-items: center;
@@ -504,7 +504,7 @@
       font-weight: 700;
       color: inherit;
       line-height: 1;
-      font-family: 'Urbanist', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
     }
 
     .day-note {
@@ -512,7 +512,7 @@
       font-weight: 600;
       color: inherit;
       line-height: 1;
-      font-family: 'Urbanist', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
     }
 
     /* Today indicator dot */
@@ -524,7 +524,7 @@
       transform: translateX(-50%);
       width: 3px;
       height: 3px;
-      border-radius: 50%;
+      border-radius: 0;
       background: currentColor;
       opacity: 0.5;
     }
@@ -688,7 +688,7 @@
     .lp-dot {
       width: 5px;
       height: 5px;
-      border-radius: 50%;
+      border-radius: 0;
       background: var(--text-2);
       opacity: 0.5;
     }
@@ -752,7 +752,7 @@
       backdrop-filter: blur(40px) saturate(200%);
       -webkit-backdrop-filter: blur(40px) saturate(200%);
       border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 100px;
+      border-radius: 0;
       padding: 0 14px;
       height: 48px;
     }
@@ -766,7 +766,7 @@
       backdrop-filter: blur(40px) saturate(200%);
       -webkit-backdrop-filter: blur(40px) saturate(200%);
       border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 100px;
+      border-radius: 0;
       padding: 0 14px;
       height: 48px;
     }
@@ -815,7 +815,7 @@
       right: -4px;
       width: 6px;
       height: 6px;
-      border-radius: 50%;
+      border-radius: 0;
       background: var(--accent);
       display: none;
     }
@@ -848,7 +848,7 @@
       right: 0;
       bottom: 0;
       background: var(--surface-3);
-      border-radius: 20px 20px 0 0;
+      border-radius: 0;
       z-index: 90;
       display: flex;
       flex-direction: column;
@@ -866,7 +866,7 @@
     .sf-sheet--top {
       top: 0;
       bottom: auto;
-      border-radius: 0 0 20px 20px;
+      border-radius: 0;
       transform: translateY(-100%);
     }
 
@@ -879,7 +879,7 @@
       width: calc(100% - 40px);
       max-width: 390px;
       background: var(--surface-5);
-      border-radius: 20px;
+      border-radius: 0;
       z-index: 999;
       display: flex;
       flex-direction: column;
@@ -906,7 +906,7 @@
     .sf-sheet-handle {
       width: 36px;
       height: 4px;
-      border-radius: 2px;
+      border-radius: 0;
       background: var(--surface-4);
       transition: background 0.3s;
     }
@@ -931,7 +931,7 @@
       height: 40px;
       background: transparent;
       border: none;
-      border-radius: 50%;
+      border-radius: 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -962,7 +962,7 @@
       text-transform: uppercase;
       color: var(--text-3);
       margin-bottom: 6px;
-      font-family: 'Urbanist', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       transition: color 0.3s;
     }
 
@@ -995,7 +995,7 @@
     .sf-apply-btn {
       flex: 2;
       padding: 14px;
-      border-radius: 12px;
+      border-radius: 0;
       border: none;
       background: var(--surface-6);
       font-size: 18px;
@@ -1027,7 +1027,7 @@
       left: -8px;
       width: 190px;
       background: var(--surface-3);
-      border-radius: 16px;
+      border-radius: 0;
       box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
       z-index: 160;
       overflow: hidden;
@@ -1061,7 +1061,7 @@
       justify-content: space-between;
       padding: 16px 12px;
       margin: 0 -12px;
-      border-radius: 10px;
+      border-radius: 0;
       cursor: pointer;
       transition: background 0.15s, opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
       gap: 12px;
@@ -1124,7 +1124,7 @@
       align-items: center;
       gap: 5px;
       cursor: pointer;
-      border-radius: 8px;
+      border-radius: 0;
       padding: 2px 6px 2px 2px;
       margin-left: -2px;
       transition: background 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1153,7 +1153,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 13px 14px;
-      border-radius: 10px;
+      border-radius: 0;
       cursor: pointer;
       transition: background 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -1183,7 +1183,7 @@
 
     .month-item-meta {
       font-size: 13px;
-      font-family: 'Urbanist', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       color: var(--text-3);
       transition: color 0.2s;
     }
@@ -1204,7 +1204,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 11px 14px;
-      border-radius: 10px;
+      border-radius: 0;
       cursor: pointer;
       transition: background 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -1234,7 +1234,7 @@
     .sort-opt-dir {
       font-size: 12px;
       color: var(--text-2);
-      font-family: 'Urbanist', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       opacity: 0;
       transition: opacity 0.2s;
     }
@@ -1262,7 +1262,7 @@
       font-weight: 300;
       text-transform: uppercase;
       color: var(--text-1);
-      font-family: 'Urbanist', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
     }
 
     .filter-chips {
@@ -1273,7 +1273,7 @@
 
     .filter-chip {
       padding: 10px 16px;
-      border-radius: 20px;
+      border-radius: 0;
       font-size: 16px;
       font-weight: 400;
       font-family: 'Pretendard Variable', sans-serif;
@@ -1307,7 +1307,7 @@
     .zone-chip .zone-label {
       font-size: 16px;
       font-weight: 600;
-      font-family: 'Urbanist', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       line-height: 1;
     }
 
@@ -1332,7 +1332,7 @@
       right: 0;
       height: 3px;
       background: rgba(128, 128, 128, 0.15);
-      border-radius: 2px;
+      border-radius: 0;
       pointer-events: none;
     }
 
@@ -1340,7 +1340,7 @@
       position: absolute;
       height: 100%;
       background: var(--accent);
-      border-radius: 2px;
+      border-radius: 0;
     }
 
     input[type='range'].range-input {
@@ -1363,7 +1363,7 @@
       -webkit-appearance: none;
       width: 20px;
       height: 20px;
-      border-radius: 50%;
+      border-radius: 0;
       background: var(--surface-6);
       pointer-events: auto;
       cursor: grab;
@@ -1380,7 +1380,7 @@
     input[type='range'].range-input::-moz-range-thumb {
       width: 20px;
       height: 20px;
-      border-radius: 50%;
+      border-radius: 0;
       background: var(--accent);
       border: 2.5px solid var(--bg);
       box-shadow: 0 1px 6px rgba(0, 0, 0, 0.85);
@@ -1396,7 +1396,7 @@
 
     .range-val {
       font-size: 14px;
-      font-family: 'Urbanist', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       color: var(--text-2);
       font-weight: 600;
     }
@@ -1480,7 +1480,7 @@
       font-size: 16px;
       font-weight: 400;
       color: #a4a4a4;
-      font-family: 'Urbanist', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
     }
 
     .lp-list {
@@ -1516,7 +1516,7 @@
     .lp-badge {
       width: 48px;
       height: 48px;
-      border-radius: 50%;
+      border-radius: 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1525,7 +1525,7 @@
       font-weight: 700;
       line-height: 1.2;
       text-align: center;
-      font-family: 'Urbanist', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       letter-spacing: -0.02em;
     }
 
@@ -1556,7 +1556,7 @@
       font-size: 16px;
       font-weight: 200;
       color: var(--text-2);
-      font-family: 'Urbanist', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       flex-shrink: 0;
     }
 
@@ -1608,7 +1608,7 @@
       width: 12px;
       height: 12px;
       flex-shrink: 0;
-      border-radius: 50%;
+      border-radius: 0;
     }
 
     .lp-row.compact .lp-info {
@@ -1643,7 +1643,7 @@
     .lp-row.compact .lp-compact-date {
       font-size: 15px;
       color: var(--text-2);
-      font-family: 'Urbanist', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       white-space: nowrap;
       line-height: 1.2;
     }
@@ -1651,7 +1651,7 @@
     .lp-row.compact .lp-compact-time {
       font-size: 15px;
       color: var(--text-1);
-      font-family: 'Urbanist', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       white-space: nowrap;
       line-height: 1.2;
     }
@@ -1697,7 +1697,7 @@
       width: 12px;
       height: 12px;
       flex-shrink: 0;
-      border-radius: 50%;
+      border-radius: 0;
       margin-top: 3px;
     }
 
@@ -1743,7 +1743,7 @@
       display: block;
       font-size: 15px;
       color: var(--text-2);
-      font-family: 'Urbanist', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       white-space: nowrap;
     }
 
@@ -1776,7 +1776,7 @@
       font-weight: 500;
       color: var(--text-1);
       line-height: 1;
-      font-family: 'Urbanist', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       order: 1;
     }
 
@@ -1784,7 +1784,7 @@
       font-size: 13px;
       font-weight: 400;
       color: var(--text-2);
-      font-family: 'Urbanist', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
     }
 
     /* ─── Bottom Sheet ────────────────────── */
@@ -1796,7 +1796,7 @@
       bottom: 0;
       height: 100%;
       background: var(--surface-1);
-      border-radius: 24px 24px 0 0;
+      border-radius: 0;
       transform: translateY(calc(100% - 104px));
       transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1),
         background 0.3s;
@@ -1833,7 +1833,7 @@
       width: 36px;
       height: 4px;
       background: var(--surface-3);
-      border-radius: 2px;
+      border-radius: 0;
       margin: 0 auto 14px;
       transition: background 0.3s;
     }
@@ -1881,7 +1881,7 @@
       cursor: pointer;
       gap: 12px;
       transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-      border-radius: 8px;
+      border-radius: 0;
     }
 
     .bs-row:nth-child(odd) {
@@ -1912,7 +1912,7 @@
       color: var(--text-1);
       letter-spacing: 0;
       transition: color 0.3s;
-      font-family: 'Urbanist', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
     }
 
     .bs-row-meta {
@@ -1920,14 +1920,14 @@
       color: var(--text-2);
       margin-top: 2px;
       transition: color 0.3s;
-      font-family: 'Urbanist', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
     }
 
     /* Circle badge — mirrors calendar type circles */
     .bs-badge {
       width: 38px;
       height: 38px;
-      border-radius: 50%;
+      border-radius: 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1945,7 +1945,7 @@
       width: 52px;
       height: 52px;
       background: var(--accent);
-      border-radius: 16px;
+      border-radius: 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1965,7 +1965,7 @@
     .back-btn {
       width: 34px;
       height: 34px;
-      border-radius: 50%;
+      border-radius: 0;
       background: var(--surface-1);
       border: none;
       color: var(--text-1);
@@ -1999,7 +1999,7 @@
 
     .tab {
       padding: 7px 16px;
-      border-radius: 100px;
+      border-radius: 0;
       font-size: 12px;
       font-weight: 600;
       background: var(--surface-1);
@@ -2049,7 +2049,7 @@
 
     .bar {
       width: 100%;
-      border-radius: 6px 6px 0 0;
+      border-radius: 0;
       transition: background 0.3s;
     }
 
@@ -2079,7 +2079,7 @@
     .stat-block {
       margin: 16px 22px 0;
       background: var(--accent);
-      border-radius: 20px;
+      border-radius: 0;
       padding: 20px;
       position: relative;
       overflow: hidden;
@@ -2119,7 +2119,7 @@
       bottom: -20px;
       width: 90px;
       height: 90px;
-      border-radius: 50%;
+      border-radius: 0;
       background: rgba(0, 0, 0, 0.06);
     }
 
@@ -2132,7 +2132,7 @@
 
     .mini-stat {
       background: var(--surface-1);
-      border-radius: 16px;
+      border-radius: 0;
       padding: 14px;
       transition: background 0.3s;
     }
@@ -2175,7 +2175,7 @@
       align-items: center;
       gap: 7px;
       padding: 7px 14px;
-      border-radius: 100px;
+      border-radius: 0;
       font-size: 12px;
       font-weight: 700;
       margin: 16px 22px 0;
@@ -2212,7 +2212,7 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 1px;
       background: var(--surface-2);
-      border-radius: 18px;
+      border-radius: 0;
       overflow: hidden;
       margin: 18px 22px 0;
       transition: background 0.3s;
@@ -2250,7 +2250,7 @@
     .detail-note {
       margin: 14px 22px 0;
       background: var(--surface-1);
-      border-radius: 16px;
+      border-radius: 0;
       padding: 16px;
       transition: background 0.3s;
     }
@@ -2276,7 +2276,7 @@
     .detail-pace-chart {
       margin: 14px 22px 0;
       background: var(--surface-1);
-      border-radius: 16px;
+      border-radius: 0;
       padding: 16px;
       transition: background 0.3s;
     }
@@ -3464,7 +3464,7 @@
     (function () {
       const THRESHOLD = 80, MAX_PULL = 120, RESIST = 0.45;
       const wrap = document.createElement('div');
-      wrap.style.cssText = 'position:fixed;top:0;left:50%;transform:translateX(-50%) translateY(-56px);width:44px;height:44px;border-radius:22px;background:rgba(35,35,35,0.92);backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;z-index:100;pointer-events:none;transition:transform 0.25s cubic-bezier(0.16,1,0.3,1),opacity 0.25s;opacity:0';
+      wrap.style.cssText = 'position:fixed;top:0;left:50%;transform:translateX(-50%) translateY(-56px);width:44px;height:44px;border-radius: 0;background:rgba(35,35,35,0.92);backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;z-index:100;pointer-events:none;transition:transform 0.25s cubic-bezier(0.16,1,0.3,1),opacity 0.25s;opacity:0';
       const icon = document.createElement('div');
       icon.style.cssText = 'display:flex;align-items:center;justify-content:center;';
       icon.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#cdcdcd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>';

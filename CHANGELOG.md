@@ -2,7 +2,30 @@
 
 ---
 
-## [2026-04-23] 이번 세션
+## [2026-04-23] Shift5 디자인 시스템 적용
+
+### Theme Migration
+- **Accent**: `#9CFD32` (neon green) → `#FF5841` (Signal Orange) — 전 파일
+- **Dark BG**: `#191919` → `#202020` (Tactical Black) — manifest 포함
+- **Fonts**:
+  - Urbanist → **Space Grotesk** (primary)
+  - **Space Mono** 신규 추가 (data readout 용)
+  - Pretendard Variable 유지 (한글)
+- **Border Radius**: 전역 `0` (sharp corners, 원형 50% 제외)
+  - 월 섹션 헤더, 칩, 버튼, 카드, 토글, PTR 인디케이터, stat grid 등 79개소
+- **Run Type Palette**: race / dark / long 계열 orange 통일
+- **accent-rgb**: `156, 253, 50` → `255, 88, 65`
+
+### 다음 단계 후보
+- Data readout에 Space Mono 적용 (pace, km, time)
+- 라벨/네비 ALL CAPS + tracking +0.14em
+- 01. 02. 03. zero-padded numbered 구조 도입
+- Light theme을 Cream(`#F8F4EB`) 기반으로 재정의
+- `runit.png` 아이콘 Shift5 컬러로 리디자인
+
+---
+
+## [2026-04-23] PTR 개선
 
 ### Pull-to-Refresh 개선 (list / detail / stats)
 
