@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="dark">
+<html lang="ko">
 
 <head>
   <meta charset="UTF-8">
@@ -28,24 +28,7 @@
     }
 
     /* ─── Tokens ── */
-    :root,
-    [data-theme="light"] {
-      --bg: #F8F4EB;
-      --surface-1: #FFFFFF;
-      --surface-2: #EFEADF;
-      --surface-3: #E2DDD2;
-      --surface-4: #F0ECE2;
-      --surface-5: #F8F4EB;
-      --surface-6: #C8C2B5;
-      --accent: #FF5841;
-      --accent-rgb: 255, 88, 65;
-      --accent-dim: rgba(255, 88, 65, 0.2);
-      --text-1: #202020;
-      --text-2: #8B8B8B;
-      --text-3: #B9B9B9;
-    }
-
-    [data-theme="dark"] {
+    :root {
       --bg: #202020;
       --surface-1: #1d1d1d;
       --surface-2: #232323;
@@ -59,9 +42,6 @@
       --text-1: #F0F0EB;
       --text-2: #8d8d8d;
       --text-3: #3E3E38;
-    }
-
-    :root {
       --type-race-bg: #000000;
       --type-race-text: #FF5841;
       --type-dark-bg: #FF5841;
@@ -74,9 +54,6 @@
       --type-jog-text: #202020;
       --type-long-bg: #FF5841;
       --type-long-text: #202020;
-    }
-
-    [data-theme="dark"] {
       --type-none-border: #282828;
       --type-none-text: #555550;
     }
@@ -128,10 +105,6 @@
       z-index: 10;
     }
 
-    [data-theme="light"] .back-header {
-      background: rgba(172, 172, 172, 0.06);
-    }
-
     .back-btn {
       width: auto;
       height: 34px;
@@ -168,12 +141,8 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      background: #CACACA;
+      background: #2f2f2f;
       transition: background 0.3s;
-    }
-
-    [data-theme="dark"] .list-page {
-      background: #292929;
     }
 
     .list-scroll {
@@ -181,7 +150,7 @@
       overflow-y: auto;
       scrollbar-width: none;
       padding-top: 62px;
-      padding-bottom: 80px;
+      padding-bottom: 100px;
     }
 
     .list-scroll::-webkit-scrollbar {
@@ -191,7 +160,7 @@
     /* ─── Month section header ── */
     .lp-month-section {
       padding: 12px 20px;
-      background: rgba(41, 41, 41);
+      background: #242424;
       transition: background 0.3s;
       position: sticky;
       top: 0;
@@ -199,6 +168,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 10px;
     }
 
 
@@ -219,15 +189,13 @@
     }
 
     /* ─── List ── */
-    .lp-list {
-      background: #292929;
-    }
+
 
     .lp-row {
       display: flex;
       align-items: center;
       gap: 20px;
-      padding: 20px;
+      padding: 20px 20px 10px;
       cursor: pointer;
       transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -297,12 +265,8 @@
 
     /* ─── Compact mode ── */
     .lp-row.compact {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      gap: 12px;
       padding: 14px 20px;
-      margin-left: -10px;
-      margin-right: -10px;
     }
 
     .lp-row.compact .lp-info {
@@ -339,18 +303,10 @@
       border-radius: 0;
     }
 
-    [data-theme="light"] .lp-row.expanded {
-      background: var(--surface-3);
-    }
-
     .lp-row.expanded:active {
       background: #383838;
       border-radius: 0;
       opacity: 1;
-    }
-
-    [data-theme="light"] .lp-row.expanded:active {
-      background: var(--surface-4);
     }
 
     .lp-row.expanded .lp-info {
@@ -503,8 +459,8 @@
       background: rgba(8, 8, 8, 0.45);
       backdrop-filter: blur(20px) saturate(100%);
       -webkit-backdrop-filter: blur(20px) saturate(100%);
-      border-radius: 0;
-      padding: 0 22px;
+      border-radius: 150px;
+      width: 56px;
       height: 56px;
     }
 
@@ -516,15 +472,9 @@
       background: rgba(8, 8, 8, 0.45);
       backdrop-filter: blur(20px) saturate(100%);
       -webkit-backdrop-filter: blur(20px) saturate(100%);
-      border-radius: 0;
-      padding: 0 22px;
+      border-radius: 150px;
+      padding: 0 24px;
       height: 56px;
-    }
-
-    [data-theme="light"] .float-view-bar,
-    [data-theme="light"] .float-sf-inner {
-      background: rgba(192, 192, 192, 0.2);
-      border-color: rgba(0, 0, 0, 0.12);
     }
 
     .float-sf-inner .sf-divider {
@@ -893,19 +843,9 @@
     .lp-row.expanded .lp-stat-unit,
     .lp-row.expanded .lp-stat-value,
     .range-val,
-    .range-val-row,
-    .lp-idx {
+    .range-val-row {
       font-family: 'Space Mono', ui-monospace, monospace;
       font-feature-settings: "tnum";
-    }
-
-    /* ─── Zero-padded numeric index ── */
-    .lp-idx {
-      color: var(--accent);
-      margin-right: 8px;
-      font-size: 0.85em;
-      font-weight: 400;
-      letter-spacing: 0.05em;
     }
 
     /* ─── Shift5 Label Tracking ── */
@@ -1025,12 +965,6 @@
   </div><!-- /phone -->
 
   <script>
-    // 테마 유지
-    (function () {
-      const saved = localStorage.getItem('runit-theme');
-      if (saved) document.documentElement.setAttribute('data-theme', saved);
-    })();
-
     /* ─── Data ── */
     const RUNS = [
       { id: 1, date: '2026-04-11', label: '4/11', month: 4, type: 'race', group: 'race', name: '2026 인천하프', time: '08:00', km: 21.2, pace: '5:02', paceV: 302, bpm: 176, spm: 174, stride: 107 },
@@ -1129,20 +1063,19 @@
             <div class="lp-month-label">${MONTH_LABELS[m]}</div>
             <div class="lp-month-km">${totalKm}km</div>
           </div>
-          <div class="lp-list">${runs.map((r, i) => rowHTML(r, i + 1)).join('')}</div>`;
+          <div class="lp-list">${runs.map(rowHTML).join('')}</div>`;
         }).join('');
       } else {
-        container.innerHTML = `<div class="lp-list">${sorted.map((r, i) => rowHTML(r, i + 1)).join('')}</div>`;
+        container.innerHTML = `<div class="lp-list">${sorted.map(rowHTML).join('')}</div>`;
       }
     }
 
-    function rowHTML(r, idx) {
-      const n = String(idx).padStart(2, '0');
+    function rowHTML(r) {
       return `<div class="lp-row ${viewMode}" onclick="location.href='detail.html'">
         <div class="lp-badge type-${r.type}"></div>
         <div class="lp-info">
           <div class="lp-title-row">
-            <div class="lp-run-name"><span class="lp-idx">${n}.</span>${r.name}</div>
+            <div class="lp-run-name">${r.name}</div>
             <div class="lp-right-content">${r.date.replace(/-/g, '.')}</div>
           </div>
           <div class="lp-stats">

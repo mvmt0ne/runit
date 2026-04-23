@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="light">
+<html lang="ko">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>runit — Home</title>
   <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#ACACAC">
+  <meta name="theme-color" content="#202020">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -28,24 +28,23 @@
     }
 
     /* ─── Tokens ──────────────────────────── */
-    :root,
-    [data-theme="light"] {
-      --bg: #F8F4EB;
-      --surface-1: #FFFFFF;
-      --surface-2: #EFEADF;
-      --surface-3: #E2DDD2;
-      --surface-4: #F0ECE2;
-      --surface-5: #F8F4EB;
-      --surface-6: #C8C2B5;
+    :root {
+      --bg: #202020;
+      --surface-1: #1d1d1d;
+      --surface-2: #232323;
+      --surface-3: #363636;
+      --surface-4: #484848;
+      --surface-5: #585858;
+      --surface-6: #d4d4d4;
       --accent: #FF5841;
       --accent-rgb: 255, 88, 65;
-      --accent-dim: rgba(255, 88, 65, 0.2);
-      --text-1: #202020;
-      --text-2: #8B8B8B;
-      --text-3: #B9B9B9;
-      --body-bg: #E8E3D6;
-      --phone-frame: #C8C2B5;
-      --label-color: #8B8B8B;
+      --accent-dim: rgba(255, 88, 65, 0.13);
+      --text-1: #F0F0EB;
+      --text-2: #8d8d8d;
+      --text-3: #3E3E38;
+      --body-bg: #0A0B09;
+      --phone-frame: #111209;
+      --label-color: #4A4A44;
     }
 
 
@@ -609,14 +608,9 @@
 
     /* ─── 러닝 활동 인라인 섹션 ──────────────── */
     .list-sheet {
-      background: #CACACA;
+      background: #2f2f2f;
       display: flex;
       flex-direction: column;
-      transition: background 0.3s;
-    }
-
-    [data-theme="dark"] .list-sheet {
-      background: var(--surface-6);
     }
 
     /* 섹션 헤더 */
@@ -627,10 +621,6 @@
       padding: 20px;
       flex-shrink: 0;
       transition: background 0.3s;
-    }
-
-    [data-theme="dark"] .list-sheet-handle {
-      background: none;
     }
 
     .list-sheet-title {
@@ -743,12 +733,6 @@
       border-radius: 0;
       padding: 0 14px;
       height: 48px;
-    }
-
-    [data-theme="light"] .float-view-bar,
-    [data-theme="light"] .float-sf-inner {
-      background: rgba(192, 192, 192, 0.2);
-      border-color: rgba(0, 0, 0, 0.12);
     }
 
     .float-sf-inner .sf-divider {
@@ -1388,12 +1372,7 @@
 
     /* ─── 전체 활동 보기 버튼 ─── */
     .view-all-wrap {
-      background: #CACACA;
-      transition: background 0.3s;
-    }
-
-    [data-theme="dark"] .view-all-wrap {
-      background: #292929;
+      background: #2f2f2f;
     }
 
     .view-all-btn {
@@ -1425,27 +1404,13 @@
       opacity: 0.5;
     }
 
-    .lp-list {
-      background: #CACACA;
-    }
-
-    [data-theme="dark"] .lp-list {
-      background: #292929;
-    }
-
-    .lp-list::-webkit-scrollbar {
-      display: none;
-    }
-
     .lp-row {
       display: flex;
       align-items: center;
-      gap: 16px;
-      padding: 24px 20px 24px 14px;
+      gap: 20px;
+      padding: 20px 20px 10px;
       cursor: pointer;
       transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-      margin-left: -10px;
-      margin-right: -10px;
     }
 
     .lp-row:active {
@@ -1456,34 +1421,19 @@
     }
 
     .lp-badge {
-      width: 48px;
-      height: 48px;
-      border-radius: 0;
+      width: 6px;
+      height: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 1.2;
-      text-align: center;
-      font-family: 'Space Grotesk', sans-serif;
-      letter-spacing: -0.02em;
-    }
-
-    .lp-info {
-      flex: 1;
-      min-width: 0;
     }
 
     .lp-title-row {
-      display: flex;
-      justify-content: space-between;
       align-items: baseline;
     }
 
     .lp-run-name {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 300;
       color: var(--text-1);
       font-family: 'Pretendard Variable', sans-serif;
@@ -1492,14 +1442,6 @@
       overflow: hidden;
       text-overflow: ellipsis;
       margin-right: 8px;
-    }
-
-    .lp-run-time {
-      font-size: 16px;
-      font-weight: 200;
-      color: var(--text-2);
-      font-family: 'Space Grotesk', sans-serif;
-      flex-shrink: 0;
     }
 
     .lp-stats {
@@ -1534,23 +1476,10 @@
       color: var(--text-2);
     }
 
-    /* ─── View modes ── */
-    /* COMPACT MODE */
+    /* ─── Compact mode ── */
     .lp-row.compact {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 14px 22px;
-      cursor: pointer;
-      transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-      border-bottom: 1px solid rgba(128, 128, 128, 0.15);
-    }
-
-    .lp-row.compact .lp-badge {
-      width: 12px;
-      height: 12px;
-      flex-shrink: 0;
-      border-radius: 0;
+      gap: 12px;
+      padding: 14px 20px;
     }
 
     .lp-row.compact .lp-info {
@@ -1574,53 +1503,17 @@
       min-width: 0;
     }
 
-    .lp-row.compact .lp-right-content {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 2px;
-      flex-shrink: 0;
-    }
-
-    .lp-row.compact .lp-compact-date {
-      font-size: 15px;
-      color: var(--text-2);
-      font-family: 'Space Grotesk', sans-serif;
-      white-space: nowrap;
-      line-height: 1.2;
-    }
-
-    .lp-row.compact .lp-compact-time {
-      font-size: 15px;
-      color: var(--text-1);
-      font-family: 'Space Grotesk', sans-serif;
-      white-space: nowrap;
-      line-height: 1.2;
-    }
-
-    .lp-row.compact .lp-expanded-date {
-      display: none;
-    }
-
     .lp-row.compact .lp-stats {
       display: none !important;
     }
 
-    /* EXPANDED MODE */
+    /* ─── Expanded mode ── */
     .lp-row.expanded {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       align-items: flex-start;
-      gap: 8px;
       background: #2f2f2f;
       border-radius: 0;
-      margin-left: 0;
-      margin-right: 0;
-      margin-bottom: 1px;
-    }
-
-    [data-theme="light"] .lp-row.expanded {
-      background: var(--surface-3);
     }
 
     .lp-row.expanded:active {
@@ -1629,34 +1522,22 @@
       opacity: 1;
     }
 
-    [data-theme="light"] .lp-row.expanded:active {
-      background: var(--surface-4);
-    }
-
-    .lp-row.expanded .lp-badge {
-      width: 12px;
-      height: 12px;
-      flex-shrink: 0;
-      border-radius: 0;
-      margin-top: 3px;
-    }
-
     .lp-row.expanded .lp-info {
       flex: 1;
-      min-width: 0;
-      margin: 0;
+      width: 100%;
     }
 
     .lp-row.expanded .lp-title-row {
       display: flex;
       justify-content: flex-start;
       align-items: flex-start;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       gap: 0;
       width: 100%;
     }
 
     .lp-row.expanded .lp-run-name {
+      font-size: 18px;
       font-weight: 300;
       color: var(--text-1);
       font-family: 'Pretendard Variable', sans-serif;
@@ -1664,24 +1545,13 @@
       min-width: 0;
     }
 
-    .lp-row.expanded .lp-right-content {
+    .lp-right-content {
+      font-size: 14px;
+      font-weight: 200;
       display: flex;
       flex-direction: column;
       align-items: flex-end;
       flex-shrink: 0;
-    }
-
-    .lp-row.expanded .lp-compact-time {
-      display: none;
-    }
-
-    .lp-row.expanded .lp-compact-date {
-      display: none;
-    }
-
-    .lp-row.expanded .lp-expanded-date {
-      display: block;
-      font-size: 15px;
       color: var(--text-2);
       font-family: 'Space Grotesk', sans-serif;
       white-space: nowrap;
@@ -1690,7 +1560,7 @@
     .lp-row.expanded .lp-stats {
       display: grid !important;
       grid-template-columns: repeat(3, 1fr);
-      gap: 20px 16px;
+      gap: 20px;
       width: 100%;
       margin: 0;
     }
@@ -1712,7 +1582,7 @@
     }
 
     .lp-row.expanded .lp-stat-value {
-      font-size: 20px;
+      font-size: 16px;
       font-weight: 500;
       color: var(--text-1);
       line-height: 1;
@@ -2084,19 +1954,9 @@
     .lp-row.expanded .lp-stat-value,
     .range-val,
     .range-val-row,
-    .weather-widget,
-    .lp-idx {
+    .weather-widget {
       font-family: 'Space Mono', ui-monospace, monospace;
       font-feature-settings: "tnum";
-    }
-
-    /* ─── Zero-padded numeric index ── */
-    .lp-idx {
-      color: var(--accent);
-      margin-right: 8px;
-      font-size: 0.85em;
-      font-weight: 400;
-      letter-spacing: 0.05em;
     }
 
     /* ─── Shift5 Label Tracking ── */
@@ -3079,16 +2939,15 @@
         container.innerHTML = '<div class="empty-result">이번 달 활동이 없습니다</div>';
         return;
       }
-      container.innerHTML = `<div class="lp-list">${thisMonth.map((r, i) => rowHTML(r, i + 1)).join('')}</div>`;
+      container.innerHTML = `<div class="lp-list">${thisMonth.map(rowHTML).join('')}</div>`;
     }
 
-    function rowHTML(r, idx) {
-      const n = String(idx).padStart(2, '0');
+    function rowHTML(r) {
       return `<div class="lp-row expanded" onclick="location.href='detail.html'">
             <div class="lp-badge type-${r.type}"></div>
             <div class="lp-info">
               <div class="lp-title-row">
-                <div class="lp-run-name"><span class="lp-idx">${n}.</span>${r.name}</div>
+                <div class="lp-run-name">${r.name}</div>
                 <div class="lp-right-content">
                   <div class="lp-compact-date">${r.date.replace(/-/g, '.')}</div>
                   <div class="lp-compact-time">${r.time}</div>

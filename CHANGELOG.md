@@ -41,6 +41,26 @@
 - `--text-3: #B9B9B9` (Slate Gray)
 - 홈 페이지 (기본 light 테마) 에디토리얼 크림 톤으로 전환
 
+### Numbering Removed ✅
+- `01. 02. 03.` zero-padded 인덱스 제거 (home + list)
+- `rowHTML(r, idx)` → `rowHTML(r)` 시그니처 원복
+- `.lp-idx` CSS 및 Space Mono override 목록에서 삭제
+
+### List Redesign Sync + Dark Mode Removal ✅
+- `list.html` 신규 리스트 디자인을 home에 동일 적용:
+  - `.lp-badge`: 48x48 → 6x6 작은 dot
+  - `.lp-row.expanded`: flex-column 구조, `#2f2f2f` BG, `.lp-stats` grid 3col
+  - `.lp-row`: `padding: 20px 20px 10px`, `gap: 20px`
+  - `.lp-stat-value`: 16px / 500
+  - `.lp-month-section`: solid `#242424`, `margin-bottom: 10px` (frosted glass 제거)
+- `.list-sheet`, `.view-all-wrap` background `#2f2f2f` 통일
+- **다크모드 제거:**
+  - `<html data-theme="...">` 속성 4개 파일 제거
+  - `:root, [data-theme="light"]` → `:root` 단일화 (값은 기존 dark 팔레트로)
+  - `[data-theme="dark"]`, `[data-theme="light"]` 모든 override selector 삭제
+  - `localStorage.getItem('runit-theme')` + `setAttribute('data-theme')` IIFE 3개 제거
+  - `theme-color` meta → `#202020` 통일
+
 ### Home List Unification & Dead Code Cleanup ✅
 - `runit-home.html` `rowHTML` → `(r, idx)` 시그니처로 list.html과 통일
 - `.lp-idx` zero-padded 인덱스 적용 (이번 달 리스트)

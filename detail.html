@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="dark">
+<html lang="ko">
 
 <head>
   <meta charset="UTF-8">
@@ -27,16 +27,15 @@
     }
 
     /* ─── Tokens ── */
-    :root,
-    [data-theme="light"] {
-      --bg: #F8F4EB;
-      --surface-1: #FFFFFF;
-      --surface-2: #EFEADF;
-      --surface-3: #E2DDD2;
+    :root {
+      --bg: #202020;
+      --surface-1: #171910;
+      --surface-2: #202216;
+      --surface-3: #2B2E1E;
       --accent: #FF5841;
-      --text-1: #202020;
-      --text-2: #8B8B8B;
-      --text-3: #B9B9B9;
+      --text-1: #F0F0EB;
+      --text-2: #7A7A72;
+      --text-3: #3E3E38;
       --type-race-bg: #000000;
       --type-race-text: #FF5841;
       --type-dark-bg: #FF5841;
@@ -49,17 +48,6 @@
       --type-jog-text: #202020;
       --type-long-bg: #FF5841;
       --type-long-text: #202020;
-    }
-
-    [data-theme="dark"] {
-      --bg: #202020;
-      --surface-1: #171910;
-      --surface-2: #202216;
-      --surface-3: #2B2E1E;
-      --accent: #FF5841;
-      --text-1: #F0F0EB;
-      --text-2: #7A7A72;
-      --text-3: #3E3E38;
     }
 
     body {
@@ -137,10 +125,6 @@
       width: 100%;
       max-width: 430px;
       z-index: 10;
-    }
-
-    [data-theme="light"] .back-header {
-      background: rgba(172, 172, 172, 0.06);
     }
 
     .back-btn {
@@ -706,11 +690,6 @@
 
     </div><!-- /phone-inner -->
   </div><!-- /phone -->
-
-  <script>
-    const saved = localStorage.getItem('runit-theme');
-    if (saved) document.documentElement.setAttribute('data-theme', saved);
-  </script>
 
   <script>
     (function () {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="dark">
+<html lang="ko">
 
 <head>
   <meta charset="UTF-8">
@@ -26,25 +26,8 @@
       box-sizing: border-box;
     }
 
-    /* ─── 홈화면 동기화 토큰 ── */
-    :root,
-    [data-theme="light"] {
-      --bg: #F8F4EB;
-      --surface-1: #FFFFFF;
-      --surface-2: #EFEADF;
-      --surface-3: #E2DDD2;
-      --surface-4: #F0ECE2;
-      --surface-5: #F8F4EB;
-      --surface-6: #C8C2B5;
-      --accent: #FF5841;
-      --accent-rgb: 255, 88, 65;
-      --accent-dim: rgba(255, 88, 65, 0.2);
-      --text-1: #202020;
-      --text-2: #8B8B8B;
-      --text-3: #B9B9B9;
-    }
-
-    [data-theme="dark"] {
+    /* ─── 토큰 ── */
+    :root {
       --bg: #202020;
       --surface-1: #1d1d1d;
       --surface-2: #232323;
@@ -56,11 +39,8 @@
       --accent-rgb: 255, 88, 65;
       --accent-dim: rgba(255, 88, 65, 0.13);
       --text-1: #eee;
-      /* L 94% */
       --text-2: #8d8d8d;
-      /* L 55% — bg대비 명도차 45% ✓ */
       --text-3: #3E3E3A;
-      /* 장식용 전용 */
     }
 
     body {
@@ -110,10 +90,6 @@
       z-index: 10;
     }
 
-    [data-theme="light"] .back-header {
-      background: rgba(172, 172, 172, 0.06);
-    }
-
     .back-btn {
       width: auto;
       height: 34px;
@@ -156,10 +132,6 @@
       width: 100%;
       max-width: 430px;
       z-index: 9;
-    }
-
-    [data-theme="light"] .tab-row {
-      background: rgba(172, 172, 172, 0.06);
     }
 
     .tab {
@@ -947,12 +919,6 @@
   </div><!-- /phone -->
 
   <script>
-    // ── 테마 ──
-    (function () {
-      const s = localStorage.getItem('runit-theme');
-      if (s) document.documentElement.setAttribute('data-theme', s);
-    })();
-
     // ── 탭 전환 ──
     const tabs = document.querySelectorAll('.tab');
     tabs.forEach(tab => {
