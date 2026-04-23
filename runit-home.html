@@ -42,7 +42,8 @@
       --text-1: #F0F0EB;
       --text-2: #8d8d8d;
       --text-3: #3E3E38;
-      --body-bg: #0A0B09;
+      --asphalt-black: #222222;
+      --body-bg: #b9b9b9;
       --phone-frame: #111209;
       --label-color: #4A4A44;
     }
@@ -466,7 +467,7 @@
 
     /* ─── Calendar day cell ───────────────── */
     .cal-day {
-      border-radius: 0;
+      border-radius: 100px;
       aspect-ratio: 1;
       display: flex;
       align-items: center;
@@ -482,11 +483,11 @@
     }
 
     .day-num {
-      font-size: 13px;
-      font-weight: 700;
-      color: inherit;
+      font-size: 14px;
+      font-weight: 300;
       line-height: 1;
-      font-family: 'Space Grotesk', sans-serif;
+      color: #ffffff;
+      display: none;
     }
 
     .day-note {
@@ -566,6 +567,8 @@
       color: var(--type-none-border);
       cursor: default;
       box-shadow: inset 0 0 0 1.5px var(--type-none-border);
+      border: #ffffff 1px solid;
+      opacity: 0.1;
     }
 
     /* Future */
@@ -608,9 +611,9 @@
 
     /* ─── 러닝 활동 인라인 섹션 ──────────────── */
     .list-sheet {
-      background: #2f2f2f;
       display: flex;
       flex-direction: column;
+      background-color: #b9b9b9;
     }
 
     /* 섹션 헤더 */
@@ -620,12 +623,14 @@
       justify-content: space-between;
       padding: 20px;
       flex-shrink: 0;
+      background-color: #b9b9b9;
       transition: background 0.3s;
     }
 
     .list-sheet-title {
       font-size: 18px;
       font-weight: 400;
+      color: var(--asphalt-black);
       font-family: 'Pretendard Variable', sans-serif;
       transition: color 0.3s;
     }
@@ -1435,7 +1440,6 @@
     .lp-run-name {
       font-size: 18px;
       font-weight: 300;
-      color: var(--text-1);
       font-family: 'Pretendard Variable', sans-serif;
       transition: color 0.3s;
       white-space: nowrap;
@@ -1465,15 +1469,8 @@
     .lp-stat strong {
       font-size: 14px;
       font-weight: 700;
-      color: var(--text-1);
       line-height: 1;
       transition: color 0.3s;
-    }
-
-    .lp-stat span {
-      font-size: 12px;
-      font-weight: 300;
-      color: var(--text-2);
     }
 
     /* ─── Compact mode ── */
@@ -1512,7 +1509,6 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      background: #2f2f2f;
       border-radius: 0;
     }
 
@@ -1539,7 +1535,6 @@
     .lp-row.expanded .lp-run-name {
       font-size: 18px;
       font-weight: 300;
-      color: var(--text-1);
       font-family: 'Pretendard Variable', sans-serif;
       flex: 1;
       min-width: 0;
@@ -1552,7 +1547,6 @@
       flex-direction: column;
       align-items: flex-end;
       flex-shrink: 0;
-      color: var(--text-2);
       font-family: 'Space Grotesk', sans-serif;
       white-space: nowrap;
     }
@@ -1574,7 +1568,6 @@
 
     .lp-row.expanded .lp-stat-label {
       font-size: 13px;
-      color: var(--text-2);
       font-weight: 400;
       font-family: 'Pretendard Variable', sans-serif;
       margin-bottom: 0;
@@ -1583,17 +1576,15 @@
 
     .lp-row.expanded .lp-stat-value {
       font-size: 16px;
-      font-weight: 500;
-      color: var(--text-1);
+      font-weight: 600;
       line-height: 1;
       font-family: 'Space Grotesk', sans-serif;
       order: 1;
     }
 
     .lp-row.expanded .lp-stat-unit {
-      font-size: 13px;
-      font-weight: 400;
-      color: var(--text-2);
+      font-size: 14px;
+      font-weight: 300;
       font-family: 'Space Grotesk', sans-serif;
     }
 
@@ -2947,12 +2938,8 @@
             <div class="lp-badge type-${r.type}"></div>
             <div class="lp-info">
               <div class="lp-title-row">
-                <div class="lp-run-name">${r.name}</div>
-                <div class="lp-right-content">
-                  <div class="lp-compact-date">${r.date.replace(/-/g, '.')}</div>
-                  <div class="lp-compact-time">${r.time}</div>
-                  <div class="lp-expanded-date">${r.date.replace(/-/g, '.')}</div>
-                </div>
+                <div class="lp-run-name">${r.name}</div>                
+                  <div class="lp-right-content">${r.date.replace(/-/g, '.')}</div>               
               </div>
               <div class="lp-stats">
                 <div class="lp-stat"><span class="lp-stat-label">시간</span><strong class="lp-stat-value">${r.time}</strong></div>
