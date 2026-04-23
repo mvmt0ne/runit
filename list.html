@@ -45,8 +45,8 @@
     /* ─── Month section header ── */
     .lp-month-section {
       padding: 12px 20px;
-      background: #242424;
-      transition: background 0.3s;
+      background-color: var(--slate-gray);
+      border-bottom: var(--cloudy-gray) 1px solid;
       position: sticky;
       top: 0;
       z-index: 5;
@@ -58,126 +58,6 @@
 
 
 
-    .lp-month-label {
-      font-size: 16px;
-      font-weight: 300;
-      color: var(--text-2);
-      font-family: 'Pretendard Variable', sans-serif;
-      transition: color 0.3s;
-    }
-
-    .lp-month-km {
-      font-size: 16px;
-      font-weight: 400;
-      color: #a4a4a4;
-      font-family: 'Space Grotesk', sans-serif;
-    }
-
-    /* ─── List ── */
-
-
-    .lp-row {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      padding: 20px 20px 10px;
-      cursor: pointer;
-      transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .lp-row:active {
-      opacity: 0.8;
-      transform: scale(0.98);
-      background: rgba(50, 50, 50, 0.4);
-      border-radius: 0;
-    }
-
-    .lp-badge {
-      width: 6px;
-      height: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .lp-title-row {
-      align-items: baseline;
-    }
-
-    .lp-run-name {
-      font-size: 18px;
-      font-weight: 300;
-      color: var(--text-1);
-      font-family: 'Pretendard Variable', sans-serif;
-      transition: color 0.3s;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-right: 8px;
-    }
-
-    .lp-stats {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 10px;
-    }
-
-    .lp-stat {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      font-family: 'Pretendard Variable', sans-serif;
-      transition: color 0.3s;
-    }
-
-    .lp-stat:last-child {
-      align-items: flex-end;
-    }
-
-    .lp-stat strong {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text-1);
-      line-height: 1;
-      transition: color 0.3s;
-    }
-
-    .lp-stat span {
-      font-size: 12px;
-      font-weight: 300;
-      color: var(--text-2);
-    }
-
-    /* ─── Compact mode ── */
-    .lp-row.compact {
-      gap: 12px;
-      padding: 14px 20px;
-    }
-
-    .lp-row.compact .lp-info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .lp-row.compact .lp-title-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .lp-row.compact .lp-run-name {
-      font-size: 16px;
-      font-weight: 300;
-      color: var(--text-1);
-      font-family: 'Pretendard Variable', sans-serif;
-      flex: 1;
-      min-width: 0;
-    }
-
-    .lp-row.compact .lp-stats {
-      display: none !important;
-    }
 
 
     /* ─── Type colors ── */
@@ -312,101 +192,7 @@
       display: block;
     }
 
-    /* ─── Sort/Filter sheets ── */
-    .sf-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 80;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.28s;
-    }
 
-    .sf-backdrop.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .month-modal {
-      position: fixed;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, calc(-50% + 20px));
-      width: calc(100% - 40px);
-      max-width: 390px;
-      background: rgba(35, 35, 35, 0.7);
-      backdrop-filter: blur(30px) saturate(160%);
-      -webkit-backdrop-filter: blur(30px) saturate(160%);
-      border-radius: 0;
-      z-index: 999;
-      display: flex;
-      flex-direction: column;
-      max-height: 70%;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .month-modal.open {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translate(-50%, -50%);
-    }
-
-    .sf-sheet-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 20px 14px;
-      flex-shrink: 0;
-    }
-
-    .sf-sheet-title {
-      font-size: 18px;
-      font-weight: 200;
-      font-family: 'Pretendard Variable', sans-serif;
-      color: var(--text-1);
-      transition: color 0.3s;
-    }
-
-    .sf-sheet-close {
-      width: 40px;
-      height: 40px;
-      background: transparent;
-      border: none;
-      border-radius: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: var(--text-2);
-      transition: background 0.15s;
-    }
-
-    .sf-sheet-close:active {
-      background: rgba(0, 0, 0, 0.25);
-    }
-
-    .sf-sheet-body {
-      overflow-y: auto;
-      scrollbar-width: none;
-      flex: 1;
-      padding: 4px 20px 12px;
-    }
-
-    .sf-sheet-body::-webkit-scrollbar {
-      display: none;
-    }
-
-    .sf-sheet-footer {
-      display: flex;
-      gap: 10px;
-      padding: 10px 20px 28px;
-      flex-shrink: 0;
-      border-top: 1px solid rgba(128, 128, 128, 0.1);
-    }
 
     .sf-reset-btn {
       flex: 1;
@@ -857,7 +643,7 @@
           const totalKm = runs.reduce((s, r) => s + r.km, 0).toFixed(1);
           return `<div class="lp-month-section">
             <div class="lp-month-label">${MONTH_LABELS[m]}</div>
-            <div class="lp-month-km">${totalKm}km</div>
+            <div class="lp-month-km"><strong>${totalKm}</strong> km</div>
           </div>
           <div class="lp-list">${runs.map(rowHTML).join('')}</div>`;
         }).join('');
