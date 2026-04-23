@@ -41,6 +41,14 @@
 - `--text-3: #B9B9B9` (Slate Gray)
 - 홈 페이지 (기본 light 테마) 에디토리얼 크림 톤으로 전환
 
+### Asphalt Noise Texture (Home Calendar) ✅
+- **grained.js** ([sarathsaleem/grained](https://github.com/sarathsaleem/grained)) MIT 라이선스 로컬 포함
+- `.cal-page`에 `id="cal-page"` 부여, grained 초기화
+- 옵션: `patternWidth/Height: 300`, `grainOpacity: 0.12`, `grainDensity: 2`, `grainWidth/Height: 1.5`, `grainChaos: 0.6`, `grainSpeed: 20`
+- `isolation: isolate` + `#cal-page::before { z-index: -1 }` → 노이즈가 콘텐츠 뒤로
+- Canvas 기반 런타임 grain + stepped animation (Shift5 shimmer 재현)
+- `.list-sheet`는 `#2f2f2f` 유지 (노이즈는 캘린더 영역에만)
+
 ### Numbering Removed ✅
 - `01. 02. 03.` zero-padded 인덱스 제거 (home + list)
 - `rowHTML(r, idx)` → `rowHTML(r)` 시그니처 원복
