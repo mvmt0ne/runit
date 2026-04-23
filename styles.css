@@ -1,0 +1,496 @@
+/* ═══════════════════════════════════════════════════════════
+   runit — Shared Styles
+   4개 HTML 공통 토큰 + 컴포넌트
+═══════════════════════════════════════════════════════════ */
+
+/* ─── Reset ─────────────────────────────── */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ─── Tokens ────────────────────────────── */
+:root {
+  /* Surfaces */
+  --bg: #202020;
+  --surface-1: #1d1d1d;
+  --surface-2: #232323;
+  --surface-3: #363636;
+  --surface-4: #484848;
+  --surface-5: #585858;
+  --surface-6: #d4d4d4;
+
+  /* Accent */
+  --accent: #FF5841;
+  --accent-rgb: 255, 88, 65;
+  --accent-dim: rgba(255, 88, 65, 0.13);
+
+  /* Text */
+  --text-1: #F0F0EB;
+  --text-2: #8d8d8d;
+  --text-3: #3E3E38;
+
+  /* Home-specific (phone frame) */
+  --body-bg: #b9b9b9;
+  --phone-frame: #111209;
+  --label-color: #4A4A44;
+  --asphalt-black: #222222;
+
+  /* Run type palette (theme-independent) */
+  --type-race-bg: #000000;
+  --type-race-text: #FF5841;
+  --type-dark-bg: #FF5841;
+  --type-dark-text: #000000;
+  --type-steady-bg: #515151;
+  --type-steady-text: #FFFFFF;
+  --type-easy-bg: #c2c2c2;
+  --type-easy-text: #202020;
+  --type-jog-bg: #767676;
+  --type-jog-text: #202020;
+  --type-long-bg: #FF5841;
+  --type-long-text: #202020;
+  --type-none-border: #282828;
+  --type-none-text: #555550;
+}
+
+/* ─── Body / Phone ──────────────────────── */
+body {
+  background: var(--bg);
+  font-family: 'Pretendard Variable', -apple-system, sans-serif;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.phone {
+  width: 100%;
+  background: transparent;
+  padding: 0;
+}
+
+.phone-inner {
+  background: var(--bg);
+  overflow: hidden;
+  width: 100%;
+  height: 100dvh;
+  max-width: 430px;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Back header (list / detail / stats) ── */
+.back-header {
+  padding: 14px 20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-shrink: 0;
+  background: rgba(41, 41, 41);
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  z-index: 10;
+}
+
+.back-btn {
+  width: auto;
+  height: 34px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-1);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+  transition: transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.back-btn:active {
+  transform: scale(0.92);
+}
+
+.back-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20px;
+  font-weight: 200;
+  font-family: 'Pretendard Variable', sans-serif;
+  color: var(--text-2);
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LIST ROW — home / list 공용
+═══════════════════════════════════════════════════════════ */
+.lp-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 20px 10px;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lp-row:active {
+  opacity: 0.8;
+  transform: scale(0.98);
+  background: rgba(50, 50, 50, 0.4);
+  border-radius: 0;
+}
+
+.lp-badge {
+  width: 6px;
+  height: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lp-title-row {
+  align-items: baseline;
+}
+
+.lp-run-name {
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--text-1);
+  font-family: 'Pretendard Variable', sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 8px;
+}
+
+.lp-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.lp-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: 'Pretendard Variable', sans-serif;
+}
+
+.lp-stat:last-child {
+  align-items: flex-end;
+}
+
+.lp-stat strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-1);
+  line-height: 1;
+}
+
+.lp-stat span {
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--text-2);
+}
+
+/* ─── Compact mode ── */
+.lp-row.compact {
+  gap: 12px;
+  padding: 14px 20px;
+}
+
+.lp-row.compact .lp-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.lp-row.compact .lp-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.lp-row.compact .lp-run-name {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--text-1);
+  font-family: 'Pretendard Variable', sans-serif;
+  flex: 1;
+  min-width: 0;
+}
+
+.lp-row.compact .lp-stats {
+  display: none !important;
+}
+
+/* ─── Expanded mode ── */
+.lp-row.expanded {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: #2f2f2f;
+  border-radius: 0;
+}
+
+.lp-row.expanded:active {
+  background: #383838;
+  border-radius: 0;
+  opacity: 1;
+}
+
+.lp-row.expanded .lp-info {
+  flex: 1;
+  width: 100%;
+}
+
+.lp-row.expanded .lp-title-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  gap: 0;
+  width: 100%;
+}
+
+.lp-row.expanded .lp-run-name {
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--text-1);
+  font-family: 'Pretendard Variable', sans-serif;
+  flex: 1;
+  min-width: 0;
+}
+
+.lp-right-content {
+  font-size: 14px;
+  font-weight: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+  color: var(--text-2);
+  font-family: 'Space Grotesk', sans-serif;
+  white-space: nowrap;
+}
+
+.lp-row.expanded .lp-stats {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+  margin: 0;
+}
+
+.lp-row.expanded .lp-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.lp-row.expanded .lp-stat-label {
+  font-size: 13px;
+  color: var(--text-2);
+  font-weight: 400;
+  font-family: 'Pretendard Variable', sans-serif;
+  margin-bottom: 0;
+  order: 2;
+}
+
+.lp-row.expanded .lp-stat-value {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-1);
+  line-height: 1;
+  font-family: 'Space Grotesk', sans-serif;
+  order: 1;
+}
+
+.lp-row.expanded .lp-stat-unit {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-2);
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MODAL / SHEET — blur 팝업창, dim backdrop
+═══════════════════════════════════════════════════════════ */
+.sf-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgb(75 75 75 / 20%);
+  z-index: 80;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s;
+}
+
+.sf-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sf-sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(54, 54, 54, 0.7);
+  backdrop-filter: blur(30px) saturate(160%);
+  -webkit-backdrop-filter: blur(30px) saturate(160%);
+  border-radius: 0;
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  max-height: 82%;
+  transform: translateY(100%);
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sf-sheet.open {
+  transform: translateY(0);
+}
+
+.sf-sheet--top {
+  top: 0;
+  bottom: auto;
+  border-radius: 0;
+  transform: translateY(-100%);
+}
+
+.month-modal {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, calc(-50% + 20px));
+  width: calc(100% - 40px);
+  max-width: 390px;
+  background: rgba(88, 88, 88, 0.55);
+  backdrop-filter: blur(40px) saturate(160%);
+  -webkit-backdrop-filter: blur(40px) saturate(160%);
+  border-radius: 8px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  max-height: 70%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.month-modal.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ROUND CTA — home 전체 활동 보기 / stats 전체 목록 보기
+═══════════════════════════════════════════════════════════ */
+.view-all-btn,
+.runs-view-all {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 12px 28px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  color: var(--text-1);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Pretendard Variable', sans-serif;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.view-all-btn:active,
+.runs-view-all:active {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.36);
+  transform: scale(0.96);
+}
+
+/* home: pill을 감싼 섹션 */
+.view-all-wrap {
+  background: #2f2f2f;
+  padding: 18px 20px 28px;
+  display: flex;
+  justify-content: center;
+}
+
+/* stats: pill 바로 나옴 */
+.runs-view-all {
+  margin: 20px auto 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SHIFT5 DATA READOUT — mono numeric, tnum
+═══════════════════════════════════════════════════════════ */
+.hero-km-big,
+.hero-km-unit,
+.day-num,
+.lp-run-time,
+.lp-row.compact .lp-compact-date,
+.lp-row.compact .lp-compact-time,
+.lp-row.expanded .lp-compact-date,
+.lp-row.expanded .lp-expanded-date,
+.lp-row.expanded .lp-stat-unit,
+.lp-row.expanded .lp-stat-value,
+.range-val,
+.range-val-row,
+.weather-widget,
+.lp-month-km,
+.status-time,
+.detail-km,
+.detail-km span,
+.dsc-value,
+.hr-pct,
+.split-hr,
+.split-km,
+.split-pace,
+.split-pace.fast,
+.cmp-km,
+.delta-km,
+.delta-km span,
+.delta-pct,
+.pace-val,
+.run-km,
+.isb-seg span {
+  font-family: 'Space Mono', ui-monospace, monospace;
+  font-feature-settings: "tnum";
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SHIFT5 LABEL TRACKING — uppercase + 0.14em letter-spacing
+═══════════════════════════════════════════════════════════ */
+.cal-month-label,
+.chart-label,
+.detail-note-label,
+.dsc-label,
+.filter-cat-label,
+.mini-stat-label,
+.sf-section-label,
+.stat-block-label,
+.month-list-label,
+.split-header span,
+.delta-vs,
+.intensity-breakdown-title,
+.month-runs-title,
+.pace-block-title {
+  letter-spacing: 0.14em;
+  font-family: 'Space Mono', ui-monospace, monospace;
+  font-weight: 400;
+}

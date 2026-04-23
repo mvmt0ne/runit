@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>runit — Design Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+  :root {
+    --orange:   #FF5841;
+    --black:    #202020;
+    --white:    #FFFFFF;
+    --gray-dark:#8B8B8B;
+    --gray-mid: #B9B9B9;
+    --cream:    #F8F4EB;
+    --mono:     'Space Mono', monospace;
+    --sans:     'Space Grotesk', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--black);
+    color: var(--white);
+    line-height: 1.5;
+  }
+
+  /* ── COVER ─────────────────────────────── */
+  .cover {
+    height: 100vh;
+    min-height: 600px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover-left {
+    background: var(--orange);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 48px;
+  }
+  .cover-right {
+    background: var(--black);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 48px;
+    border-left: 1px solid rgba(255,255,255,.08);
+  }
+  .cover-wordmark {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--black);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: auto;
+    margin-top: 0;
+    position: absolute;
+    top: 40px;
+    left: 48px;
+  }
+  .chevron { width: 16px; height: 16px; }
+  .cover-title {
+    font-size: clamp(64px, 9vw, 120px);
+    font-weight: 700;
+    line-height: .9;
+    color: var(--black);
+    letter-spacing: -.03em;
+  }
+  .cover-slash {
+    display: inline-block;
+    color: var(--black);
+    opacity: .4;
+  }
+  .cover-sub {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,.5);
+    margin-top: 20px;
+  }
+  .cover-desc {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--gray-mid);
+    line-height: 1.8;
+  }
+  .cover-desc strong { color: var(--orange); font-weight: 400; }
+  .cover-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--gray-dark);
+    margin-top: 40px;
+  }
+
+  /* ── SECTIONS ───────────────────────────── */
+  section { padding: 80px 64px; border-top: 1px solid rgba(255,255,255,.07); }
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--orange);
+    opacity: .4;
+  }
+  .section-title {
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 700;
+    letter-spacing: -.02em;
+    margin-bottom: 48px;
+    line-height: 1.1;
+  }
+
+  /* ── COLOR PALETTE ─────────────────────── */
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 2px;
+  }
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 2px;
+  }
+  .swatch-block {
+    height: 120px;
+    position: relative;
+    transition: transform .15s;
+  }
+  .swatch:hover .swatch-block { transform: scaleY(1.05); transform-origin: bottom; }
+  .swatch-info {
+    padding: 14px 16px;
+    background: rgba(255,255,255,.04);
+  }
+  .swatch-name { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+  .swatch-hex  { font-family: var(--mono); font-size: 12px; color: var(--gray-mid); margin-top: 2px; }
+  .swatch-rgb  { font-family: var(--mono); font-size: 10px; color: var(--gray-dark); margin-top: 2px; }
+  .swatch-use  { font-size: 10px; color: var(--gray-dark); margin-top: 6px; letter-spacing: .04em; }
+
+  /* ── TYPOGRAPHY ────────────────────────── */
+  .type-grid { display: flex; flex-direction: column; gap: 0; }
+  .type-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 120px;
+    align-items: center;
+    gap: 24px;
+    padding: 24px 0;
+    border-bottom: 1px solid rgba(255,255,255,.05);
+  }
+  .type-meta { display: flex; flex-direction: column; gap: 4px; }
+  .type-meta-label { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--orange); }
+  .type-meta-spec  { font-family: var(--mono); font-size: 11px; color: var(--gray-mid); line-height: 1.6; }
+  .type-sample { overflow: hidden; }
+  .type-use { font-family: var(--mono); font-size: 10px; color: var(--gray-dark); text-align: right; }
+
+  /* ── FONT FAMILIES ─────────────────────── */
+  .font-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  .font-card {
+    padding: 40px;
+    background: rgba(255,255,255,.03);
+    border-radius: 2px;
+  }
+  .font-card-name { font-family: var(--mono); font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: var(--orange); margin-bottom: 20px; }
+  .font-card-display { font-size: 56px; font-weight: 700; line-height: .95; letter-spacing: -.03em; margin-bottom: 16px; }
+  .font-card-abc { font-size: 18px; color: var(--gray-mid); letter-spacing: .04em; margin-bottom: 16px; }
+  .font-card-desc { font-size: 13px; color: var(--gray-dark); line-height: 1.6; }
+  .mono-card .font-card-display { font-family: var(--mono); letter-spacing: -.01em; }
+  .mono-card .font-card-abc { font-family: var(--mono); }
+
+  /* ── SPACING ───────────────────────────── */
+  .spacing-grid { display: flex; flex-direction: column; gap: 16px; }
+  .spacing-row { display: flex; align-items: center; gap: 20px; }
+  .spacing-bar-wrap { flex: 1; height: 24px; background: rgba(255,255,255,.04); border-radius: 2px; overflow: hidden; display: flex; align-items: center; }
+  .spacing-bar { height: 100%; background: var(--orange); opacity: .7; border-radius: 2px; min-width: 2px; }
+  .spacing-label { font-family: var(--mono); font-size: 11px; color: var(--gray-mid); width: 52px; flex-shrink: 0; }
+  .spacing-value { font-family: var(--mono); font-size: 11px; color: var(--gray-dark); width: 60px; flex-shrink: 0; text-align: right; }
+
+  /* ── COMPONENTS ────────────────────────── */
+  .components-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  .component-card {
+    background: rgba(255,255,255,.03);
+    border-radius: 2px;
+    padding: 32px;
+  }
+  .component-label { font-family: var(--mono); font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: var(--gray-dark); margin-bottom: 24px; }
+  .component-demo { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; margin-bottom: 24px; }
+  .component-spec { font-family: var(--mono); font-size: 10px; color: var(--gray-dark); line-height: 1.8; border-top: 1px solid rgba(255,255,255,.06); padding-top: 16px; }
+
+  /* Buttons */
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--orange); color: var(--black);
+    font-family: var(--sans); font-size: 12px; font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase;
+    padding: 12px 24px; border: none; cursor: pointer;
+    border-radius: 0; text-decoration: none;
+  }
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: transparent; color: var(--white);
+    font-family: var(--sans); font-size: 12px; font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase;
+    padding: 11px 24px; border: 1px solid rgba(255,255,255,.2); cursor: pointer;
+    border-radius: 0; text-decoration: none;
+  }
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: transparent; color: var(--gray-mid);
+    font-family: var(--mono); font-size: 11px; font-weight: 400;
+    letter-spacing: .12em; text-transform: uppercase;
+    padding: 0; border: none; cursor: pointer;
+    text-decoration: underline; text-underline-offset: 4px; text-decoration-color: rgba(255,255,255,.2);
+  }
+  .arrow { font-size: 14px; }
+
+  /* Badges */
+  .badge {
+    display: inline-flex; align-items: center;
+    font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 0;
+  }
+  .badge-orange { background: rgba(255,88,65,.15); color: var(--orange); border: 1px solid rgba(255,88,65,.3); }
+  .badge-gray   { background: rgba(255,255,255,.06); color: var(--gray-mid); border: 1px solid rgba(255,255,255,.1); }
+
+  /* Data chip (mono) */
+  .data-chip {
+    font-family: var(--mono); font-size: 11px; color: var(--gray-mid);
+    padding: 6px 10px;
+    background: rgba(255,255,255,.04);
+    border-left: 2px solid var(--orange);
+  }
+
+  /* Input */
+  .input-demo {
+    width: 100%;
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 0;
+    color: var(--white);
+    font-family: var(--sans);
+    font-size: 14px;
+    padding: 12px 16px;
+    outline: none;
+  }
+  .input-demo::placeholder { color: var(--gray-dark); }
+
+  /* Status list */
+  .status-list { display: flex; flex-direction: column; gap: 0; }
+  .status-item {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,.05);
+    color: var(--gray-mid);
+  }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); flex-shrink: 0; }
+
+  /* ── LAYOUT PATTERNS ───────────────────── */
+  .layout-demos { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  .layout-demo {
+    background: rgba(255,255,255,.03);
+    padding: 28px;
+    aspect-ratio: 16/9;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    border-radius: 2px;
+  }
+  .layout-demo-label { font-family: var(--mono); font-size: 9px; letter-spacing: .15em; text-transform: uppercase; color: var(--gray-dark); margin-bottom: 12px; }
+
+  /* Split layout */
+  .ld-split { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; height: 100%; }
+  .ld-block { background: rgba(255,255,255,.05); border-radius: 1px; }
+  .ld-block.accent { background: rgba(255,88,65,.2); }
+  .ld-block.dark-accent { background: rgba(255,255,255,.08); }
+
+  /* Full-bleed with overlay */
+  .ld-hero { background: rgba(255,88,65,.15); height: 100%; border-radius: 1px; display: flex; align-items: flex-end; padding: 10px; }
+  .ld-hero-text { width: 60%; }
+  .ld-hero-bar { height: 6px; background: var(--orange); border-radius: 1px; margin-bottom: 4px; }
+  .ld-hero-bar.sm { width: 40%; background: rgba(255,255,255,.2); }
+
+  /* Grid */
+  .ld-3col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; height: 100%; }
+
+  /* ── MOTION ────────────────────────────── */
+  .motion-row { display: flex; gap: 24px; flex-wrap: wrap; }
+  .motion-demo {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 12px;
+    background: rgba(255,255,255,.03); padding: 24px; border-radius: 2px; flex: 1; min-width: 180px;
+  }
+  .motion-label { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--gray-dark); }
+  .motion-spec  { font-family: var(--mono); font-size: 11px; color: var(--orange); }
+
+  /* ── VOICE & TONE ──────────────────────── */
+  .voice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  .voice-card { padding: 32px; background: rgba(255,255,255,.03); border-radius: 2px; }
+  .voice-tag { font-family: var(--mono); font-size: 10px; letter-spacing: .15em; text-transform: uppercase; padding: 3px 10px; margin-bottom: 16px; display: inline-flex; }
+  .voice-tag.do   { background: rgba(255,88,65,.15); color: var(--orange); }
+  .voice-tag.dont { background: rgba(255,255,255,.06); color: var(--gray-dark); text-decoration: line-through; }
+  .voice-example { font-size: 15px; line-height: 1.6; color: var(--white); }
+  .voice-example.dim { color: var(--gray-dark); }
+  .voice-reason { font-size: 12px; color: var(--gray-dark); margin-top: 10px; line-height: 1.5; }
+
+  /* ── ICONOGRAPHY ───────────────────────── */
+  .icon-grid { display: flex; gap: 16px; flex-wrap: wrap; }
+  .icon-item { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 20px; background: rgba(255,255,255,.04); border-radius: 2px; min-width: 80px; }
+  .icon-glyph { font-size: 24px; line-height: 1; }
+  .icon-name  { font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--gray-dark); }
+
+  /* ── FOOTER ────────────────────────────── */
+  footer {
+    padding: 48px 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 1px solid rgba(255,255,255,.07);
+  }
+  .footer-left .footer-logo { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--orange); }
+  .footer-left .footer-meta { font-family: var(--mono); font-size: 10px; color: var(--gray-dark); margin-top: 6px; }
+  .footer-right { font-family: var(--mono); font-size: 10px; color: var(--gray-dark); text-align: right; line-height: 1.8; }
+
+  /* ── SCAN LINES ────────────────────────── */
+  .scan-overlay {
+    position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,.03) 0px, rgba(0,0,0,.03) 1px, transparent 1px, transparent 3px);
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .cover { grid-template-columns: 1fr; }
+    .cover-right { display: none; }
+    section { padding: 60px 24px; }
+    .font-cards, .components-grid, .voice-grid, .layout-demos { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 24px; }
+    footer .footer-right { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<div class="scan-overlay"></div>
+
+<!-- ── COVER ──────────────────────────────── -->
+<div class="cover">
+  <div class="cover-left">
+    <div class="cover-wordmark">
+      <svg class="chevron" viewBox="0 0 16 16" fill="none">
+        <path d="M3 12L8 7L13 12" stroke="black" stroke-width="2"/>
+        <path d="M3 7L8 2L13 7" stroke="black" stroke-width="2"/>
+      </svg>
+      runit
+    </div>
+    <div class="cover-title">Design<br>Guide<span class="cover-slash">/</span></div>
+    <div class="cover-sub">Brand &amp; UI System — v1.0</div>
+  </div>
+  <div class="cover-right">
+    <div class="cover-desc">
+      <strong>Source</strong> — runit.io<br>
+      <strong>Analyzed</strong> — 2026.04.22<br>
+      <strong>Scope</strong> — Color, Type, Layout, Components<br>
+      <strong>Industry</strong> — Defense Tech / OT Security
+    </div>
+    <div class="cover-tag">AUTO-GENERATED VIA CLAUDE DESIGN ANALYSIS</div>
+  </div>
+</div>
+
+<!-- ── 01 COLOR ──────────────────────────── -->
+<section id="color">
+  <div class="section-label">01 — Color Palette</div>
+  <h2 class="section-title">High-contrast,<br>mission-critical colors.</h2>
+  <div class="palette-grid">
+    <div class="swatch">
+      <div class="swatch-block" style="background:#FF5841;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Signal Orange</div>
+        <div class="swatch-hex">#FF5841</div>
+        <div class="swatch-rgb">rgb(255, 88, 65)</div>
+        <div class="swatch-use">Primary brand · CTA · Hero BG · Accent</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-block" style="background:#202020;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Tactical Black</div>
+        <div class="swatch-hex">#202020</div>
+        <div class="swatch-rgb">rgb(32, 32, 32)</div>
+        <div class="swatch-use">Primary BG · Nav · Data panels</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-block" style="background:#FFFFFF; border: 1px solid rgba(0,0,0,.06);"></div>
+      <div class="swatch-info">
+        <div class="swatch-name" style="color:#202020;">White</div>
+        <div class="swatch-hex" style="color:#666;">#FFFFFF</div>
+        <div class="swatch-rgb" style="color:#999;">rgb(255, 255, 255)</div>
+        <div class="swatch-use" style="color:#999;">Body text on dark · Clean BG</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-block" style="background:#B9B9B9;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Slate Gray</div>
+        <div class="swatch-hex">#B9B9B9</div>
+        <div class="swatch-rgb">rgb(185, 185, 185)</div>
+        <div class="swatch-use">Secondary BG panels · Subdued text</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-block" style="background:#8B8B8B;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Steel Gray</div>
+        <div class="swatch-hex">#8B8B8B</div>
+        <div class="swatch-rgb">rgb(139, 139, 139)</div>
+        <div class="swatch-use">Caption · Labels · Disabled state</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-block" style="background:#F8F4EB; border: 1px solid rgba(0,0,0,.06);"></div>
+      <div class="swatch-info">
+        <div class="swatch-name" style="color:#202020;">Bone / Cream</div>
+        <div class="swatch-hex" style="color:#666;">#F8F4EB</div>
+        <div class="swatch-rgb" style="color:#999;">rgb(248, 244, 235)</div>
+        <div class="swatch-use" style="color:#999;">Light section BG · Editorial</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 02 TYPOGRAPHY ─────────────────────── -->
+<section id="typography">
+  <div class="section-label">02 — Typography</div>
+  <h2 class="section-title">Bold, geometric,<br>engineered precision.</h2>
+
+  <div class="font-cards" style="margin-bottom: 48px;">
+    <div class="font-card">
+      <div class="font-card-name">Primary — NonSans (Custom) / Space Grotesk (Web equivalent)</div>
+      <div class="font-card-display">runit</div>
+      <div class="font-card-abc">AaBbCcDdEeFfGgHhIiJj</div>
+      <div class="font-card-desc">Custom geometric sans-serif. Extremely wide letterforms, tight tracking on display sizes. Used for all UI text, headlines, and navigation. Weights: 400 / 500 / 600.</div>
+    </div>
+    <div class="font-card mono-card">
+      <div class="font-card-name">Monospace — AuxMono (Custom) / Space Mono (Web equivalent)</div>
+      <div class="font-card-display">0x//1101</div>
+      <div class="font-card-abc" style="font-family:var(--mono);">01.GPS 02.RADAR 03.ENGINE</div>
+      <div class="font-card-desc">Custom monospace typeface. Used exclusively for data readouts, system status labels, binary strings, metadata, and technical specs. Weight: 400 only.</div>
+    </div>
+  </div>
+
+  <div class="type-grid">
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-meta-label">Display XL</div>
+        <div class="type-meta-spec">~324px / 700<br>tracking: -0.03em<br>leading: 0.85</div>
+      </div>
+      <div class="type-sample" style="font-size:clamp(48px,6vw,100px); font-weight:700; letter-spacing:-.03em; line-height:.85; color:var(--white); overflow:hidden;">Op/</div>
+      <div class="type-use">Hero only</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-meta-label">Display L</div>
+        <div class="type-meta-spec">~130px / 700<br>tracking: -0.02em<br>leading: 0.9</div>
+      </div>
+      <div class="type-sample" style="font-size:clamp(32px,4.5vw,72px); font-weight:700; letter-spacing:-.02em; line-height:.9; color:var(--white);">Intelligence</div>
+      <div class="type-use">Hero only</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-meta-label">Heading 1</div>
+        <div class="type-meta-spec">~78px / 700<br>tracking: -0.02em<br>leading: 1.0</div>
+      </div>
+      <div class="type-sample" style="font-size:clamp(28px,3.5vw,52px); font-weight:700; letter-spacing:-.02em; line-height:1.0; color:var(--white);">Operational Intelligence</div>
+      <div class="type-use">Page title</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-meta-label">Heading 2</div>
+        <div class="type-meta-spec">~65px / 600<br>tracking: -0.015em<br>leading: 1.1</div>
+      </div>
+      <div class="type-sample" style="font-size:clamp(22px,2.8vw,42px); font-weight:600; letter-spacing:-.015em; line-height:1.1; color:var(--white);">Every Vehicle, Every Fleet</div>
+      <div class="type-use">Section title</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-meta-label">Body Large</div>
+        <div class="type-meta-spec">24px / 400<br>tracking: 0<br>leading: 1.5</div>
+      </div>
+      <div class="type-sample" style="font-size:18px; font-weight:400; color:var(--white);">Powering actionable insights for America's defense and transportation systems.</div>
+      <div class="type-use">Lead copy</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-meta-label">Body</div>
+        <div class="type-meta-spec">16px / 400<br>tracking: 0<br>leading: 1.6</div>
+      </div>
+      <div class="type-sample" style="font-size:14px; color:var(--gray-mid);">Analyze serial bus traffic and RF data to flag threats in near real-time, empowering operators to take decisive action and avoid mission compromise.</div>
+      <div class="type-use">Paragraph</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-meta-label">Label / UI</div>
+        <div class="type-meta-spec">11–12px / 600<br>tracking: +0.14em<br>UPPERCASE</div>
+      </div>
+      <div class="type-sample" style="font-size:12px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--white);">Explore the Platform →</div>
+      <div class="type-use">Buttons, Nav</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-meta-label">Mono Data</div>
+        <div class="type-meta-spec">10–12px / 400<br>tracking: +0.1em<br>UPPERCASE</div>
+      </div>
+      <div class="type-sample" style="font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--gray-mid);">01. GPS &nbsp; 02. RADAR &nbsp; 03. ENGINES</div>
+      <div class="type-use">Status / Data</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 03 COMPONENTS ─────────────────────── -->
+<section id="components">
+  <div class="section-label">03 — UI Components</div>
+  <h2 class="section-title">Utilitarian components.<br>Zero decoration.</h2>
+
+  <div class="components-grid">
+    <!-- Buttons -->
+    <div class="component-card">
+      <div class="component-label">Buttons</div>
+      <div class="component-demo">
+        <a class="btn-primary" href="#">Explore Platform <span class="arrow">→</span></a>
+        <a class="btn-outline" href="#">View Solution <span class="arrow">→</span></a>
+        <a class="btn-ghost" href="#">Read More</a>
+      </div>
+      <div class="component-spec">
+        Primary: BG #FF5841, text #202020, font 12px/600, tracking +0.1em<br>
+        Outline: border rgba(255,255,255,.2), text #FFF<br>
+        Ghost: underline, mono, gray<br>
+        border-radius: 0px (sharp corners always)<br>
+        padding: 12px 24px
+      </div>
+    </div>
+
+    <!-- Badges & Chips -->
+    <div class="component-card">
+      <div class="component-label">Badges &amp; Tags</div>
+      <div class="component-demo">
+        <span class="badge badge-orange">Defense Tech</span>
+        <span class="badge badge-orange">New</span>
+        <span class="badge badge-gray">Cyber / EW</span>
+        <span class="badge badge-gray">Research</span>
+        <div class="data-chip">01. GPS &nbsp;•&nbsp; ONLINE</div>
+        <div class="data-chip">SYS_STATUS / 10 ACTIVE</div>
+      </div>
+      <div class="component-spec">
+        Badge: mono font, 10px, all-caps, 1px border<br>
+        Orange variant: rgba(255,88,65,.15) BG<br>
+        Gray variant: rgba(255,255,255,.06) BG<br>
+        Data chip: left border 2px #FF5841, mono text
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div class="component-card">
+      <div class="component-label">Form Input</div>
+      <div class="component-demo" style="flex-direction:column; width:100%;">
+        <input class="input-demo" type="email" placeholder="Enter your email address">
+      </div>
+      <div class="component-spec">
+        BG: rgba(255,255,255,.05)<br>
+        Border: 1px solid rgba(255,255,255,.12)<br>
+        border-radius: 0px<br>
+        font: 14px sans, placeholder color #8B8B8B<br>
+        padding: 12px 16px
+      </div>
+    </div>
+
+    <!-- Status List -->
+    <div class="component-card">
+      <div class="component-label">System Status List</div>
+      <div class="component-demo" style="flex-direction:column; width:100%;">
+        <div class="status-list">
+          <div class="status-item"><span>01. GPS</span><span class="status-dot"></span></div>
+          <div class="status-item"><span>02. RADAR</span><span class="status-dot"></span></div>
+          <div class="status-item"><span>03. ENGINES</span><span class="status-dot"></span></div>
+          <div class="status-item"><span>04. ELECTRICAL</span><span class="status-dot"></span></div>
+          <div class="status-item"><span>05. FUEL</span><span class="status-dot"></span></div>
+        </div>
+      </div>
+      <div class="component-spec">
+        font: AuxMono, 10px, +0.1em tracking, ALL CAPS<br>
+        row: flex space-between, border-bottom .05 white<br>
+        dot: 6px circle, #FF5841<br>
+        Numbered with zero-padded prefix
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 04 SPACING ────────────────────────── -->
+<section id="spacing">
+  <div class="section-label">04 — Spacing Scale</div>
+  <h2 class="section-title">8pt base grid.<br>Generous, structural.</h2>
+  <div class="spacing-grid">
+    <div class="spacing-row">
+      <div class="spacing-label">4px</div>
+      <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:2%;"></div></div>
+      <div class="spacing-value">0.25rem</div>
+    </div>
+    <div class="spacing-row">
+      <div class="spacing-label">8px</div>
+      <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:4%;"></div></div>
+      <div class="spacing-value">0.5rem</div>
+    </div>
+    <div class="spacing-row">
+      <div class="spacing-label">16px</div>
+      <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:8%;"></div></div>
+      <div class="spacing-value">1rem</div>
+    </div>
+    <div class="spacing-row">
+      <div class="spacing-label">24px</div>
+      <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:12%;"></div></div>
+      <div class="spacing-value">1.5rem</div>
+    </div>
+    <div class="spacing-row">
+      <div class="spacing-label">32px</div>
+      <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:16%;"></div></div>
+      <div class="spacing-value">2rem</div>
+    </div>
+    <div class="spacing-row">
+      <div class="spacing-label">40px</div>
+      <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:20%;"></div></div>
+      <div class="spacing-value">2.5rem</div>
+    </div>
+    <div class="spacing-row">
+      <div class="spacing-label">48px</div>
+      <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:24%;"></div></div>
+      <div class="spacing-value">3rem</div>
+    </div>
+    <div class="spacing-row">
+      <div class="spacing-label">64px</div>
+      <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:32%;"></div></div>
+      <div class="spacing-value">4rem</div>
+    </div>
+    <div class="spacing-row">
+      <div class="spacing-label">80px</div>
+      <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:40%;"></div></div>
+      <div class="spacing-value">5rem</div>
+    </div>
+    <div class="spacing-row">
+      <div class="spacing-label">120px</div>
+      <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:60%;"></div></div>
+      <div class="spacing-value">7.5rem</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 05 LAYOUT ─────────────────────────── -->
+<section id="layout">
+  <div class="section-label">05 — Layout Patterns</div>
+  <h2 class="section-title">Split-screen. Full-bleed.<br>Grid-breaking.</h2>
+  <div class="layout-demos">
+    <div class="layout-demo">
+      <div class="layout-demo-label">Split Hero (50/50)</div>
+      <div class="ld-split" style="flex:1;">
+        <div class="ld-block accent"></div>
+        <div class="ld-block dark-accent"></div>
+      </div>
+    </div>
+    <div class="layout-demo">
+      <div class="layout-demo-label">Full-bleed Hero</div>
+      <div class="ld-hero" style="flex:1;">
+        <div class="ld-hero-text">
+          <div class="ld-hero-bar"></div>
+          <div class="ld-hero-bar sm"></div>
+        </div>
+      </div>
+    </div>
+    <div class="layout-demo">
+      <div class="layout-demo-label">3-Column Cards</div>
+      <div class="ld-3col" style="flex:1;">
+        <div class="ld-block"></div>
+        <div class="ld-block accent"></div>
+        <div class="ld-block"></div>
+      </div>
+    </div>
+    <div class="layout-demo">
+      <div class="layout-demo-label">Sidebar + Content (25/75)</div>
+      <div style="display:grid; grid-template-columns:1fr 3fr; gap:4px; flex:1;">
+        <div class="ld-block accent"></div>
+        <div class="ld-block dark-accent"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 06 MOTION ─────────────────────────── -->
+<section id="motion">
+  <div class="section-label">06 — Motion &amp; Animation</div>
+  <h2 class="section-title">Purposeful. Fast. Precise.</h2>
+  <div class="motion-row">
+    <div class="motion-demo">
+      <div class="motion-label">Duration — Fast</div>
+      <div class="motion-spec">150ms</div>
+      <div style="font-size:12px; color:var(--gray-dark);">Hover states, badge transitions</div>
+    </div>
+    <div class="motion-demo">
+      <div class="motion-label">Duration — Default</div>
+      <div class="motion-spec">250ms</div>
+      <div style="font-size:12px; color:var(--gray-dark);">Modal open/close, nav reveals</div>
+    </div>
+    <div class="motion-demo">
+      <div class="motion-label">Duration — Slow</div>
+      <div class="motion-spec">400–600ms</div>
+      <div style="font-size:12px; color:var(--gray-dark);">Page transitions, hero entrances</div>
+    </div>
+    <div class="motion-demo">
+      <div class="motion-label">Easing</div>
+      <div class="motion-spec">ease-out</div>
+      <div style="font-size:12px; color:var(--gray-dark);">cubic-bezier(.22,.68,0,1.2) for snappy feel</div>
+    </div>
+    <div class="motion-demo">
+      <div class="motion-label">Data Refresh</div>
+      <div class="motion-spec">Real-time</div>
+      <div style="font-size:12px; color:var(--gray-dark);">Binary strings cycle continuously. System status dots pulse.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 07 VOICE & TONE ───────────────────── -->
+<section id="voice">
+  <div class="section-label">07 — Voice &amp; Tone</div>
+  <h2 class="section-title">Direct. Precise. Forged<br>for the mission.</h2>
+  <div class="voice-grid">
+    <div class="voice-card">
+      <span class="voice-tag do">DO</span>
+      <div class="voice-example">"Powering actionable insights for America's defense and transportation systems."</div>
+      <div class="voice-reason">Active verbs, specific audience, mission framing. No fluff.</div>
+    </div>
+    <div class="voice-card">
+      <span class="voice-tag dont">DON'T</span>
+      <div class="voice-example dim">"We provide innovative solutions that help organizations leverage data-driven insights across various verticals."</div>
+      <div class="voice-reason">Avoid buzzwords, passive voice, vague industry jargon, and anything that sounds like a generic tech company.</div>
+    </div>
+    <div class="voice-card">
+      <span class="voice-tag do">DO</span>
+      <div class="voice-example">"Analyze serial bus traffic and RF data to flag threats in near real-time."</div>
+      <div class="voice-reason">Technical specificity builds credibility. Name the technology. State the outcome.</div>
+    </div>
+    <div class="voice-card">
+      <span class="voice-tag dont">DON'T</span>
+      <div class="voice-example dim">"Our cutting-edge AI-powered platform enables comprehensive monitoring for enhanced security posture."</div>
+      <div class="voice-reason">Avoid superlatives, marketing language, and anything that obscures rather than clarifies capability.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 08 DO & DON'T ─────────────────────── -->
+<section id="dos">
+  <div class="section-label">08 — Design Principles</div>
+  <h2 class="section-title">Rules for staying<br>on-brand.</h2>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:2px;">
+    <div style="padding:32px; background:rgba(255,88,65,.06); border-left:3px solid var(--orange);">
+      <div style="font-family:var(--mono); font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--orange); margin-bottom:20px;">✓ Do</div>
+      <ul style="list-style:none; display:flex; flex-direction:column; gap:12px;">
+        <li style="font-size:14px; color:var(--white); padding-left:16px; border-left:1px solid rgba(255,88,65,.3);">Use #FF5841 orange sparingly — for primary CTAs and hero backgrounds only</li>
+        <li style="font-size:14px; color:var(--white); padding-left:16px; border-left:1px solid rgba(255,88,65,.3);">Keep border-radius at 0 for all interactive elements</li>
+        <li style="font-size:14px; color:var(--white); padding-left:16px; border-left:1px solid rgba(255,88,65,.3);">Use monospace font for all data, metrics, and technical readouts</li>
+        <li style="font-size:14px; color:var(--white); padding-left:16px; border-left:1px solid rgba(255,88,65,.3);">Apply split-screen layouts with strong contrast between panels</li>
+        <li style="font-size:14px; color:var(--white); padding-left:16px; border-left:1px solid rgba(255,88,65,.3);">Use all-caps + letter-spacing for labels and navigation items</li>
+        <li style="font-size:14px; color:var(--white); padding-left:16px; border-left:1px solid rgba(255,88,65,.3);">Include zero-padded numbered lists (01. 02. 03.) for sequential content</li>
+      </ul>
+    </div>
+    <div style="padding:32px; background:rgba(255,255,255,.03); border-left:3px solid rgba(255,255,255,.1);">
+      <div style="font-family:var(--mono); font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--gray-dark); margin-bottom:20px;">✗ Don't</div>
+      <ul style="list-style:none; display:flex; flex-direction:column; gap:12px;">
+        <li style="font-size:14px; color:var(--gray-dark); padding-left:16px; border-left:1px solid rgba(255,255,255,.08);">Use rounded corners, drop shadows, or gradients — they undercut the industrial tone</li>
+        <li style="font-size:14px; color:var(--gray-dark); padding-left:16px; border-left:1px solid rgba(255,255,255,.08);">Mix more than 2 typefaces — NonSans + AuxMono is the system</li>
+        <li style="font-size:14px; color:var(--gray-dark); padding-left:16px; border-left:1px solid rgba(255,255,255,.08);">Use blue, green, or purple as accent colors — orange is the single accent</li>
+        <li style="font-size:14px; color:var(--gray-dark); padding-left:16px; border-left:1px solid rgba(255,255,255,.08);">Over-animate UI elements — motion should feel functional, not decorative</li>
+        <li style="font-size:14px; color:var(--gray-dark); padding-left:16px; border-left:1px solid rgba(255,255,255,.08);">Use lowercase for navigation or button labels</li>
+        <li style="font-size:14px; color:var(--gray-dark); padding-left:16px; border-left:1px solid rgba(255,255,255,.08);">Use icons or illustrations — photography (desaturated) or pure typography only</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────── -->
+<footer>
+  <div class="footer-left">
+    <div class="footer-logo">runit — Design System</div>
+    <div class="footer-meta">Generated from runit.io · April 2026 · Claude Design Analysis</div>
+  </div>
+  <div class="footer-right">
+    <span style="color:var(--orange);">FORGED IN AMERICA. FOR AMERICA.</span><br>
+    1100 Wilson Blvd, Ste 2100 · Rosslyn, VA 22209<br>
+    ©2026 runit, Inc.
+  </div>
+</footer>
+
+</body>
+</html>

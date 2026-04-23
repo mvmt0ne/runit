@@ -41,6 +41,13 @@
 - `--text-3: #B9B9B9` (Slate Gray)
 - 홈 페이지 (기본 light 테마) 에디토리얼 크림 톤으로 전환
 
+### Round CTA Buttons Unified ✅
+- `.view-all-btn` (home 전체 활동 보기) + `.runs-view-all` (stats 전체 목록 보기) 통일
+- 풀-width 솔리드 블록 → 중앙 정렬 **outlined pill**
+- `border-radius: 999px`, `1px solid rgba(255,255,255,0.22)` 보더
+- `padding: 12px 28px`, `font-size: 14px / 500`, 투명 배경
+- `:active` → 배경 `rgba(255,255,255,0.08)` + `scale(0.96)`
+
 ### Modal Blur Inverted ✅
 - 기존: `.sf-backdrop`에 `backdrop-filter: blur(40px)` → dimmed 영역이 블러
 - 변경: backdrop는 순수 dim만, 팝업 시트/모달 자체가 frosted glass
