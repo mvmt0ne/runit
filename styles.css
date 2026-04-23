@@ -37,6 +37,7 @@
   --body-bg: #b9b9b9;
   --phone-frame: #111209;
   --label-color: #4A4A44;
+  --cloudy-gray: #818181;
   --asphalt-black: #222222;
 
   /* Run type palette (theme-independent) */
@@ -163,7 +164,6 @@ body {
 .lp-run-name {
   font-size: 18px;
   font-weight: 300;
-  color: var(--text-1);
   font-family: 'Pretendard Variable', sans-serif;
   white-space: nowrap;
   overflow: hidden;
@@ -191,14 +191,12 @@ body {
 .lp-stat strong {
   font-size: 14px;
   font-weight: 700;
-  color: var(--text-1);
   line-height: 1;
 }
 
 .lp-stat span {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 300;
-  color: var(--text-2);
 }
 
 /* ─── Compact mode ── */
@@ -237,7 +235,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  background: #2f2f2f;
   border-radius: 0;
 }
 
@@ -264,7 +261,6 @@ body {
 .lp-row.expanded .lp-run-name {
   font-size: 18px;
   font-weight: 300;
-  color: var(--text-1);
   font-family: 'Pretendard Variable', sans-serif;
   flex: 1;
   min-width: 0;
@@ -277,7 +273,6 @@ body {
   flex-direction: column;
   align-items: flex-end;
   flex-shrink: 0;
-  color: var(--text-2);
   font-family: 'Space Grotesk', sans-serif;
   white-space: nowrap;
 }
@@ -299,7 +294,6 @@ body {
 
 .lp-row.expanded .lp-stat-label {
   font-size: 13px;
-  color: var(--text-2);
   font-weight: 400;
   font-family: 'Pretendard Variable', sans-serif;
   margin-bottom: 0;
@@ -308,8 +302,7 @@ body {
 
 .lp-row.expanded .lp-stat-value {
   font-size: 16px;
-  font-weight: 500;
-  color: var(--text-1);
+  font-weight: 600;
   line-height: 1;
   font-family: 'Space Grotesk', sans-serif;
   order: 1;
@@ -318,7 +311,6 @@ body {
 .lp-row.expanded .lp-stat-unit {
   font-size: 13px;
   font-weight: 400;
-  color: var(--text-2);
   font-family: 'Space Grotesk', sans-serif;
 }
 
@@ -398,26 +390,25 @@ body {
 /* ═══════════════════════════════════════════════════════════
    ROUND CTA — home 전체 활동 보기 / stats 전체 목록 보기
 ═══════════════════════════════════════════════════════════ */
-.view-all-btn,
-.runs-view-all {
+.view-all-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   width: fit-content;
-  padding: 12px 28px;
+  padding: 20px 28px;
+  width: 100%;
+  color: var(--asphalt-black);
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  border: 1px solid var(--cloudy-gray);
   border-radius: 999px;
-  color: var(--text-1);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   font-family: 'Pretendard Variable', sans-serif;
   text-decoration: none;
   transition: background 0.15s, border-color 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.view-all-btn:active,
-.runs-view-all:active {
+.view-all-btn:active {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.36);
   transform: scale(0.96);
@@ -425,8 +416,7 @@ body {
 
 /* home: pill을 감싼 섹션 */
 .view-all-wrap {
-  background: #2f2f2f;
-  padding: 18px 20px 28px;
+  padding: 18px 20px 48px;
   display: flex;
   justify-content: center;
 }
