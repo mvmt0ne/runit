@@ -799,9 +799,7 @@
     .sf-backdrop {
       position: fixed;
       inset: 0;
-      background: transparent;
-      backdrop-filter: blur(40px);
-      -webkit-backdrop-filter: blur(8px);
+      background: rgb(75 75 75 / 20%);
       z-index: 80;
       opacity: 0;
       pointer-events: none;
@@ -818,15 +816,16 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: var(--surface-3);
+      background: rgba(54, 54, 54, 0.7);
+      backdrop-filter: blur(30px) saturate(160%);
+      -webkit-backdrop-filter: blur(30px) saturate(160%);
       border-radius: 0;
       z-index: 90;
       display: flex;
       flex-direction: column;
       max-height: 82%;
       transform: translateY(100%);
-      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-        background 0.3s;
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .sf-sheet.open {
@@ -849,8 +848,10 @@
       transform: translate(-50%, calc(-50% + 20px));
       width: calc(100% - 40px);
       max-width: 390px;
-      background: var(--surface-5);
-      border-radius: 0;
+      background: rgba(88, 88, 88, 0.55);
+      backdrop-filter: blur(40px) saturate(160%);
+      -webkit-backdrop-filter: blur(40px) saturate(160%);
+      border-radius: 8px;
       z-index: 999;
       display: flex;
       flex-direction: column;

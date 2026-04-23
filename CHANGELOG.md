@@ -41,6 +41,14 @@
 - `--text-3: #B9B9B9` (Slate Gray)
 - 홈 페이지 (기본 light 테마) 에디토리얼 크림 톤으로 전환
 
+### Modal Blur Inverted ✅
+- 기존: `.sf-backdrop`에 `backdrop-filter: blur(40px)` → dimmed 영역이 블러
+- 변경: backdrop는 순수 dim만, 팝업 시트/모달 자체가 frosted glass
+- `.sf-backdrop`: `background: rgba(0, 0, 0, 0.5)`, blur 제거
+- `.sf-sheet` (home): `rgba(54, 54, 54, 0.7)` + `backdrop-filter: blur(30px) saturate(160%)`
+- `.month-modal` (home): `rgba(88, 88, 88, 0.55)` + 동일 blur
+- `.month-modal` (list — 정렬/필터 sheet): `rgba(35, 35, 35, 0.7)` + 동일 blur
+
 ### Asphalt Noise Texture (Home Calendar) ✅
 - **grained.js** ([sarathsaleem/grained](https://github.com/sarathsaleem/grained)) MIT 라이선스 로컬 포함
 - `.cal-page`에 `id="cal-page"` 부여, grained 초기화
