@@ -867,9 +867,9 @@ input[type='range'].range-input::-moz-range-thumb {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(8, 8, 8, 0.45);
-  backdrop-filter: blur(20px) saturate(100%);
-  -webkit-backdrop-filter: blur(20px) saturate(100%);
+  background: rgba(8, 8, 8, 0.7);
+  backdrop-filter: blur(10px) saturate(100%);
+  -webkit-backdrop-filter: blur(10px) saturate(100%);
   border-radius: 150px;
   width: 56px;
   height: 56px;
@@ -880,9 +880,9 @@ input[type='range'].range-input::-moz-range-thumb {
   flex-direction: row;
   align-items: center;
   gap: 44px;
-  background: rgba(8, 8, 8, 0.45);
-  backdrop-filter: blur(20px) saturate(100%);
-  -webkit-backdrop-filter: blur(20px) saturate(100%);
+  background: rgba(8, 8, 8, 0.7);
+  backdrop-filter: blur(10px) saturate(100%);
+  -webkit-backdrop-filter: blur(10px) saturate(100%);
   border-radius: 150px;
   padding: 0 24px;
   height: 56px;
