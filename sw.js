@@ -1,12 +1,15 @@
-const CACHE = 'runit-v3';
+const CACHE = 'runit-v4';
 const CORE = [
   './runit-home.html',
   './list.html',
   './detail.html',
   './stats.html',
+  './pb.html',
+  './styles.css',
+  './ptr.js',
+  './grained.js',
   './manifest.json',
   './icon.svg',
-  './ptr.js',
 ];
 
 self.addEventListener('install', e => {
@@ -22,13 +25,25 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
+  if (e.request.method !== 'GET') return;
+
   const url = new URL(e.request.url);
   const path = url.pathname;
 
-  // HTML 페이지 — 네트워크 우선 (pull-to-refresh로 항상 최신 버전)
-  if (HTML.some(p => path.endsWith(p)) || path === '/' || path.endsWith('index.html')) {
+  // HTML / CSS / JS — 네트워크 우선 (pull-to-refresh 시 항상 최신 버전 보장)
+  const isFresh =
+    path.endsWith('.html') ||
+    path.endsWith('.css')  ||
+    path.endsWith('.js')   ||
+    path === '/' ||
+    path.endsWith('/');
+
+  if (isFresh) {
+    // no-cache: 브라우저 HTTP 캐시를 서버와 재검증(If-Modified-Since) 후 사용.
+    // 서버에 변경이 있으면 새로 받고, 없으면 304로 빠르게 재사용.
+    const freshReq = new Request(e.request, { cache: 'no-cache' });
     e.respondWith(
-      fetch(e.request)
+      fetch(freshReq)
         .then(res => {
           const clone = res.clone();
           caches.open(CACHE).then(c => c.put(e.request, clone));
@@ -39,7 +54,7 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // 나머지 (JS, SVG, 폰트 등) — 캐시 우선, 네트워크 폴백
+  // 나머지 (SVG, 폰트, 이미지 등) — 캐시 우선, 네트워크 폴백
   e.respondWith(
     caches.match(e.request).then(cached => {
       if (cached) return cached;
