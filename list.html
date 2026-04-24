@@ -47,6 +47,8 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      /* 스크롤 viewport가 홈 인디케이터 영역까지 확장되지 않도록 safe-area 확보 */
+      padding-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     .list-scroll {
@@ -54,7 +56,7 @@
       overflow-y: auto;
       scrollbar-width: none;
       padding-top: calc(env(safe-area-inset-top, 0px) + 62px);
-      padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+      padding-bottom: 100px;
     }
 
     .list-scroll::-webkit-scrollbar {
