@@ -339,11 +339,14 @@ body {
 .sf-backdrop {
   position: fixed;
   inset: 0;
-  background: rgb(75 75 75 / 20%);
+  background: rgba(34, 34, 34, 0.4);
+  backdrop-filter: blur(10px) saturate(100%);
+  -webkit-backdrop-filter: blur(10px) saturate(100%);
+  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 80;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.28s;
 }
 
 .sf-backdrop.open {
@@ -386,9 +389,7 @@ body {
   transform: translate(-50%, calc(-50% + 20px));
   width: calc(100% - 40px);
   max-width: 390px;
-  background: rgba(44, 44, 44, 0.65);
-  backdrop-filter: blur(40px) saturate(160%);
-  -webkit-backdrop-filter: blur(40px) saturate(160%);
+  background: rgba(44, 44, 44, 1);
   border-radius: 8px;
   z-index: 999;
   display: flex;
@@ -717,13 +718,10 @@ body {
   white-space: nowrap;
 }
 
-
-
 .filter-chip.active {
-  transform: scale(0.92);
   color: var(--asphalt-black);
   background: var(--accent);
-  border: transparent;
+  border: var(--accent) 1px solid
 }
 
 /* Zone chip (Z1–Z5) */
