@@ -4,9 +4,12 @@
   const RESIST    = 0.45; // 저항감
 
   // ── 인디케이터 DOM ──
+  // safe-area-inset-top을 반영해 상태바/Dynamic Island 아래로 내려오도록.
   const wrap = document.createElement('div');
   wrap.style.cssText = [
-    'position:fixed', 'top:0', 'left:50%',
+    'position:fixed',
+    'top:env(safe-area-inset-top, 0px)',
+    'left:50%',
     'transform:translateX(-50%) translateY(-56px)',
     'width:40px', 'height:40px',
     'display:flex', 'align-items:center', 'justify-content:center',
