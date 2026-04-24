@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>runit — 마일리지</title>
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#202020">
@@ -103,7 +103,7 @@
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
-      padding-top: 96px;
+      padding-top: calc(env(safe-area-inset-top, 0px) + 96px);
       scrollbar-width: none;
     }
 

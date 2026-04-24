@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>runit — Run Detail</title>
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#202020">
@@ -109,7 +109,7 @@
       flex: 1;
       overflow-y: auto;
       padding-bottom: 40px;
-      padding-top: 60px;
+      padding-top: calc(env(safe-area-inset-top, 0px) + 60px);
       scrollbar-width: none;
     }
 
