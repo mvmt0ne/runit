@@ -21,63 +21,9 @@
     rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    /* ─── Tokens ── */
-    :root {
-      --bg: #202020;
-      --surface-1: #171910;
-      --surface-2: #202216;
-      --surface-3: #2B2E1E;
-      --accent: #FF5841;
-      --text-1: #F0F0EB;
-      --text-2: #7A7A72;
-      --text-3: #3E3E38;
-      --type-race-bg: #000000;
-      --type-race-text: #FF5841;
-      --type-dark-bg: #FF5841;
-      --type-dark-text: #000000;
-      --type-steady-bg: #515151;
-      --type-steady-text: #FFFFFF;
-      --type-easy-bg: #c2c2c2;
-      --type-easy-text: #202020;
-      --type-jog-bg: #767676;
-      --type-jog-text: #202020;
-      --type-long-bg: #FF5841;
-      --type-long-text: #202020;
-    }
-
-    body {
-      background: var(--bg);
-      font-family: 'Pretendard Variable', -apple-system, sans-serif;
-      margin: 0;
-      padding: 0;
-      width: 100vw;
-      height: 100dvh;
-      overflow: hidden;
-      transition: background 0.3s;
-    }
-
-    .phone {
-      width: 100%;
-      background: transparent;
-      padding: 0;
-    }
-
+    /* ─── phone-inner: bg + theme transition ── */
     .phone-inner {
       background: var(--bg);
-      overflow: hidden;
-      width: 100%;
-      height: 100dvh;
-      max-width: 430px;
-      margin: 0 auto;
-      position: relative;
-      display: flex;
-      flex-direction: column;
       transition: background 0.3s;
     }
 
