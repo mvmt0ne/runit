@@ -108,7 +108,7 @@
     .scroll-area {
       flex: 1;
       overflow-y: auto;
-      padding-bottom: 40px;
+      padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
       padding-top: calc(env(safe-area-inset-top, 0px) + 60px);
       scrollbar-width: none;
     }

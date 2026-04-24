@@ -54,7 +54,7 @@
       overflow-y: auto;
       scrollbar-width: none;
       padding-top: calc(env(safe-area-inset-top, 0px) + 62px);
-      padding-bottom: 100px;
+      padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
     }
 
     .list-scroll::-webkit-scrollbar {

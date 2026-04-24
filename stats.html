@@ -81,7 +81,7 @@
     /* ─── Bottom section — delta + pace + runs ── */
     .stats-bottom-section {
       background: var(--slate-gray);
-      padding-bottom: 48px;
+      padding-bottom: calc(48px + env(safe-area-inset-bottom, 0px));
     }
 
     .tab {
