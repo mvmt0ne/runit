@@ -547,7 +547,6 @@
       flex-direction: column;
       flex-shrink: 0;
       background-color: var(--accent);
-      padding-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     /* 섹션 헤더 → 리스트 진입 버튼 */
@@ -555,7 +554,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 26px 26px 36px;
+      padding: 26px 26px calc(36px + env(safe-area-inset-bottom, 0px));
       flex-shrink: 0;
       background-color: var(--accent);
       color: #202020;
