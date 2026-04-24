@@ -1,280 +1,269 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>runit — PB</title>
   <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#202020">
+  <meta name="theme-color" content="#111111">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="runit">
   <link rel="apple-touch-icon" href="./icon.svg">
   <link rel="icon" type="image/svg+xml" href="./icon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
 
   <style>
     /* ── View Transition ── */
-    @keyframes slide-in-up {
-      from { transform: translateY(60px); opacity: 0; }
-      to   { transform: translateY(0);    opacity: 1; }
-    }
-    @keyframes slide-out-down {
-      from { transform: translateY(0);    opacity: 1; }
-      to   { transform: translateY(60px); opacity: 0; }
-    }
-    ::view-transition-new(root) {
-      animation: slide-in-up 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
-    }
-    ::view-transition-old(root) {
-      animation: slide-out-down 0.25s cubic-bezier(0.4, 0, 1, 1) both;
-    }
+    @keyframes vt-in  { from { opacity:0; transform:translateY(48px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes vt-out { from { opacity:1; transform:translateY(0); }    to { opacity:0; transform:translateY(48px); } }
+    ::view-transition-new(root) { animation: vt-in  0.38s cubic-bezier(0.16,1,0.3,1) both; }
+    ::view-transition-old(root) { animation: vt-out 0.24s cubic-bezier(0.4,0,1,1)   both; }
 
     /* ── Layout ── */
-    .phone-inner {
-      background: var(--bg);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
+    .phone-inner { background: #111; display:flex; flex-direction:column; overflow:hidden; }
 
     /* ── Header ── */
     .pb-header {
-      position: relative;
-      display: flex;
-      align-items: center;
-      padding: 14px 20px;
-      flex-shrink: 0;
+      position: relative; display:flex; align-items:center;
+      padding: 14px 20px; flex-shrink:0; background:#111;
     }
-
     .pb-back-btn {
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      color: var(--text-2);
-      display: flex;
-      align-items: center;
-      padding: 0;
-      height: 34px;
-      transition: color 0.2s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+      background:transparent; border:none; cursor:pointer; color:#666;
+      display:flex; align-items:center; padding:0; height:34px;
+      transition: color .2s, transform .1s cubic-bezier(0.16,1,0.3,1);
     }
-    .pb-back-btn:active { transform: scale(0.88); }
-
+    .pb-back-btn:active { transform:scale(0.88); }
     .pb-header-title {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 20px;
-      font-weight: 200;
-      font-family: 'Pretendard Variable', sans-serif;
-      color: var(--text-2);
-      pointer-events: none;
-      letter-spacing: -0.02em;
+      position:absolute; left:50%; transform:translateX(-50%);
+      font-size:20px; font-weight:200;
+      font-family:'Pretendard Variable',sans-serif;
+      color:#555; pointer-events:none; letter-spacing:-.02em;
     }
 
-    /* ── Scroll wrapper ── */
+    /* ── Scroll ── */
     .pb-scroll {
-      flex: 1;
-      overflow-y: auto;
-      overflow-x: hidden;
-      scrollbar-width: none;
-      padding-bottom: 48px;
+      flex:1; overflow-y:auto; overflow-x:hidden;
+      scrollbar-width:none; padding-bottom:52px;
     }
-    .pb-scroll::-webkit-scrollbar { display: none; }
+    .pb-scroll::-webkit-scrollbar { display:none; }
 
     /* ── Distance tabs ── */
-    .dist-tabs {
-      display: flex;
-      gap: 8px;
-      padding: 0 20px;
-      margin-bottom: 0;
-      flex-shrink: 0;
-    }
-
+    .dist-tabs { display:flex; gap:8px; padding:0 20px; }
     .dist-tab {
-      flex: 1;
-      padding: 9px 0;
-      border-radius: 8px;
-      background: var(--surface-3);
-      border: none;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 600;
-      font-family: 'Space Mono', monospace;
-      color: var(--text-3);
-      letter-spacing: -0.01em;
-      transition: background 0.2s, color 0.2s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+      flex:1; padding:9px 0; border-radius:8px;
+      background:#1e1e1e; border:none; cursor:pointer;
+      font-size:13px; font-weight:600; font-family:'Space Mono',monospace;
+      color:#444; letter-spacing:-.01em;
+      transition: background .2s, color .2s, transform .1s cubic-bezier(0.16,1,0.3,1);
     }
-    .dist-tab:active { transform: scale(0.95); }
-    .dist-tab.active { background: var(--accent); color: #000; }
+    .dist-tab:active { transform:scale(0.95); }
+    .dist-tab.active { background:var(--accent); color:#000; }
 
     /* ── Stack wrapper ── */
-    .stack-wrap {
-      padding: 0 24px;
-    }
+    .stack-wrap { padding:0 20px; }
 
-    /* ── 카드 공통 ── */
+    /* ── Stack area — PILE mode ── */
     .stack-area {
-      position: relative;
-      /* 높이는 JS가 제어 */
-      margin-top: 40px;
-      transition: height 0.52s cubic-bezier(0.16, 1, 0.3, 1);
+      position:relative;
+      height:320px; /* overridden in expanded */
+      margin-top:32px;
+      overflow:visible;
+      transition: height .52s cubic-bezier(0.16,1,0.3,1);
     }
 
+    /* ── Stack area — EXPANDED mode ── */
+    .stack-area.expanded {
+      display:flex;
+      gap:14px;
+      overflow-x:auto;
+      overflow-y:hidden;
+      scroll-snap-type:x mandatory;
+      -webkit-overflow-scrolling:touch;
+      scrollbar-width:none;
+      height:var(--card-h-px);
+      padding:0 calc(50% - 95px);
+    }
+    .stack-area.expanded::-webkit-scrollbar { display:none; }
+
+    /* ── Card base ── */
     .pb-card {
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 168px;
-      border-radius: 16px;
-      padding: 20px 22px 18px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      cursor: pointer;
-      will-change: transform, opacity;
+      /* pile: absolute; expanded: overridden by JS */
+      position:absolute;
+      left:0; top:0;
+      width:190px;
+      height:270px;
+      border-radius:18px;
+      overflow:hidden;
+      cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+      will-change:transform,opacity;
       transition:
-        transform 0.48s cubic-bezier(0.16, 1, 0.3, 1),
-        opacity   0.38s cubic-bezier(0.16, 1, 0.3, 1),
-        box-shadow 0.38s;
-      -webkit-tap-highlight-color: transparent;
+        transform .46s cubic-bezier(0.16,1,0.3,1),
+        opacity   .36s cubic-bezier(0.16,1,0.3,1),
+        box-shadow .36s;
     }
 
-    /* ── 카드 테마 ── */
-    .theme-5k {
-      background: #141414;
-      border-left: 3px solid var(--accent);
-    }
-    .theme-10k {
-      background: #0d170f;
-      border-left: 3px solid #4ade80;
-    }
-    .theme-half {
-      background: #0d0f1c;
-      border-left: 3px solid #818cf8;
-    }
-    .theme-full {
-      background: #1a0f0d;
-      border-left: 3px solid #fb923c;
+    /* ── Card layers ── */
+    .card-base, .card-lines, .card-watermark, .card-foil {
+      position:absolute; inset:0; border-radius:inherit; pointer-events:none;
     }
 
-    /* ── 카드 내부 ── */
+    /* Base gradient */
+    .card-base { z-index:0; }
+    .theme-1 .card-base { background:linear-gradient(148deg,#141008,#201800); }
+    .theme-2 .card-base { background:linear-gradient(148deg,#08090e,#0c1020); }
+    .theme-3 .card-base { background:linear-gradient(148deg,#120908,#200e06); }
+    .theme-4 .card-base { background:linear-gradient(148deg,#070c18,#0a1430); }
+    .theme-5 .card-base { background:linear-gradient(148deg,#0e0818,#180a2e); }
+
+    /* Texture lines */
+    .card-lines { z-index:1; }
+    .theme-1 .card-lines { background:repeating-linear-gradient(28deg,  transparent 0,transparent 20px,rgba(255,255,255,.025) 20px,rgba(255,255,255,.025) 22px); }
+    .theme-2 .card-lines { background:repeating-linear-gradient(-28deg, transparent 0,transparent 20px,rgba(255,255,255,.025) 20px,rgba(255,255,255,.025) 22px); }
+    .theme-3 .card-lines { background:repeating-linear-gradient(60deg,  transparent 0,transparent 18px,rgba(255,255,255,.025) 18px,rgba(255,255,255,.025) 20px); }
+    .theme-4 .card-lines { background:repeating-linear-gradient(90deg,  transparent 0,transparent 16px,rgba(255,255,255,.025) 16px,rgba(255,255,255,.025) 18px); }
+    .theme-5 .card-lines { background:repeating-linear-gradient(0deg,   transparent 0,transparent 22px,rgba(255,255,255,.025) 22px,rgba(255,255,255,.025) 24px); }
+
+    /* Rank watermark */
+    .card-watermark {
+      z-index:2;
+      display:flex; align-items:flex-end; justify-content:flex-end;
+      padding:0 4px 0 0;
+      font-size:196px; font-weight:800;
+      font-family:'Space Grotesk',sans-serif;
+      line-height:.85; letter-spacing:-.06em;
+      color:rgba(255,255,255,.04);
+      overflow:hidden; user-select:none;
+    }
+
+    /* Holographic foil — responds to --foil-angle, --foil-x, --foil-y */
+    .card-foil {
+      z-index:3;
+      background:
+        radial-gradient(
+          ellipse 110% 90% at var(--foil-x,35%) var(--foil-y,40%),
+          rgba(255,255,255,.18) 0%,
+          rgba(255,255,255,.06) 35%,
+          transparent 65%
+        ),
+        linear-gradient(
+          var(--foil-angle,118deg),
+          transparent 10%,
+          hsla(var(--fh0,50),90%,72%,.13) 28%,
+          hsla(var(--fh1,110),90%,72%,.16) 40%,
+          rgba(255,255,255,.20) 50%,
+          hsla(var(--fh2,200),90%,72%,.16) 60%,
+          hsla(var(--fh3,280),90%,72%,.13) 72%,
+          transparent 90%
+        );
+      mix-blend-mode:screen;
+      opacity:.85;
+      transition: background .06s linear;
+    }
+
+    /* Per-theme foil hues (base, +60, +120, +180) */
+    .theme-1 .card-foil { --fh0:44; --fh1:104; --fh2:164; --fh3:224; }
+    .theme-2 .card-foil { --fh0:210; --fh1:270; --fh2:330; --fh3:30; }
+    .theme-3 .card-foil { --fh0:24; --fh1:84; --fh2:144; --fh3:204; }
+    .theme-4 .card-foil { --fh0:220; --fh1:280; --fh2:340; --fh3:40; }
+    .theme-5 .card-foil { --fh0:270; --fh1:330; --fh2:30; --fh3:90; }
+
+    /* Card content */
+    .card-content {
+      position:relative; z-index:4;
+      height:100%; display:flex; flex-direction:column;
+      padding:20px 18px 18px;
+    }
+
     .card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
+      display:flex; justify-content:space-between; align-items:center;
+      flex-shrink:0;
     }
 
-    .card-rank-badge {
-      font-size: 11px;
-      font-weight: 700;
-      font-family: 'Space Mono', monospace;
-      letter-spacing: 0.1em;
-      padding: 3px 7px;
-      border-radius: 4px;
-      background: rgba(255,255,255,0.07);
-    }
-    .theme-5k   .card-rank-badge { color: var(--accent); }
-    .theme-10k  .card-rank-badge { color: #4ade80; }
-    .theme-half .card-rank-badge { color: #818cf8; }
-    .theme-full .card-rank-badge { color: #fb923c; }
-
-    .card-date {
-      font-size: 11px;
-      font-family: 'Space Mono', monospace;
-      color: var(--text-2);
-      opacity: 0.5;
+    .card-dist {
+      font-size:11px; font-weight:700; font-family:'Space Mono',monospace;
+      letter-spacing:.1em; color:rgba(255,255,255,.35);
     }
 
-    .card-center {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
+    .card-badge {
+      font-size:11px; font-weight:700; font-family:'Space Mono',monospace;
+      letter-spacing:.1em; padding:3px 8px; border-radius:4px;
+      background:rgba(255,255,255,.07);
+    }
+    .theme-1 .card-badge { color:#c8a84b; }
+    .theme-2 .card-badge { color:#8bafd4; }
+    .theme-3 .card-badge { color:#c47a4a; }
+    .theme-4 .card-badge { color:#4a78c4; }
+    .theme-5 .card-badge { color:#8a4ac4; }
+
+    .card-body {
+      flex:1; display:flex; flex-direction:column;
+      justify-content:center; gap:6px;
     }
 
     .card-time {
-      font-size: 38px;
-      font-weight: 300;
-      font-family: 'Space Grotesk', sans-serif;
-      letter-spacing: -0.03em;
-      line-height: 1;
-      color: var(--text-1);
+      font-size:44px; font-weight:300;
+      font-family:'Space Grotesk',sans-serif;
+      letter-spacing:-.04em; line-height:1;
+      color:rgba(255,255,255,.92);
     }
 
     .card-pace {
-      font-size: 13px;
-      font-family: 'Space Mono', monospace;
-      color: var(--text-2);
-      opacity: 0.55;
+      font-size:13px; font-family:'Space Mono',monospace;
+      color:rgba(255,255,255,.3); letter-spacing:.02em;
     }
 
-    .card-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
+    .card-footer {
+      flex-shrink:0; display:flex;
+      flex-direction:column; gap:2px;
     }
 
     .card-name {
-      font-size: 12px;
-      font-family: 'Pretendard Variable', sans-serif;
-      font-weight: 400;
-      color: var(--text-2);
-      opacity: 0.5;
-      max-width: 180px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-size:12px; font-family:'Pretendard Variable',sans-serif;
+      font-weight:400; color:rgba(255,255,255,.3);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .card-date {
+      font-size:11px; font-family:'Space Mono',monospace;
+      color:rgba(255,255,255,.2);
     }
 
-    /* 카드 포커스 (파일 모드에서 탭한 카드) */
-    .pb-card.focused {
-      box-shadow: 0 20px 48px rgba(0,0,0,0.7), 0 4px 12px rgba(0,0,0,0.4) !important;
-    }
-
-    /* ── 컨트롤 영역 ── */
+    /* ── Controls ── */
     .stack-controls {
-      display: flex;
-      justify-content: center;
-      padding: 28px 0 0;
+      display:flex; justify-content:center;
+      padding:28px 0 0;
     }
 
     .expand-btn {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.14);
-      border-radius: 999px;
-      color: var(--text-2);
-      font-size: 13px;
-      font-family: 'Pretendard Variable', sans-serif;
-      font-weight: 500;
-      padding: 10px 28px;
-      cursor: pointer;
-      letter-spacing: -0.01em;
-      transition: border-color 0.2s, color 0.2s, background 0.2s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      background:transparent;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:999px; color:#555;
+      font-size:13px; font-family:'Pretendard Variable',sans-serif;
+      font-weight:500; padding:10px 28px; cursor:pointer;
+      letter-spacing:-.01em;
+      display:flex; align-items:center; gap:7px;
+      transition: border-color .2s, color .2s, transform .1s cubic-bezier(0.16,1,0.3,1);
     }
-    .expand-btn:active { transform: scale(0.95); }
-    .expand-btn.active {
-      border-color: rgba(255,255,255,0.3);
-      color: var(--text-1);
+    .expand-btn:active { transform:scale(0.95); }
+    .expand-btn.active { border-color:rgba(255,255,255,.28); color:#ccc; }
+    .expand-btn svg { transition:transform .38s cubic-bezier(0.16,1,0.3,1); }
+    .expand-btn.active svg { transform:rotate(180deg); }
+
+    /* ── Swipe hint ── */
+    .swipe-hint {
+      text-align:center; font-size:11px;
+      font-family:'Space Mono',monospace;
+      color:#333; margin-top:12px;
+      letter-spacing:.04em;
     }
 
-    .expand-btn svg {
-      transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .expand-btn.active svg {
-      transform: rotate(180deg);
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .pb-card, .stack-area { transition: none !important; }
+    @media (prefers-reduced-motion:reduce) {
+      .pb-card { transition:none !important; }
     }
   </style>
 </head>
@@ -287,16 +276,14 @@
         <button class="pb-back-btn" onclick="goBack()">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
-            <path d="m12 19-7-7 7-7"/>
-            <path d="M19 12H5"/>
+            <path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>
           </svg>
         </button>
         <span class="pb-header-title">PB</span>
       </div>
 
-      <div class="pb-scroll" id="pb-scroll">
+      <div class="pb-scroll">
 
-        <!-- 거리 탭 -->
         <div class="dist-tabs">
           <button class="dist-tab active" data-dist="5k"   onclick="switchDist('5k')">5K</button>
           <button class="dist-tab"        data-dist="10k"  onclick="switchDist('10k')">10K</button>
@@ -305,101 +292,110 @@
         </div>
 
         <div class="stack-wrap">
-          <!-- 카드 스택 -->
           <div class="stack-area" id="stack-area"></div>
-
-          <!-- 컨트롤 -->
           <div class="stack-controls">
             <button class="expand-btn" id="expand-btn" onclick="toggleExpand()">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="m6 9 6 6 6-6"/>
-              </svg>
+                stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
               펼쳐보기
             </button>
           </div>
+          <div class="swipe-hint" id="swipe-hint">탭해서 다음 기록</div>
         </div>
 
-      </div><!-- /pb-scroll -->
+      </div>
     </div>
   </div>
 
   <script>
-    // ── PB 데이터 ──
+    /* ── Data ── */
     const PB_DATA = {
-      '5k': [
-        { rank: 1, time: '18:42', pace: "3'44\"/km", date: '2026.03.22', name: '서울 10K' },
-        { rank: 2, time: '19:05', pace: "3'49\"/km", date: '2025.11.08', name: '한강 5K 레이스' },
-        { rank: 3, time: '19:31', pace: "3'54\"/km", date: '2025.08.14', name: '템포 런' },
-        { rank: 4, time: '19:58', pace: "3'59\"/km", date: '2025.04.02', name: '트랙 세션' },
-        { rank: 5, time: '20:22', pace: "4'04\"/km", date: '2024.10.19', name: '이지 런' },
+      '5k':   [
+        { time:'18:42', pace:"3'44\"/km", date:'2026.03.22', name:'서울 10K' },
+        { time:'19:05', pace:"3'49\"/km", date:'2025.11.08', name:'한강 5K 레이스' },
+        { time:'19:31', pace:"3'54\"/km", date:'2025.08.14', name:'템포 런' },
+        { time:'19:58', pace:"3'59\"/km", date:'2025.04.02', name:'트랙 세션' },
+        { time:'20:22', pace:"4'04\"/km", date:'2024.10.19', name:'이지 런' },
       ],
-      '10k': [
-        { rank: 1, time: '40:11', pace: "4'01\"/km", date: '2026.03.22', name: '서울 10K' },
-        { rank: 2, time: '41:08', pace: "4'06\"/km", date: '2025.10.11', name: '한강 마스터즈' },
-        { rank: 3, time: '42:35', pace: "4'15\"/km", date: '2025.05.18', name: '봄 10K' },
-        { rank: 4, time: '43:50', pace: "4'23\"/km", date: '2024.11.02', name: '가을 10K' },
-        { rank: 5, time: '44:22', pace: "4'26\"/km", date: '2024.06.08', name: '템포 런' },
+      '10k':  [
+        { time:'40:11', pace:"4'01\"/km", date:'2026.03.22', name:'서울 10K' },
+        { time:'41:08', pace:"4'06\"/km", date:'2025.10.11', name:'한강 마스터즈' },
+        { time:'42:35', pace:"4'15\"/km", date:'2025.05.18', name:'봄 10K' },
+        { time:'43:50', pace:"4'23\"/km", date:'2024.11.02', name:'가을 10K' },
+        { time:'44:22', pace:"4'26\"/km", date:'2024.06.08', name:'템포 런' },
       ],
       'half': [
-        { rank: 1, time: '1:46:18', pace: "5'02\"/km", date: '2026.04.11', name: '2026 인천하프' },
-        { rank: 2, time: '1:48:44', pace: "5'09\"/km", date: '2025.10.19', name: '춘천 하프마라톤' },
-        { rank: 3, time: '1:51:02', pace: "5'16\"/km", date: '2025.03.30', name: '서울 하프' },
-        { rank: 4, time: '1:53:20', pace: "5'22\"/km", date: '2024.10.06', name: '부산 하프' },
-        { rank: 5, time: '1:56:08', pace: "5'31\"/km", date: '2024.04.14', name: '봄 하프' },
+        { time:'1:46:18', pace:"5'02\"/km", date:'2026.04.11', name:'2026 인천하프' },
+        { time:'1:48:44', pace:"5'09\"/km", date:'2025.10.19', name:'춘천 하프마라톤' },
+        { time:'1:51:02', pace:"5'16\"/km", date:'2025.03.30', name:'서울 하프' },
+        { time:'1:53:20', pace:"5'22\"/km", date:'2024.10.06', name:'부산 하프' },
+        { time:'1:56:08', pace:"5'31\"/km", date:'2024.04.14', name:'봄 하프' },
       ],
       'full': [
-        { rank: 1, time: '3:52:44', pace: "5'31\"/km", date: '2025.11.02', name: '서울마라톤' },
-        { rank: 2, time: '3:58:11', pace: "5'38\"/km", date: '2025.03.16', name: '동아마라톤' },
-        { rank: 3, time: '4:04:33', pace: "5'47\"/km", date: '2024.11.03', name: '춘천마라톤' },
-        { rank: 4, time: '4:11:22', pace: "5'57\"/km", date: '2024.04.21', name: '경주마라톤' },
-        { rank: 5, time: '4:18:05', pace: "6'06\"/km", date: '2023.10.29', name: '부산마라톤' },
+        { time:'3:52:44', pace:"5'31\"/km", date:'2025.11.02', name:'서울마라톤' },
+        { time:'3:58:11', pace:"5'38\"/km", date:'2025.03.16', name:'동아마라톤' },
+        { time:'4:04:33', pace:"5'47\"/km", date:'2024.11.03', name:'춘천마라톤' },
+        { time:'4:11:22', pace:"5'57\"/km", date:'2024.04.21', name:'경주마라톤' },
+        { time:'4:18:05', pace:"6'06\"/km", date:'2023.10.29', name:'부산마라톤' },
       ],
     };
 
-    const THEMES  = { '5k': 'theme-5k', '10k': 'theme-10k', 'half': 'theme-half', 'full': 'theme-full' };
-    const LABELS  = ['1ST', '2ND', '3RD', '4TH', '5TH'];
+    const LABELS   = ['1ST','2ND','3RD','4TH','5TH'];
+    const THEMES   = { '5k':'theme-1', '10k':'theme-2', 'half':'theme-3', 'full':'theme-4' };
+    const DISTS    = { '5k':'5K', '10k':'10K', 'half':'하프', 'full':'풀' };
 
-    // 파일 모드: 각 카드의 불규칙 rotate + translate
-    const PILE_T  = [
-      { r:  -1.5, x:   2, y:  0   },   // 1위 — 맨 위 (z:5)
-      { r:   7,   x: -18, y:  6   },   // 2위
-      { r:  -9,   x:  14, y:  10  },   // 3위
-      { r:   4.5, x: -10, y:  16  },   // 4위
-      { r:  -6,   x:  18, y:  20  },   // 5위 — 맨 밑 (z:1)
+    /* Per-card theme within each distance stack */
+    const RANK_THEMES = ['theme-1','theme-2','theme-3','theme-4','theme-5'];
+
+    const CARD_W  = 190;
+    const CARD_H  = 270;
+    const PILE_H  = 330;
+
+    /* Pile: irregular rotation + offset per position (0=top) */
+    const PILE_T = [
+      { r: -1.5, x:   2, y:  0  },
+      { r:  8,   x: -20, y:  6  },
+      { r: -10,  x:  16, y: 11  },
+      { r:  5,   x: -12, y: 17  },
+      { r: -6.5, x:  20, y: 22  },
     ];
 
-    const CARD_H  = 168;
-    const CARD_GAP = 12;
-    const PILE_H  = 240;  // 파일 상태 stack-area 높이
+    let currentDist = '5k';
+    let focusedIdx  = 0;
+    let isExpanded  = false;
+    let isAnimating = false;
 
-    let currentDist   = '5k';
-    let isExpanded    = false;
-    let focusedIdx    = 0;           // 파일 모드에서 맨 앞 카드 인덱스 (0=1위)
-    let isAnimating   = false;
-
-    // ── 빌드 ──
+    /* ── Build ── */
     function buildStack(dist, enterAnim) {
       const records = PB_DATA[dist];
-      const theme   = THEMES[dist];
       const area    = document.getElementById('stack-area');
 
+      // Reset to pile mode
+      area.classList.remove('expanded');
+      area.style.cssText = `height:${PILE_H}px; overflow:visible;`;
+
       area.innerHTML = records.map((r, i) => `
-        <div class="pb-card ${theme}" data-idx="${i}">
-          <div class="card-top">
-            <span class="card-rank-badge">${LABELS[i]}</span>
-            <span class="card-date">${r.date}</span>
-          </div>
-          <div class="card-center">
-            <span class="card-time">${r.time}</span>
-            <span class="card-pace">${r.pace}</span>
-          </div>
-          <div class="card-bottom">
-            <span class="card-name">${r.name}</span>
+        <div class="pb-card ${RANK_THEMES[i]}" data-idx="${i}" style="position:absolute;left:0;top:0;">
+          <div class="card-base"></div>
+          <div class="card-lines"></div>
+          <div class="card-watermark">${i + 1}</div>
+          <div class="card-foil"></div>
+          <div class="card-content">
+            <div class="card-top">
+              <span class="card-dist">${DISTS[dist]}</span>
+              <span class="card-badge">${LABELS[i]}</span>
+            </div>
+            <div class="card-body">
+              <div class="card-time">${r.time}</div>
+              <div class="card-pace">${r.pace}</div>
+            </div>
+            <div class="card-footer">
+              <div class="card-name">${r.name}</div>
+              <div class="card-date">${r.date}</div>
+            </div>
           </div>
         </div>`).join('');
 
-      // 클릭 + 스와이프 이벤트
       area.querySelectorAll('.pb-card').forEach(card => {
         card.addEventListener('click', () => onCardClick(parseInt(card.dataset.idx)));
         addSwipe(card);
@@ -408,216 +404,282 @@
       focusedIdx = 0;
 
       if (enterAnim) {
-        // 잠깐 숨긴 뒤 파일 위치로 팝인
         area.querySelectorAll('.pb-card').forEach(c => {
           c.style.transition = 'none';
           c.style.opacity = '0';
-          c.style.transform = 'translateY(20px) scale(0.95)';
+          c.style.transform = 'translateY(24px) scale(0.94)';
         });
         requestAnimationFrame(() => requestAnimationFrame(() => {
           area.querySelectorAll('.pb-card').forEach((c, i) => {
             c.style.transition = '';
-            setTimeout(() => applyPileTransform(c, i, true), i * 45);
+            setTimeout(() => applyPileTransform(c, i), i * 50);
           });
         }));
       } else {
-        area.querySelectorAll('.pb-card').forEach((c, i) => applyPileTransform(c, i, true));
+        area.querySelectorAll('.pb-card').forEach((c, i) => applyPileTransform(c, i));
       }
 
-      applyAreaHeight(false);
+      updateHint();
     }
 
-    // ── 파일 transform 적용 ──
-    function applyPileTransform(card, idx, shadow) {
-      const t    = PILE_T[idx];
-      const zIdx = 5 - idx;
-      card.style.transform  = `rotate(${t.r}deg) translate(${t.x}px, ${t.y}px)`;
-      card.style.zIndex     = zIdx;
-      card.style.opacity    = idx <= 2 ? '1' : (idx === 3 ? '0.75' : '0.5');
-      card.style.boxShadow  = idx === 0
-        ? '0 12px 40px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.3)'
-        : '0 4px 16px rgba(0,0,0,0.35)';
+    /* ── Pile transform ── */
+    function applyPileTransform(card, pos) {
+      const t = PILE_T[pos];
+      card.style.transform  = `rotate(${t.r}deg) translate(${t.x}px,${t.y}px)`;
+      card.style.zIndex     = 5 - pos;
+      card.style.opacity    = pos === 0 ? '1' : pos === 1 ? '1' : pos === 2 ? '0.88' : pos === 3 ? '0.65' : '0.4';
+      card.style.boxShadow  = pos === 0
+        ? '0 18px 52px rgba(0,0,0,.75), 0 4px 16px rgba(0,0,0,.4)'
+        : '0 6px 20px rgba(0,0,0,.4)';
     }
 
-    // ── 펼쳐보기 transform 적용 ──
-    function applyExpandedTransform(card, idx) {
-      card.style.transform = `translateY(${idx * (CARD_H + CARD_GAP)}px)`;
-      card.style.zIndex    = 5 - idx;
-      card.style.opacity   = '1';
-      card.style.boxShadow = '0 4px 20px rgba(0,0,0,0.3)';
-    }
-
-    // ── stack-area 높이 조정 ──
-    function applyAreaHeight(animate) {
-      const area = document.getElementById('stack-area');
-      if (!animate) area.style.transition = 'none';
-      if (isExpanded) {
-        const n = PB_DATA[currentDist].length;
-        area.style.height = `${n * CARD_H + (n - 1) * CARD_GAP}px`;
-      } else {
-        area.style.height = `${PILE_H}px`;
-      }
-      if (!animate) {
-        requestAnimationFrame(() => { area.style.transition = ''; });
-      }
-    }
-
-    // ── 카드 클릭 ──
+    /* ── Tap handler ── */
     function onCardClick(idx) {
       if (isAnimating || isExpanded) return;
-
-      const n = PB_DATA[currentDist].length;
+      const n   = PB_DATA[currentDist].length;
       const pos = ((idx - focusedIdx) + n) % n;
-
-      if (pos === 0) {
-        // 맨 앞 카드 탭 → 위로 날리기
-        dismissTop();
-      } else {
-        // 뒤에 보이는 카드 탭 → 앞으로 가져오기
-        bringToFront(idx);
-      }
+      pos === 0 ? dismissTop() : bringToFront(idx);
     }
 
-    // ── 맨 앞 카드 날리기 ──
+    /* ── Dismiss top card (fly up) ── */
     function dismissTop() {
       if (isAnimating) return;
       isAnimating = true;
 
-      const cards = [...document.querySelectorAll('.pb-card')];
-      const n     = cards.length;
+      const cards   = [...document.querySelectorAll('.pb-card')];
+      const n       = cards.length;
       const topCard = cards.find(c => parseInt(c.dataset.idx) === focusedIdx);
-      const topT    = PILE_T[0];
+      const t0      = PILE_T[0];
 
-      // 위로 날아가기
-      topCard.style.transition = 'transform 0.38s cubic-bezier(0.4,0,0.2,1), opacity 0.28s ease';
-      topCard.style.transform  = `rotate(${topT.r * 1.5}deg) translateY(-130%)`;
+      topCard.style.transition = 'transform .38s cubic-bezier(.4,0,.2,1), opacity .28s ease';
+      topCard.style.transform  = `rotate(${t0.r * 1.6}deg) translateY(-135%)`;
       topCard.style.opacity    = '0';
 
-      // 나머지 카드 한 칸씩 앞으로
-      cards.forEach(card => {
-        if (card === topCard) return;
-        const idx    = parseInt(card.dataset.idx);
+      // Remaining cards move forward
+      cards.forEach(c => {
+        if (c === topCard) return;
+        const idx    = parseInt(c.dataset.idx);
         const curPos = ((idx - focusedIdx) + n) % n;
-        const newPos = curPos - 1;
-        setTimeout(() => applyPileTransform(card, newPos, true), newPos * 35);
+        setTimeout(() => applyPileTransform(c, curPos - 1), (curPos - 1) * 38);
       });
 
-      // 날아간 카드 → 맨 뒤로 순간이동 후 팝인
       setTimeout(() => {
         const newFocused = (focusedIdx + 1) % n;
         focusedIdx = newFocused;
 
-        // 순간이동 (transition 없이 맨 뒤 위치로)
+        // Snap to back position, then re-enable transition
         topCard.style.transition = 'none';
-        const backT = PILE_T[n - 1];
-        topCard.style.transform  = `rotate(${backT.r}deg) translate(${backT.x}px, ${backT.y}px) translateY(30px)`;
+        const tBack = PILE_T[n - 1];
+        topCard.style.transform  = `rotate(${tBack.r}deg) translate(${tBack.x}px,${tBack.y}px) translateY(20px)`;
         topCard.style.opacity    = '0';
         topCard.style.zIndex     = '1';
 
         requestAnimationFrame(() => requestAnimationFrame(() => {
           topCard.style.transition = '';
-          applyPileTransform(topCard, n - 1, true);
+          applyPileTransform(topCard, n - 1);
         }));
 
-        setTimeout(() => { isAnimating = false; }, 480);
+        updateHint();
+        setTimeout(() => { isAnimating = false; }, 460);
       }, 400);
     }
 
-    // ── 뒤 카드 앞으로 가져오기 ──
+    /* ── Bring card to front ── */
     function bringToFront(targetIdx) {
       if (isAnimating) return;
       isAnimating = true;
-
       const cards = [...document.querySelectorAll('.pb-card')];
       const n     = cards.length;
-
-      cards.forEach(card => {
-        const idx    = parseInt(card.dataset.idx);
-        const newPos = ((idx - targetIdx) + n) % n;
-        setTimeout(() => applyPileTransform(card, newPos, true), newPos * 35);
+      cards.forEach(c => {
+        const newPos = ((parseInt(c.dataset.idx) - targetIdx) + n) % n;
+        setTimeout(() => applyPileTransform(c, newPos), newPos * 38);
       });
-
       focusedIdx = targetIdx;
-      setTimeout(() => { isAnimating = false; }, n * 35 + 480);
+      setTimeout(() => { isAnimating = false; }, n * 38 + 460);
     }
 
-    // ── 위로 스와이프 → dismissTop ──
+    /* ── Swipe up → dismiss ── */
     function addSwipe(card) {
-      let startY = 0, startX = 0, moved = false;
-
+      let sy = 0, sx = 0, moved = false;
       card.addEventListener('touchstart', e => {
-        startY = e.touches[0].clientY;
-        startX = e.touches[0].clientX;
-        moved = false;
-      }, { passive: true });
-
-      card.addEventListener('touchmove', e => {
-        moved = true;
-      }, { passive: true });
-
+        sy = e.touches[0].clientY; sx = e.touches[0].clientX; moved = false;
+      }, { passive:true });
+      card.addEventListener('touchmove', () => { moved = true; }, { passive:true });
       card.addEventListener('touchend', e => {
         if (!moved) return;
-        const dy = startY - e.changedTouches[0].clientY;
-        const dx = Math.abs(startX - e.changedTouches[0].clientX);
-        const n  = PB_DATA[currentDist].length;
+        const dy  = sy - e.changedTouches[0].clientY;
+        const dx  = Math.abs(sx - e.changedTouches[0].clientX);
+        const n   = PB_DATA[currentDist].length;
         const pos = ((parseInt(card.dataset.idx) - focusedIdx) + n) % n;
-        // 위로 50px 이상, 수평보다 수직이 더 클 때, 맨 앞 카드에서만
-        if (dy > 50 && dy > dx && pos === 0) {
-          dismissTop();
-        }
-      }, { passive: true });
+        if (dy > 50 && dy > dx && pos === 0) dismissTop();
+      }, { passive:true });
     }
 
-    // ── 펼쳐보기 토글 ──
+    /* ── Expand toggle ── */
     function toggleExpand() {
       if (isAnimating) return;
       isExpanded = !isExpanded;
 
       const btn   = document.getElementById('expand-btn');
+      const area  = document.getElementById('stack-area');
       const cards = [...document.querySelectorAll('.pb-card')];
 
       btn.classList.toggle('active', isExpanded);
-      btn.querySelector('span') || null;
-      // 버튼 텍스트 교체
       btn.childNodes[btn.childNodes.length - 1].textContent = isExpanded ? '접기' : '펼쳐보기';
 
-      applyAreaHeight(true);
+      // Fade out
+      cards.forEach(c => { c.style.transition = 'opacity .18s'; c.style.opacity = '0'; });
 
-      if (isExpanded) {
-        // 원래 rank 순서(data-idx)대로 펼침
-        const sorted = [...cards].sort((a, b) => parseInt(a.dataset.idx) - parseInt(b.dataset.idx));
-        sorted.forEach((card, i) => {
-          setTimeout(() => applyExpandedTransform(card, i), i * 55);
+      setTimeout(() => {
+        if (isExpanded) {
+          // Switch to horizontal flex scroll
+          area.classList.add('expanded');
+          area.style.cssText = `height:${CARD_H}px; overflow-x:auto; overflow-y:hidden;`;
+          area.style.setProperty('--card-h-px', CARD_H + 'px');
+
+          // Sort by rank, switch to relative positioning
+          const sorted = [...cards].sort((a,b) => parseInt(a.dataset.idx) - parseInt(b.dataset.idx));
+          sorted.forEach(c => {
+            c.style.position   = 'relative';
+            c.style.left       = '';
+            c.style.top        = '';
+            c.style.transform  = 'none';
+            c.style.zIndex     = '';
+            c.style.boxShadow  = '0 8px 28px rgba(0,0,0,.5)';
+            c.style.flexShrink = '0';
+            c.style.scrollSnapAlign = 'center';
+            area.appendChild(c);
+          });
+        } else {
+          // Switch back to pile
+          area.classList.remove('expanded');
+          area.style.cssText = `height:${PILE_H}px; overflow:visible;`;
+
+          cards.forEach(c => {
+            c.style.position   = 'absolute';
+            c.style.left       = '0';
+            c.style.top        = '0';
+            c.style.flexShrink = '';
+            c.style.scrollSnapAlign = '';
+            const n   = PB_DATA[currentDist].length;
+            const pos = ((parseInt(c.dataset.idx) - focusedIdx) + n) % n;
+            applyPileTransform(c, pos);
+            // opacity set by applyPileTransform; let's also restore it
+          });
+        }
+
+        // Fade in (slightly staggered)
+        const toShow = isExpanded
+          ? [...area.querySelectorAll('.pb-card')].sort((a,b) => parseInt(a.dataset.idx)-parseInt(b.dataset.idx))
+          : [...area.querySelectorAll('.pb-card')].sort((a,b) => {
+              const n = PB_DATA[currentDist].length;
+              return ((parseInt(a.dataset.idx)-focusedIdx+n)%n) - ((parseInt(b.dataset.idx)-focusedIdx+n)%n);
+            });
+        toShow.forEach((c, i) => {
+          setTimeout(() => {
+            c.style.transition = 'opacity .22s';
+            c.style.opacity    = isExpanded ? '1'
+              : (i === 0 ? '1' : i === 1 ? '1' : i === 2 ? '0.88' : i === 3 ? '0.65' : '0.4');
+          }, i * 45);
         });
-      } else {
-        // 파일로 복귀 — focusedIdx 기준 재정렬
-        const n = PB_DATA[currentDist].length;
-        cards.forEach(card => {
-          const idx    = parseInt(card.dataset.idx);
-          const newPos = ((idx - focusedIdx) + n) % n;
-          setTimeout(() => applyPileTransform(card, newPos, true), newPos * 40);
-        });
-      }
+
+        updateHint();
+      }, 200);
     }
 
-    // ── 거리 전환 ──
+    /* ── Distance switch ── */
     function switchDist(dist) {
       if (dist === currentDist || isAnimating) return;
       currentDist = dist;
       isExpanded  = false;
-
       const btn = document.getElementById('expand-btn');
       btn.classList.remove('active');
       btn.childNodes[btn.childNodes.length - 1].textContent = '펼쳐보기';
-
       document.querySelectorAll('.dist-tab').forEach(t =>
         t.classList.toggle('active', t.dataset.dist === dist)
       );
-
       buildStack(dist, true);
     }
 
-    // ── 뒤로가기 ──
+    /* ── Hint text ── */
+    function updateHint() {
+      const el = document.getElementById('swipe-hint');
+      if (isExpanded) { el.textContent = ''; return; }
+      const n = PB_DATA[currentDist].length;
+      el.textContent = focusedIdx === n - 1 ? '탭해서 처음으로' : '탭해서 다음 기록';
+    }
+
+    /* ────────────────────────────────────
+       HOLOGRAPHIC FOIL — gyro + mouse
+    ──────────────────────────────────── */
+    let hasGyro    = false;
+    let animFrame  = null;
+    let mouseActive = false;
+
+    function updateFoil(rx, ry) {
+      /* rx, ry: -1 to 1 */
+      const angle = rx * 35 + 118;
+      const fx    = (rx * 0.5 + 0.5) * 100;
+      const fy    = (ry * 0.5 + 0.5) * 100;
+      document.querySelectorAll('.card-foil').forEach(el => {
+        el.style.setProperty('--foil-angle', `${angle}deg`);
+        el.style.setProperty('--foil-x',     `${fx}%`);
+        el.style.setProperty('--foil-y',     `${fy}%`);
+      });
+    }
+
+    /* Gyroscope */
+    window.addEventListener('deviceorientation', e => {
+      if (e.gamma == null) return;
+      hasGyro = true;
+      cancelAnimationFrame(animFrame);
+      const rx = Math.max(-1, Math.min(1, e.gamma / 28));
+      const ry = Math.max(-1, Math.min(1, (e.beta - 30) / 28));
+      updateFoil(rx, ry);
+    }, { passive:true });
+
+    /* Mouse (desktop) */
+    document.querySelector('.stack-wrap').addEventListener('mousemove', e => {
+      if (hasGyro) return;
+      mouseActive = true;
+      cancelAnimationFrame(animFrame);
+      const area = document.getElementById('stack-area');
+      const rect = area.getBoundingClientRect();
+      const rx   = Math.max(-1, Math.min(1, (e.clientX - rect.left  - rect.width  / 2) / (rect.width  / 2)));
+      const ry   = Math.max(-1, Math.min(1, (e.clientY - rect.top   - rect.height / 2) / (rect.height / 2)));
+      updateFoil(rx, ry);
+    });
+
+    document.querySelector('.stack-wrap').addEventListener('mouseleave', () => {
+      if (hasGyro) return;
+      mouseActive = false;
+      animFrame = requestAnimationFrame(idleFoil);
+    });
+
+    /* Touch tilt (touchmove as proxy for gyro-less mobile) */
+    let touchStartX = 0, touchStartY = 0;
+    document.querySelector('.stack-area').addEventListener('touchstart', e => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }, { passive:true });
+    document.querySelector('.stack-area').addEventListener('touchmove', e => {
+      if (hasGyro) return;
+      const dx = (e.touches[0].clientX - touchStartX) / 80;
+      const dy = (e.touches[0].clientY - touchStartY) / 120;
+      updateFoil(Math.max(-1,Math.min(1,dx)), Math.max(-1,Math.min(1,dy)));
+    }, { passive:true });
+
+    /* Idle animation */
+    function idleFoil(ts) {
+      if (hasGyro || mouseActive) return;
+      const rx = Math.sin(ts / 3800) * 0.38;
+      const ry = Math.sin(ts / 4500 + 1.2) * 0.28;
+      updateFoil(rx, ry);
+      animFrame = requestAnimationFrame(idleFoil);
+    }
+    animFrame = requestAnimationFrame(idleFoil);
+
+    /* ── Back navigation ── */
     function goBack() {
       if (document.startViewTransition) {
         document.startViewTransition(() => { history.back(); });
@@ -626,15 +688,12 @@
       }
     }
 
-    // ── 초기 렌더 ──
+    /* ── Init ── */
     buildStack('5k', false);
   </script>
 
   <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js');
-    }
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
   </script>
 </body>
-
 </html>
