@@ -758,10 +758,95 @@
       opacity: 1;
     }
 
+
+
+    /* ─── Wheel Picker ───────────────────── */
+    .wheel-picker {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      height: 224px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .wheel-highlight {
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgb(180 180 180 / 10%);
+      border-radius: 4px;
+      height: 52px;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .wheel-col {
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      flex: 0 0 auto;
+      width: 120px;
+      /* 텍스트에만 그라디언트 마스크 적용 */
+      -webkit-mask-image: linear-gradient(to bottom,
+          transparent 0%,
+          black 38%,
+          black 62%,
+          transparent 100%);
+      mask-image: linear-gradient(to bottom,
+          transparent 0%,
+          black 38%,
+          black 62%,
+          transparent 100%);
+    }
+
+    .wheel-col::-webkit-scrollbar {
+      display: none;
+    }
+
+    .wheel-col-year {
+      width: 110px;
+    }
+
+    .wheel-spacer {
+      height: 90px;
+      flex-shrink: 0;
+    }
+
+    .wheel-item {
+      scroll-snap-align: center;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      font-size: 22px;
+      color: var(--slate-gray);
+      user-select: none;
+    }
+
+    .wheel-col-year .wheel-item {
+      justify-content: flex-end;
+      padding-right: 20px;
+    }
+
+    #wheel-month .wheel-item {
+      justify-content: flex-start;
+      padding-left: 20px;
+    }
+
     .wheel-sheet-footer {
       display: flex;
-      padding: 8px 20px 28px;
+      padding: 28px 20px 28px;
       flex-shrink: 0;
+    }
+
+    #month-sheet .sf-apply-btn {
+      background: var(--slate-gray);
+      color: #111;
+      font-weight: 700;
     }
 
     /* ─── Month Label (tappable) ──────────── */
@@ -1043,7 +1128,20 @@
             </svg>
           </button>
         </div>
-        <div class="month-list" id="month-list-scroll" style="padding: 0 20px 20px;"></div>
+        <div class="wheel-picker">
+          <div class="wheel-highlight"></div>
+          <div class="wheel-col wheel-col-year" id="wheel-year">
+            <div class="wheel-spacer"></div>
+            <div class="wheel-spacer"></div>
+          </div>
+          <div class="wheel-col" id="wheel-month">
+            <div class="wheel-spacer"></div>
+            <div class="wheel-spacer"></div>
+          </div>
+        </div>
+        <div class="wheel-sheet-footer">
+          <button class="sf-apply-btn" onclick="confirmMonthPick()">확인</button>
+        </div>
       </div>
 
       <!-- 플로팅 바: list.html 로 이동 -->
@@ -1257,38 +1355,67 @@
 
     const MONTH_KEY_MAP = { '2026-4': 1, '2026-3': 0 };
 
+    const WHEEL_YEARS = [...new Set(ALL_MONTHS.map(m => m.year))].sort((a, b) => b - a);
+    const WHEEL_ITEM_H = 44;
+
+    function getMonthsForYear(year) {
+      return ALL_MONTHS
+        .filter(m => m.year === year)
+        .map(m => m.month)
+        .sort((a, b) => b - a);
+    }
+
+    let _wheelMonths = [];
+
+    function buildMonthWheel(year, snapMonth) {
+      _wheelMonths = getMonthsForYear(year);
+      const col = document.getElementById('wheel-month');
+      col.innerHTML =
+        '<div class="wheel-spacer"></div>' +
+        _wheelMonths.map(m => `<div class="wheel-item">${m}월</div>`).join('') +
+        '<div class="wheel-spacer"></div>';
+      const idx = snapMonth !== undefined
+        ? Math.max(0, _wheelMonths.indexOf(snapMonth))
+        : 0;
+      col.scrollTop = idx * WHEEL_ITEM_H;
+    }
+
     function openMonthSheet() {
-      const list = document.getElementById('month-list-scroll');
-      list.innerHTML = ALL_MONTHS.map((m, i) => {
-        const mk = `${m.year}-${m.month}`;
-        const isSel = MONTH_KEY_MAP[mk] === currentMonthIdx;
-        const showYear = i === 0 || m.month === 12;
-        const yearDisplay = showYear ? m.year : '';
-        return `<div class="month-list-item${isSel ? ' ml-selected' : ''}" onclick="selectListItem(${i})">
-              <div style="display: flex; align-items: center; gap: 16px;">
-                <span class="month-list-label">${m.month}월</span>
-                <span class="month-list-year">${yearDisplay}</span>
-              </div>
-              <svg class="month-list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 6 9 17l-5-5"/>
-              </svg>
-            </div>`;
-      }).join('');
+      const curObj = ALL_MONTHS.find(m => MONTH_KEY_MAP[`${m.year}-${m.month}`] === currentMonthIdx);
+      const initYear = curObj ? curObj.year : WHEEL_YEARS[0];
+      const initMonth = curObj ? curObj.month : getMonthsForYear(WHEEL_YEARS[0])[0];
+
+      const yearCol = document.getElementById('wheel-year');
+      yearCol.innerHTML =
+        '<div class="wheel-spacer"></div>' +
+        WHEEL_YEARS.map(y => `<div class="wheel-item">${y}년</div>`).join('') +
+        '<div class="wheel-spacer"></div>';
+      yearCol.scrollTop = WHEEL_YEARS.indexOf(initYear) * WHEEL_ITEM_H;
+
+      buildMonthWheel(initYear, initMonth);
+
+      let _yearTimer = null;
+      yearCol.onscroll = () => {
+        clearTimeout(_yearTimer);
+        _yearTimer = setTimeout(() => {
+          const yi = Math.round(yearCol.scrollTop / WHEEL_ITEM_H);
+          const y = WHEEL_YEARS[Math.max(0, Math.min(yi, WHEEL_YEARS.length - 1))];
+          buildMonthWheel(y);
+        }, 120);
+      };
 
       document.getElementById('month-sheet').classList.add('open');
       document.getElementById('month-backdrop').classList.add('open');
-
-      // 선택된 항목으로 스크롤
-      requestAnimationFrame(() => {
-        const sel = list.querySelector('.ml-selected');
-        if (sel) sel.scrollIntoView({ block: 'center' });
-      });
     }
 
-    function selectListItem(i) {
-      const m = ALL_MONTHS[i];
-      const mk = `${m.year}-${m.month}`;
-      const newIdx = MONTH_KEY_MAP[mk];
+    function confirmMonthPick() {
+      const yearCol = document.getElementById('wheel-year');
+      const monthCol = document.getElementById('wheel-month');
+      const yearIdx = Math.round(yearCol.scrollTop / WHEEL_ITEM_H);
+      const monthIdx = Math.round(monthCol.scrollTop / WHEEL_ITEM_H);
+      const year = WHEEL_YEARS[Math.max(0, Math.min(yearIdx, WHEEL_YEARS.length - 1))];
+      const month = _wheelMonths[Math.max(0, Math.min(monthIdx, _wheelMonths.length - 1))];
+      const newIdx = MONTH_KEY_MAP[`${year}-${month}`];
       closeMonthSheet();
       if (newIdx === undefined || newIdx === currentMonthIdx) return;
       const dir = newIdx > currentMonthIdx ? 1 : -1;

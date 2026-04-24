@@ -92,7 +92,6 @@ body {
   justify-content: flex-start;
   align-items: center;
   flex-shrink: 0;
-  background: var(--accent);
   position: fixed;
   top: 0;
   left: 50%;

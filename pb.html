@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>runit — PB</title>
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#202020">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="runit">
+  <link rel="apple-touch-icon" href="./icon.svg">
+  <link rel="icon" type="image/svg+xml" href="./icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+
+  <style>
+    /* ── View Transition ── */
+    @keyframes slide-in-up {
+      from { transform: translateY(60px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    @keyframes slide-out-down {
+      from { transform: translateY(0);    opacity: 1; }
+      to   { transform: translateY(60px); opacity: 0; }
+    }
+    ::view-transition-new(root) {
+      animation: slide-in-up 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    ::view-transition-old(root) {
+      animation: slide-out-down 0.25s cubic-bezier(0.4, 0, 1, 1) both;
+    }
+
+    /* ── Layout ── */
+    .phone-inner {
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── Header ── */
+    .pb-header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 14px 20px;
+      flex-shrink: 0;
+    }
+
+    .pb-back-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--text-2);
+      display: flex;
+      align-items: center;
+      padding: 0;
+      height: 34px;
+      transition: color 0.2s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .pb-back-btn:active { transform: scale(0.88); }
+
+    .pb-header-title {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 20px;
+      font-weight: 200;
+      font-family: 'Pretendard Variable', sans-serif;
+      color: var(--text-2);
+      pointer-events: none;
+      letter-spacing: -0.02em;
+    }
+
+    /* ── Scroll wrapper ── */
+    .pb-scroll {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none;
+      padding-bottom: 48px;
+    }
+    .pb-scroll::-webkit-scrollbar { display: none; }
+
+    /* ── Distance tabs ── */
+    .dist-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 0 20px;
+      margin-bottom: 0;
+      flex-shrink: 0;
+    }
+
+    .dist-tab {
+      flex: 1;
+      padding: 9px 0;
+      border-radius: 8px;
+      background: var(--surface-3);
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Space Mono', monospace;
+      color: var(--text-3);
+      letter-spacing: -0.01em;
+      transition: background 0.2s, color 0.2s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .dist-tab:active { transform: scale(0.95); }
+    .dist-tab.active { background: var(--accent); color: #000; }
+
+    /* ── Stack wrapper ── */
+    .stack-wrap {
+      padding: 0 24px;
+    }
+
+    /* ── 카드 공통 ── */
+    .stack-area {
+      position: relative;
+      /* 높이는 JS가 제어 */
+      margin-top: 40px;
+      transition: height 0.52s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .pb-card {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 168px;
+      border-radius: 16px;
+      padding: 20px 22px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      will-change: transform, opacity;
+      transition:
+        transform 0.48s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity   0.38s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.38s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ── 카드 테마 ── */
+    .theme-5k {
+      background: #141414;
+      border-left: 3px solid var(--accent);
+    }
+    .theme-10k {
+      background: #0d170f;
+      border-left: 3px solid #4ade80;
+    }
+    .theme-half {
+      background: #0d0f1c;
+      border-left: 3px solid #818cf8;
+    }
+    .theme-full {
+      background: #1a0f0d;
+      border-left: 3px solid #fb923c;
+    }
+
+    /* ── 카드 내부 ── */
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .card-rank-badge {
+      font-size: 11px;
+      font-weight: 700;
+      font-family: 'Space Mono', monospace;
+      letter-spacing: 0.1em;
+      padding: 3px 7px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.07);
+    }
+    .theme-5k   .card-rank-badge { color: var(--accent); }
+    .theme-10k  .card-rank-badge { color: #4ade80; }
+    .theme-half .card-rank-badge { color: #818cf8; }
+    .theme-full .card-rank-badge { color: #fb923c; }
+
+    .card-date {
+      font-size: 11px;
+      font-family: 'Space Mono', monospace;
+      color: var(--text-2);
+      opacity: 0.5;
+    }
+
+    .card-center {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .card-time {
+      font-size: 38px;
+      font-weight: 300;
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: var(--text-1);
+    }
+
+    .card-pace {
+      font-size: 13px;
+      font-family: 'Space Mono', monospace;
+      color: var(--text-2);
+      opacity: 0.55;
+    }
+
+    .card-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .card-name {
+      font-size: 12px;
+      font-family: 'Pretendard Variable', sans-serif;
+      font-weight: 400;
+      color: var(--text-2);
+      opacity: 0.5;
+      max-width: 180px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* 카드 포커스 (파일 모드에서 탭한 카드) */
+    .pb-card.focused {
+      box-shadow: 0 20px 48px rgba(0,0,0,0.7), 0 4px 12px rgba(0,0,0,0.4) !important;
+    }
+
+    /* ── 컨트롤 영역 ── */
+    .stack-controls {
+      display: flex;
+      justify-content: center;
+      padding: 28px 0 0;
+    }
+
+    .expand-btn {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 999px;
+      color: var(--text-2);
+      font-size: 13px;
+      font-family: 'Pretendard Variable', sans-serif;
+      font-weight: 500;
+      padding: 10px 28px;
+      cursor: pointer;
+      letter-spacing: -0.01em;
+      transition: border-color 0.2s, color 0.2s, background 0.2s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .expand-btn:active { transform: scale(0.95); }
+    .expand-btn.active {
+      border-color: rgba(255,255,255,0.3);
+      color: var(--text-1);
+    }
+
+    .expand-btn svg {
+      transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .expand-btn.active svg {
+      transform: rotate(180deg);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .pb-card, .stack-area { transition: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="phone">
+    <div class="phone-inner">
+
+      <div class="pb-header">
+        <button class="pb-back-btn" onclick="goBack()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12 19-7-7 7-7"/>
+            <path d="M19 12H5"/>
+          </svg>
+        </button>
+        <span class="pb-header-title">PB</span>
+      </div>
+
+      <div class="pb-scroll" id="pb-scroll">
+
+        <!-- 거리 탭 -->
+        <div class="dist-tabs">
+          <button class="dist-tab active" data-dist="5k"   onclick="switchDist('5k')">5K</button>
+          <button class="dist-tab"        data-dist="10k"  onclick="switchDist('10k')">10K</button>
+          <button class="dist-tab"        data-dist="half" onclick="switchDist('half')">하프</button>
+          <button class="dist-tab"        data-dist="full" onclick="switchDist('full')">풀</button>
+        </div>
+
+        <div class="stack-wrap">
+          <!-- 카드 스택 -->
+          <div class="stack-area" id="stack-area"></div>
+
+          <!-- 컨트롤 -->
+          <div class="stack-controls">
+            <button class="expand-btn" id="expand-btn" onclick="toggleExpand()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="m6 9 6 6 6-6"/>
+              </svg>
+              펼쳐보기
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /pb-scroll -->
+    </div>
+  </div>
+
+  <script>
+    // ── PB 데이터 ──
+    const PB_DATA = {
+      '5k': [
+        { rank: 1, time: '18:42', pace: "3'44\"/km", date: '2026.03.22', name: '서울 10K' },
+        { rank: 2, time: '19:05', pace: "3'49\"/km", date: '2025.11.08', name: '한강 5K 레이스' },
+        { rank: 3, time: '19:31', pace: "3'54\"/km", date: '2025.08.14', name: '템포 런' },
+        { rank: 4, time: '19:58', pace: "3'59\"/km", date: '2025.04.02', name: '트랙 세션' },
+        { rank: 5, time: '20:22', pace: "4'04\"/km", date: '2024.10.19', name: '이지 런' },
+      ],
+      '10k': [
+        { rank: 1, time: '40:11', pace: "4'01\"/km", date: '2026.03.22', name: '서울 10K' },
+        { rank: 2, time: '41:08', pace: "4'06\"/km", date: '2025.10.11', name: '한강 마스터즈' },
+        { rank: 3, time: '42:35', pace: "4'15\"/km", date: '2025.05.18', name: '봄 10K' },
+        { rank: 4, time: '43:50', pace: "4'23\"/km", date: '2024.11.02', name: '가을 10K' },
+        { rank: 5, time: '44:22', pace: "4'26\"/km", date: '2024.06.08', name: '템포 런' },
+      ],
+      'half': [
+        { rank: 1, time: '1:46:18', pace: "5'02\"/km", date: '2026.04.11', name: '2026 인천하프' },
+        { rank: 2, time: '1:48:44', pace: "5'09\"/km", date: '2025.10.19', name: '춘천 하프마라톤' },
+        { rank: 3, time: '1:51:02', pace: "5'16\"/km", date: '2025.03.30', name: '서울 하프' },
+        { rank: 4, time: '1:53:20', pace: "5'22\"/km", date: '2024.10.06', name: '부산 하프' },
+        { rank: 5, time: '1:56:08', pace: "5'31\"/km", date: '2024.04.14', name: '봄 하프' },
+      ],
+      'full': [
+        { rank: 1, time: '3:52:44', pace: "5'31\"/km", date: '2025.11.02', name: '서울마라톤' },
+        { rank: 2, time: '3:58:11', pace: "5'38\"/km", date: '2025.03.16', name: '동아마라톤' },
+        { rank: 3, time: '4:04:33', pace: "5'47\"/km", date: '2024.11.03', name: '춘천마라톤' },
+        { rank: 4, time: '4:11:22', pace: "5'57\"/km", date: '2024.04.21', name: '경주마라톤' },
+        { rank: 5, time: '4:18:05', pace: "6'06\"/km", date: '2023.10.29', name: '부산마라톤' },
+      ],
+    };
+
+    const THEMES  = { '5k': 'theme-5k', '10k': 'theme-10k', 'half': 'theme-half', 'full': 'theme-full' };
+    const LABELS  = ['1ST', '2ND', '3RD', '4TH', '5TH'];
+
+    // 파일 모드: 각 카드의 불규칙 rotate + translate
+    const PILE_T  = [
+      { r:  -1.5, x:   2, y:  0   },   // 1위 — 맨 위 (z:5)
+      { r:   7,   x: -18, y:  6   },   // 2위
+      { r:  -9,   x:  14, y:  10  },   // 3위
+      { r:   4.5, x: -10, y:  16  },   // 4위
+      { r:  -6,   x:  18, y:  20  },   // 5위 — 맨 밑 (z:1)
+    ];
+
+    const CARD_H  = 168;
+    const CARD_GAP = 12;
+    const PILE_H  = 240;  // 파일 상태 stack-area 높이
+
+    let currentDist   = '5k';
+    let isExpanded    = false;
+    let focusedIdx    = 0;           // 파일 모드에서 맨 앞 카드 인덱스 (0=1위)
+    let isAnimating   = false;
+
+    // ── 빌드 ──
+    function buildStack(dist, enterAnim) {
+      const records = PB_DATA[dist];
+      const theme   = THEMES[dist];
+      const area    = document.getElementById('stack-area');
+
+      area.innerHTML = records.map((r, i) => `
+        <div class="pb-card ${theme}" data-idx="${i}">
+          <div class="card-top">
+            <span class="card-rank-badge">${LABELS[i]}</span>
+            <span class="card-date">${r.date}</span>
+          </div>
+          <div class="card-center">
+            <span class="card-time">${r.time}</span>
+            <span class="card-pace">${r.pace}</span>
+          </div>
+          <div class="card-bottom">
+            <span class="card-name">${r.name}</span>
+          </div>
+        </div>`).join('');
+
+      // 클릭 + 스와이프 이벤트
+      area.querySelectorAll('.pb-card').forEach(card => {
+        card.addEventListener('click', () => onCardClick(parseInt(card.dataset.idx)));
+        addSwipe(card);
+      });
+
+      focusedIdx = 0;
+
+      if (enterAnim) {
+        // 잠깐 숨긴 뒤 파일 위치로 팝인
+        area.querySelectorAll('.pb-card').forEach(c => {
+          c.style.transition = 'none';
+          c.style.opacity = '0';
+          c.style.transform = 'translateY(20px) scale(0.95)';
+        });
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          area.querySelectorAll('.pb-card').forEach((c, i) => {
+            c.style.transition = '';
+            setTimeout(() => applyPileTransform(c, i, true), i * 45);
+          });
+        }));
+      } else {
+        area.querySelectorAll('.pb-card').forEach((c, i) => applyPileTransform(c, i, true));
+      }
+
+      applyAreaHeight(false);
+    }
+
+    // ── 파일 transform 적용 ──
+    function applyPileTransform(card, idx, shadow) {
+      const t    = PILE_T[idx];
+      const zIdx = 5 - idx;
+      card.style.transform  = `rotate(${t.r}deg) translate(${t.x}px, ${t.y}px)`;
+      card.style.zIndex     = zIdx;
+      card.style.opacity    = idx <= 2 ? '1' : (idx === 3 ? '0.75' : '0.5');
+      card.style.boxShadow  = idx === 0
+        ? '0 12px 40px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.3)'
+        : '0 4px 16px rgba(0,0,0,0.35)';
+    }
+
+    // ── 펼쳐보기 transform 적용 ──
+    function applyExpandedTransform(card, idx) {
+      card.style.transform = `translateY(${idx * (CARD_H + CARD_GAP)}px)`;
+      card.style.zIndex    = 5 - idx;
+      card.style.opacity   = '1';
+      card.style.boxShadow = '0 4px 20px rgba(0,0,0,0.3)';
+    }
+
+    // ── stack-area 높이 조정 ──
+    function applyAreaHeight(animate) {
+      const area = document.getElementById('stack-area');
+      if (!animate) area.style.transition = 'none';
+      if (isExpanded) {
+        const n = PB_DATA[currentDist].length;
+        area.style.height = `${n * CARD_H + (n - 1) * CARD_GAP}px`;
+      } else {
+        area.style.height = `${PILE_H}px`;
+      }
+      if (!animate) {
+        requestAnimationFrame(() => { area.style.transition = ''; });
+      }
+    }
+
+    // ── 카드 클릭 ──
+    function onCardClick(idx) {
+      if (isAnimating || isExpanded) return;
+
+      const n = PB_DATA[currentDist].length;
+      const pos = ((idx - focusedIdx) + n) % n;
+
+      if (pos === 0) {
+        // 맨 앞 카드 탭 → 위로 날리기
+        dismissTop();
+      } else {
+        // 뒤에 보이는 카드 탭 → 앞으로 가져오기
+        bringToFront(idx);
+      }
+    }
+
+    // ── 맨 앞 카드 날리기 ──
+    function dismissTop() {
+      if (isAnimating) return;
+      isAnimating = true;
+
+      const cards = [...document.querySelectorAll('.pb-card')];
+      const n     = cards.length;
+      const topCard = cards.find(c => parseInt(c.dataset.idx) === focusedIdx);
+      const topT    = PILE_T[0];
+
+      // 위로 날아가기
+      topCard.style.transition = 'transform 0.38s cubic-bezier(0.4,0,0.2,1), opacity 0.28s ease';
+      topCard.style.transform  = `rotate(${topT.r * 1.5}deg) translateY(-130%)`;
+      topCard.style.opacity    = '0';
+
+      // 나머지 카드 한 칸씩 앞으로
+      cards.forEach(card => {
+        if (card === topCard) return;
+        const idx    = parseInt(card.dataset.idx);
+        const curPos = ((idx - focusedIdx) + n) % n;
+        const newPos = curPos - 1;
+        setTimeout(() => applyPileTransform(card, newPos, true), newPos * 35);
+      });
+
+      // 날아간 카드 → 맨 뒤로 순간이동 후 팝인
+      setTimeout(() => {
+        const newFocused = (focusedIdx + 1) % n;
+        focusedIdx = newFocused;
+
+        // 순간이동 (transition 없이 맨 뒤 위치로)
+        topCard.style.transition = 'none';
+        const backT = PILE_T[n - 1];
+        topCard.style.transform  = `rotate(${backT.r}deg) translate(${backT.x}px, ${backT.y}px) translateY(30px)`;
+        topCard.style.opacity    = '0';
+        topCard.style.zIndex     = '1';
+
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          topCard.style.transition = '';
+          applyPileTransform(topCard, n - 1, true);
+        }));
+
+        setTimeout(() => { isAnimating = false; }, 480);
+      }, 400);
+    }
+
+    // ── 뒤 카드 앞으로 가져오기 ──
+    function bringToFront(targetIdx) {
+      if (isAnimating) return;
+      isAnimating = true;
+
+      const cards = [...document.querySelectorAll('.pb-card')];
+      const n     = cards.length;
+
+      cards.forEach(card => {
+        const idx    = parseInt(card.dataset.idx);
+        const newPos = ((idx - targetIdx) + n) % n;
+        setTimeout(() => applyPileTransform(card, newPos, true), newPos * 35);
+      });
+
+      focusedIdx = targetIdx;
+      setTimeout(() => { isAnimating = false; }, n * 35 + 480);
+    }
+
+    // ── 위로 스와이프 → dismissTop ──
+    function addSwipe(card) {
+      let startY = 0, startX = 0, moved = false;
+
+      card.addEventListener('touchstart', e => {
+        startY = e.touches[0].clientY;
+        startX = e.touches[0].clientX;
+        moved = false;
+      }, { passive: true });
+
+      card.addEventListener('touchmove', e => {
+        moved = true;
+      }, { passive: true });
+
+      card.addEventListener('touchend', e => {
+        if (!moved) return;
+        const dy = startY - e.changedTouches[0].clientY;
+        const dx = Math.abs(startX - e.changedTouches[0].clientX);
+        const n  = PB_DATA[currentDist].length;
+        const pos = ((parseInt(card.dataset.idx) - focusedIdx) + n) % n;
+        // 위로 50px 이상, 수평보다 수직이 더 클 때, 맨 앞 카드에서만
+        if (dy > 50 && dy > dx && pos === 0) {
+          dismissTop();
+        }
+      }, { passive: true });
+    }
+
+    // ── 펼쳐보기 토글 ──
+    function toggleExpand() {
+      if (isAnimating) return;
+      isExpanded = !isExpanded;
+
+      const btn   = document.getElementById('expand-btn');
+      const cards = [...document.querySelectorAll('.pb-card')];
+
+      btn.classList.toggle('active', isExpanded);
+      btn.querySelector('span') || null;
+      // 버튼 텍스트 교체
+      btn.childNodes[btn.childNodes.length - 1].textContent = isExpanded ? '접기' : '펼쳐보기';
+
+      applyAreaHeight(true);
+
+      if (isExpanded) {
+        // 원래 rank 순서(data-idx)대로 펼침
+        const sorted = [...cards].sort((a, b) => parseInt(a.dataset.idx) - parseInt(b.dataset.idx));
+        sorted.forEach((card, i) => {
+          setTimeout(() => applyExpandedTransform(card, i), i * 55);
+        });
+      } else {
+        // 파일로 복귀 — focusedIdx 기준 재정렬
+        const n = PB_DATA[currentDist].length;
+        cards.forEach(card => {
+          const idx    = parseInt(card.dataset.idx);
+          const newPos = ((idx - focusedIdx) + n) % n;
+          setTimeout(() => applyPileTransform(card, newPos, true), newPos * 40);
+        });
+      }
+    }
+
+    // ── 거리 전환 ──
+    function switchDist(dist) {
+      if (dist === currentDist || isAnimating) return;
+      currentDist = dist;
+      isExpanded  = false;
+
+      const btn = document.getElementById('expand-btn');
+      btn.classList.remove('active');
+      btn.childNodes[btn.childNodes.length - 1].textContent = '펼쳐보기';
+
+      document.querySelectorAll('.dist-tab').forEach(t =>
+        t.classList.toggle('active', t.dataset.dist === dist)
+      );
+
+      buildStack(dist, true);
+    }
+
+    // ── 뒤로가기 ──
+    function goBack() {
+      if (document.startViewTransition) {
+        document.startViewTransition(() => { history.back(); });
+      } else {
+        history.back();
+      }
+    }
+
+    // ── 초기 렌더 ──
+    buildStack('5k', false);
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js');
+    }
+  </script>
+</body>
+
+</html>

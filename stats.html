@@ -22,30 +22,12 @@
     rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
   <style>
-    /* ─── phone-inner: bg + theme transition ── */
+    /* ─── Page bg ── */
     .phone-inner {
       background: var(--bg);
-      transition: background 0.3s;
     }
 
     /* ─── Back header: glass override (styles.css = accent) ── */
-    .back-header {
-      padding: 14px 20px;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      flex-shrink: 0;
-      position: fixed;
-      background: rgba(25, 25, 25, 0.12);
-      backdrop-filter: blur(40px) saturate(100%);
-      -webkit-backdrop-filter: blur(40px) saturate(100%);
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 430px;
-      z-index: 10;
-    }
 
     .back-btn {
       width: auto;
@@ -91,22 +73,30 @@
       z-index: 9;
     }
 
+    /* ─── Top section — chart + intensity ── */
+    .stats-top-section {
+      background: var(--asphalt-black);
+      padding-bottom: 40px;
+    }
+
+    /* ─── Bottom section — delta + pace + runs ── */
+    .stats-bottom-section {
+      background: var(--slate-gray);
+      padding-bottom: 48px;
+    }
+
     .tab {
       padding: 12px;
-      font-size: 18px;
+      font-size: 24px;
       font-weight: 600;
       font-family: 'Pretendard Variable', sans-serif;
-      color: var(--text-3);
+      color: var(--aspalt-gray);
       cursor: pointer;
       border: none;
     }
 
     .tab.active {
-      color: var(--text-1);
-    }
-
-    .tab:active {
-      transform: scale(0.93);
+      color: var(--slate-gray);
     }
 
     /* ─── Scroll ── */
@@ -114,7 +104,6 @@
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
-      padding-bottom: 40px;
       padding-top: 96px;
       scrollbar-width: none;
     }
@@ -168,10 +157,10 @@
     }
 
     .chart-period-label {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 500;
       font-family: 'Pretendard Variable', sans-serif;
-      color: var(--text-2);
+      color: var(--slate-gray);
       transition: color 0.3s;
     }
 
@@ -330,12 +319,11 @@
     .intensity-breakdown-title {
       font-size: 14px;
       font-weight: 500;
+      color: var(--slate-gray);
+      margin-bottom: 10px;
+      transition: color 1s;
       letter-spacing: 0;
-      text-transform: uppercase;
-      color: var(--text-2);
-      opacity: 0.65;
-      margin-bottom: 20px;
-      transition: color 0.3s;
+      font-family: 'Pretendard Variable', sans-serif;
     }
 
     /* 강도 스택 바 */
@@ -442,15 +430,13 @@
       padding-left: 20px;
     }
 
-    .delta-vs {
+    .sub-title {
       font-size: 14px;
       font-weight: 500;
       letter-spacing: 0;
-      text-transform: uppercase;
-      color: var(--text-2);
-      opacity: 0.65;
       margin-bottom: 12px;
       transition: color 0.3s;
+      font-family: 'Pretendard Variable', sans-serif;
     }
 
     .delta-km {
@@ -465,14 +451,9 @@
       color: var(--accent);
     }
 
-    .delta-km.down {
-      color: var(--text-1);
-    }
-
     .delta-km span {
       font-size: 14px;
       font-weight: 400;
-      color: var(--text-2);
       margin-left: 2px;
     }
 
@@ -489,7 +470,7 @@
     }
 
     .delta-pct.down {
-      color: var(--text-2);
+      color: var(--aspalt-gray);
     }
 
     /* ════════════════════════════════════
@@ -526,7 +507,6 @@
     .pace-name {
       font-size: 16px;
       font-weight: 400;
-      color: var(--text-1);
       transition: color 0.3s;
     }
 
@@ -534,7 +514,6 @@
       font-size: 22px;
       font-weight: 300;
       font-family: 'Space Grotesk', sans-serif;
-      color: var(--text-1);
       transition: color 0.3s;
     }
 
@@ -545,15 +524,66 @@
     .pace-val span {
       font-size: 13px;
       font-weight: 400;
-      color: var(--text-2);
       margin-left: 4px;
     }
+
+    .title-area {
+      padding: 0 20px;
+    }
+
 
     /* ════════════════════════════════════
        ACTIVITY LIST
     ════════════════════════════════════ */
     .month-runs {
-      padding: 40px 20px 0;
+      padding: 40px 0 0;
+    }
+
+    .month-runs-title {
+      padding: 0 20px;
+      margin-bottom: 10px;
+    }
+
+    /* ─── Run type dot badge ── */
+    .type-race {
+      background: var(--type-race-bg);
+      color: var(--type-race-text);
+    }
+
+    .type-tempo {
+      background: var(--type-dark-bg);
+      color: var(--type-dark-text);
+    }
+
+    .type-interval {
+      background: var(--type-dark-bg);
+      color: var(--type-dark-text);
+    }
+
+    .type-steady {
+      background: var(--type-steady-bg);
+      color: var(--type-steady-text);
+    }
+
+    .type-easy {
+      background: var(--type-easy-bg);
+      color: var(--type-easy-text);
+    }
+
+    .type-jogging {
+      background: var(--type-jog-bg);
+      color: var(--type-jog-text);
+    }
+
+    .type-long {
+      background: var(--type-long-bg);
+      color: var(--type-long-text);
+    }
+
+    /* ─── view-all-btn in stats ── */
+    #view-month .view-all-btn {
+      margin: 16px 20px 0;
+      width: calc(100% - 40px);
     }
 
     .month-runs-title {
@@ -656,7 +686,6 @@
     .intensity-breakdown-title,
     .month-runs-title,
     .pace-block-title {
-      letter-spacing: 0.14em;
       font-family: 'Space Mono', ui-monospace, monospace;
       font-weight: 400;
     }
@@ -702,22 +731,22 @@
 
         <div class="delta-row">
           <div class="delta-card">
-            <div class="delta-vs">지난주 대비</div>
+            <div class="sub-title">지난주 대비</div>
             <div class="delta-km down">−19.7<span>km</span></div>
             <div class="delta-pct down">↓ 78%</div>
           </div>
           <div class="delta-card">
-            <div class="delta-vs">8주 평균 대비</div>
+            <div class="sub-title">8주 평균 대비</div>
             <div class="delta-km down">−16.2<span>km</span></div>
             <div class="delta-pct down">↓ 74%</div>
           </div>
         </div>
 
         <div class="pace-block">
-          <div class="pace-block-title">이번 주 · 페이스</div>
+          <div class="sub-title">이번 주 · 페이스</div>
           <div class="pace-row">
             <span class="pace-name">Best</span>
-            <span class="pace-val accent">5:38<span>/km</span></span>
+            <span class="pace-val">5:38<span>/km</span></span>
           </div>
           <div class="pace-row">
             <span class="pace-name">Average</span>
@@ -734,75 +763,81 @@
          MONTH VIEW (월간)
     ══════════════════════════════ -->
       <div class="scroll-area" id="view-month">
-        <div class="chart-block">
-          <div class="chart-top">
-            <div class="year-nav">
-              <button class="year-arrow" id="year-prev" onclick="changeYear(-1)">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <path d="m15 18-6-6 6-6" />
-                </svg>
-              </button>
-              <span class="chart-period-label" id="month-year-label">2026년</span>
-              <button class="year-arrow disabled" id="year-next" onclick="changeYear(1)">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <path d="m9 18 6-6-6-6" />
-                </svg>
-              </button>
+        <div class="stats-top-section">
+          <div class="chart-block">
+            <div class="chart-top">
+              <div class="year-nav">
+                <button class="year-arrow" id="year-prev" onclick="changeYear(-1)">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m15 18-6-6 6-6" />
+                  </svg>
+                </button>
+                <span class="chart-period-label" id="month-year-label">2026년</span>
+                <button class="year-arrow disabled" id="year-next" onclick="changeYear(1)">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m9 18 6-6-6-6" />
+                  </svg>
+                </button>
+              </div>
+              <span class="chart-avg-line-label">
+                <span id="month-avg-label"></span>
+              </span>
             </div>
-            <span class="chart-avg-line-label">
-              <span id="month-avg-label"></span>
-            </span>
-          </div>
-          <div class="chart-swipe-wrap" id="chart-swipe-wrap">
-            <div class="cmp-chart vertical" id="month-chart">
-              <div class="avg-line" id="month-avg-line"></div>
+            <div class="chart-swipe-wrap" id="chart-swipe-wrap">
+              <div class="cmp-chart vertical" id="month-chart">
+                <div class="avg-line" id="month-avg-line"></div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- 강도 분포 + 활동 리스트 -->
-        <div class="month-detail" id="month-detail">
-          <div class="intensity-breakdown">
-            <div class="intensity-breakdown-title">러닝 강도</div>
-            <div id="detail-intensity"></div>
+          <!-- 강도 분포 -->
+          <div class="month-detail" id="month-detail">
+            <div class="intensity-breakdown">
+              <div class="intensity-breakdown-title">러닝 강도</div>
+              <div id="detail-intensity"></div>
+            </div>
           </div>
-        </div>
+        </div><!-- /stats-top-section -->
 
-        <div class="delta-row" id="month-delta-row">
-          <div class="delta-card">
-            <div class="delta-vs">지난달 대비</div>
-            <div class="delta-km down">−27.9<span>km</span></div>
-            <div class="delta-pct down">↓ 32%</div>
+        <div class="stats-bottom-section">
+          <div class="delta-row" id="month-delta-row">
+            <div class="delta-card">
+              <div class="sub-title">지난달 대비</div>
+              <div class="delta-km down">−27.9<span>km</span></div>
+              <div class="delta-pct down">↓ 32%</div>
+            </div>
+            <div class="delta-card">
+              <div class="sub-title">12개월 평균 대비</div>
+              <div class="delta-km down">−9.4<span>km</span></div>
+              <div class="delta-pct down">↓ 14%</div>
+            </div>
           </div>
-          <div class="delta-card">
-            <div class="delta-vs">12개월 평균 대비</div>
-            <div class="delta-km down">−9.4<span>km</span></div>
-            <div class="delta-pct down">↓ 14%</div>
-          </div>
-        </div>
 
-        <div class="pace-block">
-          <div class="pace-block-title">이번 달 · 페이스</div>
-          <div class="pace-row">
-            <span class="pace-name">Best</span>
-            <span class="pace-val accent">5:02<span>/km</span></span>
+          <div class="pace-block">
+            <div class="sub-title">이번 달 · 페이스</div>
+            <div class="pace-row">
+              <span class="pace-name">Best</span>
+              <span class="pace-val">5:02<span>/km</span></span>
+            </div>
+            <div class="pace-row">
+              <span class="pace-name">Average</span>
+              <span class="pace-val">5:38<span>/km</span></span>
+            </div>
+            <div class="pace-row">
+              <span class="pace-name">지난달 평균</span>
+              <span class="pace-val">5:29<span>/km</span></span>
+            </div>
           </div>
-          <div class="pace-row">
-            <span class="pace-name">Average</span>
-            <span class="pace-val">5:38<span>/km</span></span>
-          </div>
-          <div class="pace-row">
-            <span class="pace-name">지난달 평균</span>
-            <span class="pace-val">5:29<span>/km</span></span>
-          </div>
-        </div>
 
-        <div class="month-runs">
-          <div class="month-runs-title">활동</div>
-          <div id="detail-runs"></div>
-        </div>
+          <div class="month-runs">
+            <div class="title-area">
+              <span class="sub-title">활동</span>
+            </div>
+            <div id="detail-runs"></div>
+          </div>
+        </div><!-- /stats-bottom-section -->
 
       </div><!-- /view-month -->
 
@@ -824,12 +859,12 @@
 
         <div class="delta-row">
           <div class="delta-card">
-            <div class="delta-vs">작년 동기 대비</div>
+            <div class="sub-title">작년 동기 대비</div>
             <div class="delta-km up">+14.2<span>km</span></div>
             <div class="delta-pct up">↑ 5%</div>
           </div>
           <div class="delta-card">
-            <div class="delta-vs">3년 평균 대비</div>
+            <div class="sub-title">3년 평균 대비</div>
             <div class="delta-km down">−12.6<span>km</span></div>
             <div class="delta-pct down">↓ 4%</div>
           </div>
@@ -839,7 +874,7 @@
           <div class="pace-block-title">올해 · 페이스</div>
           <div class="pace-row">
             <span class="pace-name">Best</span>
-            <span class="pace-val accent">5:02<span>/km</span></span>
+            <span class="pace-val">5:02<span>/km</span></span>
           </div>
           <div class="pace-row">
             <span class="pace-name">Average</span>
@@ -1077,26 +1112,26 @@
     // RUNS 데이터
     // ══════════════════════════════════════
     const RUNS = [
-      // 4월
-      { date: '2026-04-11', month: 4, name: '2026 인천하프', km: 21.2, pace: '5:02', bpm: 176 },
-      { date: '2026-04-10', month: 4, name: '회복 조깅', km: 5.4, pace: '6:52', bpm: 142 },
-      { date: '2026-04-07', month: 4, name: '템포 런', km: 8.0, pace: '4:45', bpm: 169 },
-      { date: '2026-04-05', month: 4, name: '이지 런', km: 7.2, pace: '6:15', bpm: 138 },
-      { date: '2026-04-04', month: 4, name: '이지 런', km: 6.8, pace: '6:20', bpm: 135 },
-      { date: '2026-04-03', month: 4, name: '이지 런', km: 5.0, pace: '6:40', bpm: 132 },
+      // 4월 — list.html 동일 데이터
+      { date: '2026-04-11', label: '4/11', month: 4, type: 'race', name: '2026 인천하프', time: '08:00', km: 21.2, pace: '5:02', bpm: 176, spm: 174, stride: 107 },
+      { date: '2026-04-10', label: '4/10', month: 4, type: 'jogging', name: '회복 조깅', time: '07:30', km: 5.4, pace: '6:52', bpm: 142, spm: 163, stride: 88 },
+      { date: '2026-04-07', label: '4/7', month: 4, type: 'tempo', name: '템포 런', time: '06:15', km: 8.0, pace: '4:45', bpm: 169, spm: 180, stride: 112 },
+      { date: '2026-04-05', label: '4/5', month: 4, type: 'easy', name: '이지 런', time: '06:30', km: 7.2, pace: '6:15', bpm: 138, spm: 162, stride: 91 },
+      { date: '2026-04-04', label: '4/4', month: 4, type: 'easy', name: '이지 런', time: '18:00', km: 6.8, pace: '6:20', bpm: 135, spm: 160, stride: 89 },
+      { date: '2026-04-03', label: '4/3', month: 4, type: 'easy', name: '이지 런', time: '07:00', km: 5.0, pace: '6:40', bpm: 132, spm: 158, stride: 86 },
       // 3월
-      { date: '2026-03-30', month: 3, name: '스테디 런', km: 10.5, pace: '5:30', bpm: 158 },
-      { date: '2026-03-28', month: 3, name: '스테디 런', km: 9.8, pace: '5:38', bpm: 155 },
-      { date: '2026-03-22', month: 3, name: '서울 10K', km: 10.0, pace: '4:52', bpm: 172 },
-      { date: '2026-03-20', month: 3, name: '스테디 런', km: 11.2, pace: '5:25', bpm: 160 },
-      { date: '2026-03-19', month: 3, name: '회복 조깅', km: 4.8, pace: '7:05', bpm: 138 },
-      { date: '2026-03-13', month: 3, name: '이지 런', km: 8.5, pace: '6:08', bpm: 141 },
-      { date: '2026-03-09', month: 3, name: '이지 런', km: 6.0, pace: '6:22', bpm: 136 },
+      { date: '2026-03-30', label: '3/30', month: 3, type: 'steady', name: '스테디 런', time: '07:30', km: 10.5, pace: '5:30', bpm: 158, spm: 170, stride: 98 },
+      { date: '2026-03-28', label: '3/28', month: 3, type: 'steady', name: '스테디 런', time: '07:00', km: 9.8, pace: '5:38', bpm: 155, spm: 168, stride: 96 },
+      { date: '2026-03-22', label: '3/22', month: 3, type: 'race', name: '서울 10K', time: '09:00', km: 10.0, pace: '4:52', bpm: 172, spm: 177, stride: 105 },
+      { date: '2026-03-20', label: '3/20', month: 3, type: 'steady', name: '스테디 런', time: '07:15', km: 11.2, pace: '5:25', bpm: 160, spm: 171, stride: 100 },
+      { date: '2026-03-19', label: '3/19', month: 3, type: 'jogging', name: '회복 조깅', time: '07:30', km: 4.8, pace: '7:05', bpm: 138, spm: 161, stride: 85 },
+      { date: '2026-03-13', label: '3/13', month: 3, type: 'easy', name: '이지 런', time: '06:45', km: 8.5, pace: '6:08', bpm: 141, spm: 164, stride: 93 },
+      { date: '2026-03-09', label: '3/9', month: 3, type: 'easy', name: '이지 런', time: '07:00', km: 6.0, pace: '6:22', bpm: 136, spm: 160, stride: 90 },
       // 2월
-      { date: '2026-02-25', month: 2, name: '롱 런', km: 18.0, pace: '5:48', bpm: 155 },
-      { date: '2026-02-18', month: 2, name: '템포 런', km: 7.5, pace: '4:52', bpm: 167 },
-      { date: '2026-02-10', month: 2, name: '스테디 런', km: 9.2, pace: '5:42', bpm: 152 },
-      { date: '2026-02-02', month: 2, name: '이지 런', km: 5.5, pace: '6:28', bpm: 133 },
+      { date: '2026-02-25', label: '2/25', month: 2, type: 'long', name: '롱 런', time: '07:00', km: 18.0, pace: '5:48', bpm: 155, spm: 168, stride: 97 },
+      { date: '2026-02-18', label: '2/18', month: 2, type: 'tempo', name: '템포 런', time: '06:30', km: 7.5, pace: '4:52', bpm: 167, spm: 178, stride: 110 },
+      { date: '2026-02-10', label: '2/10', month: 2, type: 'steady', name: '스테디 런', time: '07:15', km: 9.2, pace: '5:42', bpm: 152, spm: 167, stride: 95 },
+      { date: '2026-02-02', label: '2/2', month: 2, type: 'easy', name: '이지 런', time: '08:00', km: 5.5, pace: '6:28', bpm: 133, spm: 159, stride: 87 },
     ];
 
     function fmtDate(dateStr) {
@@ -1185,8 +1220,8 @@
           <div class="isb-seg isb-high" style="width:${intensity.high}%"><span>${intensity.high}%</span></div>
         </div>
         <div class="isb-axis">
-          <span class="isb-axis-label">低</span>
-          <span class="isb-axis-label">高</span>
+          <span class="isb-axis-label">저</span>
+          <span class="isb-axis-label">고</span>
         </div>`;
 
       // 순차 reveal — 저 → 중 → 고 (clip-path 커튼)
@@ -1196,23 +1231,29 @@
         setTimeout(() => { el.style.clipPath = 'inset(0 0% 0 0)'; }, baseDelay + i * stagger);
       });
 
-      // 활동 리스트
+      // 활동 리스트 — list.html rowHTML과 동일
       const monthRuns = RUNS.filter(r => r.month === mIdx).sort((a, b) => a.date < b.date ? 1 : -1);
       document.getElementById('detail-runs').innerHTML = monthRuns.length
-        ? monthRuns.map(r => `
-          <a class="run-item" href="detail.html">
-            <div class="run-left">
-              <div class="run-date">${fmtDate(r.date)}</div>
-              <div class="run-name">${r.name}</div>
-              <div class="run-sub">${r.pace}/km · ${r.bpm}bpm</div>
+        ? `<div class="lp-list">${monthRuns.map(r => `
+          <div class="lp-row expanded" onclick="location.href='detail.html'">
+            <div class="lp-badge type-${r.type}"></div>
+            <div class="lp-info">
+              <div class="lp-title-row">
+                <div class="lp-run-name">${r.name}</div>
+                <div class="lp-right-content">${r.date.replace(/-/g, '.')}</div>
+              </div>
+              <div class="lp-stats">
+                <div class="lp-stat"><span class="lp-stat-label">시간</span><strong class="lp-stat-value">${r.time}</strong></div>
+                <div class="lp-stat"><span class="lp-stat-label">거리</span><strong class="lp-stat-value">${r.km} <span class="lp-stat-unit">km</span></strong></div>
+                <div class="lp-stat"><span class="lp-stat-label">페이스</span><strong class="lp-stat-value">${r.pace} <span class="lp-stat-unit">/km</span></strong></div>
+                <div class="lp-stat"><span class="lp-stat-label">심박수</span><strong class="lp-stat-value">${r.bpm} <span class="lp-stat-unit">bpm</span></strong></div>
+                <div class="lp-stat"><span class="lp-stat-label">케이던스</span><strong class="lp-stat-value">${r.spm} <span class="lp-stat-unit">spm</span></strong></div>
+                <div class="lp-stat"><span class="lp-stat-label">보행길이</span><strong class="lp-stat-value">${r.stride} <span class="lp-stat-unit">cm</span></strong></div>
+              </div>
             </div>
-            <div class="run-right">
-              <div class="run-km">${r.km}<span>km</span></div>
-              <svg class="run-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-            </div>
-          </a>`).join('')
+          </div>`).join('')}</div>`
         + `<a class="view-all-btn" href="list.html">전체 목록 보기</a>`
-        : `<div class="run-item"><span class="run-sub">데이터 없음</span></div>`;
+        : `<div class="lp-row expanded"><span class="lp-stat-label">데이터 없음</span></div>`;
     }
 
     function selectMonth(idx) {
