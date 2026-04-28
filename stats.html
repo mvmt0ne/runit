@@ -731,12 +731,12 @@
         <div class="delta-row">
           <div class="delta-card">
             <div class="sub-title">지난주 대비</div>
-            <div class="delta-km down">−19.7<span>km</span></div>
+            <div class="delta-km down">−19.7<span>K</span></div>
             <div class="delta-pct down">↓ 78%</div>
           </div>
           <div class="delta-card">
             <div class="sub-title">8주 평균 대비</div>
-            <div class="delta-km down">−16.2<span>km</span></div>
+            <div class="delta-km down">−16.2<span>K</span></div>
             <div class="delta-pct down">↓ 74%</div>
           </div>
         </div>
@@ -804,12 +804,12 @@
           <div class="delta-row" id="month-delta-row">
             <div class="delta-card">
               <div class="sub-title">지난달 대비</div>
-              <div class="delta-km down">−27.9<span>km</span></div>
+              <div class="delta-km down">−27.9<span>K</span></div>
               <div class="delta-pct down">↓ 32%</div>
             </div>
             <div class="delta-card">
               <div class="sub-title">12개월 평균 대비</div>
-              <div class="delta-km down">−9.4<span>km</span></div>
+              <div class="delta-km down">−9.4<span>K</span></div>
               <div class="delta-pct down">↓ 14%</div>
             </div>
           </div>
@@ -859,12 +859,12 @@
         <div class="delta-row">
           <div class="delta-card">
             <div class="sub-title">작년 동기 대비</div>
-            <div class="delta-km up">+14.2<span>km</span></div>
+            <div class="delta-km up">+14.2<span>K</span></div>
             <div class="delta-pct up">↑ 5%</div>
           </div>
           <div class="delta-card">
             <div class="sub-title">3년 평균 대비</div>
-            <div class="delta-km down">−12.6<span>km</span></div>
+            <div class="delta-km down">−12.6<span>K</span></div>
             <div class="delta-pct down">↓ 4%</div>
           </div>
         </div>
@@ -1051,7 +1051,7 @@
       renderChart('month-chart', 'month-avg-line', data, activeAvg, {
         barMaxPx: 115, labelOffset: 34
       });
-      document.getElementById('month-avg-label').textContent = '평균 ' + activeAvg + 'km';
+      document.getElementById('month-avg-label').textContent = '평균 ' + activeAvg + 'K';
 
       // 현재 달 인덱스로 디폴트 상세 패널 초기화
       const defaultIdx = data.findIndex(d => d.current);
@@ -1243,7 +1243,7 @@
               </div>
               <div class="lp-stats">
                 <div class="lp-stat"><span class="lp-stat-label">시간</span><strong class="lp-stat-value">${r.time}</strong></div>
-                <div class="lp-stat"><span class="lp-stat-label">거리</span><strong class="lp-stat-value">${r.km} <span class="lp-stat-unit">km</span></strong></div>
+                <div class="lp-stat"><span class="lp-stat-label">거리</span><strong class="lp-stat-value">${r.km} <span class="lp-stat-unit">K</span></strong></div>
                 <div class="lp-stat"><span class="lp-stat-label">페이스</span><strong class="lp-stat-value">${r.pace} <span class="lp-stat-unit">/km</span></strong></div>
                 <div class="lp-stat"><span class="lp-stat-label">심박수</span><strong class="lp-stat-value">${r.bpm} <span class="lp-stat-unit">bpm</span></strong></div>
                 <div class="lp-stat"><span class="lp-stat-label">케이던스</span><strong class="lp-stat-value">${r.spm} <span class="lp-stat-unit">spm</span></strong></div>
@@ -1343,14 +1343,14 @@
       renderChart('week-chart', 'week-avg-line', WEEK_DATA, AVG_WEEK, {
         barMaxPx: 115, labelOffset: 18
       });
-      document.getElementById('week-avg-label').textContent = 'avg ' + AVG_WEEK + 'km';
+      document.getElementById('week-avg-label').textContent = 'avg ' + AVG_WEEK + 'K';
     }
 
     function renderYearChart() {
       renderChart('year-chart', 'year-avg-line', YEAR_DATA, AVG_YEAR, {
         barMaxPx: 115, labelOffset: 18
       });
-      document.getElementById('year-avg-label').textContent = 'avg ' + AVG_YEAR + 'km';
+      document.getElementById('year-avg-label').textContent = 'avg ' + AVG_YEAR + 'K';
     }
   </script>
 

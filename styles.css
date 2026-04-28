@@ -859,7 +859,7 @@ input[type='range'].range-input::-moz-range-thumb {
 /* ─── Floating bar ── */
 .float-bar-wrap {
   position: fixed;
-  bottom: calc(38px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%) translateY(20px);
   display: flex;

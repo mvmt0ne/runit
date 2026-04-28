@@ -346,7 +346,7 @@
           const totalKm = runs.reduce((s, r) => s + r.km, 0).toFixed(1);
           return `<div class="lp-month-section">
             <div class="lp-month-label">${MONTH_LABELS[m]}</div>
-            <div class="lp-month-km"><strong>${totalKm}</strong> km</div>
+            <div class="lp-month-km"><strong>${totalKm}</strong> K</div>
           </div>
           <div class="lp-list">${runs.map(rowHTML).join('')}</div>`;
         }).join('');
@@ -365,7 +365,7 @@
           </div>
           <div class="lp-stats">
             <div class="lp-stat"><span class="lp-stat-label">시간</span><strong class="lp-stat-value">${r.time}</strong></div>
-            <div class="lp-stat"><span class="lp-stat-label">거리</span><strong class="lp-stat-value">${r.km} <span class="lp-stat-unit">km</span></strong></div>
+            <div class="lp-stat"><span class="lp-stat-label">거리</span><strong class="lp-stat-value">${r.km} <span class="lp-stat-unit">K</span></strong></div>
             <div class="lp-stat"><span class="lp-stat-label">페이스</span><strong class="lp-stat-value">${r.pace} <span class="lp-stat-unit">/km</span></strong></div>
             <div class="lp-stat"><span class="lp-stat-label">심박수</span><strong class="lp-stat-value">${r.bpm} <span class="lp-stat-unit">bpm</span></strong></div>
             <div class="lp-stat"><span class="lp-stat-label">케이던스</span><strong class="lp-stat-value">${r.spm} <span class="lp-stat-unit">spm</span></strong></div>
@@ -450,7 +450,7 @@
       document.getElementById('sf-filter-cats').innerHTML = `
         <div class="filter-cat"><div class="filter-cat-label">타입</div><div class="filter-chips">${typeChips}</div></div>
         <div class="filter-cat"><div class="filter-cat-label">거리</div>
-          <div class="range-val-row"><span class="range-val" id="dist-lo-val">${distLoV}km</span><span class="range-val" id="dist-hi-val">${distHiV}km</span></div>
+          <div class="range-val-row"><span class="range-val" id="dist-lo-val">${distLoV}K</span><span class="range-val" id="dist-hi-val">${distHiV}K</span></div>
           <div class="range-slider-wrap" style="height:20px">
             <div class="range-track"><div class="range-fill" id="dist-fill"></div></div>
             <input type="range" class="range-input" id="dist-lo" min="0" max="42" step="1" value="${distMin}" oninput="onRangeInput('dist')">
@@ -484,8 +484,8 @@
       if (+lo.value >= +hi.value) lo.value = +hi.value - +lo.step;
       if (key === 'dist') {
         filterState.distMin = +lo.value; filterState.distMax = +hi.value;
-        document.getElementById('dist-lo-val').textContent = lo.value + 'km';
-        document.getElementById('dist-hi-val').textContent = hi.value + 'km';
+        document.getElementById('dist-lo-val').textContent = lo.value + 'K';
+        document.getElementById('dist-hi-val').textContent = hi.value + 'K';
       } else {
         filterState.paceMin = +lo.value; filterState.paceMax = +hi.value;
         document.getElementById('pace-lo-val').textContent = fmtPace(+lo.value) + '/km';
