@@ -266,9 +266,9 @@ body {
 }
 
 .lp-row.expanded:active {
-  background: var(--asphalt-black);
+  background: black;
   border-radius: 8px;
-  opacity: 0.3;
+  opacity: 0.1;
 }
 
 .lp-row.expanded .lp-info {
