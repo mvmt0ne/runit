@@ -251,6 +251,12 @@ sup {
   gap: 12px;
 }
 
+.lp-row.compact .lp-row-left-head {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
 .lp-row.compact .lp-run-name {
   font-size: 16px;
   font-weight: 300;
@@ -261,6 +267,14 @@ sup {
 
 .lp-row.compact .lp-stats {
   display: none !important;
+}
+
+.lp-row.compact .lp-expanded-date {
+  display: none;
+}
+
+.lp-row.expanded .lp-compact-km {
+  display: none;
 }
 
 /* ─── Expanded mode ── */
@@ -310,12 +324,12 @@ sup {
 }
 
 .lp-right-content {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 300;
   flex-shrink: 0;
   font-family: 'Space Grotesk', sans-serif;
   white-space: nowrap;
-  color: var(--aspalt-gray);
+  color: var(--asphalt-black);
 }
 
 /* 2-column stats */
