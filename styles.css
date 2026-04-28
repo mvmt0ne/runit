@@ -140,7 +140,7 @@ sup {
   left: 50%;
   transform: translateX(-50%);
   font-size: 20px;
-  font-weight: 200;
+  font-weight: 400;
   font-family: 'Pretendard Variable', sans-serif;
   color: var(--asphalt-black);
   pointer-events: none;
@@ -301,8 +301,8 @@ sup {
 .lp-row.expanded .lp-title-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
+  align-items: end;
+  margin-bottom: 20px;
   gap: 8px;
   width: 100%;
 }
@@ -364,17 +364,23 @@ sup {
   align-items: stretch;
 }
 
-.lp-stats-right .lp-stat {
+/* → .lp-row.expanded .lp-stats-right .lp-stat 으로 통합됨 */
+
+/* 좌 컬럼만 column — 우 컬럼은 .lp-stats-right .lp-stat에서 row로 오버라이드 */
+.lp-stats-left .lp-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* 우 컬럼 row 레이아웃 — specificity 강화로 위 column 규칙 차단 */
+.lp-row.expanded .lp-stats-right .lp-stat {
+  display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: baseline;
   width: 100%;
-}
-
-.lp-row.expanded .lp-stat {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+  gap: 0;
 }
 
 .lp-row.expanded .lp-stat-row {

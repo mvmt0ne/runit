@@ -70,9 +70,9 @@
       left: 50%;
       transform: translateX(-50%);
       font-size: 20px;
-      font-weight: 200;
+      font-weight: 400;
       font-family: 'Pretendard Variable', sans-serif;
-      color: var(--text-2);
+      color: var(--cloudy-gray);
       transition: color 0.3s;
       pointer-events: none;
     }
@@ -117,7 +117,7 @@
 
     .month-runs {
       background: var(--slate-gray);
-      padding-bottom: calc(48px + env(safe-area-inset-bottom, 0px));
+      padding: 40px 0 calc(48px + env(safe-area-inset-bottom, 0px)) 0;
     }
 
     /* delta · pace 텍스트 — 어두운 배경 위 */
@@ -558,9 +558,6 @@
     /* ════════════════════════════════════
        ACTIVITY LIST
     ════════════════════════════════════ */
-    .month-runs {
-      padding: 40px 0 0;
-    }
 
     .month-runs-title {
       padding: 0 20px;
@@ -719,7 +716,7 @@
 
       <div class="back-header">
         <button class="back-btn" onclick="history.back()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--slate-gray)" stroke-width="2"
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--slate-gray)" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <path d="m12 19-7-7 7-7" />
             <path d="M19 12H5" />
@@ -727,7 +724,7 @@
         </button>
         <span class="back-title">마일리지</span>
         <button class="pb-header-btn" onclick="goToPB()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
             <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
