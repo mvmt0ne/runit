@@ -121,9 +121,6 @@
     }
 
     /* delta · pace 텍스트 — 어두운 배경 위 */
-    .sub-title {
-      color: var(--cloudy-gray);
-    }
 
     .delta-km {
       color: var(--text-1);
@@ -131,10 +128,6 @@
 
     .pace-name {
       color: var(--cloudy-gray);
-    }
-
-    .pace-val {
-      color: var(--text-1);
     }
 
     .tab {
@@ -168,7 +161,7 @@
        COMPARISON CHART
     ════════════════════════════════════ */
     .chart-block {
-      margin: 34px 22px 0;
+      margin: 20px 0;
     }
 
     .chart-top {
@@ -176,6 +169,7 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 24px;
+      padding: 0 20px 0 12px;
     }
 
     .year-nav {
@@ -217,13 +211,8 @@
     }
 
     .chart-avg-line-label {
-      font-size: 16px;
-      font-weight: 300;
-      color: var(--text-2);
-      font-family: 'Pretendard Variable', sans-serif;
-      display: flex;
-      align-items: center;
-      transition: color 0.3s;
+      color: var(--cloudy-gray);
+      font-family: 'Space Grotesk', monospace;
     }
 
     .avg-line-dash {
@@ -237,19 +226,15 @@
       overflow: hidden;
     }
 
-    /* 차트 슬라이드 애니메이션 */
-    .cmp-chart {
-      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s;
-    }
-
     /* 바 차트 — 회전 레이블 수용 */
     .cmp-chart {
       position: relative;
-      height: 200px;
+      height: 220px;
       display: flex;
       align-items: flex-end;
       gap: 0;
       padding: 0 10px;
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s;
     }
 
     .avg-line {
@@ -368,11 +353,21 @@
       padding: 40px 22px 0;
     }
 
-    .intensity-breakdown-title {
-      font-size: 14px;
-      font-weight: 500;
+    .components-title {
+      font-size: 16px;
+      font-weight: 400;
       color: var(--slate-gray);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      transition: color 1s;
+      letter-spacing: 0;
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
+    .components-title.dark {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--asphalt-black);
+      margin-bottom: 12px;
       transition: color 1s;
       letter-spacing: 0;
       font-family: 'Pretendard Variable', sans-serif;
@@ -400,7 +395,7 @@
     .isb-seg span {
       font-size: 16px;
       font-weight: 600;
-      font-family: 'Space Grotesk', sans-serif;
+      font-family: 'Space Grotesk', monospace;
       white-space: nowrap;
     }
 
@@ -435,8 +430,9 @@
     }
 
     .isb-axis-label {
-      font-size: 14px;
-      color: var(--text-2);
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--cloudy-gray);
       font-family: 'Pretendard Variable', sans-serif;
       transition: color 0.3s;
     }
@@ -470,7 +466,7 @@
       grid-template-columns: 1fr 1fr;
       gap: 0;
       margin: 0;
-      padding: 40px 20px 0;
+      padding: 0 20px 40px;
     }
 
     .delta-card {
@@ -482,21 +478,14 @@
       padding-left: 20px;
     }
 
-    .sub-title {
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0;
-      margin-bottom: 12px;
-      transition: color 0.3s;
-      font-family: 'Pretendard Variable', sans-serif;
-    }
-
     .delta-km {
       font-size: 32px;
-      font-weight: 300;
-      font-family: 'Space Grotesk', sans-serif;
-      line-height: 1;
+      font-weight: 400;
       transition: color 0.3s;
+    }
+
+    .delta-km.down {
+      color: var(--cloudy-gray);
     }
 
     .delta-km.up {
@@ -510,8 +499,7 @@
     }
 
     .delta-pct {
-      font-size: 13px;
-      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
       margin-top: 6px;
       font-weight: 400;
       transition: color 0.3s;
@@ -522,7 +510,7 @@
     }
 
     .delta-pct.down {
-      color: var(--aspalt-gray);
+      color: var(--slate-gray);
     }
 
     /* ════════════════════════════════════
@@ -560,23 +548,6 @@
       font-size: 16px;
       font-weight: 400;
       transition: color 0.3s;
-    }
-
-    .pace-val {
-      font-size: 22px;
-      font-weight: 300;
-      font-family: 'Space Grotesk', sans-serif;
-      transition: color 0.3s;
-    }
-
-    .pace-val.accent {
-      color: var(--accent);
-    }
-
-    .pace-val span {
-      font-size: 13px;
-      font-weight: 400;
-      margin-left: 4px;
     }
 
     .title-area {
@@ -726,7 +697,6 @@
     .delta-km,
     .delta-km span,
     .delta-pct,
-    .pace-val,
     .run-km,
     .isb-seg span {
       font-family: 'Space Mono', ui-monospace, monospace;
@@ -735,7 +705,6 @@
 
     /* ─── Shift5 Label Tracking ── */
     .delta-vs,
-    .intensity-breakdown-title,
     .month-runs-title,
     .pace-block-title {
       font-family: 'Space Mono', ui-monospace, monospace;
@@ -794,30 +763,14 @@
 
         <div class="delta-row">
           <div class="delta-card">
-            <div class="sub-title">지난주 대비</div>
-            <div class="delta-km down">−19.7<span>K</span></div>
+            <div class="components-title">지난주 대비</div>
+            <div class="delta-km down">−19.7<sup>K</sup></div>
             <div class="delta-pct down">↓ 78%</div>
           </div>
           <div class="delta-card">
-            <div class="sub-title">8주 평균 대비</div>
+            <div class="components-title">8주 평균 대비</div>
             <div class="delta-km down">−16.2<span>K</span></div>
             <div class="delta-pct down">↓ 74%</div>
-          </div>
-        </div>
-
-        <div class="pace-block">
-          <div class="sub-title">이번 주 · 페이스</div>
-          <div class="pace-row">
-            <span class="pace-name">Best</span>
-            <span class="pace-val">5:38<span>/km</span></span>
-          </div>
-          <div class="pace-row">
-            <span class="pace-name">Average</span>
-            <span class="pace-val">5:51<span>/km</span></span>
-          </div>
-          <div class="pace-row">
-            <span class="pace-name">지난주 평균</span>
-            <span class="pace-val">5:33<span>/km</span></span>
           </div>
         </div>
       </div><!-- /view-week -->
@@ -858,7 +811,7 @@
           <!-- 강도 분포 -->
           <div class="month-detail" id="month-detail">
             <div class="intensity-breakdown">
-              <div class="intensity-breakdown-title">러닝 강도</div>
+              <div class="components-title">러닝 강도</div>
               <div id="detail-intensity"></div>
             </div>
           </div>
@@ -867,36 +820,20 @@
         <div class="stats-bottom-section">
           <div class="delta-row" id="month-delta-row">
             <div class="delta-card">
-              <div class="sub-title">지난달 대비</div>
-              <div class="delta-km down">−27.9<span>K</span></div>
+              <div class="components-title">지난달 대비</div>
+              <div class="delta-km down">−27.9<sup> K</sup></div>
               <div class="delta-pct down">↓ 32%</div>
             </div>
             <div class="delta-card">
-              <div class="sub-title">12개월 평균 대비</div>
-              <div class="delta-km down">−9.4<span>K</span></div>
+              <div class="components-title">12개월 평균 대비</div>
+              <div class="delta-km down">−9.4<sup> K</sup></div>
               <div class="delta-pct down">↓ 14%</div>
-            </div>
-          </div>
-
-          <div class="pace-block">
-            <div class="sub-title">이번 달 · 페이스</div>
-            <div class="pace-row">
-              <span class="pace-name">Best</span>
-              <span class="pace-val">5:02<span>/km</span></span>
-            </div>
-            <div class="pace-row">
-              <span class="pace-name">Average</span>
-              <span class="pace-val">5:38<span>/km</span></span>
-            </div>
-            <div class="pace-row">
-              <span class="pace-name">지난달 평균</span>
-              <span class="pace-val">5:29<span>/km</span></span>
             </div>
           </div>
 
           <div class="month-runs">
             <div class="title-area">
-              <span class="sub-title">활동</span>
+              <span class="components-title dark">4월의 러닝</span>
             </div>
             <div id="detail-runs"></div>
           </div>
@@ -922,30 +859,14 @@
 
         <div class="delta-row">
           <div class="delta-card">
-            <div class="sub-title">작년 동기 대비</div>
+            <div class="components-title">작년 동기 대비</div>
             <div class="delta-km up">+14.2<span>K</span></div>
             <div class="delta-pct up">↑ 5%</div>
           </div>
           <div class="delta-card">
-            <div class="sub-title">3년 평균 대비</div>
+            <div class="components-title">3년 평균 대비</div>
             <div class="delta-km down">−12.6<span>K</span></div>
             <div class="delta-pct down">↓ 4%</div>
-          </div>
-        </div>
-
-        <div class="pace-block">
-          <div class="pace-block-title">올해 · 페이스</div>
-          <div class="pace-row">
-            <span class="pace-name">Best</span>
-            <span class="pace-val">5:02<span>/km</span></span>
-          </div>
-          <div class="pace-row">
-            <span class="pace-name">Average</span>
-            <span class="pace-val">5:34<span>/km</span></span>
-          </div>
-          <div class="pace-row">
-            <span class="pace-name">작년 평균</span>
-            <span class="pace-val">5:41<span>/km</span></span>
           </div>
         </div>
 
@@ -1116,7 +1037,7 @@
       renderChart('month-chart', 'month-avg-line', data, activeAvg, {
         barMaxPx: 115, labelOffset: 34
       });
-      document.getElementById('month-avg-label').textContent = '평균 ' + activeAvg + 'K';
+      document.getElementById('month-avg-label').textContent = 'avg ' + activeAvg + 'K';
 
       // 현재 달 인덱스로 디폴트 상세 패널 초기화
       const defaultIdx = data.findIndex(d => d.current);
