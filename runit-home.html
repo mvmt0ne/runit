@@ -505,8 +505,9 @@
     .cal-page {
       display: flex;
       flex-direction: column;
-      min-height: calc(100svh - 54px);
-      padding-bottom: 40px;
+      min-height: 100svh;
+      /* floating 러닝 활동 버튼(약 94px) + 캘린더와의 40px 간격 */
+      padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 134px);
       background-color: var(--bg);
       position: relative;
       isolation: isolate;
@@ -520,11 +521,11 @@
     /* 히어로↔캘린더 사이 가변 여백 + 스와이프 인디케이터 */
     .cal-flex-spacer {
       flex: 1;
-      min-height: 32px;
+      min-height: 40px;
       display: flex;
-      align-items: center;
+      align-items: flex-end;
       justify-content: space-between;
-      padding: 0 18px;
+      padding: 0 18px 40px;
     }
 
     .cal-swipe-arrow {
@@ -543,10 +544,15 @@
 
     /* ─── 러닝 활동 하단 고정 버튼 ──────────────── */
     .list-sheet {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 30;
       display: flex;
       flex-direction: column;
-      flex-shrink: 0;
       background-color: var(--accent);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     /* 섹션 헤더 → 리스트 진입 버튼 */
