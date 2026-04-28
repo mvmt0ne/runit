@@ -505,7 +505,8 @@
     .cal-page {
       display: flex;
       flex-direction: column;
-      min-height: 100svh;
+      /* phone-inner(100dvh)와 동일하게 — svh를 쓰면 모바일 URL 바 영역만큼 빈 공간 발생 */
+      min-height: 100dvh;
       /* floating 러닝 활동 버튼(약 94px) + 캘린더와의 40px 간격 */
       padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 134px);
       background-color: var(--bg);
