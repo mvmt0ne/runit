@@ -59,23 +59,39 @@
   --type-none-text: #555550;
 }
 
-/* ─── Page enter animation ──────────────── */
-@keyframes page-push-in {
+/* ─── Cross-document View Transitions ───── */
+@view-transition {
+  navigation: auto;
+}
+
+/* ── Forward: 새 페이지 올라옴 / 구 페이지 뒤로 물러남 ── */
+@keyframes vt-push-in {
   from { transform: translateY(100%); }
-  to   { transform: translateY(0); }
+}
+@keyframes vt-push-out {
+  to { transform: scale(0.94) translateY(-16px); opacity: 0.5; }
 }
 
-@keyframes page-pop-in {
-  from { transform: translateY(-6%) scale(0.96); opacity: 0.5; }
-  to   { transform: translateY(0) scale(1); opacity: 1; }
+::view-transition-new(root) {
+  animation: vt-push-in 0.44s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+::view-transition-old(root) {
+  animation: vt-push-out 0.44s cubic-bezier(0.4, 0, 1, 1) both;
 }
 
-.phone-inner {
-  animation: page-push-in 0.44s cubic-bezier(0.16, 1, 0.3, 1) both;
+/* ── Back: 구 페이지 아래로 / 새(이전) 페이지 앞으로 나옴 ── */
+@keyframes vt-back-in {
+  from { transform: scale(0.94) translateY(-16px); opacity: 0.5; }
+}
+@keyframes vt-back-out {
+  to { transform: translateY(100%); }
 }
 
-html.is-back .phone-inner {
-  animation: page-pop-in 0.36s cubic-bezier(0.16, 1, 0.3, 1) both;
+html.nav-back ::view-transition-new(root) {
+  animation: vt-back-in 0.44s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+html.nav-back ::view-transition-old(root) {
+  animation: vt-back-out 0.44s cubic-bezier(0.4, 0, 1, 1) both;
 }
 
 /* ─── Body / Phone ──────────────────────── */
