@@ -266,8 +266,9 @@ body {
 }
 
 .lp-row.expanded:active {
-  background: rgba(0, 0, 0, 0.25) border-radius: 8px;
-  opacity: 1;
+  background: var(--asphalt-black);
+  border-radius: 8px;
+  opacity: 0.3;
 }
 
 .lp-row.expanded .lp-info {
