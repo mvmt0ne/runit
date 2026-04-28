@@ -4,7 +4,7 @@
     {
       "name": "Python HTTP Server",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8000"],
+      "runtimeArgs": ["-c", "import os; os.chdir('/Users/leedongwon/Desktop/wonnyworx/runit'); from http.server import test, SimpleHTTPRequestHandler, ThreadingHTTPServer; test(HandlerClass=SimpleHTTPRequestHandler, ServerClass=ThreadingHTTPServer, port=8000)"],
       "port": 8000
     },
     {
