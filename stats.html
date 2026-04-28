@@ -88,13 +88,13 @@
       font-size: 24px;
       font-weight: 600;
       font-family: 'Pretendard Variable', sans-serif;
-      color: var(--aspalt-gray);
+      color: var(--asphalt-gray);
       cursor: pointer;
       border: none;
     }
 
     .tab.active {
-      color: var(--slate-gray);
+      color: var(--text-1);
     }
 
     /* ─── Scroll ── */
@@ -1110,26 +1110,26 @@
     // RUNS 데이터
     // ══════════════════════════════════════
     const RUNS = [
-      // 4월 — list.html 동일 데이터
-      { date: '2026-04-11', label: '4/11', month: 4, type: 'race', name: '2026 인천하프', time: '08:00', km: 21.2, pace: '5:02', bpm: 176, spm: 174, stride: 107 },
-      { date: '2026-04-10', label: '4/10', month: 4, type: 'jogging', name: '회복 조깅', time: '07:30', km: 5.4, pace: '6:52', bpm: 142, spm: 163, stride: 88 },
-      { date: '2026-04-07', label: '4/7', month: 4, type: 'tempo', name: '템포 런', time: '06:15', km: 8.0, pace: '4:45', bpm: 169, spm: 180, stride: 112 },
-      { date: '2026-04-05', label: '4/5', month: 4, type: 'easy', name: '이지 런', time: '06:30', km: 7.2, pace: '6:15', bpm: 138, spm: 162, stride: 91 },
-      { date: '2026-04-04', label: '4/4', month: 4, type: 'easy', name: '이지 런', time: '18:00', km: 6.8, pace: '6:20', bpm: 135, spm: 160, stride: 89 },
-      { date: '2026-04-03', label: '4/3', month: 4, type: 'easy', name: '이지 런', time: '07:00', km: 5.0, pace: '6:40', bpm: 132, spm: 158, stride: 86 },
+      // 4월
+      { date: '2026-04-11', label: '4/11', month: 4, type: 'race',    name: '2026 인천하프', dur: '1:46:42', km: 21.2, pace: '5:02', bpm: 176, spm: 174, ground: 214, stride: 107 },
+      { date: '2026-04-10', label: '4/10', month: 4, type: 'jogging', name: '회복 조깅',     dur: '37:05',   km: 5.4,  pace: '6:52', bpm: 142, spm: 163, ground: 268, stride: 88  },
+      { date: '2026-04-07', label: '4/7',  month: 4, type: 'tempo',   name: '템포 런',       dur: '38:00',   km: 8.0,  pace: '4:45', bpm: 169, spm: 180, ground: 208, stride: 112 },
+      { date: '2026-04-05', label: '4/5',  month: 4, type: 'easy',    name: '이지 런',       dur: '45:00',   km: 7.2,  pace: '6:15', bpm: 138, spm: 162, ground: 252, stride: 91  },
+      { date: '2026-04-04', label: '4/4',  month: 4, type: 'easy',    name: '이지 런',       dur: '43:04',   km: 6.8,  pace: '6:20', bpm: 135, spm: 160, ground: 255, stride: 89  },
+      { date: '2026-04-03', label: '4/3',  month: 4, type: 'easy',    name: '이지 런',       dur: '33:20',   km: 5.0,  pace: '6:40', bpm: 132, spm: 158, ground: 260, stride: 86  },
       // 3월
-      { date: '2026-03-30', label: '3/30', month: 3, type: 'steady', name: '스테디 런', time: '07:30', km: 10.5, pace: '5:30', bpm: 158, spm: 170, stride: 98 },
-      { date: '2026-03-28', label: '3/28', month: 3, type: 'steady', name: '스테디 런', time: '07:00', km: 9.8, pace: '5:38', bpm: 155, spm: 168, stride: 96 },
-      { date: '2026-03-22', label: '3/22', month: 3, type: 'race', name: '서울 10K', time: '09:00', km: 10.0, pace: '4:52', bpm: 172, spm: 177, stride: 105 },
-      { date: '2026-03-20', label: '3/20', month: 3, type: 'steady', name: '스테디 런', time: '07:15', km: 11.2, pace: '5:25', bpm: 160, spm: 171, stride: 100 },
-      { date: '2026-03-19', label: '3/19', month: 3, type: 'jogging', name: '회복 조깅', time: '07:30', km: 4.8, pace: '7:05', bpm: 138, spm: 161, stride: 85 },
-      { date: '2026-03-13', label: '3/13', month: 3, type: 'easy', name: '이지 런', time: '06:45', km: 8.5, pace: '6:08', bpm: 141, spm: 164, stride: 93 },
-      { date: '2026-03-09', label: '3/9', month: 3, type: 'easy', name: '이지 런', time: '07:00', km: 6.0, pace: '6:22', bpm: 136, spm: 160, stride: 90 },
+      { date: '2026-03-30', label: '3/30', month: 3, type: 'steady',  name: '스테디 런',     dur: '57:45',   km: 10.5, pace: '5:30', bpm: 158, spm: 170, ground: 238, stride: 98  },
+      { date: '2026-03-28', label: '3/28', month: 3, type: 'steady',  name: '스테디 런',     dur: '55:12',   km: 9.8,  pace: '5:38', bpm: 155, spm: 168, ground: 241, stride: 96  },
+      { date: '2026-03-22', label: '3/22', month: 3, type: 'race',    name: '서울 10K',      dur: '48:40',   km: 10.0, pace: '4:52', bpm: 172, spm: 177, ground: 216, stride: 105 },
+      { date: '2026-03-20', label: '3/20', month: 3, type: 'steady',  name: '스테디 런',     dur: '1:00:40', km: 11.2, pace: '5:25', bpm: 160, spm: 171, ground: 244, stride: 100 },
+      { date: '2026-03-19', label: '3/19', month: 3, type: 'jogging', name: '회복 조깅',     dur: '34:00',   km: 4.8,  pace: '7:05', bpm: 138, spm: 161, ground: 271, stride: 85  },
+      { date: '2026-03-13', label: '3/13', month: 3, type: 'easy',    name: '이지 런',       dur: '52:08',   km: 8.5,  pace: '6:08', bpm: 141, spm: 164, ground: 257, stride: 93  },
+      { date: '2026-03-09', label: '3/9',  month: 3, type: 'easy',    name: '이지 런',       dur: '38:12',   km: 6.0,  pace: '6:22', bpm: 136, spm: 160, ground: 262, stride: 90  },
       // 2월
-      { date: '2026-02-25', label: '2/25', month: 2, type: 'long', name: '롱 런', time: '07:00', km: 18.0, pace: '5:48', bpm: 155, spm: 168, stride: 97 },
-      { date: '2026-02-18', label: '2/18', month: 2, type: 'tempo', name: '템포 런', time: '06:30', km: 7.5, pace: '4:52', bpm: 167, spm: 178, stride: 110 },
-      { date: '2026-02-10', label: '2/10', month: 2, type: 'steady', name: '스테디 런', time: '07:15', km: 9.2, pace: '5:42', bpm: 152, spm: 167, stride: 95 },
-      { date: '2026-02-02', label: '2/2', month: 2, type: 'easy', name: '이지 런', time: '08:00', km: 5.5, pace: '6:28', bpm: 133, spm: 159, stride: 87 },
+      { date: '2026-02-25', label: '2/25', month: 2, type: 'long',    name: '롱 런',         dur: '1:44:24', km: 18.0, pace: '5:48', bpm: 155, spm: 168, ground: 245, stride: 97  },
+      { date: '2026-02-18', label: '2/18', month: 2, type: 'tempo',   name: '템포 런',       dur: '36:30',   km: 7.5,  pace: '4:52', bpm: 167, spm: 178, ground: 212, stride: 110 },
+      { date: '2026-02-10', label: '2/10', month: 2, type: 'steady',  name: '스테디 런',     dur: '52:26',   km: 9.2,  pace: '5:42', bpm: 152, spm: 167, ground: 242, stride: 95  },
+      { date: '2026-02-02', label: '2/2',  month: 2, type: 'easy',    name: '이지 런',       dur: '35:34',   km: 5.5,  pace: '6:28', bpm: 133, spm: 159, ground: 258, stride: 87  },
     ];
 
     function fmtDate(dateStr) {
@@ -1232,24 +1232,56 @@
       // 활동 리스트 — list.html rowHTML과 동일
       const monthRuns = RUNS.filter(r => r.month === mIdx).sort((a, b) => a.date < b.date ? 1 : -1);
       document.getElementById('detail-runs').innerHTML = monthRuns.length
-        ? `<div class="lp-list">${monthRuns.map(r => `
+        ? `<div class="lp-list">${monthRuns.map(r => {
+            const dateStr = r.date.split('-').map((p, i) => i === 0 ? p : parseInt(p)).join('.');
+            const strideM = (r.stride / 100).toFixed(2);
+            return `
           <div class="lp-row expanded" onclick="location.href='detail.html'">
-            <div class="lp-badge type-${r.type}"></div>
             <div class="lp-info">
               <div class="lp-title-row">
-                <div class="lp-run-name">${r.name}</div>
-                <div class="lp-right-content">${r.date.replace(/-/g, '.')}</div>
+                <div class="lp-row-left-head">
+                  <div class="lp-badge type-${r.type}"></div>
+                  <div class="lp-run-name">${r.name}</div>
+                </div>
+                <div class="lp-right-content">${dateStr}</div>
               </div>
               <div class="lp-stats">
-                <div class="lp-stat"><span class="lp-stat-label">시간</span><strong class="lp-stat-value">${r.time}</strong></div>
-                <div class="lp-stat"><span class="lp-stat-label">거리</span><strong class="lp-stat-value">${r.km} <span class="lp-stat-unit">K</span></strong></div>
-                <div class="lp-stat"><span class="lp-stat-label">페이스</span><strong class="lp-stat-value">${r.pace} <span class="lp-stat-unit">/km</span></strong></div>
-                <div class="lp-stat"><span class="lp-stat-label">심박수</span><strong class="lp-stat-value">${r.bpm} <span class="lp-stat-unit">bpm</span></strong></div>
-                <div class="lp-stat"><span class="lp-stat-label">케이던스</span><strong class="lp-stat-value">${r.spm} <span class="lp-stat-unit">spm</span></strong></div>
-                <div class="lp-stat"><span class="lp-stat-label">보행길이</span><strong class="lp-stat-value">${r.stride} <span class="lp-stat-unit">cm</span></strong></div>
+                <div class="lp-stats-left">
+                  <div class="lp-stat">
+                    <span class="lp-stat-label">시간</span>
+                    <strong class="lp-stat-value">${r.dur}</strong>
+                  </div>
+                  <div class="lp-stat">
+                    <span class="lp-stat-label">거리</span>
+                    <strong class="lp-stat-value">${r.km} <span class="lp-stat-unit">K</span></strong>
+                  </div>
+                  <div class="lp-stat">
+                    <span class="lp-stat-label">케이던스</span>
+                    <strong class="lp-stat-value">${r.spm} <span class="lp-stat-unit">spm</span></strong>
+                  </div>
+                </div>
+                <div class="lp-stats-right">
+                  <div class="lp-stat">
+                    <span class="lp-stat-label">심박수</span>
+                    <strong class="lp-stat-value">${r.bpm} <span class="lp-stat-unit">bpm</span></strong>
+                  </div>
+                  <div class="lp-stat">
+                    <span class="lp-stat-label">접지시간</span>
+                    <strong class="lp-stat-value">${r.ground} <span class="lp-stat-unit">ms</span></strong>
+                  </div>
+                  <div class="lp-stat">
+                    <span class="lp-stat-label">페이스</span>
+                    <strong class="lp-stat-value">${r.pace} <span class="lp-stat-unit">/K</span></strong>
+                  </div>
+                  <div class="lp-stat">
+                    <span class="lp-stat-label">보행길이</span>
+                    <strong class="lp-stat-value">${strideM} <span class="lp-stat-unit">M</span></strong>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>`).join('')}</div>`
+          </div>`;
+          }).join('')}</div>`
         + `<a class="view-all-btn" href="list.html">전체 목록 보기</a>`
         : `<div class="lp-row expanded"><span class="lp-stat-label">데이터 없음</span></div>`;
     }

@@ -24,7 +24,7 @@
   --surface-6: #d4d4d4;
 
   /* Accent */
-  --accent: #FF5841;
+  --accent: #FF543E;
   --accent-rgb: 255, 88, 65;
   --accent-dim: rgba(255, 88, 65, 0.13);
 
@@ -44,8 +44,8 @@
 
   /* Run type palette (theme-independent) */
   --type-race-bg: #000000;
-  --type-race-text: #FF5841;
-  --type-dark-bg: #FF5841;
+  --type-race-text: #FF543E;
+  --type-dark-bg: #FF543E;
   --type-dark-text: #000000;
   --type-steady-bg: #515151;
   --type-steady-text: #FFFFFF;
@@ -53,7 +53,7 @@
   --type-easy-text: #202020;
   --type-jog-bg: #767676;
   --type-jog-text: #202020;
-  --type-long-bg: #FF5841;
+  --type-long-bg: #FF543E;
   --type-long-text: #202020;
   --type-none-border: #282828;
   --type-none-text: #555550;
@@ -75,6 +75,12 @@ body {
      100lvh = largest viewport height (safe-area 포함한 최대 높이). */
   min-height: 100lvh;
   overflow: hidden;
+}
+
+sup {
+  font-size: 0.5em;
+  vertical-align: super;
+  font-weight: 400;
 }
 
 .phone {
@@ -261,7 +267,7 @@ body {
 .lp-row.expanded {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
   border-radius: 0;
 }
 
@@ -279,62 +285,113 @@ body {
 
 .lp-row.expanded .lp-title-row {
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  margin-bottom: 20px;
-  gap: 0;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 8px;
   width: 100%;
+}
+
+/* badge + name 묶음 */
+.lp-row-left-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .lp-row.expanded .lp-run-name {
   font-size: 18px;
   font-weight: 300;
   font-family: 'Pretendard Variable', sans-serif;
-  flex: 1;
   min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .lp-right-content {
-  font-size: 14px;
-  font-weight: 200;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  font-size: 13px;
+  font-weight: 300;
   flex-shrink: 0;
   font-family: 'Space Grotesk', sans-serif;
   white-space: nowrap;
+  color: var(--aspalt-gray);
 }
 
+/* 2-column stats */
 .lp-row.expanded .lp-stats {
-  display: grid !important;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  display: flex !important;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 0;
   width: 100%;
   margin: 0;
+}
+
+.lp-stats-left,
+.lp-stats-right {
+  display: flex;
+  flex-direction: column;
+}
+
+.lp-stats-left {
+  flex: 1;
+  gap: 16px;
+}
+
+.lp-stats-left .lp-stat {
+  align-items: flex-start;
+}
+
+.lp-stats-right {
+  flex: 1;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.lp-stats-right .lp-stat {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
 }
 
 .lp-row.expanded .lp-stat {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  align-items: flex-start;
+  gap: 2px;
+}
+
+.lp-row.expanded .lp-stat-row {
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
 }
 
 .lp-row.expanded .lp-stat-label {
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--aspalt-gray);
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--asphalt-gray);
   font-family: 'Pretendard Variable', sans-serif;
-  margin-bottom: 0;
-  order: 2;
 }
 
-.lp-row.expanded .lp-stat-value {
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1;
-  font-family: 'Space Grotesk', sans-serif;
-  order: 1;
+.lp-stats-left .lp-stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+  font-family: 'Space Grotesk', ui-monospace, monospace;
+  font-feature-settings: "tnum";
+  color: var(--asphalt-black);
+}
+
+.lp-stats-right .lp-stat-value {
+  margin-left: auto;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+  font-family: 'Space Grotesk', ui-monospace, monospace;
+  font-feature-settings: "tnum";
+  color: var(--asphalt-black);
 }
 
 .lp-row.expanded .lp-stat-unit {
@@ -475,7 +532,7 @@ body {
 .lp-row.expanded .lp-compact-date,
 .lp-row.expanded .lp-expanded-date,
 .lp-row.expanded .lp-stat-unit,
-.lp-row.expanded .lp-stat-value,
+.lp-row.expanded,
 .range-val,
 .range-val-row,
 .weather-widget,
@@ -496,7 +553,7 @@ body {
 .pace-val,
 .run-km,
 .isb-seg span {
-  font-family: 'Space Mono', ui-monospace, monospace;
+  font-family: 'Pretendard Variable', ui-monospace, monospace;
   font-feature-settings: "tnum";
 }
 
@@ -517,7 +574,7 @@ body {
 .month-runs-title,
 .pace-block-title {
   letter-spacing: 0.14em;
-  font-family: 'Space Mono', ui-monospace, monospace;
+  font-family: 'Pretendard Variable', ui-monospace, monospace;
   font-weight: 400;
 }
 
