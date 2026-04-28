@@ -59,6 +59,16 @@
   --type-none-text: #555550;
 }
 
+/* ─── Page enter animation ──────────────── */
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0px); }
+}
+
+.phone-inner {
+  animation: page-enter 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
 /* ─── Body / Phone ──────────────────────── */
 /* html 까지 배경 상속시켜야 iOS 일부 상태에서 하단 safe-area가 흰색으로 비치는 일 없음 */
 html {

@@ -21,6 +21,7 @@
   <link href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable.min.css"
     rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
+  <script src="./transitions.js"></script>
   <style>
     /* ─── Page bg ── */
     .phone-inner {
@@ -715,7 +716,7 @@
     <div class="phone-inner">
 
       <div class="back-header">
-        <button class="back-btn" onclick="history.back()">
+        <button class="back-btn" onclick="goBack()">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--slate-gray)" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <path d="m12 19-7-7 7-7" />
@@ -1220,7 +1221,7 @@
           const dateStr = r.date.split('-').map((p, i) => i === 0 ? p : parseInt(p)).join('.');
           const strideM = (r.stride / 100).toFixed(2);
           return `
-          <div class="lp-row expanded" onclick="location.href='detail.html'">
+          <div class="lp-row expanded" onclick="goTo('detail.html')">
             <div class="lp-info">
               <div class="lp-title-row">
                 <div class="lp-row-left-head">
@@ -1463,13 +1464,7 @@
     })();
   </script>
   <script>
-    function goToPB() {
-      if (document.startViewTransition) {
-        document.startViewTransition(() => { location.href = 'pb.html'; });
-      } else {
-        location.href = 'pb.html';
-      }
-    }
+    function goToPB() { goTo('pb.html'); }
   </script>
   <script>
     if ('serviceWorker' in navigator) {
