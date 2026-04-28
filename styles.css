@@ -73,10 +73,10 @@
 }
 
 ::view-transition-new(root) {
-  animation: vt-push-in 0.44s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: vt-push-in 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 ::view-transition-old(root) {
-  animation: vt-push-out 0.44s cubic-bezier(0.4, 0, 1, 1) both;
+  animation: vt-push-out 1.2s cubic-bezier(0.4, 0, 1, 1) both;
 }
 
 /* ── Back: 구 페이지 아래로 / 새(이전) 페이지 앞으로 나옴 ── */
@@ -88,10 +88,10 @@
 }
 
 html.nav-back ::view-transition-new(root) {
-  animation: vt-back-in 0.44s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: vt-back-in 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 html.nav-back ::view-transition-old(root) {
-  animation: vt-back-out 0.44s cubic-bezier(0.4, 0, 1, 1) both;
+  animation: vt-back-out 1.2s cubic-bezier(0.4, 0, 1, 1) both;
 }
 
 /* ─── Body / Phone ──────────────────────── */
