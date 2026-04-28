@@ -193,6 +193,7 @@ sup {
   font-size: 18px;
   font-weight: 100;
   color: var(--slate-gray);
+  font-family: 'Space Grotesk', monospace;
 }
 
 .lp-run-name {
@@ -325,7 +326,7 @@ sup {
 
 .lp-right-content {
   font-size: 14px;
-  font-weight: 300;
+  font-weight: 400;
   flex-shrink: 0;
   font-family: 'Space Grotesk', sans-serif;
   white-space: nowrap;
@@ -384,7 +385,7 @@ sup {
 
 .lp-row.expanded .lp-stat-label {
   font-size: 14px;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--asphalt-gray);
   font-family: 'Pretendard Variable', sans-serif;
 }
@@ -544,13 +545,11 @@ sup {
 .lp-row.compact .lp-compact-date,
 .lp-row.compact .lp-compact-time,
 .lp-row.expanded .lp-compact-date,
-.lp-row.expanded .lp-expanded-date,
 .lp-row.expanded .lp-stat-unit,
 .lp-row.expanded,
 .range-val,
 .range-val-row,
 .weather-widget,
-.lp-month-km,
 .status-time,
 .detail-km,
 .detail-km span,
