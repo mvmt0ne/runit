@@ -543,7 +543,7 @@
       opacity: 0;
     }
 
-    /* ─── 러닝 활동 하단 고정 버튼 ──────────────── */
+    /* ─── 러닝 활동 하단 floating 버튼 ──────────────── */
     .list-sheet {
       position: absolute;
       bottom: 0;
@@ -551,25 +551,17 @@
       right: 0;
       z-index: 30;
       display: flex;
-      flex-direction: column;
-      background-color: var(--accent);
-    }
-
-    /* 섹션 헤더 → 리스트 진입 버튼 */
-    .list-sheet-handle {
-      display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 26px 16px 0px 26px calc(0px + env(safe-area-inset-bottom, 0px));
-      flex-shrink: 0;
+      padding: 26px 16px calc(26px + env(safe-area-inset-bottom, 0px)) 26px;
       background-color: var(--accent);
       color: #202020;
       text-decoration: none;
-      transition: background 0.2s, transform 0.2s;
       cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
     }
 
-    .list-sheet-handle:active {
+    .list-sheet:active {
       background-color: rgba(var(--accent-rgb), 0.85);
       transform: scale(0.99);
     }
@@ -1009,16 +1001,14 @@
 
         </div><!-- /cal-area -->
 
-        <!-- 러닝 활동 → 리스트 페이지 진입 버튼 (하단 고정) -->
-        <div class="list-sheet" id="list-sheet-1">
-          <a class="list-sheet-handle" id="list-sheet-handle-1" href="list.html">
-            <div class="list-sheet-title">러닝 활동</div>
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-              stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-          </a>
-        </div><!-- /list-sheet -->
+        <!-- 러닝 활동 → 리스트 페이지 진입 버튼 (floating) -->
+        <a class="list-sheet" href="list.html">
+          <div class="list-sheet-title">러닝 활동</div>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a><!-- /list-sheet -->
 
       </div>
 
