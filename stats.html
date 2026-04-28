@@ -27,6 +27,25 @@
       background: var(--asphalt-black);
     }
 
+    /* ─── PB header button ── */
+    .pb-header-btn {
+      position: absolute;
+      right: 20px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--text-2);
+      display: flex;
+      align-items: center;
+      padding: 0;
+      transition: color 0.2s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .pb-header-btn:active {
+      transform: scale(0.88);
+      color: var(--text-1);
+    }
+
     /* ─── Back header: glass override (styles.css = accent) ── */
 
     .back-btn {
@@ -70,6 +89,20 @@
       width: 100%;
       max-width: 430px;
       z-index: 9;
+      transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+      background: rgba(34, 34, 34, 0.9);
+      backdrop-filter: blur(40px) saturate(160%);
+      -webkit-backdrop-filter: blur(40px) saturate(160%);
+    }
+
+    /* ─── Scroll-hide header ── */
+    .back-header {
+      transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+      background: rgba(34, 34, 34, 0.9);
+      backdrop-filter: blur(40px) saturate(160%);
+      -webkit-backdrop-filter: blur(40px) saturate(160%);
     }
 
     /* ─── Top section — chart + intensity ── */
@@ -77,10 +110,31 @@
       padding-bottom: 40px;
     }
 
-    /* ─── Bottom section — delta + pace + runs ── */
+    /* ─── Bottom section — delta + pace (dark) / runs (light) ── */
     .stats-bottom-section {
+      background: transparent;
+    }
+
+    .month-runs {
       background: var(--slate-gray);
       padding-bottom: calc(48px + env(safe-area-inset-bottom, 0px));
+    }
+
+    /* delta · pace 텍스트 — 어두운 배경 위 */
+    .sub-title {
+      color: var(--cloudy-gray);
+    }
+
+    .delta-km {
+      color: var(--text-1);
+    }
+
+    .pace-name {
+      color: var(--cloudy-gray);
+    }
+
+    .pace-val {
+      color: var(--text-1);
     }
 
     .tab {
@@ -475,7 +529,7 @@
        PACE 요약
     ════════════════════════════════════ */
     .pace-block {
-      padding: 40px 20px 0;
+      padding: 40px 20px;
     }
 
     .pace-block-title {
@@ -703,6 +757,17 @@
           </svg>
         </button>
         <span class="back-title">마일리지</span>
+        <button class="pb-header-btn" onclick="goToPB()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+            <path d="M4 22h16" />
+            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+          </svg>
+        </button>
       </div>
 
       <div class="tab-row">
@@ -902,6 +967,7 @@
         document.getElementById('view-year').style.display = t === 'year' ? '' : 'none';
         if (t === 'week') renderWeekChart();
         if (t === 'year') renderYearChart();
+        if (window._resetScrollHide) window._resetScrollHide();
       });
     });
 
@@ -1111,25 +1177,25 @@
     // ══════════════════════════════════════
     const RUNS = [
       // 4월
-      { date: '2026-04-11', label: '4/11', month: 4, type: 'race',    name: '2026 인천하프', dur: '1:46:42', km: 21.2, pace: '5:02', bpm: 176, spm: 174, ground: 214, stride: 107 },
-      { date: '2026-04-10', label: '4/10', month: 4, type: 'jogging', name: '회복 조깅',     dur: '37:05',   km: 5.4,  pace: '6:52', bpm: 142, spm: 163, ground: 268, stride: 88  },
-      { date: '2026-04-07', label: '4/7',  month: 4, type: 'tempo',   name: '템포 런',       dur: '38:00',   km: 8.0,  pace: '4:45', bpm: 169, spm: 180, ground: 208, stride: 112 },
-      { date: '2026-04-05', label: '4/5',  month: 4, type: 'easy',    name: '이지 런',       dur: '45:00',   km: 7.2,  pace: '6:15', bpm: 138, spm: 162, ground: 252, stride: 91  },
-      { date: '2026-04-04', label: '4/4',  month: 4, type: 'easy',    name: '이지 런',       dur: '43:04',   km: 6.8,  pace: '6:20', bpm: 135, spm: 160, ground: 255, stride: 89  },
-      { date: '2026-04-03', label: '4/3',  month: 4, type: 'easy',    name: '이지 런',       dur: '33:20',   km: 5.0,  pace: '6:40', bpm: 132, spm: 158, ground: 260, stride: 86  },
+      { date: '2026-04-11', label: '4/11', month: 4, type: 'race', name: '2026 인천하프', dur: '1:46:42', km: 21.2, pace: '5:02', bpm: 176, spm: 174, ground: 214, stride: 107 },
+      { date: '2026-04-10', label: '4/10', month: 4, type: 'jogging', name: '회복 조깅', dur: '37:05', km: 5.4, pace: '6:52', bpm: 142, spm: 163, ground: 268, stride: 88 },
+      { date: '2026-04-07', label: '4/7', month: 4, type: 'tempo', name: '템포 런', dur: '38:00', km: 8.0, pace: '4:45', bpm: 169, spm: 180, ground: 208, stride: 112 },
+      { date: '2026-04-05', label: '4/5', month: 4, type: 'easy', name: '이지 런', dur: '45:00', km: 7.2, pace: '6:15', bpm: 138, spm: 162, ground: 252, stride: 91 },
+      { date: '2026-04-04', label: '4/4', month: 4, type: 'easy', name: '이지 런', dur: '43:04', km: 6.8, pace: '6:20', bpm: 135, spm: 160, ground: 255, stride: 89 },
+      { date: '2026-04-03', label: '4/3', month: 4, type: 'easy', name: '이지 런', dur: '33:20', km: 5.0, pace: '6:40', bpm: 132, spm: 158, ground: 260, stride: 86 },
       // 3월
-      { date: '2026-03-30', label: '3/30', month: 3, type: 'steady',  name: '스테디 런',     dur: '57:45',   km: 10.5, pace: '5:30', bpm: 158, spm: 170, ground: 238, stride: 98  },
-      { date: '2026-03-28', label: '3/28', month: 3, type: 'steady',  name: '스테디 런',     dur: '55:12',   km: 9.8,  pace: '5:38', bpm: 155, spm: 168, ground: 241, stride: 96  },
-      { date: '2026-03-22', label: '3/22', month: 3, type: 'race',    name: '서울 10K',      dur: '48:40',   km: 10.0, pace: '4:52', bpm: 172, spm: 177, ground: 216, stride: 105 },
-      { date: '2026-03-20', label: '3/20', month: 3, type: 'steady',  name: '스테디 런',     dur: '1:00:40', km: 11.2, pace: '5:25', bpm: 160, spm: 171, ground: 244, stride: 100 },
-      { date: '2026-03-19', label: '3/19', month: 3, type: 'jogging', name: '회복 조깅',     dur: '34:00',   km: 4.8,  pace: '7:05', bpm: 138, spm: 161, ground: 271, stride: 85  },
-      { date: '2026-03-13', label: '3/13', month: 3, type: 'easy',    name: '이지 런',       dur: '52:08',   km: 8.5,  pace: '6:08', bpm: 141, spm: 164, ground: 257, stride: 93  },
-      { date: '2026-03-09', label: '3/9',  month: 3, type: 'easy',    name: '이지 런',       dur: '38:12',   km: 6.0,  pace: '6:22', bpm: 136, spm: 160, ground: 262, stride: 90  },
+      { date: '2026-03-30', label: '3/30', month: 3, type: 'steady', name: '스테디 런', dur: '57:45', km: 10.5, pace: '5:30', bpm: 158, spm: 170, ground: 238, stride: 98 },
+      { date: '2026-03-28', label: '3/28', month: 3, type: 'steady', name: '스테디 런', dur: '55:12', km: 9.8, pace: '5:38', bpm: 155, spm: 168, ground: 241, stride: 96 },
+      { date: '2026-03-22', label: '3/22', month: 3, type: 'race', name: '서울 10K', dur: '48:40', km: 10.0, pace: '4:52', bpm: 172, spm: 177, ground: 216, stride: 105 },
+      { date: '2026-03-20', label: '3/20', month: 3, type: 'steady', name: '스테디 런', dur: '1:00:40', km: 11.2, pace: '5:25', bpm: 160, spm: 171, ground: 244, stride: 100 },
+      { date: '2026-03-19', label: '3/19', month: 3, type: 'jogging', name: '회복 조깅', dur: '34:00', km: 4.8, pace: '7:05', bpm: 138, spm: 161, ground: 271, stride: 85 },
+      { date: '2026-03-13', label: '3/13', month: 3, type: 'easy', name: '이지 런', dur: '52:08', km: 8.5, pace: '6:08', bpm: 141, spm: 164, ground: 257, stride: 93 },
+      { date: '2026-03-09', label: '3/9', month: 3, type: 'easy', name: '이지 런', dur: '38:12', km: 6.0, pace: '6:22', bpm: 136, spm: 160, ground: 262, stride: 90 },
       // 2월
-      { date: '2026-02-25', label: '2/25', month: 2, type: 'long',    name: '롱 런',         dur: '1:44:24', km: 18.0, pace: '5:48', bpm: 155, spm: 168, ground: 245, stride: 97  },
-      { date: '2026-02-18', label: '2/18', month: 2, type: 'tempo',   name: '템포 런',       dur: '36:30',   km: 7.5,  pace: '4:52', bpm: 167, spm: 178, ground: 212, stride: 110 },
-      { date: '2026-02-10', label: '2/10', month: 2, type: 'steady',  name: '스테디 런',     dur: '52:26',   km: 9.2,  pace: '5:42', bpm: 152, spm: 167, ground: 242, stride: 95  },
-      { date: '2026-02-02', label: '2/2',  month: 2, type: 'easy',    name: '이지 런',       dur: '35:34',   km: 5.5,  pace: '6:28', bpm: 133, spm: 159, ground: 258, stride: 87  },
+      { date: '2026-02-25', label: '2/25', month: 2, type: 'long', name: '롱 런', dur: '1:44:24', km: 18.0, pace: '5:48', bpm: 155, spm: 168, ground: 245, stride: 97 },
+      { date: '2026-02-18', label: '2/18', month: 2, type: 'tempo', name: '템포 런', dur: '36:30', km: 7.5, pace: '4:52', bpm: 167, spm: 178, ground: 212, stride: 110 },
+      { date: '2026-02-10', label: '2/10', month: 2, type: 'steady', name: '스테디 런', dur: '52:26', km: 9.2, pace: '5:42', bpm: 152, spm: 167, ground: 242, stride: 95 },
+      { date: '2026-02-02', label: '2/2', month: 2, type: 'easy', name: '이지 런', dur: '35:34', km: 5.5, pace: '6:28', bpm: 133, spm: 159, ground: 258, stride: 87 },
     ];
 
     function fmtDate(dateStr) {
@@ -1233,9 +1299,9 @@
       const monthRuns = RUNS.filter(r => r.month === mIdx).sort((a, b) => a.date < b.date ? 1 : -1);
       document.getElementById('detail-runs').innerHTML = monthRuns.length
         ? `<div class="lp-list">${monthRuns.map(r => {
-            const dateStr = r.date.split('-').map((p, i) => i === 0 ? p : parseInt(p)).join('.');
-            const strideM = (r.stride / 100).toFixed(2);
-            return `
+          const dateStr = r.date.split('-').map((p, i) => i === 0 ? p : parseInt(p)).join('.');
+          const strideM = (r.stride / 100).toFixed(2);
+          return `
           <div class="lp-row expanded" onclick="location.href='detail.html'">
             <div class="lp-info">
               <div class="lp-title-row">
@@ -1284,7 +1350,7 @@
               </div>
             </div>
           </div>`;
-          }).join('')}</div>`
+        }).join('')}</div>`
         + `<a class="view-all-btn" href="list.html">전체 목록 보기</a>`
         : `<div class="lp-row expanded"><span class="lp-stat-label">데이터 없음</span></div>`;
     }
@@ -1421,6 +1487,71 @@
       document.addEventListener('touchmove', e => { if (!tracking) return; if (scrollTop() > 2) { tracking = false; return; } const dy = e.touches[0].clientY - startY; if (dy <= 0) return; pullDist = Math.min(dy * RESIST, MAX_PULL); setPos(pullDist, Math.min(pullDist / THRESHOLD, 1)); }, { passive: true });
       document.addEventListener('touchend', () => { if (!tracking) return; tracking = false; const ease = 'transform 0.25s cubic-bezier(0.16,1,0.3,1),opacity 0.25s'; wrap.style.transition = ease; icon.style.transition = 'transform 0.25s'; if (scrollEl) scrollEl.style.transition = 'transform 0.25s cubic-bezier(0.16,1,0.3,1)'; if (pullDist >= THRESHOLD) { triggered = true; wrap.style.transform = 'translateX(-50%) translateY(8px)'; wrap.style.opacity = '1'; if (scrollEl) scrollEl.style.transform = 'translateY(64px)'; icon.style.transform = 'none'; icon.style.transition = 'none'; icon.style.animation = 'ptr-spin 0.55s linear infinite'; sessionStorage.setItem('ptr-return', '1'); setTimeout(() => window.location.reload(), 700); } else { wrap.style.transform = 'translateX(-50%) translateY(-52px)'; wrap.style.opacity = '0'; if (scrollEl) scrollEl.style.transform = ''; } pullDist = 0; }, { passive: true });
     })();
+  </script>
+  <script>
+    /* ─── Scroll-hide header + tabs ── */
+    (function () {
+      const header = document.querySelector('.back-header');
+      const tabRow = document.querySelector('.tab-row');
+      const scrollEls = document.querySelectorAll('.scroll-area');
+      if (!header || !tabRow || !scrollEls.length) return;
+
+      let lastY = 0;
+      let hidden = false;
+      let ticking = false;
+      const THRESHOLD = 48;
+
+      function hide() {
+        if (hidden) return;
+        hidden = true;
+        const headerH = header.offsetHeight;
+        const tabH = tabRow.offsetHeight;
+        header.style.transform = `translateX(-50%) translateY(-${headerH}px)`;
+        tabRow.style.transform = `translateX(-50%) translateY(-${headerH + tabH}px)`;
+      }
+
+      function show() {
+        if (!hidden) return;
+        hidden = false;
+        header.style.transform = 'translateX(-50%)';
+        tabRow.style.transform = 'translateX(-50%)';
+      }
+
+      function reset() {
+        show();
+        lastY = 0;
+      }
+
+      /* 모든 탭의 스크롤에 리스너 부착 */
+      scrollEls.forEach(el => {
+        el.addEventListener('scroll', () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(() => {
+            const y = el.scrollTop;
+            if (y > lastY && y > THRESHOLD) {
+              hide();
+            } else if (y < lastY) {
+              show();
+            }
+            lastY = y;
+            ticking = false;
+          });
+        }, { passive: true });
+      });
+
+      /* 탭 전환 시 헤더 복원 + lastY 리셋 — 탭 스크립트에서 호출 */
+      window._resetScrollHide = reset;
+    })();
+  </script>
+  <script>
+    function goToPB() {
+      if (document.startViewTransition) {
+        document.startViewTransition(() => { location.href = 'pb.html'; });
+      } else {
+        location.href = 'pb.html';
+      }
+    }
   </script>
   <script>
     if ('serviceWorker' in navigator) {
