@@ -37,8 +37,8 @@
   };
 
   /* ── Back ── */
-  window.goBack = function () {
+  window.goBack = function (url) {
     sessionStorage.setItem('runit-nav', 'back');
-    history.back();
+    location.href = url;
   };
 })();
