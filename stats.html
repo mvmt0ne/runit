@@ -670,10 +670,11 @@
       left: 0;
       right: 0;
       z-index: 5;
-      display: none;           /* JS로 월간 탭에서만 표시 */
+      display: none;
+      /* JS로 월간 탭에서만 표시 */
       align-items: center;
       justify-content: space-between;
-      padding: 26px 20px calc(env(safe-area-inset-bottom, 0px)) 26px;
+      padding: 50px 20px calc(env(safe-area-inset-bottom, 0px)) 26px;
       background-color: var(--accent);
       color: #202020;
       text-decoration: none;
@@ -1003,7 +1004,7 @@
 
   <script>
     // ── 탭 전환 ──
-    const tabs   = document.querySelectorAll('.tab');
+    const tabs = document.querySelectorAll('.tab');
     const heroEl = document.getElementById('stats-hero');
     const listFab = document.getElementById('list-fab');
 
@@ -1018,9 +1019,9 @@
         const t = tab.dataset.tab;
         const targetView = document.getElementById('view-' + t);
         targetView.insertBefore(heroEl, targetView.firstChild);
-        document.getElementById('view-week').style.display  = t === 'week'  ? '' : 'none';
+        document.getElementById('view-week').style.display = t === 'week' ? '' : 'none';
         document.getElementById('view-month').style.display = t === 'month' ? '' : 'none';
-        document.getElementById('view-year').style.display  = t === 'year'  ? '' : 'none';
+        document.getElementById('view-year').style.display = t === 'year' ? '' : 'none';
         setFabVisible(t === 'month');
         if (t === 'week') renderWeekChart();
         if (t === 'year') renderYearChart();
@@ -1550,19 +1551,19 @@
   <script>
     /* ─── 탭 scroll-hide + hero tracking ── */
     (function () {
-      const tabRow    = document.querySelector('.tab-row');
+      const tabRow = document.querySelector('.tab-row');
       const scrollEls = document.querySelectorAll('.scroll-area');
       const compactKm = document.getElementById('header-compact-km');
       if (!tabRow || !scrollEls.length) return;
 
-      let lastY     = 0;
-      let hidden    = false;
+      let lastY = 0;
+      let hidden = false;
       let animating = false;
-      let ticking   = false;
+      let ticking = false;
 
       function heroH() {
         const el = document.querySelector('.scroll-area:not([style*="none"]) .stats-hero-bar')
-                || document.querySelector('.stats-hero-bar');
+          || document.querySelector('.stats-hero-bar');
         return el ? el.offsetHeight : 0;
       }
 
@@ -1571,18 +1572,18 @@
         if (hidden || animating) return;
         const offset = Math.max(0, heroH() - y);
         tabRow.style.transition = 'none';
-        tabRow.style.transform  = `translateX(-50%) translateY(${offset}px)`;
+        tabRow.style.transform = `translateX(-50%) translateY(${offset}px)`;
         if (compactKm) compactKm.classList.toggle('visible', y >= heroH());
       }
 
       /* 히어로가 완전히 사라지고 추가 80px 내린 뒤에 숨김 */
       function hide() {
         if (hidden) return;
-        hidden    = true;
+        hidden = true;
         animating = true;
         const tabBottom = tabRow.getBoundingClientRect().bottom;
         tabRow.style.transition = 'transform 0.35s cubic-bezier(0.4, 0, 1, 1)';
-        tabRow.style.transform  = `translateX(-50%) translateY(-${tabBottom}px)`;
+        tabRow.style.transform = `translateX(-50%) translateY(-${tabBottom}px)`;
         setTimeout(() => { animating = false; }, 380);
         if (compactKm) compactKm.classList.remove('visible');
       }
@@ -1590,11 +1591,11 @@
       /* 스크롤 업 시 복귀 — track이 애니메이션을 덮어쓰지 못하도록 animating 플래그 */
       function show(y) {
         if (!hidden) return;
-        hidden    = false;
+        hidden = false;
         animating = true;
         const offset = Math.max(0, heroH() - y);
         tabRow.style.transition = 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
-        tabRow.style.transform  = `translateX(-50%) translateY(${offset}px)`;
+        tabRow.style.transform = `translateX(-50%) translateY(${offset}px)`;
         setTimeout(() => { animating = false; }, 380);
         if (compactKm) compactKm.classList.toggle('visible', y >= heroH());
       }
@@ -1610,12 +1611,12 @@
           if (ticking) return;
           ticking = true;
           requestAnimationFrame(() => {
-            const y        = el.scrollTop;
-            const hideAt   = heroH() + 80;   /* 히어로 사라진 뒤 80px 더 내려야 숨김 */
-            if      (y > lastY && y > hideAt) hide();
-            else if (y < lastY && hidden)     show(y);
-            else                              track(y);
-            lastY   = y;
+            const y = el.scrollTop;
+            const hideAt = heroH() + 80;   /* 히어로 사라진 뒤 80px 더 내려야 숨김 */
+            if (y > lastY && y > hideAt) hide();
+            else if (y < lastY && hidden) show(y);
+            else track(y);
+            lastY = y;
             ticking = false;
           });
         }, { passive: true });
