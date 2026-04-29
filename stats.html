@@ -90,7 +90,6 @@
       width: 100%;
       max-width: 430px;
       z-index: 9;
-      transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
       will-change: transform;
       background: rgba(34, 34, 34, 0.9);
       backdrop-filter: blur(40px) saturate(160%);
@@ -166,10 +165,8 @@
       transform: translateY(0);
     }
 
-    /* ─── Scroll-hide header ── */
+    /* ─── 고정 헤더 ── */
     .back-header {
-      transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
-      will-change: transform;
       background: rgba(34, 34, 34, 0.9);
       backdrop-filter: blur(40px) saturate(160%);
       -webkit-backdrop-filter: blur(40px) saturate(160%);
@@ -1483,84 +1480,80 @@
     })();
   </script>
   <script>
-    /* ─── Scroll-hide + dynamic tab position ── */
+    /* ─── 탭 scroll-hide + hero tracking ── */
     (function () {
-      const header = document.querySelector('.back-header');
-      const tabRow = document.querySelector('.tab-row');
+      const tabRow    = document.querySelector('.tab-row');
       const scrollEls = document.querySelectorAll('.scroll-area');
       const compactKm = document.getElementById('header-compact-km');
-      if (!header || !tabRow || !scrollEls.length) return;
+      if (!tabRow || !scrollEls.length) return;
 
-      /* 헤더 콘텐츠 높이(safe-area 제외) — padding 14+14 + icon 24 */
-      const HEADER_CONTENT_H = 52;
-      const THRESHOLD = 48;
-      let lastY = 0;
-      let hidden = false;
-      let ticking = false;
+      let lastY     = 0;
+      let hidden    = false;
+      let animating = false;
+      let ticking   = false;
 
-      /* 히어로 높이 캐시 */
       function heroH() {
         const el = document.querySelector('.scroll-area:not([style*="none"]) .stats-hero-bar')
-          || document.querySelector('.stats-hero-bar');
+                || document.querySelector('.stats-hero-bar');
         return el ? el.offsetHeight : 0;
       }
 
-      /* 탭 top을 히어로 스크롤량에 맞춰 업데이트 */
-      function updateTabTop(y) {
+      /* 히어로 추적 — transition 없이 즉각 반영, 애니메이션 중에는 실행 안 함 */
+      function track(y) {
+        if (hidden || animating) return;
         const offset = Math.max(0, heroH() - y);
-        tabRow.style.top = `calc(env(safe-area-inset-top, 0px) + ${HEADER_CONTENT_H + offset}px)`;
+        tabRow.style.transition = 'none';
+        tabRow.style.transform  = `translateX(-50%) translateY(${offset}px)`;
+        if (compactKm) compactKm.classList.toggle('visible', y >= heroH());
       }
 
+      /* 히어로가 완전히 사라지고 추가 80px 내린 뒤에 숨김 */
       function hide() {
         if (hidden) return;
-        hidden = true;
-        const headerH = header.offsetHeight;
+        hidden    = true;
+        animating = true;
         const tabBottom = tabRow.getBoundingClientRect().bottom;
-        header.style.transform = `translateX(-50%) translateY(-${headerH}px)`;
-        tabRow.style.transform = `translateX(-50%) translateY(-${tabBottom}px)`;
+        tabRow.style.transition = 'transform 0.35s cubic-bezier(0.4, 0, 1, 1)';
+        tabRow.style.transform  = `translateX(-50%) translateY(-${tabBottom}px)`;
+        setTimeout(() => { animating = false; }, 380);
         if (compactKm) compactKm.classList.remove('visible');
       }
 
+      /* 스크롤 업 시 복귀 — track이 애니메이션을 덮어쓰지 못하도록 animating 플래그 */
       function show(y) {
         if (!hidden) return;
-        hidden = false;
-        header.style.transform = 'translateX(-50%)';
-        tabRow.style.transform = 'translateX(-50%)';
-        updateTabTop(y);
-        if (compactKm) compactKm.classList.toggle('visible', y > 8);
+        hidden    = false;
+        animating = true;
+        const offset = Math.max(0, heroH() - y);
+        tabRow.style.transition = 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+        tabRow.style.transform  = `translateX(-50%) translateY(${offset}px)`;
+        setTimeout(() => { animating = false; }, 380);
+        if (compactKm) compactKm.classList.toggle('visible', y >= heroH());
       }
 
       function reset() {
-        hidden = true; // show() 강제 실행
-        show(0);
-        lastY = 0;
-        updateTabTop(0);
+        hidden = animating = false;
+        track(0);
         if (compactKm) compactKm.classList.remove('visible');
       }
 
-      /* 모든 탭 스크롤에 리스너 부착 */
       scrollEls.forEach(el => {
         el.addEventListener('scroll', () => {
           if (ticking) return;
           ticking = true;
           requestAnimationFrame(() => {
-            const y = el.scrollTop;
-            if (y > lastY && y > THRESHOLD) {
-              hide();
-            } else if (y < lastY) {
-              show(y);
-            }
-            if (!hidden) updateTabTop(y);
-            if (y <= 8 && compactKm) compactKm.classList.remove('visible');
-            lastY = y;
+            const y        = el.scrollTop;
+            const hideAt   = heroH() + 80;   /* 히어로 사라진 뒤 80px 더 내려야 숨김 */
+            if      (y > lastY && y > hideAt) hide();
+            else if (y < lastY && hidden)     show(y);
+            else                              track(y);
+            lastY   = y;
             ticking = false;
           });
         }, { passive: true });
       });
 
-      /* 초기 탭 위치 설정 */
-      updateTabTop(0);
-
+      track(0);
       window._resetScrollHide = reset;
     })();
   </script>
