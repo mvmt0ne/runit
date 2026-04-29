@@ -98,35 +98,32 @@
 
     /* ─── Hero: 스크롤 콘텐츠 내 첫 번째 요소 ── */
     .stats-hero-bar {
-      padding: 10px 22px 20px;
+      padding: 20px;
       margin-bottom: 80px;
     }
 
     .stats-hero-label {
       font-size: 18px;
       font-weight: 300;
-      color: var(--text-1);
+      color: var(--cloudy-gray);
       font-family: 'Pretendard Variable', sans-serif;
-      line-height: 1.4;
-      letter-spacing: -0.02em;
+      line-height: 1;
     }
 
     .stats-hero-num {
-      font-size: 56px;
-      font-weight: 300;
-      color: var(--text-1);
-      letter-spacing: -2px;
-      line-height: 1;
+      font-size: 48px;
+      font-weight: 400;
+      color: var(--slate-gray);
+      line-height: 1.5;
       font-family: 'Space Grotesk', sans-serif;
     }
 
     .stats-hero-num sup {
-      font-size: 0.38em;
+      font-size: 0.5em;
       vertical-align: super;
       font-weight: 400;
-      color: var(--text-2);
-      margin-left: 2px;
-      letter-spacing: 0;
+      color: var(--cloudy-gray);
+      margin-left: 8px;
     }
 
     /* ─── 헤더 센터 앵커 — 헤더 정중앙에 0-size 기준점 ── */
@@ -213,7 +210,7 @@
     .tab {
       padding: 12px;
       font-size: 24px;
-      font-weight: 600;
+      font-weight: 500;
       font-family: 'Pretendard Variable', sans-serif;
       color: var(--asphalt-gray);
       cursor: pointer;
@@ -731,8 +728,10 @@
       z-index: 10;
     }
 
-    /* 월간 탭: 콘텐츠가 FAB 위까지 스크롤될 수 있도록 하단 여백 */
-    #view-month {
+    /* 전체 탭: 콘텐츠가 FAB 위까지 스크롤될 수 있도록 하단 여백 */
+    #view-month,
+    #view-week,
+    #view-year {
       padding-bottom: 100px;
     }
 
@@ -879,28 +878,60 @@
          WEEK VIEW (주간)
     ══════════════════════════════ -->
       <div class="scroll-area" id="view-week" style="display:none">
-        <div class="chart-block">
-          <div class="chart-top">
-            <span class="chart-period-label">Weekly Distance</span>
-            <span class="chart-avg-line-label">
-              <span class="avg-line-dash"></span><span id="week-avg-label"></span>
-            </span>
+        <div class="stats-top-section">
+          <div class="chart-block">
+            <div class="chart-top">
+              <div class="year-nav">
+                <button class="year-arrow" id="week-period-prev" onclick="changeWeekPeriod(-1)">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m15 18-6-6 6-6" />
+                  </svg>
+                </button>
+                <span class="chart-period-label" id="week-period-label">3.9 — 5.25</span>
+                <button class="year-arrow disabled" id="week-period-next" onclick="changeWeekPeriod(1)">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m9 18 6-6-6-6" />
+                  </svg>
+                </button>
+              </div>
+              <span class="chart-avg-line-label">
+                <span class="avg-line-dash"></span><span id="week-avg-label"></span>
+              </span>
+            </div>
+            <div class="chart-swipe-wrap" id="week-chart-swipe-wrap">
+              <div class="cmp-chart" id="week-chart">
+                <div class="avg-line" id="week-avg-line"></div>
+              </div>
+            </div>
           </div>
-          <div class="cmp-chart" id="week-chart">
-            <div class="avg-line" id="week-avg-line"></div>
+          <div class="month-detail">
+            <div class="intensity-breakdown">
+              <div class="components-title">러닝 강도</div>
+              <div id="week-intensity"></div>
+            </div>
           </div>
         </div>
 
-        <div class="delta-row">
-          <div class="delta-card">
-            <div class="components-title">지난주 대비</div>
-            <div class="delta-km down">−19.7<sup>K</sup></div>
-            <div class="delta-pct down">↓ 78%</div>
+        <div class="stats-bottom-section">
+          <div class="delta-row">
+            <div class="delta-card">
+              <div class="components-title">지난주 대비</div>
+              <div class="delta-km down">−19.7<sup>K</sup></div>
+              <div class="delta-pct down">↓ 78%</div>
+            </div>
+            <div class="delta-card">
+              <div class="components-title">8주 평균 대비</div>
+              <div class="delta-km down">−16.2<span>K</span></div>
+              <div class="delta-pct down">↓ 74%</div>
+            </div>
           </div>
-          <div class="delta-card">
-            <div class="components-title">8주 평균 대비</div>
-            <div class="delta-km down">−16.2<span>K</span></div>
-            <div class="delta-pct down">↓ 74%</div>
+          <div class="month-runs">
+            <div class="title-area">
+              <span class="components-title dark">이번 주 러닝</span>
+            </div>
+            <div id="week-runs"></div>
           </div>
         </div>
       </div><!-- /view-week -->
@@ -979,31 +1010,62 @@
          YEAR VIEW (년간)
     ══════════════════════════════ -->
       <div class="scroll-area" id="view-year" style="display:none">
-        <div class="chart-block">
-          <div class="chart-top">
-            <span class="chart-period-label">Yearly Distance</span>
-            <span class="chart-avg-line-label">
-              <span class="avg-line-dash"></span><span id="year-avg-label"></span>
-            </span>
+        <div class="stats-top-section">
+          <div class="chart-block">
+            <div class="chart-top">
+              <div class="year-nav">
+                <button class="year-arrow" id="year-period-prev" onclick="changeYearPeriod(-1)">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m15 18-6-6 6-6" />
+                  </svg>
+                </button>
+                <span class="chart-period-label" id="year-period-label">2022 — 2026</span>
+                <button class="year-arrow disabled" id="year-period-next" onclick="changeYearPeriod(1)">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m9 18 6-6-6-6" />
+                  </svg>
+                </button>
+              </div>
+              <span class="chart-avg-line-label">
+                <span class="avg-line-dash"></span><span id="year-avg-label"></span>
+              </span>
+            </div>
+            <div class="chart-swipe-wrap" id="year-chart-swipe-wrap">
+              <div class="cmp-chart" id="year-chart">
+                <div class="avg-line" id="year-avg-line"></div>
+              </div>
+            </div>
           </div>
-          <div class="cmp-chart" id="year-chart">
-            <div class="avg-line" id="year-avg-line"></div>
+          <div class="month-detail">
+            <div class="intensity-breakdown">
+              <div class="components-title">러닝 강도</div>
+              <div id="year-intensity"></div>
+            </div>
           </div>
         </div>
 
-        <div class="delta-row">
-          <div class="delta-card">
-            <div class="components-title">작년 동기 대비</div>
-            <div class="delta-km up">+14.2<span>K</span></div>
-            <div class="delta-pct up">↑ 5%</div>
+        <div class="stats-bottom-section">
+          <div class="delta-row">
+            <div class="delta-card">
+              <div class="components-title">작년 동기 대비</div>
+              <div class="delta-km up">+14.2<span>K</span></div>
+              <div class="delta-pct up">↑ 5%</div>
+            </div>
+            <div class="delta-card">
+              <div class="components-title">3년 평균 대비</div>
+              <div class="delta-km down">−12.6<span>K</span></div>
+              <div class="delta-pct down">↓ 4%</div>
+            </div>
           </div>
-          <div class="delta-card">
-            <div class="components-title">3년 평균 대비</div>
-            <div class="delta-km down">−12.6<span>K</span></div>
-            <div class="delta-pct down">↓ 4%</div>
+          <div class="month-runs">
+            <div class="title-area">
+              <span class="components-title dark">최근 러닝</span>
+            </div>
+            <div id="year-runs"></div>
           </div>
         </div>
-
       </div><!-- /view-year -->
 
       <!-- 전체 러닝 활동 FAB — 리스트 뒤에 고정 -->
@@ -1038,7 +1100,7 @@
         document.getElementById('view-week').style.display = t === 'week' ? '' : 'none';
         document.getElementById('view-month').style.display = t === 'month' ? '' : 'none';
         document.getElementById('view-year').style.display = t === 'year' ? '' : 'none';
-        setFabVisible(t === 'month');
+        setFabVisible(true);
         if (t === 'week') renderWeekChart();
         if (t === 'year') renderYearChart();
         if (window._resetScrollHide) window._resetScrollHide();
@@ -1372,62 +1434,10 @@
         setTimeout(() => { el.style.clipPath = 'inset(0 0% 0 0)'; }, baseDelay + i * stagger);
       });
 
-      // 활동 리스트 — list.html rowHTML과 동일
+      // 활동 리스트 — 공통 runRowHTML 사용
       const monthRuns = RUNS.filter(r => r.month === mIdx).sort((a, b) => a.date < b.date ? 1 : -1);
       document.getElementById('detail-runs').innerHTML = monthRuns.length
-        ? `<div class="lp-list">${monthRuns.map(r => {
-          const dateStr = r.date.split('-').map((p, i) => i === 0 ? p : parseInt(p)).join('.');
-          const strideM = (r.stride / 100).toFixed(2);
-          return `
-          <div class="lp-row expanded" onclick="goTo('detail.html')">
-            <div class="lp-info">
-              <div class="lp-title-row">
-                <div class="lp-row-left-head">
-                  <div class="lp-badge type-${r.type}"></div>
-                  <div class="lp-run-name">${r.name}</div>
-                </div>
-                <div class="lp-right-content">
-                  <span class="lp-compact-km">${r.km} K</span>
-                  <span class="lp-expanded-date">${dateStr}</span>
-                </div>
-              </div>
-              <div class="lp-stats">
-                <div class="lp-stats-left">
-                  <div class="lp-stat">
-                    <span class="lp-stat-label">시간</span>
-                    <strong class="lp-stat-value">${r.dur}</strong>
-                  </div>
-                  <div class="lp-stat">
-                    <span class="lp-stat-label">거리</span>
-                    <strong class="lp-stat-value">${r.km} <span class="lp-stat-unit">K</span></strong>
-                  </div>
-                  <div class="lp-stat">
-                    <span class="lp-stat-label">케이던스</span>
-                    <strong class="lp-stat-value">${r.spm} <span class="lp-stat-unit">spm</span></strong>
-                  </div>
-                </div>
-                <div class="lp-stats-right">
-                  <div class="lp-stat">
-                    <span class="lp-stat-label">심박수</span>
-                    <strong class="lp-stat-value">${r.bpm} <span class="lp-stat-unit">bpm</span></strong>
-                  </div>
-                  <div class="lp-stat">
-                    <span class="lp-stat-label">접지시간</span>
-                    <strong class="lp-stat-value">${r.ground} <span class="lp-stat-unit">ms</span></strong>
-                  </div>
-                  <div class="lp-stat">
-                    <span class="lp-stat-label">페이스</span>
-                    <strong class="lp-stat-value">${r.pace} <span class="lp-stat-unit">/K</span></strong>
-                  </div>
-                  <div class="lp-stat">
-                    <span class="lp-stat-label">보행길이</span>
-                    <strong class="lp-stat-value">${strideM} <span class="lp-stat-unit">M</span></strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>`;
-        }).join('')}</div>`
+        ? `<div class="lp-list">${monthRuns.map(runRowHTML).join('')}</div>`
         : `<div class="lp-row expanded"><span class="lp-stat-label">데이터 없음</span></div>`;
     }
 
@@ -1515,11 +1525,86 @@
     updateYearNav();
     updateMonthChart(/* animate */ true);
 
+    // ── 런 카드 HTML 공통 템플릿 ──
+    function runRowHTML(r) {
+      const dateStr = r.date.split('-').map((p, i) => i === 0 ? p : parseInt(p)).join('.');
+      const strideM = (r.stride / 100).toFixed(2);
+      return `<div class="lp-row expanded" onclick="goTo('detail.html')">
+        <div class="lp-info">
+          <div class="lp-title-row">
+            <div class="lp-row-left-head">
+              <div class="lp-badge type-${r.type}"></div>
+              <div class="lp-run-name">${r.name}</div>
+            </div>
+            <div class="lp-right-content">
+              <span class="lp-compact-km">${r.km} K</span>
+              <span class="lp-expanded-date">${dateStr}</span>
+            </div>
+          </div>
+          <div class="lp-stats">
+            <div class="lp-stats-left">
+              <div class="lp-stat"><span class="lp-stat-label">시간</span><strong class="lp-stat-value">${r.dur}</strong></div>
+              <div class="lp-stat"><span class="lp-stat-label">거리</span><strong class="lp-stat-value">${r.km} <span class="lp-stat-unit">K</span></strong></div>
+              <div class="lp-stat"><span class="lp-stat-label">케이던스</span><strong class="lp-stat-value">${r.spm} <span class="lp-stat-unit">spm</span></strong></div>
+            </div>
+            <div class="lp-stats-right">
+              <div class="lp-stat"><span class="lp-stat-label">심박수</span><strong class="lp-stat-value">${r.bpm} <span class="lp-stat-unit">bpm</span></strong></div>
+              <div class="lp-stat"><span class="lp-stat-label">접지시간</span><strong class="lp-stat-value">${r.ground} <span class="lp-stat-unit">ms</span></strong></div>
+              <div class="lp-stat"><span class="lp-stat-label">페이스</span><strong class="lp-stat-value">${r.pace} <span class="lp-stat-unit">/K</span></strong></div>
+              <div class="lp-stat"><span class="lp-stat-label">보행길이</span><strong class="lp-stat-value">${strideM} <span class="lp-stat-unit">M</span></strong></div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    function renderRunsList(containerId, runs) {
+      const el = document.getElementById(containerId);
+      if (!el) return;
+      const sorted = [...runs].sort((a, b) => a.date < b.date ? 1 : -1);
+      el.innerHTML = sorted.length
+        ? `<div class="lp-list">${sorted.map(runRowHTML).join('')}</div>`
+        : `<div class="lp-row expanded"><span class="lp-stat-label">데이터 없음</span></div>`;
+    }
+
+    function renderIntensityBar(containerId, bpms, animate) {
+      const el = document.getElementById(containerId);
+      if (!el || !bpms.length) return;
+      const total = bpms.length;
+      let low = 0, mid = 0, high = 0;
+      bpms.forEach(b => {
+        const z = bpmToIntensity(b);
+        if (z === 'low') low++;
+        else if (z === 'mid') mid++;
+        else high++;
+      });
+      const lp = Math.round(low / total * 100);
+      const mp = Math.round(mid / total * 100);
+      const hp = 100 - lp - mp;
+      el.innerHTML = `
+        <div class="intensity-stacked-bar">
+          <div class="isb-seg isb-low"  style="width:${lp}%"><span>${lp}%</span></div>
+          <div class="isb-seg isb-mid"  style="width:${mp}%"><span>${mp}%</span></div>
+          <div class="isb-seg isb-high" style="width:${hp}%"><span>${hp}%</span></div>
+        </div>
+        <div class="isb-axis">
+          <span class="isb-axis-label">저</span>
+          <span class="isb-axis-label">고</span>
+        </div>`;
+      if (animate) {
+        el.querySelectorAll('.isb-seg').forEach((seg, i) => {
+          setTimeout(() => { seg.style.clipPath = 'inset(0 0% 0 0)'; }, 300 + i * 280);
+        });
+      }
+    }
+
     function renderWeekChart() {
       renderChart('week-chart', 'week-avg-line', WEEK_DATA, AVG_WEEK, {
         barMaxPx: 115, labelOffset: 18
       });
       document.getElementById('week-avg-label').textContent = 'avg ' + AVG_WEEK + 'K';
+      renderIntensityBar('week-intensity', RUNS_BPM[4], true);
+      renderRunsList('week-runs', RUNS.filter(r => r.date >= '2026-04-08'));
     }
 
     function renderYearChart() {
@@ -1527,6 +1612,8 @@
         barMaxPx: 115, labelOffset: 18
       });
       document.getElementById('year-avg-label').textContent = 'avg ' + AVG_YEAR + 'K';
+      renderIntensityBar('year-intensity', RUNS.map(r => r.bpm), true);
+      renderRunsList('year-runs', RUNS);
     }
   </script>
 
