@@ -814,7 +814,6 @@
          WEEK VIEW (주간)
     ══════════════════════════════ -->
       <div class="scroll-area" id="view-week" style="display:none">
-        <div class="stats-hero-bar"><div class="stats-hero-label">전체 마일리지는</div><div class="stats-hero-num">247.3<sup>K</sup></div></div>
         <div class="chart-block">
           <div class="chart-top">
             <span class="chart-period-label">Weekly Distance</span>
@@ -845,7 +844,10 @@
          MONTH VIEW (월간)
     ══════════════════════════════ -->
       <div class="scroll-area" id="view-month">
-        <div class="stats-hero-bar"><div class="stats-hero-label">전체 마일리지는</div><div class="stats-hero-num">247.3<sup>K</sup></div></div>
+        <div class="stats-hero-bar" id="stats-hero">
+          <div class="stats-hero-label">총 마일리지는</div>
+          <div class="stats-hero-num">247.3<sup>K</sup></div>
+        </div>
         <div class="stats-top-section">
           <div class="chart-block">
             <div class="chart-top">
@@ -912,7 +914,6 @@
          YEAR VIEW (년간)
     ══════════════════════════════ -->
       <div class="scroll-area" id="view-year" style="display:none">
-        <div class="stats-hero-bar"><div class="stats-hero-label">전체 마일리지는</div><div class="stats-hero-num">247.3<sup>K</sup></div></div>
         <div class="chart-block">
           <div class="chart-top">
             <span class="chart-period-label">Yearly Distance</span>
@@ -946,11 +947,15 @@
   <script>
     // ── 탭 전환 ──
     const tabs = document.querySelectorAll('.tab');
+    const heroEl = document.getElementById('stats-hero');
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
         tabs.forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
         const t = tab.dataset.tab;
+        // 히어로를 활성 탭의 첫 번째 자식으로 이동
+        const targetView = document.getElementById('view-' + t);
+        targetView.insertBefore(heroEl, targetView.firstChild);
         document.getElementById('view-week').style.display = t === 'week' ? '' : 'none';
         document.getElementById('view-month').style.display = t === 'month' ? '' : 'none';
         document.getElementById('view-year').style.display = t === 'year' ? '' : 'none';
@@ -1480,8 +1485,8 @@
   <script>
     /* ─── Scroll-hide + dynamic tab position ── */
     (function () {
-      const header  = document.querySelector('.back-header');
-      const tabRow  = document.querySelector('.tab-row');
+      const header = document.querySelector('.back-header');
+      const tabRow = document.querySelector('.tab-row');
       const scrollEls = document.querySelectorAll('.scroll-area');
       const compactKm = document.getElementById('header-compact-km');
       if (!header || !tabRow || !scrollEls.length) return;
@@ -1496,7 +1501,7 @@
       /* 히어로 높이 캐시 */
       function heroH() {
         const el = document.querySelector('.scroll-area:not([style*="none"]) .stats-hero-bar')
-                || document.querySelector('.stats-hero-bar');
+          || document.querySelector('.stats-hero-bar');
         return el ? el.offsetHeight : 0;
       }
 
@@ -1509,10 +1514,10 @@
       function hide() {
         if (hidden) return;
         hidden = true;
-        const headerH  = header.offsetHeight;
+        const headerH = header.offsetHeight;
         const tabBottom = tabRow.getBoundingClientRect().bottom;
         header.style.transform = `translateX(-50%) translateY(-${headerH}px)`;
-        tabRow.style.transform  = `translateX(-50%) translateY(-${tabBottom}px)`;
+        tabRow.style.transform = `translateX(-50%) translateY(-${tabBottom}px)`;
         if (compactKm) compactKm.classList.remove('visible');
       }
 
@@ -1520,7 +1525,7 @@
         if (!hidden) return;
         hidden = false;
         header.style.transform = 'translateX(-50%)';
-        tabRow.style.transform  = 'translateX(-50%)';
+        tabRow.style.transform = 'translateX(-50%)';
         updateTabTop(y);
         if (compactKm) compactKm.classList.toggle('visible', y > 8);
       }
