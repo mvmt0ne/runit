@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>runit — Home</title>
-  <link rel="manifest" href="./manifest.json">
+  <script>if(location.protocol!=='file:'){document.write('<link rel="manifest" href="./manifest.json">')}</script>
   <meta name="theme-color" content="#202020">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -921,7 +921,7 @@
             </div>
 
             <div class="hero-km-row" onclick="goTo('stats.html')">
-              <span class="hero-km-big">"59.7 "<sup>K</sup></span>
+              <span class="hero-km-big"><span class="hero-km-value">59.7</span><sup> K</sup></span>
             </div>
 
             <!-- 가변 여백: 히어로↔캘린더 사이 + 스와이프 인디케이터 -->
@@ -1204,7 +1204,7 @@
     function renderMonth() {
       const key = MONTHS_ORDER[currentMonthIdx];
       const d = MONTH_DATA[key];
-      const kmEl = document.querySelector('.hero-km-big');
+      const kmEl = document.querySelector('.hero-km-value');
       if (kmEl) kmEl.textContent = d.km;
       const labelEl = document.getElementById('hero-month-label');
       if (labelEl) labelEl.textContent = d.monthName;
@@ -1422,7 +1422,7 @@
     });
   </script>
   <script>
-    if ('serviceWorker' in navigator) {
+    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
       navigator.serviceWorker.register('./sw.js');
     }
   </script>
