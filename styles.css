@@ -222,6 +222,10 @@ sup {
   border-bottom: var(--cloudy-gray) 1px solid;
 }
 
+.lp-row:last-child {
+  border-bottom: none;
+}
+
 .lp-row:active {
   opacity: 0.8;
   transform: scale(0.98);
