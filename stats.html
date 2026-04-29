@@ -129,40 +129,55 @@
       letter-spacing: 0;
     }
 
-    /* ─── 헤더 compact km (mid-page 시 fade-in) ── */
-    .back-title-group {
+    /* ─── 헤더 센터 앵커 — 헤더 정중앙에 0-size 기준점 ── */
+    .header-center-group {
       position: absolute;
       left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0;
+      top: 50%;
+      width: 0;
+      height: 0;
       pointer-events: none;
     }
 
-    .back-title-text {
+    /* 타이틀 — 기본: 앵커 기준 센터. compact: 왼쪽으로 슬라이드 */
+    .header-title {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: translateX(-50%) translateY(-50%);
       font-size: 20px;
       font-weight: 400;
       font-family: 'Pretendard Variable', sans-serif;
       color: var(--text-1);
-      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .header-compact-km {
-      font-size: 11px;
-      font-weight: 600;
+    /* km — 기본: 같은 앵커에서 투명. compact: 오른쪽으로 슬라이드 */
+    .header-km {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: translateX(-50%) translateY(-50%);
+      font-size: 13px;
+      font-weight: 500;
       font-family: 'Space Grotesk', sans-serif;
       color: var(--text-2);
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
       opacity: 0;
-      transform: translateY(-4px);
-      transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+      transition: opacity 0.32s ease 0.04s,
+        transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .header-compact-km.visible {
+    /* compact 상태 — 중앙에서 좌우로 갈라짐 */
+    .back-header.compact .header-title {
+      transform: translateX(calc(-100% - 4px)) translateY(-50%);
+    }
+
+    .back-header.compact .header-km {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateX(4px) translateY(-50%);
     }
 
     /* ─── 고정 헤더 ── */
@@ -185,7 +200,7 @@
 
     .month-runs {
       background: var(--slate-gray);
-      padding: 40px 0 0 0;
+      padding: 40px 0 20px 0;
     }
 
     /* delta · pace 텍스트 — 어두운 배경 위 */
@@ -689,7 +704,7 @@
       left: 0;
       right: 0;
       bottom: 100%;
-      height: 80px;
+      height: 100px;
       background: var(--accent);
     }
 
@@ -717,7 +732,7 @@
 
     /* 월간 탭: 콘텐츠가 FAB 위까지 스크롤될 수 있도록 하단 여백 */
     #view-month {
-      padding-bottom: 80px;
+      padding-bottom: 100px;
     }
 
     .month-runs-title {
@@ -828,7 +843,7 @@
   <div class="phone">
     <div class="phone-inner">
 
-      <div class="back-header">
+      <div class="back-header" id="back-header">
         <button class="back-btn" onclick="goBack('runit-home.html')">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--slate-gray)" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
@@ -836,9 +851,9 @@
             <path d="M19 12H5" />
           </svg>
         </button>
-        <div class="back-title-group">
-          <span class="back-title-text">마일리지</span>
-          <span class="header-compact-km" id="header-compact-km">247.3K</span>
+        <div class="header-center-group">
+          <span class="header-title">마일리지</span>
+          <span class="header-km" id="header-compact-km">247.3K</span>
         </div>
         <button class="pb-header-btn" onclick="goToPB()">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -1552,8 +1567,8 @@
     /* ─── 탭 scroll-hide + hero tracking ── */
     (function () {
       const tabRow = document.querySelector('.tab-row');
+      const backHeader = document.getElementById('back-header');
       const scrollEls = document.querySelectorAll('.scroll-area');
-      const compactKm = document.getElementById('header-compact-km');
       if (!tabRow || !scrollEls.length) return;
 
       let lastY = 0;
@@ -1573,7 +1588,7 @@
         const offset = Math.max(0, heroH() - y);
         tabRow.style.transition = 'none';
         tabRow.style.transform = `translateX(-50%) translateY(${offset}px)`;
-        if (compactKm) compactKm.classList.toggle('visible', y >= heroH());
+        if (backHeader) backHeader.classList.toggle('compact', y >= heroH());
       }
 
       /* 히어로가 완전히 사라지고 추가 80px 내린 뒤에 숨김 */
@@ -1585,7 +1600,7 @@
         tabRow.style.transition = 'transform 0.35s cubic-bezier(0.4, 0, 1, 1)';
         tabRow.style.transform = `translateX(-50%) translateY(-${tabBottom}px)`;
         setTimeout(() => { animating = false; }, 380);
-        if (compactKm) compactKm.classList.remove('visible');
+        if (backHeader) backHeader.classList.remove('compact');
       }
 
       /* 스크롤 업 시 복귀 — track이 애니메이션을 덮어쓰지 못하도록 animating 플래그 */
@@ -1597,13 +1612,13 @@
         tabRow.style.transition = 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
         tabRow.style.transform = `translateX(-50%) translateY(${offset}px)`;
         setTimeout(() => { animating = false; }, 380);
-        if (compactKm) compactKm.classList.toggle('visible', y >= heroH());
+        if (backHeader) backHeader.classList.toggle('compact', y >= heroH());
       }
 
       function reset() {
         hidden = animating = false;
         track(0);
-        if (compactKm) compactKm.classList.remove('visible');
+        if (backHeader) backHeader.classList.remove('compact');
       }
 
       scrollEls.forEach(el => {
