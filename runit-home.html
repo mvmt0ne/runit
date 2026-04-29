@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>runit — Home</title>
-  <script>if(location.protocol!=='file:'){document.write('<link rel="manifest" href="./manifest.json">')}</script>
+  <script>if (location.protocol !== 'file:') { document.write('<link rel="manifest" href="./manifest.json">') }</script>
   <meta name="theme-color" content="#202020">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -228,8 +228,8 @@
       font-size: 24px;
       font-weight: 300;
       color: var(--text-1);
-      letter-spacing: -0.03em;
-      line-height: 1.35;
+      letter-spacing: 0em;
+      line-height: 1.5;
       transition: color 0.3s;
       font-family: 'Pretendard Variable', -apple-system, sans-serif;
     }
@@ -523,25 +523,24 @@
     /* 히어로↔캘린더 사이 가변 여백 + 스와이프 인디케이터 */
     .cal-flex-spacer {
       flex: 1;
-      min-height: 40px;
+      min-height: 24px;
       display: flex;
       align-items: flex-end;
-      justify-content: space-between;
-      padding: 0 8px 30px;
+      padding: 0 12px 30px;
+      gap: 16px;
     }
 
     .cal-swipe-arrow {
-      color: var(--text-1);
-      opacity: 0.35;
+      color: var(--slate-gray);
       display: flex;
       align-items: center;
       pointer-events: none;
       user-select: none;
-      transition: opacity 0.2s ease;
+      transition: color 0.2s ease;
     }
 
     .cal-swipe-arrow.hidden {
-      opacity: 0;
+      color: var(--asphalt-gray);
     }
 
     /* ─── 러닝 활동 하단 floating 버튼 ──────────────── */
@@ -927,13 +926,13 @@
             <!-- 가변 여백: 히어로↔캘린더 사이 + 스와이프 인디케이터 -->
             <div class="cal-flex-spacer">
               <div class="cal-swipe-arrow" id="cal-arrow-left">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
                   stroke-linecap="round" stroke-linejoin="round">
                   <path d="m15 18-6-6 6-6" />
                 </svg>
               </div>
               <div class="cal-swipe-arrow" id="cal-arrow-right">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
                   stroke-linecap="round" stroke-linejoin="round">
                   <path d="m9 18 6-6-6-6" />
                 </svg>

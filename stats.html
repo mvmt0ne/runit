@@ -123,10 +123,6 @@
 
     /* delta · pace 텍스트 — 어두운 배경 위 */
 
-    .delta-km {
-      color: var(--text-1);
-    }
-
     .pace-name {
       color: var(--cloudy-gray);
     }
@@ -331,13 +327,12 @@
     }
 
     .cmp-chart.vertical .cmp-label {
-      color: var(--text-2);
-      margin-top: 2px;
+      color: var(--slate-gray);
+      font-weight: 300;
     }
 
     .cmp-chart.vertical .cmp-km {
       color: var(--accent);
-      margin-bottom: 2px;
     }
 
     /* ════════════════════════════════════
@@ -357,7 +352,7 @@
     .components-title {
       font-size: 16px;
       font-weight: 400;
-      color: var(--slate-gray);
+      color: var(--asphalt-gray);
       margin-bottom: 12px;
       transition: color 1s;
       letter-spacing: 0;
@@ -433,7 +428,7 @@
     .isb-axis-label {
       font-size: 15px;
       font-weight: 300;
-      color: var(--cloudy-gray);
+      color: var(--slate-gray);
       font-family: 'Pretendard Variable', sans-serif;
       transition: color 0.3s;
     }
@@ -486,7 +481,7 @@
     }
 
     .delta-km.down {
-      color: var(--cloudy-gray);
+      color: var(--slate-gray);
     }
 
     .delta-km.up {
@@ -511,7 +506,7 @@
     }
 
     .delta-pct.down {
-      color: var(--slate-gray);
+      color: var(--asphalt-gray);
     }
 
     /* ════════════════════════════════════
@@ -1270,7 +1265,7 @@
             </div>
           </div>`;
         }).join('')}</div>`
-        + `<a class="view-all-btn" href="list.html">전체 목록 보기</a>`
+        + `<a class="view-all-btn" href="list.html">전체 러닝 활동</a>`
         : `<div class="lp-row expanded"><span class="lp-stat-label">데이터 없음</span></div>`;
     }
 

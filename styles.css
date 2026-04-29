@@ -65,16 +65,36 @@
 }
 
 /* ── keyframes ── */
-@keyframes vt-slide-in  { from { transform: translateX(100%); } }
-@keyframes vt-slide-out { to   { transform: translateX(-30%); } }
-@keyframes vt-back-in   { from { transform: translateX(-30%); } }
-@keyframes vt-back-out  { to   { transform: translateX(100%); } }
+@keyframes vt-slide-in {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes vt-slide-out {
+  to {
+    transform: translateX(-30%);
+  }
+}
+
+@keyframes vt-back-in {
+  from {
+    transform: translateX(-30%);
+  }
+}
+
+@keyframes vt-back-out {
+  to {
+    transform: translateX(100%);
+  }
+}
 
 /* ── Forward (기본) ── */
 ::view-transition-new(root) {
   animation: vt-slide-in 0.38s cubic-bezier(0.4, 0, 0.2, 1) both;
   z-index: 1;
 }
+
 ::view-transition-old(root) {
   animation: vt-slide-out 0.38s cubic-bezier(0.4, 0, 0.2, 1) both;
   z-index: 0;
@@ -85,6 +105,7 @@
   animation: vt-back-in 0.38s cubic-bezier(0.4, 0, 0.2, 1) both;
   z-index: 0;
 }
+
 :active-view-transition-type(back)::view-transition-old(root) {
   animation: vt-back-out 0.38s cubic-bezier(0.4, 0, 0.2, 1) both;
   z-index: 1;
@@ -95,6 +116,7 @@ html.nav-back ::view-transition-new(root) {
   animation: vt-back-in 0.38s cubic-bezier(0.4, 0, 0.2, 1) both;
   z-index: 0;
 }
+
 html.nav-back ::view-transition-old(root) {
   animation: vt-back-out 0.38s cubic-bezier(0.4, 0, 0.2, 1) both;
   z-index: 1;
@@ -331,7 +353,7 @@ sup {
   background: rgba(0, 0, 0, 0.05);
   border-radius: 8px;
   opacity: 1;
-  transform: scale(0.98);
+  transform: scale(0.99);
 }
 
 .lp-row.expanded .lp-info {
