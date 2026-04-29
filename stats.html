@@ -133,7 +133,8 @@
     .header-center-group {
       position: absolute;
       left: 50%;
-      top: 50%;
+      top: calc(env(safe-area-inset-top, 0px) + 31px);
+      /* 14px(header padding) + 17px(back-btn 절반) = 버튼들과 수평 정렬 */
       width: 0;
       height: 0;
       pointer-events: none;
@@ -1588,7 +1589,7 @@
         const offset = Math.max(0, heroH() - y);
         tabRow.style.transition = 'none';
         tabRow.style.transform = `translateX(-50%) translateY(${offset}px)`;
-        if (backHeader) backHeader.classList.toggle('compact', y >= heroH());
+        if (backHeader) backHeader.classList.toggle('compact', y > heroH() + 20);
       }
 
       /* 히어로가 완전히 사라지고 추가 80px 내린 뒤에 숨김 */
@@ -1612,7 +1613,7 @@
         tabRow.style.transition = 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
         tabRow.style.transform = `translateX(-50%) translateY(${offset}px)`;
         setTimeout(() => { animating = false; }, 380);
-        if (backHeader) backHeader.classList.toggle('compact', y >= heroH());
+        if (backHeader) backHeader.classList.toggle('compact', y > heroH() + 20);
       }
 
       function reset() {
