@@ -213,7 +213,7 @@
         <div class="sf-sheet-header">
           <span class="sf-sheet-title">정렬</span>
           <button class="sf-sheet-close" onclick="closeSFSheet()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 6 6 18" />
               <path d="m6 6 12 12" />
@@ -228,7 +228,7 @@
         <div class="sf-sheet-header">
           <span class="sf-sheet-title">필터</span>
           <button class="sf-sheet-close" onclick="closeSFSheet()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 6 6 18" />
               <path d="m6 6 12 12" />
@@ -473,7 +473,7 @@
       const zoneChips = FILTER_ZONE_OPTS.map(o => {
         const a = filterState.bpm === o.val;
         return `<div class="filter-chip zone-chip ${a ? 'active' : ''}" onclick="selectFilter('bpm','${o.val}')">
-          <span class="zone-label">${o.label}</span><span class="zone-desc">${o.desc}</span>
+          <span class="zone-label">${o.label}</span>
         </div>`;
       }).join('');
       const distLoV = distMin, distHiV = distMax;
