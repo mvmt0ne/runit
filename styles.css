@@ -64,24 +64,26 @@
   navigation: auto;
 }
 
-/* ── Forward: 새 페이지 올라옴 / 구 페이지 뒤로 물러남 ── */
+/* ── Forward: 새 페이지 올라오면서 구 페이지를 위로 밀어냄 ── */
 @keyframes vt-push-in {
   from { transform: translateY(100%); }
 }
 @keyframes vt-push-out {
-  to { transform: scale(0.94) translateY(-16px); opacity: 0.5; }
+  to { transform: translateY(-30%); opacity: 0; }
 }
 
 ::view-transition-new(root) {
   animation: vt-push-in 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  z-index: 1;
 }
 ::view-transition-old(root) {
-  animation: vt-push-out 1.2s cubic-bezier(0.4, 0, 1, 1) both;
+  animation: vt-push-out 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  z-index: 0;
 }
 
-/* ── Back: 구 페이지 아래로 / 새(이전) 페이지 앞으로 나옴 ── */
+/* ── Back: 구 페이지 아래로 / 새(이전) 페이지 위에서 내려옴 ── */
 @keyframes vt-back-in {
-  from { transform: scale(0.94) translateY(-16px); opacity: 0.5; }
+  from { transform: translateY(-30%); opacity: 0; }
 }
 @keyframes vt-back-out {
   to { transform: translateY(100%); }
@@ -89,9 +91,11 @@
 
 html.nav-back ::view-transition-new(root) {
   animation: vt-back-in 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  z-index: 0;
 }
 html.nav-back ::view-transition-old(root) {
-  animation: vt-back-out 1.2s cubic-bezier(0.4, 0, 1, 1) both;
+  animation: vt-back-out 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  z-index: 1;
 }
 
 /* ─── Body / Phone ──────────────────────── */
