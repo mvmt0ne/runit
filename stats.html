@@ -97,6 +97,75 @@
       -webkit-backdrop-filter: blur(40px) saturate(160%);
     }
 
+    /* ─── Hero: 스크롤 콘텐츠 내 첫 번째 요소 ── */
+    .stats-hero-bar {
+      padding: 10px 22px 20px;
+      margin-bottom: 80px;
+    }
+
+    .stats-hero-label {
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--text-1);
+      font-family: 'Pretendard Variable', sans-serif;
+      line-height: 1.4;
+      letter-spacing: -0.02em;
+    }
+
+    .stats-hero-num {
+      font-size: 56px;
+      font-weight: 300;
+      color: var(--text-1);
+      letter-spacing: -2px;
+      line-height: 1;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .stats-hero-num sup {
+      font-size: 0.38em;
+      vertical-align: super;
+      font-weight: 400;
+      color: var(--text-2);
+      margin-left: 2px;
+      letter-spacing: 0;
+    }
+
+    /* ─── 헤더 compact km (mid-page 시 fade-in) ── */
+    .back-title-group {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      pointer-events: none;
+    }
+
+    .back-title-text {
+      font-size: 20px;
+      font-weight: 400;
+      font-family: 'Pretendard Variable', sans-serif;
+      color: var(--text-1);
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .header-compact-km {
+      font-size: 11px;
+      font-weight: 600;
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--text-2);
+      letter-spacing: 0.5px;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .header-compact-km.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     /* ─── Scroll-hide header ── */
     .back-header {
       transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
@@ -146,7 +215,7 @@
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
-      padding-top: calc(env(safe-area-inset-top, 0px) + 128px);
+      padding-top: calc(env(safe-area-inset-top, 0px) + 52px);
       scrollbar-width: none;
     }
 
@@ -718,7 +787,10 @@
             <path d="M19 12H5" />
           </svg>
         </button>
-        <span class="back-title">마일리지</span>
+        <div class="back-title-group">
+          <span class="back-title-text">마일리지</span>
+          <span class="header-compact-km" id="header-compact-km">247.3K</span>
+        </div>
         <button class="pb-header-btn" onclick="goToPB()">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
@@ -742,6 +814,7 @@
          WEEK VIEW (주간)
     ══════════════════════════════ -->
       <div class="scroll-area" id="view-week" style="display:none">
+        <div class="stats-hero-bar"><div class="stats-hero-label">전체 마일리지는</div><div class="stats-hero-num">247.3<sup>K</sup></div></div>
         <div class="chart-block">
           <div class="chart-top">
             <span class="chart-period-label">Weekly Distance</span>
@@ -772,6 +845,7 @@
          MONTH VIEW (월간)
     ══════════════════════════════ -->
       <div class="scroll-area" id="view-month">
+        <div class="stats-hero-bar"><div class="stats-hero-label">전체 마일리지는</div><div class="stats-hero-num">247.3<sup>K</sup></div></div>
         <div class="stats-top-section">
           <div class="chart-block">
             <div class="chart-top">
@@ -838,6 +912,7 @@
          YEAR VIEW (년간)
     ══════════════════════════════ -->
       <div class="scroll-area" id="view-year" style="display:none">
+        <div class="stats-hero-bar"><div class="stats-hero-label">전체 마일리지는</div><div class="stats-hero-num">247.3<sup>K</sup></div></div>
         <div class="chart-block">
           <div class="chart-top">
             <span class="chart-period-label">Yearly Distance</span>
@@ -1403,40 +1478,62 @@
     })();
   </script>
   <script>
-    /* ─── Scroll-hide header + tabs ── */
+    /* ─── Scroll-hide + dynamic tab position ── */
     (function () {
-      const header = document.querySelector('.back-header');
-      const tabRow = document.querySelector('.tab-row');
+      const header  = document.querySelector('.back-header');
+      const tabRow  = document.querySelector('.tab-row');
       const scrollEls = document.querySelectorAll('.scroll-area');
+      const compactKm = document.getElementById('header-compact-km');
       if (!header || !tabRow || !scrollEls.length) return;
 
+      /* 헤더 콘텐츠 높이(safe-area 제외) — padding 14+14 + icon 24 */
+      const HEADER_CONTENT_H = 52;
+      const THRESHOLD = 48;
       let lastY = 0;
       let hidden = false;
       let ticking = false;
-      const THRESHOLD = 48;
+
+      /* 히어로 높이 캐시 */
+      function heroH() {
+        const el = document.querySelector('.scroll-area:not([style*="none"]) .stats-hero-bar')
+                || document.querySelector('.stats-hero-bar');
+        return el ? el.offsetHeight : 0;
+      }
+
+      /* 탭 top을 히어로 스크롤량에 맞춰 업데이트 */
+      function updateTabTop(y) {
+        const offset = Math.max(0, heroH() - y);
+        tabRow.style.top = `calc(env(safe-area-inset-top, 0px) + ${HEADER_CONTENT_H + offset}px)`;
+      }
 
       function hide() {
         if (hidden) return;
         hidden = true;
-        const headerH = header.offsetHeight;
-        const tabH = tabRow.offsetHeight;
+        const headerH  = header.offsetHeight;
+        const tabBottom = tabRow.getBoundingClientRect().bottom;
         header.style.transform = `translateX(-50%) translateY(-${headerH}px)`;
-        tabRow.style.transform = `translateX(-50%) translateY(-${headerH + tabH}px)`;
+        tabRow.style.transform  = `translateX(-50%) translateY(-${tabBottom}px)`;
+        if (compactKm) compactKm.classList.remove('visible');
       }
 
-      function show() {
+      function show(y) {
         if (!hidden) return;
         hidden = false;
         header.style.transform = 'translateX(-50%)';
-        tabRow.style.transform = 'translateX(-50%)';
+        tabRow.style.transform  = 'translateX(-50%)';
+        updateTabTop(y);
+        if (compactKm) compactKm.classList.toggle('visible', y > 8);
       }
 
       function reset() {
-        show();
+        hidden = true; // show() 강제 실행
+        show(0);
         lastY = 0;
+        updateTabTop(0);
+        if (compactKm) compactKm.classList.remove('visible');
       }
 
-      /* 모든 탭의 스크롤에 리스너 부착 */
+      /* 모든 탭 스크롤에 리스너 부착 */
       scrollEls.forEach(el => {
         el.addEventListener('scroll', () => {
           if (ticking) return;
@@ -1446,15 +1543,19 @@
             if (y > lastY && y > THRESHOLD) {
               hide();
             } else if (y < lastY) {
-              show();
+              show(y);
             }
+            if (!hidden) updateTabTop(y);
+            if (y <= 8 && compactKm) compactKm.classList.remove('visible');
             lastY = y;
             ticking = false;
           });
         }, { passive: true });
       });
 
-      /* 탭 전환 시 헤더 복원 + lastY 리셋 — 탭 스크립트에서 호출 */
+      /* 초기 탭 위치 설정 */
+      updateTabTop(0);
+
       window._resetScrollHide = reset;
     })();
   </script>
