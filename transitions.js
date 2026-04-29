@@ -1,24 +1,34 @@
 /**
  * runit — Page Transitions (View Transitions API)
  *
- * 방향을 sessionStorage로 다음 페이지에 전달
- * Forward (goTo)  : 새 페이지 아래서 올라옴 / 현재 페이지 뒤로 물러남
- * Back   (goBack) : 현재 페이지 아래로 퇴장 / 이전 페이지 앞으로 나옴
+ * pagereveal 에서 viewTransition.types 로 방향을 주입 — CSS `:active-view-transition-type()` 로 분기
+ * 동시에 html 클래스도 추가해 구형 브라우저 폴백 지원
  */
 
 (function () {
-  /* ── 진입 시 방향 클래스 적용 (VT 시작 전에 동기 실행) ── */
-  function applyNavClass() {
-    var nav = sessionStorage.getItem('runit-nav');
-    if (nav) {
-      sessionStorage.removeItem('runit-nav');
-      document.documentElement.classList.add('nav-' + nav);
-    }
+  /* ── 1) 동기 실행: 신규 페이지 로드 시 클래스 선적용 ── */
+  var _nav = sessionStorage.getItem('runit-nav');
+  if (_nav) {
+    sessionStorage.removeItem('runit-nav');
+    document.documentElement.classList.add('nav-' + _nav);
   }
-  applyNavClass();
 
-  /* ── bfcache 복원 시에도 방향 적용 (pagereveal: Chrome 126+, Safari 18.2+) ── */
-  window.addEventListener('pagereveal', applyNavClass);
+  /* ── 2) pagereveal: VT types 주입 + bfcache 복원 대응 ── */
+  window.addEventListener('pagereveal', function (e) {
+    /* bfcache 복원 시엔 스크립트가 재실행 안 되므로 sessionStorage 재확인 */
+    var nav = _nav;
+    if (!nav) {
+      nav = sessionStorage.getItem('runit-nav');
+      if (nav) {
+        sessionStorage.removeItem('runit-nav');
+        document.documentElement.classList.add('nav-' + nav);
+      }
+    }
+    /* viewTransition.types: Chrome 131+ — CSS :active-view-transition-type() 로 매핑 */
+    if (nav && e.viewTransition && e.viewTransition.types) {
+      e.viewTransition.types.add(nav);
+    }
+  });
 
   /* ── Forward ── */
   window.goTo = function (url) {

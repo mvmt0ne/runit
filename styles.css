@@ -64,37 +64,39 @@
   navigation: auto;
 }
 
-/* ── Forward: 새 페이지 올라오면서 구 페이지를 위로 밀어냄 ── */
-@keyframes vt-push-in {
-  from { transform: translateY(100%); }
-}
-@keyframes vt-push-out {
-  to { transform: translateY(-30%); opacity: 0; }
-}
+/* ── keyframes ── */
+@keyframes vt-slide-in  { from { transform: translateX(100%); } }
+@keyframes vt-slide-out { to   { transform: translateX(-30%); } }
+@keyframes vt-back-in   { from { transform: translateX(-30%); } }
+@keyframes vt-back-out  { to   { transform: translateX(100%); } }
 
+/* ── Forward (기본) ── */
 ::view-transition-new(root) {
-  animation: vt-push-in 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: vt-slide-in 0.38s cubic-bezier(0.4, 0, 0.2, 1) both;
   z-index: 1;
 }
 ::view-transition-old(root) {
-  animation: vt-push-out 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: vt-slide-out 0.38s cubic-bezier(0.4, 0, 0.2, 1) both;
   z-index: 0;
 }
 
-/* ── Back: 구 페이지 아래로 / 새(이전) 페이지 위에서 내려옴 ── */
-@keyframes vt-back-in {
-  from { transform: translateY(-30%); opacity: 0; }
+/* ── Back — :active-view-transition-type (Chrome 131+) ── */
+:active-view-transition-type(back)::view-transition-new(root) {
+  animation: vt-back-in 0.38s cubic-bezier(0.4, 0, 0.2, 1) both;
+  z-index: 0;
 }
-@keyframes vt-back-out {
-  to { transform: translateY(100%); }
+:active-view-transition-type(back)::view-transition-old(root) {
+  animation: vt-back-out 0.38s cubic-bezier(0.4, 0, 0.2, 1) both;
+  z-index: 1;
 }
 
+/* ── Back — html.nav-back 폴백 (구형 Chrome / Safari) ── */
 html.nav-back ::view-transition-new(root) {
-  animation: vt-back-in 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: vt-back-in 0.38s cubic-bezier(0.4, 0, 0.2, 1) both;
   z-index: 0;
 }
 html.nav-back ::view-transition-old(root) {
-  animation: vt-back-out 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: vt-back-out 0.38s cubic-bezier(0.4, 0, 0.2, 1) both;
   z-index: 1;
 }
 
