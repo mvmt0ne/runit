@@ -619,12 +619,10 @@
       color: var(--type-dark-text);
     }
 
-    /* ─── 전체 러닝 활동 FAB — 리스트 뒤에 고정, 스크롤로 드러남 ── */
+    /* ─── 전체 러닝 활동 FAB — flex child, scroll-area 아래에 위치 ── */
     .list-fab {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      position: relative;
+      flex-shrink: 0;
       display: none;
       /* JS로 월간 탭에서만 표시 */
       align-items: center;
@@ -659,13 +657,11 @@
       color: #202020;
     }
 
-    /* z-index 레이어: 헤더(30) > 탭(20) > FAB(15) > scroll-area(10) */
+    /* z-index 레이어: 헤더(30) > 탭(20) > scroll-area(10) > FAB::before(5) */
+    /* FAB 자체는 flex child로 scroll-area 아래에 위치 → 클릭 가능 */
+    /* FAB::before(주황 90px)는 scroll-area가 z-index:10으로 시각적으로 덮음 */
     .back-header {
       z-index: 30;
-    }
-
-    .list-fab {
-      z-index: 15;
     }
 
     .scroll-area {
@@ -673,11 +669,15 @@
       z-index: 10;
     }
 
-    /* 전체 탭: 콘텐츠가 FAB 위까지 스크롤될 수 있도록 하단 여백 */
+    .list-fab {
+      z-index: 5;
+    }
+
+    /* 전체 탭: 하단 여백 (FAB는 flex child로 분리됨) */
     #view-month,
     #view-week,
     #view-year {
-      padding-bottom: 90px;
+      padding-bottom: 24px;
     }
 
     .month-runs-title {
