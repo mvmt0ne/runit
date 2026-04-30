@@ -352,7 +352,9 @@
 
     /* 강도 분포 */
     .intensity-breakdown {
-      padding: 40px 22px 0;
+      padding: 20px 0 0;
+      display: flex;
+      justify-content: center;
     }
 
     .components-title {
@@ -801,7 +803,6 @@
           </div>
           <div class="month-detail">
             <div class="intensity-breakdown">
-              <div class="components-title">러닝 강도</div>
               <div id="week-intensity"></div>
             </div>
             <div class="type-chart">
@@ -861,7 +862,6 @@
           <!-- 강도 분포 -->
           <div class="month-detail" id="month-detail">
             <div class="intensity-breakdown">
-              <div class="components-title">러닝 강도</div>
               <div id="detail-intensity"></div>
             </div>
             <div class="type-chart">
@@ -927,7 +927,6 @@
           </div>
           <div class="month-detail">
             <div class="intensity-breakdown">
-              <div class="components-title">러닝 강도</div>
               <div id="year-intensity"></div>
             </div>
             <div class="type-chart">
@@ -1402,29 +1401,9 @@
       const mIdx = idx + 1;
       const intensity = calcIntensity(mIdx);
 
-      const rows = [
-        { label: '저강도', pct: intensity.low, target: INTENSITY_TARGET.low },
-        { label: '중강도', pct: intensity.mid, target: INTENSITY_TARGET.mid },
-        { label: '고강도', pct: intensity.high, target: INTENSITY_TARGET.high },
-      ];
-
-      document.getElementById('detail-intensity').innerHTML = `
-        <div class="intensity-stacked-bar">
-          <div class="isb-seg isb-low"  style="width:${intensity.low}%"><span>${intensity.low}%</span></div>
-          <div class="isb-seg isb-mid"  style="width:${intensity.mid}%"><span>${intensity.mid}%</span></div>
-          <div class="isb-seg isb-high" style="width:${intensity.high}%"><span>${intensity.high}%</span></div>
-        </div>
-        <div class="isb-axis">
-          <span class="isb-axis-label">저</span>
-          <span class="isb-axis-label">고</span>
-        </div>`;
-
-      // 순차 reveal — 저 → 중 → 고 (clip-path 커튼)
-      const baseDelay = isDefault ? 300 : 60;
-      const stagger = isDefault ? 280 : 160;
-      document.querySelectorAll('#detail-intensity .isb-seg').forEach((el, i) => {
-        setTimeout(() => { el.style.clipPath = 'inset(0 0% 0 0)'; }, baseDelay + i * stagger);
-      });
+      renderIntensityDonut('detail-intensity',
+        intensity.low, intensity.mid, intensity.high,
+        isDefault ? 300 : 60);
 
     }
 
@@ -1592,9 +1571,73 @@
       }));
     }
 
-    function renderIntensityBar(containerId, bpms, animate) {
+    /* ── 도넛 차트: 러닝 강도 ── */
+    function renderIntensityDonut(containerId, low, mid, high, animDelay) {
       const el = document.getElementById(containerId);
-      if (!el || !bpms.length) return;
+      if (!el) return;
+
+      const W = 260, cx = W / 2;
+      const START = 270, ARC = 270, RAD = Math.PI / 180;
+      const rings = [
+        { r: 100, sw: 17, label: '저', pct: low,  color: 'var(--slate-gray)'   },
+        { r: 72,  sw: 17, label: '중', pct: mid,  color: 'var(--asphalt-gray)' },
+        { r: 44,  sw: 17, label: '고', pct: high, color: 'var(--accent)'       },
+      ];
+
+      const pt = (r, deg) => [cx + r * Math.cos(deg * RAD), cx + r * Math.sin(deg * RAD)];
+
+      const defs = rings.map((ring, i) => {
+        const [sx, sy] = pt(ring.r, START);
+        const [ex, ey] = pt(ring.r, START + ARC);
+        return `<path id="dpath${containerId}${i}" d="M${sx.toFixed(1)},${sy.toFixed(1)} A${ring.r},${ring.r} 0 1,1 ${ex.toFixed(1)},${ey.toFixed(1)}" fill="none"/>`;
+      }).join('');
+
+      const parts = rings.map((ring, i) => {
+        const circ    = 2 * Math.PI * ring.r;
+        const arcLen  = ARC / 360 * circ;
+        const fillLen = ring.pct / 100 * arcLen;
+        const gapLen  = circ - arcLen;
+        const delay   = (animDelay || 0) + i * 130;
+        const [lx, ly] = pt(ring.r, START);
+        return `
+          <circle cx="${cx}" cy="${cx}" r="${ring.r}" fill="none"
+            stroke="${ring.color}" stroke-opacity="0.18" stroke-width="${ring.sw}"
+            stroke-dasharray="${arcLen.toFixed(1)} ${gapLen.toFixed(1)}" stroke-linecap="round"
+            transform="rotate(${START},${cx},${cx})"/>
+          <circle cx="${cx}" cy="${cx}" r="${ring.r}" fill="none"
+            stroke="${ring.color}" stroke-width="${ring.sw}" stroke-linecap="round"
+            stroke-dasharray="${arcLen.toFixed(1)} ${gapLen.toFixed(1)}"
+            stroke-dashoffset="${arcLen.toFixed(1)}"
+            transform="rotate(${START},${cx},${cx})"
+            class="donut-arc" data-target="${(arcLen - fillLen).toFixed(1)}"
+            style="transition:stroke-dashoffset 0.65s cubic-bezier(0.16,1,0.3,1) ${delay}ms"/>
+          <text fill="${ring.color}" font-size="11" font-family="'Space Grotesk',sans-serif">
+            <textPath href="#dpath${containerId}${i}" startOffset="${ring.pct.toFixed(0)}%">${ring.pct}%</textPath>
+          </text>
+          <text x="${(lx - 10).toFixed(1)}" y="${ly.toFixed(1)}"
+            fill="${ring.color}" font-size="12" font-family="'Pretendard Variable',sans-serif"
+            text-anchor="end" dominant-baseline="middle">${ring.label}</text>`;
+      }).join('');
+
+      el.innerHTML = `
+        <svg viewBox="0 0 ${W} ${W}" xmlns="http://www.w3.org/2000/svg"
+          style="width:100%;max-width:260px;display:block;overflow:visible">
+          <defs>${defs}</defs>
+          ${parts}
+          <text x="${cx}" y="${cx}" text-anchor="middle" dominant-baseline="middle"
+            fill="var(--cloudy-gray)" font-size="16" font-weight="300"
+            font-family="'Pretendard Variable',sans-serif">러닝강도</text>
+        </svg>`;
+
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        el.querySelectorAll('.donut-arc').forEach(c => {
+          c.style.strokeDashoffset = c.dataset.target;
+        });
+      }));
+    }
+
+    function renderIntensityBar(containerId, bpms, animate) {
+      if (!bpms || !bpms.length) return;
       const total = bpms.length;
       let low = 0, mid = 0, high = 0;
       bpms.forEach(b => {
@@ -1606,21 +1649,7 @@
       const lp = Math.round(low / total * 100);
       const mp = Math.round(mid / total * 100);
       const hp = 100 - lp - mp;
-      el.innerHTML = `
-        <div class="intensity-stacked-bar">
-          <div class="isb-seg isb-low"  style="width:${lp}%"><span>${lp}%</span></div>
-          <div class="isb-seg isb-mid"  style="width:${mp}%"><span>${mp}%</span></div>
-          <div class="isb-seg isb-high" style="width:${hp}%"><span>${hp}%</span></div>
-        </div>
-        <div class="isb-axis">
-          <span class="isb-axis-label">저</span>
-          <span class="isb-axis-label">고</span>
-        </div>`;
-      if (animate) {
-        el.querySelectorAll('.isb-seg').forEach((seg, i) => {
-          setTimeout(() => { seg.style.clipPath = 'inset(0 0% 0 0)'; }, 300 + i * 280);
-        });
-      }
+      renderIntensityDonut(containerId, lp, mp, hp, animate ? 300 : 0);
     }
 
     // ══════════════════════════════════════
