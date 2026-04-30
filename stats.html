@@ -625,7 +625,6 @@
       bottom: 0;
       left: 0;
       right: 0;
-      z-index: 5;
       display: none;
       /* JS로 월간 탭에서만 표시 */
       align-items: center;
@@ -660,12 +659,15 @@
       color: #202020;
     }
 
-    /* z-index 레이어: 헤더(30) > 탭(20) > scroll-area(10) > FAB(5) */
+    /* z-index 레이어: 헤더(30) > 탭(20) > FAB(15) > scroll-area(10) */
     .back-header {
       z-index: 30;
     }
 
-    /* scroll-area가 FAB 위를 덮도록 — 투명 배경 통해 FAB이 드러남 */
+    .list-fab {
+      z-index: 15;
+    }
+
     .scroll-area {
       position: relative;
       z-index: 10;
