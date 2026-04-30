@@ -29,38 +29,6 @@
     }
 
     /* ─── PB header button ── */
-    .pb-header-btn {
-      position: absolute;
-      right: 20px;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      color: var(--text-2);
-      display: flex;
-      align-items: center;
-      padding: 0;
-      transition: color 0.2s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .pb-header-btn:active {
-      transform: scale(0.88);
-      color: var(--text-1);
-    }
-
-    /* ─── Back header: glass override (styles.css = accent) ── */
-
-    .back-btn {
-      width: auto;
-      height: 34px;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 0;
-      transition: background 0.3s, color 0.3s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-    }
 
     .back-btn:active {
       transform: scale(0.92);
@@ -126,64 +94,6 @@
       margin-left: 8px;
     }
 
-    /* ─── 헤더 센터 앵커 — 헤더 정중앙에 0-size 기준점 ── */
-    .header-center-group {
-      position: absolute;
-      left: 50%;
-      top: calc(env(safe-area-inset-top, 0px) + 31px);
-      /* 14px(header padding) + 17px(back-btn 절반) = 버튼들과 수평 정렬 */
-      width: 0;
-      height: 0;
-      pointer-events: none;
-    }
-
-    /* 타이틀 — 기본: 앵커 기준 센터. compact: 왼쪽으로 슬라이드 */
-    .header-title {
-      position: absolute;
-      top: 0;
-      left: 0;
-      transform: translateX(-50%) translateY(-50%);
-      font-size: 20px;
-      font-weight: 400;
-      font-family: 'Pretendard Variable', sans-serif;
-      color: var(--slate-gray);
-      white-space: nowrap;
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    /* km — 기본: 같은 앵커에서 투명. compact: 오른쪽으로 슬라이드 */
-    .header-km {
-      position: absolute;
-      top: 0;
-      left: 0;
-      transform: translateX(-50%) translateY(-50%);
-      font-size: 13px;
-      font-weight: 500;
-      font-family: 'Space Grotesk', sans-serif;
-      color: var(--text-2);
-      letter-spacing: 0.3px;
-      opacity: 0;
-      white-space: nowrap;
-      transition: opacity 0.32s ease 0.04s,
-        transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    /* compact 상태 — 중앙에서 좌우로 갈라짐 */
-    .back-header.compact .header-title {
-      transform: translateX(calc(-100% - 4px)) translateY(-50%);
-    }
-
-    .back-header.compact .header-km {
-      opacity: 1;
-      transform: translateX(4px) translateY(-50%);
-    }
-
-    /* ─── 고정 헤더 ── */
-    .back-header {
-      background: rgba(34, 34, 34, 0.9);
-      backdrop-filter: blur(40px) saturate(160%);
-      -webkit-backdrop-filter: blur(40px) saturate(160%);
-    }
 
     /* ─── 러닝 종류 차트 ── */
     .type-chart {
@@ -903,7 +813,7 @@
   <div class="phone">
     <div class="phone-inner">
 
-      <div class="back-header" id="back-header">
+      <div class="back-header back-header--dark" id="back-header">
         <button class="back-btn" onclick="goBack('runit-home.html')">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--slate-gray)" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
@@ -911,11 +821,8 @@
             <path d="M19 12H5" />
           </svg>
         </button>
-        <div class="header-center-group">
-          <span class="header-title">마일리지</span>
-          <span class="header-km" id="header-compact-km">247.3K</span>
-        </div>
-        <button class="pb-header-btn" onclick="goToPB()">
+        <span class="back-title">마일리지</span>
+        <button class="header-action-btn" onclick="goToPB()">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
@@ -1964,12 +1871,11 @@
         return el ? el.offsetHeight : 0;
       }
 
-      /* 히어로 추적 — tab-row는 고정 위치 유지, compact만 계산 */
+      /* 히어로 추적 — tab-row 고정 위치 유지 */
       function track(y) {
         if (hidden || animating) return;
         tabRow.style.transition = 'none';
         tabRow.style.transform = 'translateX(-50%) translateY(0)';
-        if (backHeader) backHeader.classList.toggle('compact', heroH() > 0 && y > heroH() + 20);
       }
 
       /* 히어로가 완전히 사라지고 추가 80px 내린 뒤에 숨김 */
@@ -1981,7 +1887,6 @@
         tabRow.style.transition = 'transform 0.35s cubic-bezier(0.4, 0, 1, 1)';
         tabRow.style.transform = `translateX(-50%) translateY(-${tabBottom}px)`;
         setTimeout(() => { animating = false; }, 380);
-        if (backHeader) backHeader.classList.remove('compact');
       }
 
       /* 스크롤 업 시 복귀 */
@@ -1992,13 +1897,11 @@
         tabRow.style.transition = 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
         tabRow.style.transform = 'translateX(-50%) translateY(0)';
         setTimeout(() => { animating = false; }, 380);
-        if (backHeader) backHeader.classList.toggle('compact', heroH() > 0 && y > heroH() + 20);
       }
 
       function reset() {
         hidden = animating = false;
         track(0);
-        if (backHeader) backHeader.classList.remove('compact');
       }
 
       scrollEls.forEach(el => {

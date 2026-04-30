@@ -24,24 +24,6 @@
   <script src="./transitions.js"></script>
   <style>
     /* ─── PB header button ── */
-    .pb-header-btn {
-      position: absolute;
-      right: 20px;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      color: var(--text-2);
-      display: flex;
-      align-items: center;
-      padding: 0;
-      transition: color 0.2s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .pb-header-btn:active {
-      transform: scale(0.88);
-      color: var(--text-1);
-    }
-
     /* ─── List page layout ── */
     .list-page {
       flex: 1;
@@ -117,10 +99,6 @@
       color: var(--type-long-text);
     }
 
-    .back-header {
-      background: var(--accent);
-    }
-
     /* ─── Empty ── */
     .empty-result {
       padding: 48px 20px;
@@ -138,7 +116,7 @@
     <div class="phone-inner">
 
       <!-- 헤더 -->
-      <div class="back-header">
+      <div class="back-header back-header--accent">
         <button class="back-btn" onclick="goBack('runit-home.html')">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
@@ -147,7 +125,7 @@
           </svg>
         </button>
         <span class="back-title">러닝 활동</span>
-        <button class="pb-header-btn" onclick="goToStats()">
+        <button class="header-action-btn" onclick="goToStats()">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--asphalt-black)" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" x2="18" y1="20" y2="10" />

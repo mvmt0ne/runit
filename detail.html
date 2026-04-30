@@ -57,53 +57,6 @@
     }
 
     /* ─── Back header ── */
-    .back-header {
-      padding: 14px 20px;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      flex-shrink: 0;
-      background: rgba(25, 25, 25, 0.08);
-      backdrop-filter: blur(12px) saturate(150%);
-      -webkit-backdrop-filter: blur(12px) saturate(150%);
-      position: fixed;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 430px;
-      z-index: 10;
-    }
-
-    .back-btn {
-      width: auto;
-      height: 34px;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      color: var(--text-1);
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 0;
-      transition: color 0.3s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .back-btn:active {
-      transform: scale(0.92);
-    }
-
-    .back-title {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 20px;
-      font-weight: 200;
-      font-family: 'Pretendard Variable', sans-serif;
-      color: var(--text-2);
-      pointer-events: none;
-      transition: color 0.3s;
-    }
 
     /* ─── Scroll area ── */
     .scroll-area {
@@ -462,7 +415,7 @@
 
 
 
-      <div class="back-header">
+      <div class="back-header back-header--dark">
         <button class="back-btn" onclick="goBack('list.html')">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
