@@ -225,9 +225,12 @@ sup {
   transform: scale(0.92);
 }
 
-.back-header--dark .back-btn,
+.back-header--dark .back-btn {
+  color: var(--slate-gray);
+}
+
 .back-header--accent .back-btn {
-  color: var(--text-2);
+  color: var(--asphalt-black);
 }
 
 .back-title {
@@ -247,7 +250,7 @@ sup {
 }
 
 .back-header--accent .back-title {
-  color: var(--text-1);
+  color: var(--asphalt-black);
 }
 
 /* 우측 액션 버튼 (PB, Stats 아이콘 등) */
@@ -268,9 +271,12 @@ sup {
   transform: scale(0.88);
 }
 
-.back-header--dark .header-action-btn,
+.back-header--dark .header-action-btn {
+  color: var(--slate-gray);
+}
+
 .back-header--accent .header-action-btn {
-  color: var(--text-2);
+  color: var(--asphalt-black);
 }
 
 /* ═══════════════════════════════════════════════════════════
