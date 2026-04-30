@@ -1746,6 +1746,60 @@
   </script>
 
   <script>
+    /* ─── 헤더 scroll-hide + tab-row 연동 ── */
+    (function () {
+      const header = document.getElementById('back-header');
+      const tabRow = document.querySelector('.tab-row');
+      const scroller = document.querySelector('.scroll-area');
+      if (!header || !tabRow || !scroller) return;
+
+      const HEADER_H = header.offsetHeight;
+      let lastY = 0;
+      let pinned = false;
+
+      // 초기: tab-row를 헤더 바로 아래에 고정
+      tabRow.style.top = HEADER_H + 'px';
+
+      scroller.addEventListener('scroll', function () {
+        const y = scroller.scrollTop;
+        const down = y > lastY;
+        lastY = y;
+
+        // 상단 근처: 자연스러운 flow로 리셋
+        if (y < HEADER_H + 20) {
+          pinned = false;
+          header.style.transition = 'none';
+          header.style.top = '';
+          tabRow.style.transition = 'none';
+          tabRow.style.top = HEADER_H + 'px';
+          return;
+        }
+
+        if (down) {
+          // 아래로: 헤더 스크롤아웃, tab-row 상단으로
+          if (pinned) {
+            pinned = false;
+            header.style.transition = 'top 0.22s cubic-bezier(0.4, 0, 1, 1)';
+            header.style.top = '';
+          }
+          if (tabRow.style.top !== 'env(safe-area-inset-top, 0px)') {
+            tabRow.style.transition = 'top 0.22s cubic-bezier(0.4, 0, 1, 1)';
+            tabRow.style.top = 'env(safe-area-inset-top, 0px)';
+          }
+        } else {
+          // 위로: 헤더 슬라이드다운
+          if (!pinned) {
+            pinned = true;
+            header.style.transition = 'top 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+            header.style.top = 'env(safe-area-inset-top, 0px)';
+            tabRow.style.transition = 'top 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+            tabRow.style.top = HEADER_H + 'px';
+          }
+        }
+      }, { passive: true });
+    })();
+  </script>
+  <script>
     function goToPB() { goTo('pb.html'); }
   </script>
   <script>
