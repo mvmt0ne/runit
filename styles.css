@@ -578,7 +578,7 @@ sup {
   right: 0;
   bottom: calc(-1 * env(safe-area-inset-bottom, 0px));
   background: rgba(34, 34, 34, 0.4);
-  backdrop-filter: blur(10px) saturate(100%);
+  backdrop-filter: blur(30px) saturate(100%);
   -webkit-backdrop-filter: blur(10px) saturate(100%);
   transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
     transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
@@ -627,7 +627,7 @@ sup {
   transform: translate(-50%, calc(-50% + 20px));
   width: calc(100% - 40px);
   max-width: 390px;
-  background: rgba(44, 44, 44, 1);
+  background: var(--bone);
   border-radius: 8px;
   z-index: 999;
   display: flex;
@@ -871,7 +871,7 @@ sup {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 12px;
+  padding: 16px 12px;
   margin: 0 -12px;
   border-radius: 0;
   cursor: pointer;
@@ -885,22 +885,21 @@ sup {
 }
 
 .month-list-label {
-  font-size: 17px;
-  font-weight: 300;
+  font-size: 18px;
+  font-weight: 400;
   font-family: 'Pretendard Variable', sans-serif;
-  color: var(--text-1);
-  letter-spacing: -0.02em;
+  color: var(--asphalt-gray);
 }
 
 .month-list-item.ml-selected .month-list-label {
-  color: var(--accent);
+  color: var(--asphalt-black);
   font-weight: 500;
 }
 
 .month-list-check {
-  width: 18px;
-  height: 18px;
-  color: var(--accent);
+  width: 24px;
+  height: 24px;
+  color: var(--asphalt-black);
   opacity: 0;
   transition: opacity 0.15s;
   flex-shrink: 0;

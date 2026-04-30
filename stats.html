@@ -741,225 +741,225 @@
     <div class="phone-inner">
 
       <div class="scroll-area">
-      <div class="back-header back-header--dark" id="back-header">
-        <button class="back-btn" onclick="goBack('runit-home.html')">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--slate-gray)" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="m12 19-7-7 7-7" />
-            <path d="M19 12H5" />
-          </svg>
-        </button>
-        <span class="back-title">마일리지</span>
-        <button class="header-action-btn" onclick="goToPB()">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
-            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
-            <path d="M4 22h16" />
-            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
-            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
-            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
-          </svg>
-        </button>
-      </div>
+        <div class="back-header back-header--dark" id="back-header">
+          <button class="back-btn" onclick="goBack('runit-home.html')">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--slate-gray)" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="m12 19-7-7 7-7" />
+              <path d="M19 12H5" />
+            </svg>
+          </button>
+          <span class="back-title">마일리지</span>
+          <button class="header-action-btn" onclick="goToPB()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+              <path d="M4 22h16" />
+              <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+              <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+              <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+            </svg>
+          </button>
+        </div>
 
-      <div class="tab-row">
-        <div class="tab" data-tab="week">주간</div>
-        <div class="tab active" data-tab="month">월간</div>
-        <div class="tab" data-tab="year">년간</div>
-      </div>
+        <div class="tab-row">
+          <div class="tab" data-tab="week">주간</div>
+          <div class="tab active" data-tab="month">월간</div>
+          <div class="tab" data-tab="year">년간</div>
+        </div>
 
-      <!-- ══════════════════════════════
+        <!-- ══════════════════════════════
          WEEK VIEW (주간)
     ══════════════════════════════ -->
-      <div id="view-week" style="display:none">
-        <div class="stats-top-section">
-          <div class="chart-block">
-            <div class="chart-top">
-              <div class="year-nav">
-                <span class="chart-period-label" id="week-period-label">3.9 — 5.25</span>
-                <button class="year-arrow" id="week-period-prev" onclick="changeWeekPeriod(-1)">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m15 18-6-6 6-6" />
-                  </svg>
-                </button>
-                <button class="year-arrow disabled" id="week-period-next" onclick="changeWeekPeriod(1)">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m9 18 6-6-6-6" />
-                  </svg>
-                </button>
+        <div id="view-week" style="display:none">
+          <div class="stats-top-section">
+            <div class="chart-block">
+              <div class="chart-top">
+                <div class="year-nav">
+                  <span class="chart-period-label" id="week-period-label">3.9 — 5.25</span>
+                  <button class="year-arrow" id="week-period-prev" onclick="changeWeekPeriod(-1)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="m15 18-6-6 6-6" />
+                    </svg>
+                  </button>
+                  <button class="year-arrow disabled" id="week-period-next" onclick="changeWeekPeriod(1)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="m9 18 6-6-6-6" />
+                    </svg>
+                  </button>
+                </div>
+                <span class="chart-avg-line-label">
+                  <span class="avg-line-dash"></span><span id="week-avg-label"></span>
+                </span>
               </div>
-              <span class="chart-avg-line-label">
-                <span class="avg-line-dash"></span><span id="week-avg-label"></span>
-              </span>
+              <div class="chart-swipe-wrap" id="week-chart-swipe-wrap">
+                <div class="cmp-chart vertical" id="week-chart">
+                  <div class="avg-line" id="week-avg-line"></div>
+                </div>
+              </div>
             </div>
-            <div class="chart-swipe-wrap" id="week-chart-swipe-wrap">
-              <div class="cmp-chart vertical" id="week-chart">
-                <div class="avg-line" id="week-avg-line"></div>
+            <div class="month-detail">
+              <div class="intensity-breakdown">
+                <div id="week-intensity"></div>
+              </div>
+              <div class="type-chart">
+                <div class="components-title">러닝 종류</div>
+                <div id="week-type-chart"></div>
               </div>
             </div>
           </div>
-          <div class="month-detail">
-            <div class="intensity-breakdown">
-              <div id="week-intensity"></div>
-            </div>
-            <div class="type-chart">
-              <div class="components-title">러닝 종류</div>
-              <div id="week-type-chart"></div>
+
+          <div class="stats-bottom-section">
+            <div class="delta-row">
+              <div class="delta-card">
+                <div class="components-title">지난주 대비</div>
+                <div class="delta-km down">−19.7<sup>K</sup></div>
+                <div class="delta-pct down">↓ 78%</div>
+              </div>
+              <div class="delta-card">
+                <div class="components-title">8주 평균 대비</div>
+                <div class="delta-km down">−16.2<span>K</span></div>
+                <div class="delta-pct down">↓ 74%</div>
+              </div>
             </div>
           </div>
-        </div>
+        </div><!-- /view-week -->
 
-        <div class="stats-bottom-section">
-          <div class="delta-row">
-            <div class="delta-card">
-              <div class="components-title">지난주 대비</div>
-              <div class="delta-km down">−19.7<sup>K</sup></div>
-              <div class="delta-pct down">↓ 78%</div>
-            </div>
-            <div class="delta-card">
-              <div class="components-title">8주 평균 대비</div>
-              <div class="delta-km down">−16.2<span>K</span></div>
-              <div class="delta-pct down">↓ 74%</div>
-            </div>
-          </div>
-        </div>
-      </div><!-- /view-week -->
-
-      <!-- ══════════════════════════════
+        <!-- ══════════════════════════════
          MONTH VIEW (월간)
     ══════════════════════════════ -->
-      <div id="view-month">
-        <div class="stats-top-section">
-          <div class="chart-block">
-            <div class="chart-top">
-              <div class="year-nav">
-                <span class="chart-period-label" id="month-year-label">2026년</span>
-                <button class="year-arrow" id="year-prev" onclick="changeYear(-1)">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m15 18-6-6 6-6" />
-                  </svg>
-                </button>
-                <button class="year-arrow disabled" id="year-next" onclick="changeYear(1)">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m9 18 6-6-6-6" />
-                  </svg>
-                </button>
+        <div id="view-month">
+          <div class="stats-top-section">
+            <div class="chart-block">
+              <div class="chart-top">
+                <div class="year-nav">
+                  <span class="chart-period-label" id="month-year-label">2026년</span>
+                  <button class="year-arrow" id="year-prev" onclick="changeYear(-1)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="m15 18-6-6 6-6" />
+                    </svg>
+                  </button>
+                  <button class="year-arrow disabled" id="year-next" onclick="changeYear(1)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="m9 18 6-6-6-6" />
+                    </svg>
+                  </button>
+                </div>
+                <span class="chart-avg-line-label"><span id="month-avg-label"></span></span>
               </div>
-              <span class="chart-avg-line-label"><span id="month-avg-label"></span></span>
-            </div>
-            <div class="chart-swipe-wrap" id="chart-swipe-wrap">
-              <div class="cmp-chart vertical" id="month-chart">
-                <div class="avg-line" id="month-avg-line"></div>
+              <div class="chart-swipe-wrap" id="chart-swipe-wrap">
+                <div class="cmp-chart vertical" id="month-chart">
+                  <div class="avg-line" id="month-avg-line"></div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- 강도 분포 -->
-          <div class="month-detail" id="month-detail">
-            <div class="intensity-breakdown">
-              <div id="detail-intensity"></div>
+            <!-- 강도 분포 -->
+            <div class="month-detail" id="month-detail">
+              <div class="intensity-breakdown">
+                <div id="detail-intensity"></div>
+              </div>
+              <div class="type-chart">
+                <div class="components-title">러닝 종류</div>
+                <div id="month-type-chart"></div>
+              </div>
             </div>
-            <div class="type-chart">
-              <div class="components-title">러닝 종류</div>
-              <div id="month-type-chart"></div>
+          </div><!-- /stats-top-section -->
+
+          <div class="stats-bottom-section">
+            <div class="delta-row" id="month-delta-row">
+              <div class="delta-card">
+                <div class="components-title">지난달 대비</div>
+                <div class="delta-km down">−27.9<sup> K</sup></div>
+                <div class="delta-pct down">↓ 32%</div>
+              </div>
+              <div class="delta-card">
+                <div class="components-title">12개월 평균 대비</div>
+                <div class="delta-km down">−9.4<sup> K</sup></div>
+                <div class="delta-pct down">↓ 14%</div>
+              </div>
             </div>
-          </div>
-        </div><!-- /stats-top-section -->
 
-        <div class="stats-bottom-section">
-          <div class="delta-row" id="month-delta-row">
-            <div class="delta-card">
-              <div class="components-title">지난달 대비</div>
-              <div class="delta-km down">−27.9<sup> K</sup></div>
-              <div class="delta-pct down">↓ 32%</div>
-            </div>
-            <div class="delta-card">
-              <div class="components-title">12개월 평균 대비</div>
-              <div class="delta-km down">−9.4<sup> K</sup></div>
-              <div class="delta-pct down">↓ 14%</div>
-            </div>
-          </div>
+          </div><!-- /stats-bottom-section -->
 
-        </div><!-- /stats-bottom-section -->
+        </div><!-- /view-month -->
 
-      </div><!-- /view-month -->
-
-      <!-- ══════════════════════════════
+        <!-- ══════════════════════════════
          YEAR VIEW (년간)
     ══════════════════════════════ -->
-      <div id="view-year" style="display:none">
-        <div class="stats-hero-bar" id="stats-hero">
-          <div class="stats-hero-label">총 마일리지는</div>
-          <div class="stats-hero-num">247.3<sup>K</sup></div>
-        </div>
-        <div class="stats-top-section">
-          <div class="chart-block">
-            <div class="chart-top">
-              <div class="year-nav">
-                <span class="chart-period-label" id="year-period-label">2022 — 2026</span>
-                <button class="year-arrow" id="year-period-prev" onclick="changeYearPeriod(-1)">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m15 18-6-6 6-6" />
-                  </svg>
-                </button>
-                <button class="year-arrow disabled" id="year-period-next" onclick="changeYearPeriod(1)">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m9 18 6-6-6-6" />
-                  </svg>
-                </button>
+        <div id="view-year" style="display:none">
+          <div class="stats-hero-bar" id="stats-hero">
+            <div class="stats-hero-label">총 마일리지는</div>
+            <div class="stats-hero-num">247.3<sup>K</sup></div>
+          </div>
+          <div class="stats-top-section">
+            <div class="chart-block">
+              <div class="chart-top">
+                <div class="year-nav">
+                  <span class="chart-period-label" id="year-period-label">2022 — 2026</span>
+                  <button class="year-arrow" id="year-period-prev" onclick="changeYearPeriod(-1)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="m15 18-6-6 6-6" />
+                    </svg>
+                  </button>
+                  <button class="year-arrow disabled" id="year-period-next" onclick="changeYearPeriod(1)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="m9 18 6-6-6-6" />
+                    </svg>
+                  </button>
+                </div>
+                <span class="chart-avg-line-label">
+                  <span class="avg-line-dash"></span><span id="year-avg-label"></span>
+                </span>
               </div>
-              <span class="chart-avg-line-label">
-                <span class="avg-line-dash"></span><span id="year-avg-label"></span>
-              </span>
+              <div class="chart-swipe-wrap" id="year-chart-swipe-wrap">
+                <div class="cmp-chart vertical" id="year-chart">
+                  <div class="avg-line" id="year-avg-line"></div>
+                </div>
+              </div>
             </div>
-            <div class="chart-swipe-wrap" id="year-chart-swipe-wrap">
-              <div class="cmp-chart vertical" id="year-chart">
-                <div class="avg-line" id="year-avg-line"></div>
+            <div class="month-detail">
+              <div class="intensity-breakdown">
+                <div id="year-intensity"></div>
+              </div>
+              <div class="type-chart">
+                <div class="components-title">러닝 종류</div>
+                <div id="year-type-chart"></div>
               </div>
             </div>
           </div>
-          <div class="month-detail">
-            <div class="intensity-breakdown">
-              <div id="year-intensity"></div>
-            </div>
-            <div class="type-chart">
-              <div class="components-title">러닝 종류</div>
-              <div id="year-type-chart"></div>
+
+          <div class="stats-bottom-section">
+            <div class="delta-row">
+              <div class="delta-card">
+                <div class="components-title">작년 동기 대비</div>
+                <div class="delta-km up">+14.2<span>K</span></div>
+                <div class="delta-pct up">↑ 5%</div>
+              </div>
+              <div class="delta-card">
+                <div class="components-title">3년 평균 대비</div>
+                <div class="delta-km down">−12.6<span>K</span></div>
+                <div class="delta-pct down">↓ 4%</div>
+              </div>
             </div>
           </div>
-        </div>
+        </div><!-- /view-year -->
 
-        <div class="stats-bottom-section">
-          <div class="delta-row">
-            <div class="delta-card">
-              <div class="components-title">작년 동기 대비</div>
-              <div class="delta-km up">+14.2<span>K</span></div>
-              <div class="delta-pct up">↑ 5%</div>
-            </div>
-            <div class="delta-card">
-              <div class="components-title">3년 평균 대비</div>
-              <div class="delta-km down">−12.6<span>K</span></div>
-              <div class="delta-pct down">↓ 4%</div>
-            </div>
-          </div>
-        </div>
-      </div><!-- /view-year -->
-
-      <!-- 전체 러닝 활동 FAB — 리스트 뒤에 고정 -->
-      <a class="list-fab" id="list-fab" href="list.html" onclick="event.preventDefault(); goTo('list.html')">
-        <div class="list-fab-title">러닝 활동</div>
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#202020" stroke-width="1.5"
-          stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="9 18 15 12 9 6"></polyline>
-        </svg>
-      </a>
+        <!-- 전체 러닝 활동 FAB — 리스트 뒤에 고정 -->
+        <a class="list-fab" id="list-fab" href="list.html" onclick="event.preventDefault(); goTo('list.html')">
+          <div class="list-fab-title">러닝 활동</div>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#202020" stroke-width="1.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
 
       </div><!-- /scroll-area -->
 
@@ -1580,12 +1580,12 @@
       const el = document.getElementById(containerId);
       if (!el) return;
 
-      const W = 260, cx = W / 2;
+      const W = 300, cx = W / 2;
       const RAD = Math.PI / 180;
       const rings = [
-        { r: 100, sw: 17, label: '저', pct: low,  color: 'var(--slate-gray)'   },
-        { r: 72,  sw: 17, label: '중', pct: mid,  color: 'var(--asphalt-gray)' },
-        { r: 44,  sw: 17, label: '고', pct: high, color: 'var(--accent)'       },
+        { r: 100, sw: 17, label: '저', pct: low, color: 'var(--slate-gray)' },
+        { r: 72, sw: 17, label: '중', pct: mid, color: 'var(--asphalt-gray)' },
+        { r: 44, sw: 17, label: '고', pct: high, color: 'var(--accent)' },
       ];
 
       // textPath용: 12시(cx, cx-r)에서 시계방향 ≈360° 경로
@@ -1597,12 +1597,12 @@
       }).join('');
 
       const parts = rings.map((ring, i) => {
-        const circ    = 2 * Math.PI * ring.r;
+        const circ = 2 * Math.PI * ring.r;
         const fillLen = ring.pct / 100 * circ;   // pct% of 360°
-        const delay   = (animDelay || 0) + i * 130;
+        const delay = (animDelay || 0) + i * 130;
         // round-linecap 시작점 보정: arcsin(sw/2 / r)
-        const capDeg  = Math.asin((ring.sw / 2) / ring.r) / RAD;
-        const rot     = (270 + capDeg).toFixed(2);
+        const capDeg = Math.asin((ring.sw / 2) / ring.r) / RAD;
+        const rot = (270 + capDeg).toFixed(2);
         // 라벨: 12시 방향
         const lx = cx, ly = cx - ring.r;
 
