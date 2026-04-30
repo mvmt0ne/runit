@@ -50,7 +50,7 @@
       padding: 14px 20px;
       background-color: var(--asphalt-black);
       position: sticky;
-      top: env(safe-area-inset-top, 0px);
+      top: calc(env(safe-area-inset-top, 0px) + 50px);
       z-index: 5;
       display: flex;
       justify-content: space-between;
@@ -576,43 +576,6 @@
   </script>
   <script>
     function goToStats() { goTo('stats.html'); }
-  </script>
-  <script>
-    /* ─── 헤더 scroll-hide ── */
-    (function () {
-      const header = document.querySelector('.back-header');
-      const scroller = document.querySelector('.list-scroll');
-      if (!header || !scroller) return;
-
-      const HEADER_H = header.offsetHeight;
-      let lastY = 0;
-      let pinned = false;
-
-      scroller.addEventListener('scroll', function () {
-        const y = scroller.scrollTop;
-        const down = y > lastY;
-        lastY = y;
-
-        if (y < HEADER_H + 20) {
-          if (pinned) {
-            pinned = false;
-            header.style.transition = 'none';
-            header.style.top = '';
-          }
-          return;
-        }
-
-        if (down && pinned) {
-          pinned = false;
-          header.style.transition = 'top 0.22s cubic-bezier(0.4, 0, 1, 1)';
-          header.style.top = '';
-        } else if (!down && !pinned) {
-          pinned = true;
-          header.style.transition = 'top 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
-          header.style.top = 'env(safe-area-inset-top, 0px)';
-        }
-      }, { passive: true });
-    })();
   </script>
   <script>
     if ('serviceWorker' in navigator) {

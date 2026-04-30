@@ -186,9 +186,8 @@ sup {
   align-items: center;
   flex-shrink: 0;
   position: sticky;
-  top: -200px; /* 기본: 뷰포트 위 고정 → 스크롤 시 자연스럽게 사라짐 */
+  top: 0;
   z-index: 25;
-  transition: top 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   /* 기본: 라이트 글래스 */
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(20px) saturate(150%);
