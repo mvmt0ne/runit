@@ -1571,45 +1571,50 @@
       }));
     }
 
-    /* ── 도넛 차트: 러닝 강도 ── */
+    /* ── 도넛 차트: 러닝 강도 ──
+       설계: 세 링 모두 360° 전체 원 기준.
+       각 링이 pct% × 360°를 채우므로 저+중+고=100% → 합산 arc = 360° (= 100%)
+       모두 12시(270°)에서 시계방향 시작, round-linecap 각도 보정 포함.
+    ── */
     function renderIntensityDonut(containerId, low, mid, high, animDelay) {
       const el = document.getElementById(containerId);
       if (!el) return;
 
       const W = 260, cx = W / 2;
-      const START = 270, ARC = 270, RAD = Math.PI / 180;
+      const RAD = Math.PI / 180;
       const rings = [
         { r: 100, sw: 17, label: '저', pct: low,  color: 'var(--slate-gray)'   },
         { r: 72,  sw: 17, label: '중', pct: mid,  color: 'var(--asphalt-gray)' },
         { r: 44,  sw: 17, label: '고', pct: high, color: 'var(--accent)'       },
       ];
 
-      const pt = (r, deg) => [cx + r * Math.cos(deg * RAD), cx + r * Math.sin(deg * RAD)];
-
+      // textPath용: 12시(cx, cx-r)에서 시계방향 ≈360° 경로
       const defs = rings.map((ring, i) => {
-        const [sx, sy] = pt(ring.r, START);
-        const [ex, ey] = pt(ring.r, START + ARC);
-        return `<path id="dpath${containerId}${i}" d="M${sx.toFixed(1)},${sy.toFixed(1)} A${ring.r},${ring.r} 0 1,1 ${ex.toFixed(1)},${ey.toFixed(1)}" fill="none"/>`;
+        const ty = (cx - ring.r).toFixed(1);
+        return `<path id="dpath${containerId}${i}"
+          d="M${cx},${ty} A${ring.r},${ring.r} 0 1,1 ${(cx + 0.01).toFixed(2)},${ty}"
+          fill="none"/>`;
       }).join('');
 
       const parts = rings.map((ring, i) => {
         const circ    = 2 * Math.PI * ring.r;
-        const arcLen  = ARC / 360 * circ;
-        const fillLen = ring.pct / 100 * arcLen;
-        const gapLen  = circ - arcLen;
+        const fillLen = ring.pct / 100 * circ;   // pct% of 360°
         const delay   = (animDelay || 0) + i * 130;
-        const [lx, ly] = pt(ring.r, START);
+        // round-linecap 시작점 보정: arcsin(sw/2 / r)
+        const capDeg  = Math.asin((ring.sw / 2) / ring.r) / RAD;
+        const rot     = (270 + capDeg).toFixed(2);
+        // 라벨: 12시 방향
+        const lx = cx, ly = cx - ring.r;
+
         return `
           <circle cx="${cx}" cy="${cx}" r="${ring.r}" fill="none"
-            stroke="${ring.color}" stroke-opacity="0.18" stroke-width="${ring.sw}"
-            stroke-dasharray="${arcLen.toFixed(1)} ${gapLen.toFixed(1)}" stroke-linecap="round"
-            transform="rotate(${START},${cx},${cx})"/>
+            stroke="${ring.color}" stroke-opacity="0.15" stroke-width="${ring.sw}"/>
           <circle cx="${cx}" cy="${cx}" r="${ring.r}" fill="none"
             stroke="${ring.color}" stroke-width="${ring.sw}" stroke-linecap="round"
-            stroke-dasharray="${arcLen.toFixed(1)} ${gapLen.toFixed(1)}"
-            stroke-dashoffset="${arcLen.toFixed(1)}"
-            transform="rotate(${START},${cx},${cx})"
-            class="donut-arc" data-target="${(arcLen - fillLen).toFixed(1)}"
+            stroke-dasharray="${circ.toFixed(1)} ${circ.toFixed(1)}"
+            stroke-dashoffset="${circ.toFixed(1)}"
+            transform="rotate(${rot},${cx},${cx})"
+            class="donut-arc" data-target="${(circ - fillLen).toFixed(1)}"
             style="transition:stroke-dashoffset 0.65s cubic-bezier(0.16,1,0.3,1) ${delay}ms"/>
           <text fill="${ring.color}" font-size="11" font-family="'Space Grotesk',sans-serif">
             <textPath href="#dpath${containerId}${i}" startOffset="${ring.pct.toFixed(0)}%">${ring.pct}%</textPath>

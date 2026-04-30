@@ -408,6 +408,11 @@ sup {
   display: none !important;
 }
 
+.lp-row.compact .lp-right-content {
+  text-align: right;
+  margin-left: auto;
+}
+
 .lp-row.compact .lp-expanded-date {
   display: none;
 }

@@ -331,7 +331,7 @@
     function rowHTML(r) {
       const dateStr = r.date.split('-').map((p, i) => i === 0 ? p : parseInt(p)).join('.');
       const strideM = (r.stride / 100).toFixed(2);
-      return `<div class="lp-row ${viewMode}" onclick="goTo('detail.html')"
+      return `<div class="lp-row ${viewMode}" onclick="goTo('detail.html')">
         <div class="lp-info">
           <div class="lp-title-row">
             <div class="lp-row-left-head">
