@@ -38,7 +38,7 @@
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 400;
       font-family: 'Pretendard Variable', sans-serif;
       color: var(--cloudy-gray);
@@ -49,18 +49,18 @@
     /* ─── Tabs ── */
     .tab-row {
       display: flex;
-      padding: 12px 20px;
+      padding: 0 10px;
       flex-shrink: 0;
       position: fixed;
-      top: calc(env(safe-area-inset-top, 0px) + 52px);
+      top: calc(env(safe-area-inset-top, 0px) + 50px);
       left: 50%;
       transform: translateX(-50%);
       width: 100%;
       max-width: 430px;
       z-index: 20;
       will-change: transform;
-      background: rgba(34, 34, 34, 0.9);
-      backdrop-filter: blur(40px) saturate(160%);
+      background: rgba(34, 34, 34, 0.75);
+      backdrop-filter: blur(20px) saturate(160%);
       -webkit-backdrop-filter: blur(40px) saturate(160%);
     }
 
@@ -147,7 +147,7 @@
     /* hero 없는 탭(월간·주간)은 tab-row 높이만큼 여백 확보 */
     #view-month .stats-top-section,
     #view-week .stats-top-section {
-      padding-top: 72px;
+      padding-top: 52px;
     }
 
     /* 년간 hero — tab-row 아래로 위치 */
@@ -210,7 +210,7 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 24px;
-      padding: 0 20px 0 12px;
+      padding: 0 20px;
     }
 
 
@@ -240,7 +240,7 @@
     }
 
     .year-arrow.disabled {
-      opacity: 0;
+      opacity: 0.4;
       pointer-events: none;
     }
 
@@ -397,7 +397,7 @@
     .components-title {
       font-size: 16px;
       font-weight: 400;
-      color: var(--asphalt-gray);
+      color: var(--cloudy-gray);
       margin-bottom: 12px;
       transition: color 1s;
       letter-spacing: 0;
@@ -445,7 +445,7 @@
     }
 
     .isb-low span {
-      color: #1a1a1a;
+      color: var(--asphalt-black);
     }
 
     .isb-mid {
@@ -507,7 +507,9 @@
       grid-template-columns: 1fr 1fr;
       gap: 0;
       margin: 0;
-      padding: 0 20px 40px;
+      padding: 30px 20px;
+      /*-- background: var(--slate-gray); --*/
+      border-top: #353535 1px solid;
     }
 
     .delta-card {
@@ -523,14 +525,8 @@
       font-size: 32px;
       font-weight: 400;
       transition: color 0.3s;
-    }
-
-    .delta-km.down {
-      color: var(--slate-gray);
-    }
-
-    .delta-km.up {
-      color: var(--accent);
+      color: var(--bone);
+      line-height: 1;
     }
 
     .delta-km span {
@@ -551,7 +547,7 @@
     }
 
     .delta-pct.down {
-      color: var(--asphalt-gray);
+      color: var(--cloudy-gray);
     }
 
     /* ════════════════════════════════════
@@ -672,7 +668,7 @@
       left: 0;
       right: 0;
       bottom: 100%;
-      height: 100px;
+      height: 90px;
       background: var(--accent);
     }
 
@@ -702,7 +698,7 @@
     #view-month,
     #view-week,
     #view-year {
-      padding-bottom: 100px;
+      padding-bottom: 90px;
     }
 
     .month-runs-title {
@@ -1149,18 +1145,18 @@
       0: {
         label: '9.22 — 12.14',
         weeks: [
-          { label: '9.22',  km: 18.5, past: true },
-          { label: '9.29',  km: 22.8, past: true },
-          { label: '10.6',  km: 27.3, past: true },
+          { label: '9.22', km: 18.5, past: true },
+          { label: '9.29', km: 22.8, past: true },
+          { label: '10.6', km: 27.3, past: true },
           { label: '10.13', km: 31.5, past: true },
           { label: '10.20', km: 29.8, past: true },
           { label: '10.27', km: 25.6, past: true },
-          { label: '11.3',  km: 22.4, past: true },
+          { label: '11.3', km: 22.4, past: true },
           { label: '11.10', km: 28.9, past: true },
           { label: '11.17', km: 23.5, past: true },
           { label: '11.24', km: 17.2, past: true },
-          { label: '12.1',  km: 20.3, past: true },
-          { label: '12.8',  km: 15.8, past: true },
+          { label: '12.1', km: 20.3, past: true },
+          { label: '12.8', km: 15.8, past: true },
         ],
         bpms: [155, 162, 158, 165, 160, 153, 148, 162, 154, 147, 156, 150],
       },
@@ -1170,33 +1166,33 @@
           { label: '12.15', km: 14.1, past: true },
           { label: '12.22', km: 11.4, past: true },
           { label: '12.29', km: 18.5, past: true },
-          { label: '1.5',   km: 22.6, past: true },
-          { label: '1.12',  km: 24.2, past: true },
-          { label: '1.19',  km: 26.4, past: true },
-          { label: '1.26',  km: 21.8, past: true },
-          { label: '2.2',   km: 19.5, past: true },
-          { label: '2.9',   km: 22.1, past: true },
-          { label: '2.16',  km: 18.7, past: true },
-          { label: '2.23',  km: 26.4, past: true },
-          { label: '3.2',   km: 31.2, past: true },
+          { label: '1.5', km: 22.6, past: true },
+          { label: '1.12', km: 24.2, past: true },
+          { label: '1.19', km: 26.4, past: true },
+          { label: '1.26', km: 21.8, past: true },
+          { label: '2.2', km: 19.5, past: true },
+          { label: '2.9', km: 22.1, past: true },
+          { label: '2.16', km: 18.7, past: true },
+          { label: '2.23', km: 26.4, past: true },
+          { label: '3.2', km: 31.2, past: true },
         ],
         bpms: [145, 142, 149, 153, 157, 161, 156, 150, 146, 143, 159, 168],
       },
       2: {
         label: '3.9 — 5.25',
         weeks: [
-          { label: '3.9',   km: 19.8, past: true },
-          { label: '3.16',  km: 28.5, past: true },
-          { label: '3.23',  km: 15.3, past: true },
-          { label: '3.30',  km: 26.4, past: true },
-          { label: '4.6',   km: 31.2, past: true },
-          { label: '4.13',  km: 5.6,  past: true },
-          { label: '4.20',  km: 11.2, past: true },
-          { label: '4.27',  km: 3.5,  current: true },
-          { label: '5.4',   km: 0,    future: true },
-          { label: '5.11',  km: 0,    future: true },
-          { label: '5.18',  km: 0,    future: true },
-          { label: '5.25',  km: 0,    future: true },
+          { label: '3.9', km: 19.8, past: true },
+          { label: '3.16', km: 28.5, past: true },
+          { label: '3.23', km: 15.3, past: true },
+          { label: '3.30', km: 26.4, past: true },
+          { label: '4.6', km: 31.2, past: true },
+          { label: '4.13', km: 5.6, past: true },
+          { label: '4.20', km: 11.2, past: true },
+          { label: '4.27', km: 3.5, current: true },
+          { label: '5.4', km: 0, future: true },
+          { label: '5.11', km: 0, future: true },
+          { label: '5.18', km: 0, future: true },
+          { label: '5.25', km: 0, future: true },
         ],
         bpms: [155, 163, 172, 162, 169, 176, 155, 148],
       },
@@ -1630,14 +1626,14 @@
     // ── 러닝 종류 차트 ──
     function renderTypeChart(containerId, runs) {
       const RUN_TYPES = [
-        { key: 'race',     label: 'Race',     color: 'var(--type-race-text)' },
-        { key: 'tt',       label: 'TT',       color: 'var(--type-dark-bg)' },
-        { key: 'tempo',    label: 'Tempo',    color: 'var(--type-dark-bg)' },
+        { key: 'race', label: 'Race', color: 'var(--type-race-text)' },
+        { key: 'tt', label: 'TT', color: 'var(--type-dark-bg)' },
+        { key: 'tempo', label: 'Tempo', color: 'var(--type-dark-bg)' },
         { key: 'interval', label: 'Interval', color: 'var(--type-dark-bg)' },
-        { key: 'steady',   label: 'Steady',   color: 'var(--type-steady-bg)' },
-        { key: 'easy',     label: 'Easy',     color: 'var(--type-easy-bg)' },
-        { key: 'jogging',  label: 'Jogging',  color: 'var(--type-jog-bg)' },
-        { key: 'long',     label: 'LSD',      color: 'var(--type-long-bg)' },
+        { key: 'steady', label: 'Steady', color: 'var(--type-steady-bg)' },
+        { key: 'easy', label: 'Easy', color: 'var(--type-easy-bg)' },
+        { key: 'jogging', label: 'Jogging', color: 'var(--type-jog-bg)' },
+        { key: 'long', label: 'LSD', color: 'var(--type-long-bg)' },
       ];
       const el = document.getElementById(containerId);
       if (!el) return;

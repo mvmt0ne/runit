@@ -24,9 +24,9 @@
   --surface-6: #d4d4d4;
   --bone: #efeeed;
   /* Accent */
-  --accent: #FF5E55;
-  --accent-rgb: 255, 94, 85;
-  --accent-dim: rgba(255, 94, 85, 0.13);
+  --accent: #FF4C31;
+  --accent-rgb: 255, 76, 49;
+  --accent-dim: rgba(255, 76, 49, 0.13);
 
   /* Text */
   --text-1: #F0F0EB;
@@ -175,7 +175,7 @@ sup {
 ═══════════════════════════════════════════════════════════ */
 
 .back-header {
-  padding: calc(env(safe-area-inset-top, 0px) + 14px) 20px 14px;
+  padding: calc(env(safe-area-inset-top, 0px) + 8px) 20px 8px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
