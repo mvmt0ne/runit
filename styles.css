@@ -162,6 +162,11 @@ sup {
   position: relative;
   display: flex;
   flex-direction: column;
+  background: var(--asphalt-black);
+}
+
+.bg-dark {
+  background: var(--slate-gray);
 }
 
 /* ─── Back header (list / detail / stats) ── */
@@ -180,13 +185,7 @@ sup {
   justify-content: flex-start;
   align-items: center;
   flex-shrink: 0;
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 430px;
-  z-index: 10;
+  position: relative;
   /* 기본: 라이트 글래스 */
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(20px) saturate(150%);
@@ -195,7 +194,7 @@ sup {
 
 /* 다크 글래스 (stats.html, detail.html 등) */
 .back-header--dark {
-  background: rgba(34, 34, 34, 0.9);
+  background: rgba(34, 34, 34, 0.75);
   backdrop-filter: blur(40px) saturate(160%);
   -webkit-backdrop-filter: blur(40px) saturate(160%);
 }

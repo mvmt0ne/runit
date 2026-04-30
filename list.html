@@ -36,7 +36,6 @@
       flex: 1;
       overflow-y: auto;
       scrollbar-width: none;
-      padding-top: calc(env(safe-area-inset-top, 0px) + 50px);
       /* 스크롤 끝 여백만 safe-area만큼 더해 마지막 콘텐츠가 홈 인디케이터 위에 오도록.
          스크롤 viewport는 viewport 끝까지 확장되어 홈 인디케이터 영역이 투명하게 콘텐츠 위에 겹치게 함. */
       padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
@@ -113,31 +112,29 @@
 
 <body>
   <div class="phone">
-    <div class="phone-inner">
-
-      <!-- 헤더 -->
-      <div class="back-header back-header--accent">
-        <button class="back-btn" onclick="goBack('runit-home.html')">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="m12 19-7-7 7-7" />
-            <path d="M19 12H5" />
-          </svg>
-        </button>
-        <span class="back-title">러닝 활동</span>
-        <button class="header-action-btn" onclick="goToStats()">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--asphalt-black)" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" x2="18" y1="20" y2="10" />
-            <line x1="12" x2="12" y1="20" y2="4" />
-            <line x1="6" x2="6" y1="20" y2="14" />
-          </svg>
-        </button>
-      </div>
+    <div class="phone-inner bg-dark">
 
       <!-- 리스트 -->
       <div class="list-page">
         <div class="list-scroll" id="list-scroll">
+          <div class="back-header back-header--accent">
+            <button class="back-btn" onclick="goBack('runit-home.html')">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="m12 19-7-7 7-7" />
+                <path d="M19 12H5" />
+              </svg>
+            </button>
+            <span class="back-title">러닝 활동</span>
+            <button class="header-action-btn" onclick="goToStats()">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--asphalt-black)" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" x2="18" y1="20" y2="10" />
+                <line x1="12" x2="12" y1="20" y2="4" />
+                <line x1="6" x2="6" y1="20" y2="14" />
+              </svg>
+            </button>
+          </div>
           <div id="runs-list-container"></div>
         </div>
       </div>
@@ -547,7 +544,7 @@
     (function () {
       const THRESHOLD = 80, MAX_PULL = 120, RESIST = 0.45;
       const scrollEl = document.querySelector('.list-scroll');
-      const headerH = scrollEl ? (parseInt(getComputedStyle(scrollEl).paddingTop) || 0) : 0;
+      const headerH = 0;
       const wrap = document.createElement('div');
       wrap.style.cssText = `position:fixed;top:${headerH}px;left:50%;transform:translateX(-50%) translateY(-52px);width:44px;height:44px;border-radius:0;background:rgba(35,35,35,0.92);backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;z-index:9;pointer-events:none;transition:transform 0.25s cubic-bezier(0.16,1,0.3,1),opacity 0.25s;opacity:0`;
       const icon = document.createElement('div');

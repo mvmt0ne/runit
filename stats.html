@@ -28,14 +28,10 @@
       display: flex;
       padding: 0 10px;
       flex-shrink: 0;
-      position: fixed;
-      top: calc(env(safe-area-inset-top, 0px) + 50px);
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 430px;
+      position: sticky;
+      top: 0;
       z-index: 20;
-      will-change: transform;
+      width: 100%;
       background: rgba(34, 34, 34, 0.75);
       backdrop-filter: blur(20px) saturate(160%);
       -webkit-backdrop-filter: blur(40px) saturate(160%);
@@ -121,17 +117,6 @@
       padding-bottom: 40px;
     }
 
-    /* hero 없는 탭(월간·주간)은 tab-row 높이만큼 여백 확보 */
-    #view-month .stats-top-section,
-    #view-week .stats-top-section {
-      padding-top: 52px;
-    }
-
-    /* 년간 hero — tab-row 아래로 위치 */
-    #view-year .stats-hero-bar {
-      padding-top: 72px;
-    }
-
     /* ─── Bottom section — delta + pace (dark) / runs (light) ── */
     .stats-bottom-section {
       background: var(--asphalt-black);
@@ -167,7 +152,6 @@
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
-      padding-top: calc(env(safe-area-inset-top, 0px) + 52px);
       scrollbar-width: none;
     }
 
@@ -217,7 +201,7 @@
     }
 
     .year-arrow.disabled {
-      opacity: 0.4;
+      opacity: 0.18;
       pointer-events: none;
     }
 
@@ -418,7 +402,7 @@
     }
 
     .isb-low {
-      background: #646464;
+      background: var(--slate-gray);
     }
 
     .isb-low span {
@@ -426,11 +410,11 @@
     }
 
     .isb-mid {
-      background: #2d2d2d;
+      background: var(--asphalt-gray);
     }
 
     .isb-mid span {
-      color: var(--text-2);
+      color: var(--bone);
     }
 
     .isb-high {
@@ -484,18 +468,19 @@
       grid-template-columns: 1fr 1fr;
       gap: 0;
       margin: 0;
-      padding: 30px 20px;
+      padding: 0 20px;
       /*-- background: var(--slate-gray); --*/
       border-top: #353535 1px solid;
     }
 
     .delta-card {
-      padding: 0;
+      padding: 30px 0;
       transition: background 0.3s;
     }
 
     .delta-card+.delta-card {
-      padding-left: 20px;
+      padding: 30px 0 30px 20px;
+      border-left: 1px solid #353535;
     }
 
     .delta-km {
@@ -619,9 +604,8 @@
       color: var(--type-dark-text);
     }
 
-    /* ─── 전체 러닝 활동 FAB — flex child, scroll-area 아래에 위치 ── */
+    /* ─── 전체 러닝 활동 FAB — 스크롤 콘텐츠 하단에 포함 ── */
     .list-fab {
-      position: relative;
       flex-shrink: 0;
       display: none;
       /* JS로 월간 탭에서만 표시 */
@@ -635,17 +619,6 @@
       transition: opacity 0.2s;
     }
 
-    /* FAB 위 갭 영역도 accent 컬러 채우기 */
-    .list-fab::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 100%;
-      height: 90px;
-      background: var(--accent);
-    }
-
     .list-fab:active {
       opacity: 0.8;
     }
@@ -655,29 +628,6 @@
       font-weight: 500;
       font-family: 'Pretendard Variable', sans-serif;
       color: #202020;
-    }
-
-    /* z-index 레이어: 헤더(30) > 탭(20) > scroll-area(10) > FAB::before(5) */
-    /* FAB 자체는 flex child로 scroll-area 아래에 위치 → 클릭 가능 */
-    /* FAB::before(주황 90px)는 scroll-area가 z-index:10으로 시각적으로 덮음 */
-    .back-header {
-      z-index: 30;
-    }
-
-    .scroll-area {
-      position: relative;
-      z-index: 10;
-    }
-
-    .list-fab {
-      z-index: 5;
-    }
-
-    /* 전체 탭: 하단 여백 (FAB는 flex child로 분리됨) */
-    #view-month,
-    #view-week,
-    #view-year {
-      padding-bottom: 24px;
     }
 
     .month-runs-title {
@@ -788,6 +738,7 @@
   <div class="phone">
     <div class="phone-inner">
 
+      <div class="scroll-area">
       <div class="back-header back-header--dark" id="back-header">
         <button class="back-btn" onclick="goBack('runit-home.html')">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--slate-gray)" stroke-width="2"
@@ -819,7 +770,7 @@
       <!-- ══════════════════════════════
          WEEK VIEW (주간)
     ══════════════════════════════ -->
-      <div class="scroll-area" id="view-week" style="display:none">
+      <div id="view-week" style="display:none">
         <div class="stats-top-section">
           <div class="chart-block">
             <div class="chart-top">
@@ -879,7 +830,7 @@
       <!-- ══════════════════════════════
          MONTH VIEW (월간)
     ══════════════════════════════ -->
-      <div class="scroll-area" id="view-month">
+      <div id="view-month">
         <div class="stats-top-section">
           <div class="chart-block">
             <div class="chart-top">
@@ -941,7 +892,7 @@
       <!-- ══════════════════════════════
          YEAR VIEW (년간)
     ══════════════════════════════ -->
-      <div class="scroll-area" id="view-year" style="display:none">
+      <div id="view-year" style="display:none">
         <div class="stats-hero-bar" id="stats-hero">
           <div class="stats-hero-label">총 마일리지는</div>
           <div class="stats-hero-num">247.3<sup>K</sup></div>
@@ -1011,6 +962,8 @@
         </svg>
       </a>
 
+      </div><!-- /scroll-area -->
+
     </div><!-- /phone-inner -->
   </div><!-- /phone -->
 
@@ -1034,7 +987,6 @@
         setFabVisible(true);
         if (t === 'week') renderWeekChart();
         if (t === 'year') renderYearChart();
-        if (window._resetScrollHide) window._resetScrollHide();
       });
     });
 
@@ -1793,78 +1745,6 @@
     addChartSwipe('year-chart-swipe-wrap', changeYearPeriod);
   </script>
 
-  <script>
-    /* ─── 탭 scroll-hide + hero tracking ── */
-    (function () {
-      const tabRow = document.querySelector('.tab-row');
-      const backHeader = document.getElementById('back-header');
-      const scrollEls = document.querySelectorAll('.scroll-area');
-      if (!tabRow || !scrollEls.length) return;
-
-      let lastY = 0;
-      let hidden = false;
-      let animating = false;
-      let ticking = false;
-
-      function heroH() {
-        const el = document.querySelector('.scroll-area:not([style*="none"]) .stats-hero-bar')
-          || document.querySelector('.stats-hero-bar');
-        return el ? el.offsetHeight : 0;
-      }
-
-      /* 히어로 추적 — tab-row 고정 위치 유지 */
-      function track(y) {
-        if (hidden || animating) return;
-        tabRow.style.transition = 'none';
-        tabRow.style.transform = 'translateX(-50%) translateY(0)';
-      }
-
-      /* 히어로가 완전히 사라지고 추가 80px 내린 뒤에 숨김 */
-      function hide() {
-        if (hidden) return;
-        hidden = true;
-        animating = true;
-        const tabBottom = tabRow.getBoundingClientRect().bottom;
-        tabRow.style.transition = 'transform 0.35s cubic-bezier(0.4, 0, 1, 1)';
-        tabRow.style.transform = `translateX(-50%) translateY(-${tabBottom}px)`;
-        setTimeout(() => { animating = false; }, 380);
-      }
-
-      /* 스크롤 업 시 복귀 */
-      function show(y) {
-        if (!hidden) return;
-        hidden = false;
-        animating = true;
-        tabRow.style.transition = 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
-        tabRow.style.transform = 'translateX(-50%) translateY(0)';
-        setTimeout(() => { animating = false; }, 380);
-      }
-
-      function reset() {
-        hidden = animating = false;
-        track(0);
-      }
-
-      scrollEls.forEach(el => {
-        el.addEventListener('scroll', () => {
-          if (ticking) return;
-          ticking = true;
-          requestAnimationFrame(() => {
-            const y = el.scrollTop;
-            const hideAt = heroH() + 80;   /* 히어로 사라진 뒤 80px 더 내려야 숨김 */
-            if (y > lastY && y > hideAt) hide();
-            else if (y < lastY && hidden) show(y);
-            else track(y);
-            lastY = y;
-            ticking = false;
-          });
-        }, { passive: true });
-      });
-
-      track(0);
-      window._resetScrollHide = reset;
-    })();
-  </script>
   <script>
     function goToPB() { goTo('pb.html'); }
   </script>
