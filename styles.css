@@ -294,6 +294,24 @@ sup {
   background-color: var(--surface-1);
   border-top: 1px solid var(--surface-3);
   padding-bottom: env(safe-area-inset-bottom, 0px);
+  view-transition-name: app-tabbar;
+  contain: layout;
+}
+
+/* 탭바는 페이지 전환 동안 자기 자리에 고정 (root 슬라이드 분리)
+   old은 즉시 사라지고 new가 즉시 자리잡아 — 사용자에게는 그대로 보이는 효과 */
+::view-transition-group(app-tabbar) {
+  animation: none !important;
+}
+
+::view-transition-old(app-tabbar) {
+  animation: none !important;
+  opacity: 0 !important;
+}
+
+::view-transition-new(app-tabbar) {
+  animation: none !important;
+  opacity: 1 !important;
 }
 
 .tab-item {
