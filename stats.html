@@ -355,9 +355,68 @@
 
     /* 강도 분포 */
     .intensity-breakdown {
-      padding: 20px 0 0;
+      padding: 32px 22px 0;
+    }
+
+    /* 강도 카드: 제목 + 도넛 + 범례 */
+    .intensity-title {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--text-2);
+      font-family: 'Pretendard Variable', sans-serif;
+      letter-spacing: 0;
+      margin-bottom: 20px;
+    }
+
+    .intensity-donut-wrap {
       display: flex;
       justify-content: center;
+      margin-bottom: 36px;
+    }
+
+    .intensity-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .intensity-legend-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-family: 'Pretendard Variable', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+
+    .intensity-legend-row.high {
+      color: var(--accent);
+    }
+
+    .intensity-legend-row.mid {
+      color: var(--slate-gray);
+    }
+
+    .intensity-legend-row.low {
+      color: var(--text-1);
+    }
+
+    .il-types {
+      font-weight: 400;
+    }
+
+    .il-pct {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .il-pct-unit {
+      font-weight: 400;
+      font-size: 14px;
+      margin-left: 4px;
+      opacity: 0.85;
     }
 
     .components-title {
@@ -1558,6 +1617,7 @@
        설계: 세 링 모두 360° 전체 원 기준.
        각 링이 pct% × 360°를 채우므로 저+중+고=100% → 합산 arc = 360° (= 100%)
        모두 12시(270°)에서 시계방향 시작, round-linecap 각도 보정 포함.
+       텍스트는 SVG 내부에서 제거 — 제목/범례는 컴포넌트 레벨에서 분리 렌더.
     ── */
     function renderIntensityDonut(containerId, low, mid, high, animDelay) {
       const el = document.getElementById(containerId);
@@ -1565,29 +1625,20 @@
 
       const W = 300, cx = W / 2;
       const RAD = Math.PI / 180;
+      // 링 간 viewBox 간격 절반으로 축소: 11 → 5.5 (sw=17 기준 r=100, 77.5, 55)
       const rings = [
-        { r: 100, sw: 17, label: '저', pct: low, color: 'var(--slate-gray)' },
-        { r: 72, sw: 17, label: '중', pct: mid, color: 'var(--asphalt-gray)' },
-        { r: 44, sw: 17, label: '고', pct: high, color: 'var(--accent)' },
+        { r: 100, sw: 17, label: '저', sub: 'Easy, Jogging', pct: low, color: 'var(--slate-gray)', cls: 'low' },
+        { r: 77.5, sw: 17, label: '중', sub: 'Steady, LSD', pct: mid, color: 'var(--asphalt-gray)', cls: 'mid' },
+        { r: 55, sw: 17, label: '고', sub: 'Race, TT, Tempo, Interval', pct: high, color: 'var(--accent)', cls: 'high' },
       ];
 
-      // textPath용: 12시(cx, cx-r)에서 시계방향 ≈360° 경로
-      const defs = rings.map((ring, i) => {
-        const ty = (cx - ring.r).toFixed(1);
-        return `<path id="dpath${containerId}${i}"
-          d="M${cx},${ty} A${ring.r},${ring.r} 0 1,1 ${(cx + 0.01).toFixed(2)},${ty}"
-          fill="none"/>`;
-      }).join('');
-
-      const parts = rings.map((ring, i) => {
+      const arcs = rings.map((ring, i) => {
         const circ = 2 * Math.PI * ring.r;
         const fillLen = ring.pct / 100 * circ;   // pct% of 360°
         const delay = (animDelay || 0) + i * 130;
         // round-linecap 시작점 보정: arcsin(sw/2 / r)
         const capDeg = Math.asin((ring.sw / 2) / ring.r) / RAD;
         const rot = (270 + capDeg).toFixed(2);
-        // 라벨: 12시 방향
-        const lx = cx, ly = cx - ring.r;
 
         return `
           <circle cx="${cx}" cy="${cx}" r="${ring.r}" fill="none"
@@ -1598,24 +1649,29 @@
             stroke-dashoffset="${circ.toFixed(1)}"
             transform="rotate(${rot},${cx},${cx})"
             class="donut-arc" data-target="${(circ - fillLen).toFixed(1)}"
-            style="transition:stroke-dashoffset 0.65s cubic-bezier(0.16,1,0.3,1) ${delay}ms"/>
-          <text fill="${ring.color}" font-size="11" font-family="'Space Grotesk',sans-serif">
-            <textPath href="#dpath${containerId}${i}" startOffset="${ring.pct.toFixed(0)}%">${ring.pct}%</textPath>
-          </text>
-          <text x="${(lx - 10).toFixed(1)}" y="${ly.toFixed(1)}"
-            fill="${ring.color}" font-size="12" font-family="'Pretendard Variable',sans-serif"
-            text-anchor="end" dominant-baseline="middle">${ring.label}</text>`;
+            style="transition:stroke-dashoffset 0.65s cubic-bezier(0.16,1,0.3,1) ${delay}ms"/>`;
       }).join('');
 
+      // 범례는 고 → 중 → 저 순 (이미지 디자인 기준)
+      const legendOrder = [rings[2], rings[1], rings[0]];
+      const legendRows = legendOrder.map(ring => `
+        <div class="intensity-legend-row ${ring.cls}">
+          <div class="il-label">${ring.label}<span class="il-types">(${ring.sub})</span></div>
+          <div class="il-pct">${ring.pct}<span class="il-pct-unit">%</span></div>
+        </div>
+      `).join('');
+
       el.innerHTML = `
-        <svg viewBox="0 0 ${W} ${W}" xmlns="http://www.w3.org/2000/svg"
-          style="width:100%;max-width:260px;display:block;overflow:visible">
-          <defs>${defs}</defs>
-          ${parts}
-          <text x="${cx}" y="${cx}" text-anchor="middle" dominant-baseline="middle"
-            fill="var(--cloudy-gray)" font-size="16" font-weight="300"
-            font-family="'Pretendard Variable',sans-serif">러닝강도</text>
-        </svg>`;
+        <div class="intensity-title">러닝 강도</div>
+        <div class="intensity-donut-wrap">
+          <svg viewBox="0 0 ${W} ${W}" xmlns="http://www.w3.org/2000/svg"
+            style="width:100%;max-width:312px;display:block;overflow:visible">
+            ${arcs}
+          </svg>
+        </div>
+        <div class="intensity-legend">
+          ${legendRows}
+        </div>`;
 
       requestAnimationFrame(() => requestAnimationFrame(() => {
         el.querySelectorAll('.donut-arc').forEach(c => {
