@@ -281,6 +281,59 @@ sup {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   TAB BAR — 전 페이지 공통 하단 탭바
+═══════════════════════════════════════════════════════════ */
+.tab-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  align-items: stretch;
+  background-color: var(--surface-1);
+  border-top: 1px solid var(--surface-3);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 0 12px;
+  color: var(--text-2);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+}
+
+.tab-item:active {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.tab-item.active {
+  color: var(--accent);
+}
+
+.tab-icon {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab-label {
+  font-size: 11px;
+  font-weight: 500;
+  font-family: 'Pretendard Variable', sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* ═══════════════════════════════════════════════════════════
    LIST ROW — home / list 공용
 ═══════════════════════════════════════════════════════════ */
 .lp-row {
@@ -1075,7 +1128,7 @@ input[type='range'].range-input::-moz-range-thumb {
 /* ─── Floating bar ── */
 .float-bar-wrap {
   position: fixed;
-  bottom: calc(0px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(72px + env(safe-area-inset-bottom, 0px));
   left: 50%;
   /* ─── transform: translateX(-50%) translateY(20px);── */
   display: flex;

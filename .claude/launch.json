@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "runit",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["http-server", "/Users/leedongwon/Desktop/wonnyworx/runit", "-p", "8080", "--cors", "-c-1"],
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8080", "--directory", "/Users/ryan/Desktop/wonny_worx/Claude/runit"],
       "port": 8080
     }
   ]
