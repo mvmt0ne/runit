@@ -71,7 +71,8 @@
 
     /* ─── 러닝 종류 차트 ── */
     .type-chart {
-      padding: 40px 22px 0;
+      background: var(--slate-gray);
+      padding: 40px 20px;
     }
 
     .type-chart-row {
@@ -85,7 +86,7 @@
     .type-chart-label {
       font-size: 13px;
       font-family: 'Pretendard Variable', sans-serif;
-      color: var(--slate-gray);
+      color: var(--asphalt-black);
       width: 54px;
       flex-shrink: 0;
     }
@@ -112,15 +113,15 @@
       flex-shrink: 0;
     }
 
-    /* ─── Top section — chart + intensity ── */
+    /* ─── Top section — chart + intensity 
     .stats-top-section {
       background: var(--asphalt-black);
       padding-bottom: 40px;
-    }
+    }── */
 
     /* ─── Bottom section — delta + pace (dark) / runs (light) ── */
     .stats-bottom-section {
-      background: var(--asphalt-black);
+      background: var(--slate-gray);
     }
 
     .month-runs {
@@ -355,23 +356,22 @@
 
     /* 강도 분포 */
     .intensity-breakdown {
-      padding: 32px 22px 0;
+      padding: 40px 20px;
     }
 
     /* 강도 카드: 제목 + 도넛 + 범례 */
     .intensity-title {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 400;
-      color: var(--text-2);
+      color: var(--cloudy-gray);
       font-family: 'Pretendard Variable', sans-serif;
       letter-spacing: 0;
-      margin-bottom: 20px;
     }
 
     .intensity-donut-wrap {
       display: flex;
       justify-content: center;
-      margin-bottom: 36px;
+      margin-top: -20px;
     }
 
     .intensity-legend {
@@ -386,8 +386,7 @@
       align-items: baseline;
       font-family: 'Pretendard Variable', sans-serif;
       font-size: 16px;
-      font-weight: 500;
-      letter-spacing: -0.01em;
+      font-weight: 400;
     }
 
     .intensity-legend-row.high {
@@ -395,11 +394,11 @@
     }
 
     .intensity-legend-row.mid {
-      color: var(--slate-gray);
+      color: var(--cloudy-gray);
     }
 
     .intensity-legend-row.low {
-      color: var(--text-1);
+      color: var(--slate-gray);
     }
 
     .il-types {
@@ -420,9 +419,9 @@
     }
 
     .components-title {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 400;
-      color: var(--cloudy-gray);
+      color: var(--asphalt-gray);
       margin-bottom: 12px;
       transition: color 1s;
       letter-spacing: 0;
@@ -534,24 +533,24 @@
       margin: 0;
       padding: 0 20px;
       /*-- background: var(--slate-gray); --*/
-      border-top: #353535 1px solid;
+      border-top: var(--cloudy-gray) 1px solid;
     }
 
     .delta-card {
-      padding: 30px 0;
+      padding: 40px 0;
       transition: background 0.3s;
     }
 
     .delta-card+.delta-card {
-      padding: 30px 0 30px 20px;
-      border-left: 1px solid #353535;
+      padding: 40px 0 30px 20px;
+      border-left: 1px solid var(--cloudy-gray);
     }
 
     .delta-km {
       font-size: 32px;
       font-weight: 400;
       transition: color 0.3s;
-      color: var(--bone);
+      color: var(--asphalt-black);
       line-height: 1;
     }
 
@@ -906,7 +905,7 @@
               </div>
               <div class="type-chart">
                 <div class="components-title">러닝 종류</div>
-                <div id="month-type-chart"></div>
+                <div id="month-type-chart" style="margin-top: 20px;"></div>
               </div>
             </div>
           </div><!-- /stats-top-section -->
@@ -992,14 +991,14 @@
           </div>
         </div><!-- /view-year -->
 
-        <!-- 전체 러닝 활동 FAB — 리스트 뒤에 고정 -->
+        <!-- 전체 러닝 활동 FAB — 리스트 뒤에 고정 
         <a class="list-fab" id="list-fab" href="list.html" onclick="event.preventDefault(); goTo('list.html')">
           <div class="list-fab-title">러닝 활동</div>
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#202020" stroke-width="1.5"
             stroke-linecap="round" stroke-linejoin="round">
             <polyline points="9 18 15 12 9 6"></polyline>
           </svg>
-        </a>
+        </a>-->
 
       </div><!-- /scroll-area -->
 
@@ -1665,7 +1664,7 @@
         <div class="intensity-title">러닝 강도</div>
         <div class="intensity-donut-wrap">
           <svg viewBox="0 0 ${W} ${W}" xmlns="http://www.w3.org/2000/svg"
-            style="width:100%;max-width:312px;display:block;overflow:visible">
+            style="width:100%;max-width:280px;display:block;overflow:visible">
             ${arcs}
           </svg>
         </div>
