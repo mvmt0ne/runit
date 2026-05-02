@@ -285,14 +285,14 @@ sup {
 ═══════════════════════════════════════════════════════════ */
 .tab-bar {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
   z-index: 30;
   display: flex;
   align-items: stretch;
-  background-color: var(--surface-1);
-  border-top: 1px solid var(--surface-3);
+  background-color: var(--asphalt-black);
+  border-radius: 100px;
   padding-bottom: env(safe-area-inset-bottom, 0px);
   view-transition-name: app-tabbar;
   contain: layout;
