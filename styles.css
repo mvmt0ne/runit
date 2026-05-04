@@ -169,6 +169,10 @@ sup {
   background: var(--slate-gray);
 }
 
+.slide-home .slide-stats .slide-pb {
+  background: var(--asphalt-black);
+}
+
 /* ─── Back header (list / detail / stats) ── */
 /* ═══════════════════════════════════════════════════════════
    HEADER — 공통 컴포넌트
