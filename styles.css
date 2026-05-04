@@ -285,9 +285,9 @@ sup {
 ═══════════════════════════════════════════════════════════ */
 .tab-bar {
   position: absolute;
-  bottom: 8px;
-  left: 8px;
-  right: 8px;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
   z-index: 30;
   display: flex;
   align-items: stretch;
