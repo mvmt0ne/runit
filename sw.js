@@ -1,15 +1,21 @@
-const CACHE = 'runit-v4';
+const CACHE = 'runit-v5';
 const CORE = [
+  './app.html',
   './runit-home.html',
   './list.html',
   './detail.html',
   './stats.html',
   './pb.html',
+  './input.html',
   './styles.css',
+  './transitions.js',
   './ptr.js',
   './grained.js',
   './manifest.json',
   './icon.svg',
+  './data/splits.js',
+  './data/zones.js',
+  './data/store.js',
 ];
 
 self.addEventListener('install', e => {
