@@ -165,12 +165,12 @@ sup {
   /* background: var(--asphalt-black); */
 }
 
+.slide-stats,
 .slide-list {
   background: var(--slate-gray);
 }
 
 .slide-home,
-.slide-stats,
 .slide-pb {
   background: var(--asphalt-black);
 }
