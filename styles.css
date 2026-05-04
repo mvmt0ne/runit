@@ -291,7 +291,7 @@ sup {
   z-index: 30;
   display: flex;
   align-items: stretch;
-  border-radius: 100px;
+  border-radius: 40px;
   padding-bottom: env(safe-area-inset-bottom, 0px);
   /* 액체 유리 셋업 */
   isolation: isolate;
@@ -333,7 +333,7 @@ sup {
 }
 
 /* 탭 아이템들은 유리 레이어 위에 */
-.tab-bar > .tab-item {
+.tab-bar>.tab-item {
   position: relative;
   z-index: 1;
 }
