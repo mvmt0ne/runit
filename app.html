@@ -23,6 +23,8 @@
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
   <script src="./transitions.js"></script>
+  <!-- 홈 페이지가 인라인으로 grained() 호출 → 미리 로드 필요 -->
+  <script src="./grained.js"></script>
   <style>
     /* ─── SPA 셸 ─── */
     .phone-inner {
@@ -185,11 +187,19 @@
           slide.innerHTML = phoneInner ? phoneInner.innerHTML : `<div style="padding:20px;color:#888">${url} 로드 실패</div>`;
 
           // 3) 페이지의 inline script 들을 하나의 IIFE 로 묶어 실행 (전역 격리)
+          //    + IIFE 안 top-level 함수 선언들은 window 에 expose
+          //      (onclick="fn()" 같은 인라인 핸들러가 작동하려면 전역 노출 필요)
           const inlineCode = [...doc.querySelectorAll('body script:not([src])')]
             .map(s => s.textContent).join('\n;\n');
           if (inlineCode.trim()) {
+            const fnNames = new Set();
+            for (const m of inlineCode.matchAll(/^\s*function\s+(\w+)\s*\(/gm)) {
+              fnNames.add(m[1]);
+            }
+            const exposeCode = [...fnNames]
+              .map(n => `try{window.${n}=${n};}catch(e){}`).join('\n');
             const ns = document.createElement('script');
-            ns.textContent = `;(function(){\n${inlineCode}\n})();`;
+            ns.textContent = `;(function(){\n${inlineCode}\n${exposeCode}\n})();`;
             ns.dataset.fromSlide = tab;
             document.body.appendChild(ns);
           }
@@ -217,6 +227,12 @@
         longSwipesRatio: 0.25,
         touchAngle: 35,
         followFinger: true,
+        // 내부 스와이프/드래그가 필요한 영역에선 SPA 스와이프 비활성화
+        // - .calendar: 홈 캘린더 그리드만 (hero 영역은 SPA 스와이프 허용)
+        // - .chart-swipe-wrap: 마일리지 주/월/년 차트 가로 스와이프
+        // - .range-slider-wrap, input[type=range]: 리스트 거리/페이스 슬라이더
+        // - .month-modal, .sf-sheet, .month-list, .wheel-col: 모달/시트 내부 스크롤
+        noSwipingSelector: '.calendar, .chart-swipe-wrap, .range-slider-wrap, input[type="range"], .month-modal, .sf-sheet, .month-list, .wheel-col',
         on: {
           slideChange() {
             updateActiveTab(this.activeIndex);
