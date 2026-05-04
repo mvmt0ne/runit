@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
   <script src="./transitions.js"></script>
   <style>
-    /* ─── SPA 셸 ── */
+    /* ─── SPA 셸 ─── */
     .phone-inner {
       height: 100dvh;
       min-height: 100dvh;
@@ -51,11 +51,29 @@
       background: var(--asphalt-black);
     }
 
-    .app-swiper iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      display: block;
+    /* 각 슬라이드는 페이지의 .phone-inner 콘텐츠를 직접 호스트 — 내부에서 100% 사용 */
+    .app-swiper .swiper-slide > * {
+      box-sizing: border-box;
+    }
+
+    .swiper-slide.loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-2);
+      font-family: 'Pretendard Variable', sans-serif;
+      font-size: 14px;
+      opacity: 0.4;
+    }
+
+    .swiper-slide.loading::after {
+      content: '로딩중...';
+    }
+
+    /* 슬라이드는 자체적으로 flex column 레이아웃을 가진다 (페이지의 .phone-inner 역할) */
+    .swiper-slide:not(.loading) {
+      display: flex;
+      flex-direction: column;
     }
   </style>
 </head>
@@ -66,18 +84,10 @@
 
       <div class="swiper app-swiper" id="app-swiper">
         <div class="swiper-wrapper">
-          <div class="swiper-slide" data-tab="home">
-            <iframe src="./runit-home.html" title="홈" loading="eager"></iframe>
-          </div>
-          <div class="swiper-slide" data-tab="list">
-            <iframe src="./list.html" title="활동" loading="lazy"></iframe>
-          </div>
-          <div class="swiper-slide" data-tab="stats">
-            <iframe src="./stats.html" title="마일리지" loading="lazy"></iframe>
-          </div>
-          <div class="swiper-slide" data-tab="pb">
-            <iframe src="./pb.html" title="PB" loading="lazy"></iframe>
-          </div>
+          <div class="swiper-slide slide-home loading" data-tab="home" data-src="./runit-home.html"></div>
+          <div class="swiper-slide slide-list loading" data-tab="list" data-src="./list.html"></div>
+          <div class="swiper-slide slide-stats loading" data-tab="stats" data-src="./stats.html"></div>
+          <div class="swiper-slide slide-pb loading" data-tab="pb" data-src="./pb.html"></div>
         </div>
       </div>
 
@@ -138,25 +148,81 @@
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script>
-    (function () {
+    (async function () {
       const TABS = ['home', 'list', 'stats', 'pb'];
+
+      /**
+       * 각 탭 페이지(예: runit-home.html)를 fetch 해서:
+       *   1. <head> <style> → @scope (.slide-<name>) 로 감싸 head에 주입 (격리)
+       *   2. .phone-inner 콘텐츠 → 슬라이드 div 안에 직접 삽입
+       *   3. <body> inline <script> → IIFE 로 감싸 body에 추가 (전역 격리)
+       */
+      async function loadSlide(slide) {
+        if (!slide.dataset.src || slide.dataset.loaded === '1') return;
+        slide.dataset.loaded = '1';
+
+        const url = slide.dataset.src;
+        const tab = slide.dataset.tab;
+        const scope = `.slide-${tab}`;
+
+        try {
+          const html = await fetch(url).then(r => r.text());
+          const doc = new DOMParser().parseFromString(html, 'text/html');
+
+          // 1) 페이지 인라인 스타일 → @scope 으로 격리해 head에 주입
+          doc.querySelectorAll('head style').forEach(styleEl => {
+            const css = styleEl.textContent || '';
+            const wrapped = `@scope (${scope}) {\n${css}\n}`;
+            const ns = document.createElement('style');
+            ns.textContent = wrapped;
+            ns.dataset.fromSlide = tab;
+            document.head.appendChild(ns);
+          });
+
+          // 2) 콘텐츠 주입 (.phone-inner 의 자식들을 슬라이드로 옮김)
+          const phoneInner = doc.querySelector('.phone-inner');
+          slide.classList.remove('loading');
+          slide.innerHTML = phoneInner ? phoneInner.innerHTML : `<div style="padding:20px;color:#888">${url} 로드 실패</div>`;
+
+          // 3) 페이지의 inline script 들을 하나의 IIFE 로 묶어 실행 (전역 격리)
+          const inlineCode = [...doc.querySelectorAll('body script:not([src])')]
+            .map(s => s.textContent).join('\n;\n');
+          if (inlineCode.trim()) {
+            const ns = document.createElement('script');
+            ns.textContent = `;(function(){\n${inlineCode}\n})();`;
+            ns.dataset.fromSlide = tab;
+            document.body.appendChild(ns);
+          }
+        } catch (e) {
+          console.error('[loadSlide]', tab, e);
+          slide.classList.remove('loading');
+          slide.innerHTML = `<div style="padding:20px;color:#f88">로드 실패: ${url}</div>`;
+        }
+      }
+
+      const slides = [...document.querySelectorAll('.swiper-slide[data-src]')];
       const hash = (location.hash || '').replace('#', '');
       const initialIdx = Math.max(0, TABS.indexOf(hash));
+
+      // 초기 슬라이드는 동기적으로 먼저 로드 (Swiper init 전에 콘텐츠 준비)
+      await loadSlide(slides[initialIdx]);
 
       const swiper = new Swiper('#app-swiper', {
         initialSlide: initialIdx,
         slidesPerView: 1,
         spaceBetween: 0,
-        threshold: 8,                  // px 미만 드래그는 무시 (탭과 충돌 방지)
+        threshold: 8,
         speed: 280,
         resistanceRatio: 0.5,
         longSwipesRatio: 0.25,
-        touchAngle: 35,                // 가로 35° 이내 제스처만 (세로 스크롤 방해 X)
+        touchAngle: 35,
         followFinger: true,
         on: {
           slideChange() {
             updateActiveTab(this.activeIndex);
             history.replaceState(null, '', '#' + TABS[this.activeIndex]);
+            // 인접 슬라이드 미리 로드
+            preloadNeighbors(this.activeIndex);
           }
         }
       });
@@ -164,6 +230,12 @@
       function updateActiveTab(idx) {
         document.querySelectorAll('#app-tab-bar .tab-item').forEach((el, i) => {
           el.classList.toggle('active', i === idx);
+        });
+      }
+
+      function preloadNeighbors(idx) {
+        [idx - 1, idx + 1].forEach(i => {
+          if (i >= 0 && i < slides.length) loadSlide(slides[i]);
         });
       }
 
@@ -175,21 +247,19 @@
       });
 
       updateActiveTab(initialIdx);
+      preloadNeighbors(initialIdx);
 
-      /* 외부에서 hash 바뀌면 슬라이드 동기화 */
+      // 외부에서 hash 바뀌면 슬라이드 동기화
       window.addEventListener('hashchange', () => {
         const h = (location.hash || '').replace('#', '');
         const idx = TABS.indexOf(h);
         if (idx >= 0 && idx !== swiper.activeIndex) swiper.slideTo(idx);
       });
 
-      /* iframe 안에서 가로 스와이프 발생 시 슬라이드 이동 (transitions.js 브리지) */
-      window.addEventListener('message', (e) => {
-        const d = e.data;
-        if (!d || d.type !== 'runit:swipe') return;
-        if (d.dir === 'next') swiper.slideNext();
-        else if (d.dir === 'prev') swiper.slidePrev();
-      });
+      // 백그라운드에서 나머지 슬라이드 lazy 로드
+      setTimeout(() => {
+        slides.forEach((s, i) => { if (i !== initialIdx) loadSlide(s); });
+      }, 600);
     })();
   </script>
 
