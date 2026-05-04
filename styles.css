@@ -169,7 +169,9 @@ sup {
   background: var(--slate-gray);
 }
 
-.slide-home .slide-stats .slide-pb {
+.slide-home,
+.slide-stats,
+.slide-pb {
   background: var(--asphalt-black);
 }
 
