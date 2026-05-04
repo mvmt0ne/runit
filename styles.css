@@ -295,8 +295,10 @@ sup {
   padding-bottom: env(safe-area-inset-bottom, 0px);
   /* 액체 유리 셋업 */
   isolation: isolate;
-  background: transparent;
+  background: rgba(31, 31, 31, 0.5);
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(4px) saturate(160%);
+  -webkit-backdrop-filter: blur(4px) saturate(160%);
 }
 
 /* layer 1 (deepest): backdrop refraction (Chromium) / blur fallback (Safari) */
