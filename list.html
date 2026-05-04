@@ -22,7 +22,6 @@
     rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
   <script src="./transitions.js"></script>
-  <script src="./tabbar.js" defer></script>
   <style>
     /* ─── PB header button ── */
     /* ─── List page layout ── */
@@ -51,7 +50,7 @@
       padding: 14px 20px;
       background-color: var(--asphalt-black);
       position: sticky;
-      top: env(safe-area-inset-top, 0px); 
+      top: env(safe-area-inset-top, 0px);
       z-index: 5;
       display: flex;
       justify-content: space-between;
@@ -122,8 +121,6 @@
         </div>
       </div>
 
-      <!-- 하단 탭바 → tabbar.js 가 자동 주입 -->
-
       <!-- 플로팅 바 -->
       <div class="float-bar-wrap visible" id="float-sf-bar">
         <div class="float-view-bar" id="float-view-bar">
@@ -173,7 +170,7 @@
         <div class="sf-sheet-header">
           <span class="sf-sheet-title">정렬</span>
           <button class="sf-sheet-close" onclick="closeSFSheet()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--asphalt-black)" stroke-width="2"
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 6 6 18" />
               <path d="m6 6 12 12" />

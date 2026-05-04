@@ -22,7 +22,6 @@
     rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
   <script src="./transitions.js"></script>
-  <script src="./tabbar.js" defer></script>
   <style>
     /* 홈 전용: phone-inner overflow visible (FAB, 월 모달 드롭다운용) */
     .phone-inner {
@@ -670,7 +669,7 @@
       right: 20px;
       top: 50%;
       transform: translateY(-50%);
-      background: rgb(180 180 180 / 10%);
+      background: rgb(180 180 180 / 20%);
       border-radius: 4px;
       height: 52px;
       pointer-events: none;
@@ -716,7 +715,7 @@
       display: flex;
       align-items: center;
       font-size: 22px;
-      color: var(--slate-gray);
+      color: var(--asphalt-black);
       user-select: none;
     }
 
@@ -736,11 +735,7 @@
       flex-shrink: 0;
     }
 
-    #month-sheet .sf-apply-btn {
-      background: var(--slate-gray);
-      color: #111;
-      font-weight: 700;
-    }
+
 
     /* ─── Month Label (tappable) ──────────── */
     .hero-month-tap {
@@ -970,8 +965,6 @@
 
         </div><!-- /cal-area -->
 
-        <!-- 하단 탭바 → tabbar.js 가 자동 주입 -->
-
       </div>
 
       <!-- ── Month Picker Sheet ── -->
@@ -980,7 +973,7 @@
         <div class="sf-sheet-header" style="padding: 18px 20px 14px; flex-shrink:0;">
           <span class="sf-sheet-title">월 선택</span>
           <button class="sf-sheet-close" onclick="closeMonthSheet()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 6 6 18" />
               <path d="m6 6 12 12" />

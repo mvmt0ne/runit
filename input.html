@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>runit — 데이터 입력</title>
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#202020">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="runit">
+  <link rel="apple-touch-icon" href="./icon.svg">
+  <link rel="icon" type="image/svg+xml" href="./icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable.min.css"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./transitions.js"></script>
+  <style>
+    .input-page {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .input-scroll {
+      flex: 1;
+      overflow-y: auto;
+      scrollbar-width: none;
+      padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .input-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .input-section {
+      padding: 24px 20px 8px;
+    }
+
+    .input-section + .input-section {
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      margin-top: 8px;
+    }
+
+    .input-label {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-2);
+      font-family: 'Pretendard Variable', sans-serif;
+      margin-bottom: 8px;
+      display: block;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .input-helper {
+      font-size: 12px;
+      color: var(--text-2);
+      opacity: 0.6;
+      margin-top: 6px;
+      line-height: 1.4;
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      color: var(--bone);
+      font-size: 16px;
+      font-family: 'Space Grotesk', sans-serif;
+      outline: none;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .input-field:focus {
+      border-color: var(--accent);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    textarea.input-field {
+      min-height: 140px;
+      resize: vertical;
+      font-family: 'Space Mono', ui-monospace, monospace;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .field-row {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+      margin-bottom: 8px;
+    }
+
+    .field-row .input-field {
+      flex: 1;
+    }
+
+    .ghost-btn {
+      padding: 10px 14px;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      color: var(--slate-gray);
+      font-size: 13px;
+      font-family: 'Pretendard Variable', sans-serif;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+
+    .ghost-btn:active {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .save-btn {
+      width: 100%;
+      padding: 18px;
+      background: var(--accent);
+      border: none;
+      border-radius: 100px;
+      color: #202020;
+      font-size: 17px;
+      font-weight: 600;
+      font-family: 'Pretendard Variable', sans-serif;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+      margin: 24px 20px 8px;
+      width: calc(100% - 40px);
+    }
+
+    .save-btn:active {
+      opacity: 0.85;
+      transform: scale(0.98);
+    }
+
+    .save-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* 토스트 */
+    .toast {
+      position: fixed;
+      bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      padding: 14px 22px;
+      background: rgba(20, 20, 20, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 100px;
+      color: var(--bone);
+      font-size: 14px;
+      font-family: 'Pretendard Variable', sans-serif;
+      z-index: 100;
+      opacity: 0;
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.32s;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.error {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* 저장된 목록 */
+    .saved-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .saved-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .saved-item:last-child {
+      border-bottom: none;
+    }
+
+    .saved-date {
+      font-size: 16px;
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--bone);
+    }
+
+    .saved-tags {
+      display: flex;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .saved-tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--slate-gray);
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
+    .delete-btn {
+      padding: 8px 12px;
+      background: transparent;
+      border: none;
+      color: var(--text-2);
+      font-size: 13px;
+      font-family: 'Pretendard Variable', sans-serif;
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+
+    .delete-btn:active {
+      color: var(--accent);
+    }
+
+    .saved-empty {
+      color: var(--text-2);
+      font-size: 13px;
+      padding: 12px 0;
+      opacity: 0.5;
+      text-align: center;
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
+    /* 예시 모달 */
+    .example-block {
+      margin-top: 8px;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 8px;
+      font-family: 'Space Mono', ui-monospace, monospace;
+      font-size: 11px;
+      color: var(--cloudy-gray);
+      line-height: 1.55;
+      overflow-x: auto;
+      white-space: pre;
+      display: none;
+    }
+
+    .example-block.open {
+      display: block;
+    }
+
+    /* 입력 검증 표시 */
+    .check {
+      font-size: 12px;
+      color: var(--text-2);
+      margin-top: 6px;
+      font-family: 'Pretendard Variable', sans-serif;
+      min-height: 16px;
+    }
+
+    .check.ok {
+      color: #4ade80;
+    }
+
+    .check.err {
+      color: var(--accent);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="phone">
+    <div class="phone-inner bg-dark" style="background: var(--asphalt-black);">
+
+      <div class="input-page">
+        <div class="back-header back-header--dark">
+          <button class="back-btn" onclick="goBack('detail.html')">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="m12 19-7-7 7-7" />
+              <path d="M19 12H5" />
+            </svg>
+          </button>
+          <span class="back-title">데이터 입력</span>
+        </div>
+
+        <div class="input-scroll">
+
+          <!-- 활동 날짜 -->
+          <div class="input-section">
+            <label class="input-label">활동 날짜</label>
+            <input type="date" id="input-date" class="input-field">
+            <div class="input-helper">가민 활동 날짜 (YYYY-MM-DD). 같은 날짜면 덮어씀.</div>
+          </div>
+
+          <!-- 스플릿 -->
+          <div class="input-section">
+            <label class="input-label">스플릿 (km별 랩)</label>
+            <textarea id="input-splits" class="input-field"
+              placeholder='[{ "km": 1, "lap": "5:06", "pace": "5:06", "bpm": 161 }, ...]'></textarea>
+            <div class="check" id="splits-check"></div>
+            <div class="field-row" style="margin-top:8px">
+              <button class="ghost-btn" onclick="toggleExample('splits-example')">예시 형식</button>
+              <button class="ghost-btn" onclick="loadSample('splits')">샘플 채우기</button>
+            </div>
+            <pre class="example-block" id="splits-example">[
+  { "km": 1, "lap": "5:06", "pace": "5:06", "bpm": 161 },
+  { "km": 2, "lap": "5:00", "pace": "5:00", "bpm": 172 },
+  // ...
+  { "km": 21.19, "lap": "0:47", "pace": "4:06", "bpm": 185, "partial": true }
+]</pre>
+          </div>
+
+          <!-- 심박존 -->
+          <div class="input-section">
+            <label class="input-label">심박존</label>
+            <textarea id="input-zones" class="input-field"
+              placeholder='{ "z1": { "range": [124,134], "pct": 0 }, ... }'></textarea>
+            <div class="check" id="zones-check"></div>
+            <div class="field-row" style="margin-top:8px">
+              <button class="ghost-btn" onclick="toggleExample('zones-example')">예시 형식</button>
+              <button class="ghost-btn" onclick="loadSample('zones')">샘플 채우기</button>
+            </div>
+            <pre class="example-block" id="zones-example">{
+  "z1": { "range": [124,134], "pct": 0  },
+  "z2": { "range": [135,148], "pct": 1  },
+  "z3": { "range": [149,164], "pct": 7  },
+  "z4": { "range": [165,177], "pct": 62 },
+  "z5": { "range": [178,190], "pct": 30 },
+  "avgBpm": 174,
+  "te": { "aerobic": 5.0, "anaerobic": 2.7 }
+}</pre>
+          </div>
+
+          <button class="save-btn" id="save-btn" onclick="onSave()">저장</button>
+
+          <!-- 저장된 활동 -->
+          <div class="input-section">
+            <label class="input-label">저장된 활동 (localStorage)</label>
+            <ul class="saved-list" id="saved-list"></ul>
+            <div class="field-row" style="margin-top:14px">
+              <button class="ghost-btn" onclick="onClearAll()" style="flex:1;color:var(--accent);border-color:rgba(255,76,49,0.3)">
+                전체 삭제
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="./data/splits.js"></script>
+  <script src="./data/zones.js"></script>
+  <script src="./data/store.js"></script>
+
+  <script>
+    /* ── 초기화 ── */
+    const dateInput = document.getElementById('input-date');
+    const splitsInput = document.getElementById('input-splits');
+    const zonesInput = document.getElementById('input-zones');
+    const splitsCheck = document.getElementById('splits-check');
+    const zonesCheck = document.getElementById('zones-check');
+
+    // 기본 날짜 = 오늘
+    dateInput.value = new Date().toISOString().slice(0, 10);
+
+    /* ── 토스트 ── */
+    function showToast(msg, isError) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.toggle('error', !!isError);
+      t.classList.add('visible');
+      clearTimeout(t._timer);
+      t._timer = setTimeout(() => t.classList.remove('visible'), 2200);
+    }
+
+    /* ── 예시 토글 ── */
+    function toggleExample(id) {
+      document.getElementById(id).classList.toggle('open');
+    }
+
+    /* ── 샘플 채우기 (4/26 데이터) ── */
+    function loadSample(type) {
+      if (type === 'splits') {
+        splitsInput.value = JSON.stringify(SPLITS_DEFAULT['2026-04-26'], null, 2);
+        validate('splits');
+      } else {
+        zonesInput.value = JSON.stringify(ZONES_DEFAULT['2026-04-26'], null, 2);
+        validate('zones');
+      }
+    }
+
+    /* ── 검증 ── */
+    function parseJSON(str) {
+      if (!str.trim()) return { ok: true, data: null, msg: '' };
+      try {
+        return { ok: true, data: JSON.parse(str), msg: '' };
+      } catch (e) {
+        return { ok: false, data: null, msg: 'JSON 파싱 실패: ' + e.message };
+      }
+    }
+
+    function validate(which) {
+      if (which === 'splits') {
+        const r = parseJSON(splitsInput.value);
+        if (!splitsInput.value.trim()) {
+          splitsCheck.textContent = '';
+          splitsCheck.className = 'check';
+        } else if (!r.ok) {
+          splitsCheck.textContent = '✗ ' + r.msg;
+          splitsCheck.className = 'check err';
+        } else if (!Array.isArray(r.data)) {
+          splitsCheck.textContent = '✗ 배열이어야 함';
+          splitsCheck.className = 'check err';
+        } else {
+          splitsCheck.textContent = `✓ ${r.data.length}개 랩`;
+          splitsCheck.className = 'check ok';
+        }
+      } else {
+        const r = parseJSON(zonesInput.value);
+        if (!zonesInput.value.trim()) {
+          zonesCheck.textContent = '';
+          zonesCheck.className = 'check';
+        } else if (!r.ok) {
+          zonesCheck.textContent = '✗ ' + r.msg;
+          zonesCheck.className = 'check err';
+        } else if (!r.data.z1 || !r.data.z5) {
+          zonesCheck.textContent = '✗ z1~z5 필요';
+          zonesCheck.className = 'check err';
+        } else {
+          const sum = ['z1', 'z2', 'z3', 'z4', 'z5']
+            .map(k => r.data[k]?.pct || 0).reduce((a, b) => a + b, 0);
+          zonesCheck.textContent = `✓ 합계 ${sum}%`;
+          zonesCheck.className = sum === 100 ? 'check ok' : 'check err';
+        }
+      }
+    }
+
+    splitsInput.addEventListener('input', () => validate('splits'));
+    zonesInput.addEventListener('input', () => validate('zones'));
+
+    /* ── 저장 ── */
+    function onSave() {
+      const date = dateInput.value;
+      if (!date) { showToast('날짜를 선택하세요', true); return; }
+
+      const sStr = splitsInput.value.trim();
+      const zStr = zonesInput.value.trim();
+      if (!sStr && !zStr) { showToast('저장할 데이터가 없습니다', true); return; }
+
+      let saved = [];
+
+      if (sStr) {
+        const r = parseJSON(sStr);
+        if (!r.ok || !Array.isArray(r.data)) {
+          showToast('스플릿 JSON 오류', true); return;
+        }
+        setSplits(date, r.data);
+        saved.push('스플릿');
+      }
+
+      if (zStr) {
+        const r = parseJSON(zStr);
+        if (!r.ok) { showToast('심박존 JSON 오류', true); return; }
+        setZones(date, r.data);
+        saved.push('심박존');
+      }
+
+      showToast(`${date}: ${saved.join(' + ')} 저장됨`);
+      renderSavedList();
+    }
+
+    /* ── 저장된 목록 렌더 ── */
+    function renderSavedList() {
+      const list = document.getElementById('saved-list');
+      const items = listSavedDates();
+      if (!items.length) {
+        list.innerHTML = '<div class="saved-empty">저장된 활동 없음</div>';
+        return;
+      }
+      list.innerHTML = items.map(item => `
+        <li class="saved-item">
+          <div>
+            <div class="saved-date">${item.date}</div>
+            <div class="saved-tags">
+              ${item.hasSplits ? '<span class="saved-tag">스플릿</span>' : ''}
+              ${item.hasZones ? '<span class="saved-tag">심박존</span>' : ''}
+            </div>
+          </div>
+          <button class="delete-btn" onclick="onRemove('${item.date}')">삭제</button>
+        </li>
+      `).join('');
+    }
+
+    function onRemove(date) {
+      removeSaved(date);
+      showToast(`${date} 삭제됨`);
+      renderSavedList();
+    }
+
+    function onClearAll() {
+      if (!confirm('localStorage에 저장된 모든 데이터를 삭제할까요?')) return;
+      clearAllSaved();
+      showToast('전체 삭제 완료');
+      renderSavedList();
+    }
+
+    /* ── 초기 렌더 ── */
+    renderSavedList();
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js');
+    }
+  </script>
+</body>
+
+</html>

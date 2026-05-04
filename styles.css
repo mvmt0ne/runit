@@ -162,7 +162,7 @@ sup {
   position: relative;
   display: flex;
   flex-direction: column;
-  background: var(--asphalt-black);
+  /* background: var(--asphalt-black); */
 }
 
 .bg-dark {
@@ -294,24 +294,6 @@ sup {
   background-color: var(--asphalt-black);
   border-radius: 100px;
   padding-bottom: env(safe-area-inset-bottom, 0px);
-  view-transition-name: app-tabbar;
-  contain: layout;
-}
-
-/* 탭바는 페이지 전환 동안 자기 자리에 고정 (root 슬라이드 분리)
-   old은 즉시 사라지고 new가 즉시 자리잡아 — 사용자에게는 그대로 보이는 효과 */
-::view-transition-group(app-tabbar) {
-  animation: none !important;
-}
-
-::view-transition-old(app-tabbar) {
-  animation: none !important;
-  opacity: 0 !important;
-}
-
-::view-transition-new(app-tabbar) {
-  animation: none !important;
-  opacity: 1 !important;
 }
 
 .tab-item {
@@ -824,7 +806,7 @@ sup {
   font-size: 18px;
   font-weight: 400;
   font-family: 'Pretendard Variable', sans-serif;
-  color: var(--cloudy-gray);
+  color: var(--asphalt-gray);
   transition: color 0.3s;
 }
 
@@ -837,7 +819,7 @@ sup {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--text-1);
+  color: var(--asphalt-black);
   transition: background 0.15s;
 }
 
@@ -903,7 +885,7 @@ sup {
   background: transparent;
   font-size: 18px;
   font-family: 'Pretendard Variable', sans-serif;
-  color: var(--slate-gray);
+  color: var(--cloudy-gray);
   cursor: pointer;
   transition: color 0.3s, background 0.15s;
 }
@@ -913,11 +895,11 @@ sup {
   padding: 14px;
   border-radius: 100px;
   border: none;
-  background: var(--slate-gray);
+  background: var(--asphalt-black);
   font-size: 18px;
   font-weight: 500;
   font-family: 'Pretendard Variable', sans-serif;
-  color: var(--asphalt-black);
+  color: var(--bone);
   cursor: pointer;
 }
 
@@ -959,7 +941,7 @@ sup {
   font-size: 18px;
   font-weight: 400;
   font-family: 'Pretendard Variable', sans-serif;
-  color: var(--asphalt-gray);
+  color: var(--cloudy-gray);
 }
 
 .month-list-item.ml-selected .month-list-label {
@@ -970,7 +952,7 @@ sup {
 .month-list-check {
   width: 24px;
   height: 24px;
-  color: var(--asphalt-black);
+  color: var(--accent);
   opacity: 0;
   transition: opacity 0.15s;
   flex-shrink: 0;
@@ -984,19 +966,19 @@ sup {
 .filter-cats {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 40px;
 }
 
 .filter-cat {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .filter-cat-label {
   font-size: 16px;
   font-weight: 300;
-  color: var(--slate-gray);
+  color: var(--asphalt-gray);
 }
 
 .filter-chips {
@@ -1011,10 +993,10 @@ sup {
   font-size: 16px;
   font-weight: 400;
   font-family: 'Pretendard Variable', sans-serif;
-  color: var(--bone);
+  color: var(--cloudy-gray);
   background: transparent;
   border-radius: 100px;
-  border: var(--bone) 1px solid;
+  border: var(--cloudy-gray) 1px solid;
   cursor: pointer;
   transition: all 0.1s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
@@ -1023,8 +1005,8 @@ sup {
 .filter-chip.active {
   font-weight: 500;
   color: var(--asphalt-black);
-  background: var(--bone);
-  border: var(--bone) 1px solid
+  background: var(--accent);
+  border: var(--accent) 1px solid
 }
 
 /* Zone chip (Z1–Z5) */
@@ -1053,7 +1035,6 @@ sup {
 /* Range slider */
 .range-slider-wrap {
   position: relative;
-  margin: 10px 0 0;
 }
 
 .range-track {
@@ -1063,7 +1044,7 @@ sup {
   left: 0;
   right: 0;
   height: 3px;
-  background: rgba(128, 128, 128, 0.85);
+  background: rgba(128, 128, 128, 0.3);
   border-radius: 0;
   pointer-events: none;
 }
@@ -1096,10 +1077,10 @@ input[type='range'].range-input::-webkit-slider-thumb {
   width: 20px;
   height: 20px;
   border-radius: 100px;
-  background: var(--surface-6);
+  background: var(--bone);
   pointer-events: auto;
   cursor: grab;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0px 2px rgba(0, 0, 0, 0.5);
   transition: transform 0.1s;
 }
 
@@ -1122,13 +1103,12 @@ input[type='range'].range-input::-moz-range-thumb {
 .range-val-row {
   display: flex;
   justify-content: space-between;
-  margin-top: 8px;
 }
 
 .range-val {
   font-size: 14px;
   font-family: 'Space Grotesk', sans-serif;
-  color: var(--text-2);
+  color: var(--asphalt-black);
   font-weight: 600;
 }
 
