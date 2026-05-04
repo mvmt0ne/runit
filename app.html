@@ -25,6 +25,8 @@
   <script src="./transitions.js"></script>
   <!-- 홈 페이지가 인라인으로 grained() 호출 → 미리 로드 필요 -->
   <script src="./grained.js"></script>
+  <!-- 액체 유리 효과 (탭바 backdrop-filter) -->
+  <script src="./liquid-glass.js"></script>
   <style>
     /* ─── SPA 셸 ─── */
     .phone-inner {
@@ -147,6 +149,12 @@
 
     </div>
   </div>
+
+  <!-- 액체 유리 SVG 필터 컨테이너 (liquid-glass.js 가 동적으로 채움) -->
+  <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0"
+    style="position:absolute;width:0;height:0;overflow:hidden" color-interpolation-filters="sRGB" aria-hidden="true">
+    <defs id="svg-defs"></defs>
+  </svg>
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script>
@@ -276,6 +284,21 @@
       setTimeout(() => {
         slides.forEach((s, i) => { if (i !== initialIdx) loadSlide(s); });
       }, 600);
+
+      // 탭바에 액체 유리 효과 적용 (Swiper init 후 — 탭바 dimension 결정된 시점)
+      if (typeof applyLiquidGlass === 'function') {
+        applyLiquidGlass(document.getElementById('app-tab-bar'), {
+          borderRadius: 100,
+          bezelWidth: 14,
+          glassThickness: 10,
+          ior: 1.45,
+          scaleRatio: 1,
+          blurAmt: 0.4,
+          specOpacity: 0.5,
+          specSat: 1.0,
+          surface: 'lip',
+        });
+      }
     })();
   </script>
 

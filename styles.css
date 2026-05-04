@@ -291,9 +291,51 @@ sup {
   z-index: 30;
   display: flex;
   align-items: stretch;
-  background-color: var(--asphalt-black);
   border-radius: 100px;
   padding-bottom: env(safe-area-inset-bottom, 0px);
+  /* 액체 유리 셋업 */
+  isolation: isolate;
+  background: transparent;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.28);
+}
+
+/* layer 1 (deepest): backdrop refraction (Chromium) / blur fallback (Safari) */
+.tab-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  border-radius: inherit;
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+}
+
+@supports (backdrop-filter: url(#x)) or (-webkit-backdrop-filter: url(#x)) {
+  .tab-bar::before {
+    backdrop-filter: url(#liquid-glass-filter);
+    -webkit-backdrop-filter: url(#liquid-glass-filter);
+  }
+}
+
+/* layer 2: tint + inner highlight (유리 표면 광택) */
+.tab-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: rgba(20, 20, 20, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.25),
+    inset 0 0 12px rgba(255, 255, 255, 0.05);
+  pointer-events: none;
+}
+
+/* 탭 아이템들은 유리 레이어 위에 */
+.tab-bar > .tab-item {
+  position: relative;
+  z-index: 1;
 }
 
 .tab-item {
