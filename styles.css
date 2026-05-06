@@ -163,12 +163,10 @@ sup {
   position: relative;
   display: flex;
   flex-direction: column;
-  /* background: var(--asphalt-black); */
 }
 
-.slide-stats,
-{
-background: var(--slate-gray);
+.slide-stats {
+  background: var(--slate-gray);
 }
 
 .slide-list .slide-home,
@@ -436,16 +434,6 @@ background: var(--slate-gray);
   font-weight: 100;
   color: var(--slate-gray);
   font-family: 'Space Grotesk', monospace;
-}
-
-.lp-run-name {
-  font-size: 18px;
-  font-weight: 300;
-  font-family: 'Pretendard Variable', sans-serif;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-right: 8px;
 }
 
 .lp-stats {
