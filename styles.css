@@ -387,10 +387,8 @@ sup {
    LIST ROW — home / list 공용
 ═══════════════════════════════════════════════════════════ */
 .lp-row {
-  padding: 0 20px;
   cursor: pointer;
   transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-  border-bottom: var(--dark-gray) 1px solid;
 }
 
 .lp-row:last-child {
@@ -436,34 +434,6 @@ sup {
 
 .lp-month-km strong {
   font-weight: 500;
-}
-
-.lp-stats {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-.lp-stat {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  font-family: 'Pretendard Variable', sans-serif;
-}
-
-.lp-stat:last-child {
-  align-items: flex-end;
-}
-
-.lp-stat strong {
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.lp-stat span {
-  font-size: 13px;
-  font-weight: 300;
 }
 
 /* ─── Compact mode ── */
@@ -539,9 +509,9 @@ sup {
   display: flex;
   justify-content: space-between;
   align-items: end;
-  margin-bottom: 20px;
   gap: 8px;
   width: 100%;
+  padding: 20px 20px 10px;
 }
 
 /* badge + name 묶음 */
@@ -574,9 +544,37 @@ sup {
   display: flex !important;
   justify-content: space-between;
   align-items: stretch;
-  gap: 16px;
   width: 100%;
-  margin: 0;
+  border-top: 1px solid var(--dark-gray);
+  border-bottom: 1px solid var(--dark-gray);
+}
+
+.lp-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.lp-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+}
+
+.lp-stat:last-child {
+  align-items: flex-end;
+}
+
+.lp-stat strong {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.lp-stat span {
+  font-size: 13px;
+  font-weight: 300;
 }
 
 .lp-stats-left,
@@ -587,17 +585,11 @@ sup {
 
 .lp-stats-left {
   flex: 1;
-  gap: 16px;
   border-right: 1px solid var(--dark-gray);
-}
-
-.lp-stats-left .lp-stat {
-  align-items: flex-start;
 }
 
 .lp-stats-right {
   flex: 1;
-  justify-content: space-between;
   align-items: stretch;
 }
 
@@ -605,9 +597,11 @@ sup {
 
 /* 좌 컬럼만 column — 우 컬럼은 .lp-stats-right .lp-stat에서 row로 오버라이드 */
 .lp-stats-left .lp-stat {
+  align-items: flex-start;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 5px;
+  padding: 14px 20px;
 }
 
 /* 우 컬럼 row 레이아웃 — specificity 강화로 위 column 규칙 차단 */
@@ -623,7 +617,12 @@ sup {
 .lp-row.expanded .lp-stat-row {
   display: flex;
   flex-direction: row;
-  gap: 2px;
+  gap: 20px;
+  padding: 20px;
+}
+
+.lp-row.expanded .lp-stat-row:not(:last-child) {
+  border-bottom: 1px solid var(--dark-gray);
 }
 
 .lp-row.expanded .lp-stat-label {
