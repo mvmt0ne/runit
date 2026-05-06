@@ -161,10 +161,36 @@
       const TABS = ['home', 'list', 'stats', 'pb'];
 
       /**
+       * 페이지 CSS 를 portal 대상(modal/sheet 등)용 전역 룰과 슬라이드 한정 룰로 분리.
+       * portal 대상 엘리먼트는 document.body 로 이동하기 때문에 @scope 안에 두면 스타일이 안 먹음.
+       */
+      const PORTAL_RE = /\.(month-modal|sf-sheet|sf-backdrop|sf-section|sf-divider|sf-reset|sf-apply|wheel-|month-list|month-item|filter-|range-|zone-)/;
+      function splitPageCSS(css) {
+        let depth = 0, buf = '', global = '', scoped = '';
+        for (let i = 0; i < css.length; i++) {
+          const c = css[i];
+          buf += c;
+          if (c === '{') depth++;
+          else if (c === '}') {
+            depth--;
+            if (depth === 0) {
+              if (PORTAL_RE.test(buf)) global += buf + '\n';
+              else scoped += buf + '\n';
+              buf = '';
+            }
+          }
+        }
+        if (buf.trim()) scoped += buf; // 잔여
+        return { global, scoped };
+      }
+
+      /**
        * 각 탭 페이지(예: runit-home.html)를 fetch 해서:
        *   1. <head> <style> → @scope (.slide-<name>) 로 감싸 head에 주입 (격리)
+       *      + portal 대상 셀렉터는 별도로 un-scoped 주입
        *   2. .phone-inner 콘텐츠 → 슬라이드 div 안에 직접 삽입
        *   3. <body> inline <script> → IIFE 로 감싸 body에 추가 (전역 격리)
+       *   4. 모달/시트/백드롭 → document.body 로 portal 이동
        */
       async function loadSlide(slide) {
         if (!slide.dataset.src || slide.dataset.loaded === '1') return;
@@ -178,14 +204,23 @@
           const html = await fetch(url).then(r => r.text());
           const doc = new DOMParser().parseFromString(html, 'text/html');
 
-          // 1) 페이지 인라인 스타일 → @scope 으로 격리해 head에 주입
+          // 1) 페이지 인라인 스타일 → portal 대상은 un-scoped, 나머지는 @scope 로 격리
           doc.querySelectorAll('head style').forEach(styleEl => {
             const css = styleEl.textContent || '';
-            const wrapped = `@scope (${scope}) {\n${css}\n}`;
-            const ns = document.createElement('style');
-            ns.textContent = wrapped;
-            ns.dataset.fromSlide = tab;
-            document.head.appendChild(ns);
+            const { global, scoped: scopedCss } = splitPageCSS(css);
+
+            if (scopedCss.trim()) {
+              const ns = document.createElement('style');
+              ns.textContent = `@scope (${scope}) {\n${scopedCss}\n}`;
+              ns.dataset.fromSlide = tab;
+              document.head.appendChild(ns);
+            }
+            if (global.trim()) {
+              const ns = document.createElement('style');
+              ns.textContent = global;
+              ns.dataset.fromSlide = tab + ':global';
+              document.head.appendChild(ns);
+            }
           });
 
           // 2) 콘텐츠 주입 (.phone-inner 의 자식들을 슬라이드로 옮김)
@@ -210,6 +245,14 @@
             ns.dataset.fromSlide = tab;
             document.body.appendChild(ns);
           }
+
+          // 4) 모달/백드롭/시트를 document.body 로 portal 이동.
+          //    Swiper 슬라이드는 transform 이 걸려 있어 자식의 position:fixed 가
+          //    슬라이드 박스에 갇힘 → 탭바를 못 덮음. body 직속으로 옮기면 viewport 기준 fixed 로 동작.
+          slide.querySelectorAll('.sf-backdrop, .month-modal, .sf-sheet').forEach(el => {
+            el.dataset.portalFrom = tab;
+            document.body.appendChild(el);
+          });
         } catch (e) {
           console.error('[loadSlide]', tab, e);
           slide.classList.remove('loading');
