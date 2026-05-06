@@ -155,12 +155,12 @@
       <div class="list-page">
         <div class="list-scroll" id="list-scroll">
           <!-- Compact sticky header (스크롤 시 작은 타이틀이 페이드인) -->
-          <div class="lp-header" id="lp-header">
-            <span class="lp-header-title-compact" id="lp-title-compact">러닝 활동</span>
+          <div class="lp-header">
+            <span class="lp-header-title-compact">러닝 활동</span>
           </div>
           <!-- Large title (스크롤 시 자연스럽게 위로 사라짐) -->
           <div class="lp-hero">
-            <h1 class="lp-hero-title" id="lp-title-large">러닝 활동</h1>
+            <h1 class="lp-hero-title">러닝 활동</h1>
           </div>
           <div id="runs-list-container"></div>
         </div>
@@ -561,30 +561,8 @@
       document.getElementById('float-filter-badge').classList.toggle('visible', !!hasFilter);
     }
 
-    /* ─── Collapsing large title ── */
-    (function () {
-      const scrollEl = document.getElementById('list-scroll');
-      const compactTitle = document.getElementById('lp-title-compact');
-      const largeTitle = document.getElementById('lp-title-large');
-      if (!scrollEl || !compactTitle || !largeTitle) return;
-
-      // 큰 타이틀이 작은 헤더 영역까지 거의 다 스크롤됐을 때 페이드 시작
-      const FADE_START = 16;
-      const FADE_END = 44;
-
-      function update() {
-        const y = scrollEl.scrollTop;
-        const t = Math.max(0, Math.min(1, (y - FADE_START) / (FADE_END - FADE_START)));
-        compactTitle.style.opacity = t;
-        // 큰 타이틀은 자연스럽게 스크롤되지만, 페이드와 함께 살짝 축소
-        const scale = 1 - t * 0.05;
-        largeTitle.style.transform = `scale(${scale})`;
-        largeTitle.style.transformOrigin = 'left center';
-        largeTitle.style.opacity = 1 - t * 0.5;
-      }
-      scrollEl.addEventListener('scroll', update, { passive: true });
-      update();
-    })();
+    /* ─── Collapsing large title (iOS-style) ── */
+    setupCollapsingHeader(document.getElementById('list-scroll'));
 
     /* ─── Init ── */
     renderList();

@@ -39,4 +39,28 @@
     sessionStorage.setItem('runit-nav', 'back');
     location.href = url;
   };
+
+  /* ── Collapsing large title (iOS-style) ──
+     scrollEl 안에 .lp-header-title-compact + .lp-hero-title 가 있어야 함.
+     스크롤하면 큰 타이틀이 페이드/축소되고 sticky 헤더에 작은 타이틀이 페이드인. */
+  window.setupCollapsingHeader = function (scrollEl) {
+    if (!scrollEl) return;
+    const compactTitle = scrollEl.querySelector('.lp-header-title-compact');
+    const largeTitle = scrollEl.querySelector('.lp-hero-title');
+    if (!compactTitle || !largeTitle) return;
+
+    const FADE_START = 16, FADE_END = 44;
+
+    function update() {
+      const y = scrollEl.scrollTop;
+      const t = Math.max(0, Math.min(1, (y - FADE_START) / (FADE_END - FADE_START)));
+      compactTitle.style.opacity = t;
+      const scale = 1 - t * 0.05;
+      largeTitle.style.transform = `scale(${scale})`;
+      largeTitle.style.transformOrigin = 'left center';
+      largeTitle.style.opacity = 1 - t * 0.5;
+    }
+    scrollEl.addEventListener('scroll', update, { passive: true });
+    update();
+  };
 })();

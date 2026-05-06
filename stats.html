@@ -23,13 +23,53 @@
   <link rel="stylesheet" href="./styles.css">
   <script src="./transitions.js"></script>
   <style>
+    /* ─── Compact sticky header ── */
+    .lp-header {
+      position: sticky;
+      top: 0;
+      z-index: 25;
+      height: 50px;
+      padding: calc(env(safe-area-inset-top, 0px) + 8px) 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(185, 185, 185, 0.78);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+    }
+
+    .lp-header-title-compact {
+      font-size: 17px;
+      font-weight: 600;
+      font-family: 'Pretendard Variable', sans-serif;
+      color: var(--asphalt-black);
+      opacity: 0;
+      transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    .lp-hero {
+      padding: 12px 20px 20px;
+    }
+
+    .lp-hero-title {
+      font-size: 34px;
+      font-weight: 700;
+      font-family: 'Pretendard Variable', sans-serif;
+      color: var(--asphalt-black);
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      margin: 0;
+    }
+
     /* ─── Tabs ── */
     .tab-row {
       display: flex;
       padding: 0 10px;
       flex-shrink: 0;
       position: sticky;
-      top: env(safe-area-inset-top, 0px);
+      /* lp-header 아래에 sticky */
+      top: 50px;
       z-index: 20;
       width: 100%;
       background: rgba(34, 34, 34, 0.75);
@@ -804,6 +844,14 @@
     <div class="phone-inner">
 
       <div class="scroll-area">
+        <!-- Compact sticky header -->
+        <div class="lp-header">
+          <span class="lp-header-title-compact">마일리지</span>
+        </div>
+        <!-- Large title -->
+        <div class="lp-hero">
+          <h1 class="lp-hero-title">마일리지</h1>
+        </div>
         <div class="tab-row">
           <div class="tab" data-tab="week">주간</div>
           <div class="tab active" data-tab="month">월간</div>
@@ -1815,6 +1863,9 @@
     }
     addChartSwipe('week-chart-swipe-wrap', changeWeekPeriod);
     addChartSwipe('year-chart-swipe-wrap', changeYearPeriod);
+
+    /* ─── Collapsing large title ── */
+    setupCollapsingHeader(document.querySelector('.scroll-area'));
   </script>
 
   <script>
