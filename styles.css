@@ -314,6 +314,50 @@ sup {
   margin: 0;
 }
 
+/* ─── Hero: 스크롤 콘텐츠 내 첫 번째 요소 ── */
+.stats-hero-bar {
+  padding: 52px 20px 8px;
+  margin: 40px 20px;
+  color: var(--asphalt-black);
+  background: var(--accent);
+}
+
+.stats-hero-label {
+  font-size: 18px;
+  font-weight: 300;
+  font-family: 'Pretendard Variable', sans-serif;
+  line-height: 1;
+}
+
+.stats-hero-num {
+  font-size: 48px;
+  font-weight: 500;
+  line-height: 1.2;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.stats-hero-num sup {
+  font-size: 0.5em;
+  vertical-align: super;
+  font-weight: 400;
+  margin-left: 8px;
+}
+
+/* ─── Tabs (stats - 월간탭) ── */
+.tab-row {
+  display: flex;
+  padding: 0 10px;
+  flex-shrink: 0;
+  position: sticky;
+  /* lp-header 아래에 sticky */
+  top: 85px;
+  z-index: 20;
+  width: 100%;
+  background: rgba(34, 34, 34, 0.75);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(40px) saturate(160%);
+}
+
 /* ═══════════════════════════════════════════════════════════
    TAB BAR — 전 페이지 공통 하단 탭바
 ═══════════════════════════════════════════════════════════ */
