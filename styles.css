@@ -566,7 +566,6 @@ sup {
   flex-shrink: 0;
   font-family: 'Space Grotesk', sans-serif;
   white-space: nowrap;
-  color: var(--asphalt-black);
 }
 
 /* 2-column stats */
@@ -634,7 +633,7 @@ sup {
 
 .lp-stats-left .lp-stat-value {
   font-size: 28px;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 1.2;
   font-family: 'Space Grotesk', ui-monospace, monospace;
   font-feature-settings: "tnum";
@@ -643,7 +642,7 @@ sup {
 .lp-stats-right .lp-stat-value {
   margin-left: auto;
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 1.2;
   font-family: 'Space Grotesk', ui-monospace, monospace;
   font-feature-settings: "tnum";
