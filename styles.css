@@ -545,8 +545,7 @@ sup {
   justify-content: space-between;
   align-items: stretch;
   width: 100%;
-  border-top: 1px solid var(--dark-gray);
-  border-bottom: 1px solid var(--dark-gray);
+  border-block: 1px solid var(--dark-gray);
 }
 
 .lp-stats {
