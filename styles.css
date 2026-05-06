@@ -537,6 +537,7 @@ sup {
 .lp-row.compact {
   gap: 12px;
   padding: 14px 20px;
+  border-bottom: 1px solid var(--dark-gray);
 }
 
 .lp-row.compact .lp-info {
@@ -1314,12 +1315,12 @@ input[type='range'].range-input::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 28px;
   height: 28px;
-  border: var(--accent) 1px solid;
+  border: var(--accent) 1.5px solid;
   border-radius: 100px;
   background: var(--bone);
   pointer-events: auto;
   cursor: grab;
-  box-shadow: 0 0px 2px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0px 20px rgba(0, 0, 0, 0.5);
   transition: transform 0.1s;
 }
 
