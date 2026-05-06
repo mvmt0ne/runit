@@ -45,28 +45,6 @@
       display: none;
     }
 
-    /* ─── Compact sticky header (스크롤 후 작은 타이틀) ── */
-    .lp-header {
-      position: sticky;
-      top: 0;
-      z-index: 25;
-      height: 90px;
-      padding: calc(env(safe-area-inset-top, 0px) + 8px) 20px 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(34, 34, 34, 0.85);
-      backdrop-filter: blur(20px) saturate(160%);
-      -webkit-backdrop-filter: blur(20px) saturate(160%);
-    }
-
-    .lp-header-title-compact {
-      font-size: 14px;
-      font-weight: 500;
-      transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      pointer-events: none;
-    }
-
     /* ─── Hero (large title — 스크롤 시 자연스럽게 사라짐) ── */
     .lp-hero {
       padding: 12px 20px 20px;
