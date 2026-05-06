@@ -437,6 +437,10 @@ sup {
   font-family: 'Space Grotesk', monospace;
 }
 
+.lp-month-km strong {
+  font-weight: 400;
+}
+
 .lp-stats {
   display: flex;
   justify-content: space-between;
