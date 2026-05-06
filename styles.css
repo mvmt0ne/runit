@@ -599,8 +599,8 @@ sup {
   align-items: flex-start;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  padding: 14px 20px;
+  gap: 4px;
+  padding: 10px 20px;
 }
 
 /* 우 컬럼 row 레이아웃 — specificity 강화로 위 column 규칙 차단 */
@@ -617,7 +617,7 @@ sup {
   display: flex;
   flex-direction: row;
   gap: 20px;
-  padding: 20px;
+  padding: 14px 20px;
 }
 
 .lp-row.expanded .lp-stat-row:not(:last-child) {
@@ -627,23 +627,20 @@ sup {
 .lp-row.expanded .lp-stat-label {
   font-size: 14px;
   font-weight: 400;
-  color: var(--asphalt-gray);
-  font-family: 'Pretendard Variable', sans-serif;
+  color: var(--cloudy-gray);
 }
 
 .lp-stats-left .lp-stat-value {
-  font-size: 28px;
+  font-size: 22px;
   font-weight: 500;
-  line-height: 1.2;
   font-family: 'Space Grotesk', ui-monospace, monospace;
   font-feature-settings: "tnum";
 }
 
 .lp-stats-right .lp-stat-value {
   margin-left: auto;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
-  line-height: 1.2;
   font-family: 'Space Grotesk', ui-monospace, monospace;
   font-feature-settings: "tnum";
 }
