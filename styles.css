@@ -1312,8 +1312,8 @@ input[type='range'].range-input {
 
 input[type='range'].range-input::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 28px;
+  height: 28px;
   border: var(--accent) 1px solid;
   border-radius: 100px;
   background: var(--bone);
@@ -1329,8 +1329,8 @@ input[type='range'].range-input:active::-webkit-slider-thumb {
 }
 
 input[type='range'].range-input::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
+  width: 28px;
+  height: 28px;
   border-radius: 0;
   background: var(--accent);
   border: 2.5px solid var(--bg);
