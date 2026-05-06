@@ -723,8 +723,12 @@
     /* ── Init ── */
     buildStack('5k', false);
 
-    /* ── Collapsing large title ── */
-    setupCollapsingHeader(document.querySelector('.pb-scroll'));
+    /* ── Collapsing large title + auto-hide chrome ── */
+    {
+      const _scrollEl = document.querySelector('.pb-scroll');
+      setupCollapsingHeader(_scrollEl);
+      setupAutoHideChrome(_scrollEl);
+    }
   </script>
 
   <script>

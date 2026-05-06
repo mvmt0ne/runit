@@ -63,4 +63,54 @@
     scrollEl.addEventListener('scroll', update, { passive: true });
     update();
   };
+
+  /* ── Auto-hide chrome (헤더/스티키 탭/하단 탭바) ──
+     scrollEl 에서 스크롤 방향 감지:
+       - 아래로 스크롤 → 모든 chrome 화면 밖으로 (translateY)
+       - 위로 스크롤   → 다시 보임
+     상단 40px 안에선 항상 보임. */
+  window.setupAutoHideChrome = function (scrollEl) {
+    if (!scrollEl) return;
+    let lastY = scrollEl.scrollTop;
+    let hidden = false;
+    let pendingDir = 0;
+    const HIDE_DELTA = 6;   // 누적 dy 가 ±6 넘으면 방향 결정
+    const TOP_BAND = 40;    // 이 영역 안에선 무조건 보임
+
+    function setHidden(h) {
+      if (hidden === h) return;
+      hidden = h;
+      // 부모(app.html) 의 탭바
+      const tabBar = document.getElementById('app-tab-bar');
+      if (tabBar) tabBar.classList.toggle('chrome-hidden', h);
+      // 슬라이드 내부의 sticky 헤더 / 탭들
+      scrollEl.querySelectorAll('.lp-header, .tab-row, .lp-month-section').forEach(el => {
+        el.classList.toggle('chrome-hidden', h);
+      });
+    }
+
+    function update() {
+      const y = scrollEl.scrollTop;
+      const dy = y - lastY;
+      lastY = y;
+
+      if (y <= TOP_BAND) {
+        setHidden(false);
+        pendingDir = 0;
+        return;
+      }
+      // 방향 변경 시 누적 리셋
+      if ((dy > 0) !== (pendingDir > 0)) pendingDir = 0;
+      pendingDir += dy;
+
+      if (pendingDir > HIDE_DELTA) {
+        setHidden(true);
+        pendingDir = 0;
+      } else if (pendingDir < -HIDE_DELTA) {
+        setHidden(false);
+        pendingDir = 0;
+      }
+    }
+    scrollEl.addEventListener('scroll', update, { passive: true });
+  };
 })();

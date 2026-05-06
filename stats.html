@@ -1864,8 +1864,12 @@
     addChartSwipe('week-chart-swipe-wrap', changeWeekPeriod);
     addChartSwipe('year-chart-swipe-wrap', changeYearPeriod);
 
-    /* ─── Collapsing large title ── */
-    setupCollapsingHeader(document.querySelector('.scroll-area'));
+    /* ─── Collapsing large title + auto-hide chrome ── */
+    {
+      const _scrollEl = document.querySelector('.scroll-area');
+      setupCollapsingHeader(_scrollEl);
+      setupAutoHideChrome(_scrollEl);
+    }
   </script>
 
   <script>

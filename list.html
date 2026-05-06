@@ -561,8 +561,12 @@
       document.getElementById('float-filter-badge').classList.toggle('visible', !!hasFilter);
     }
 
-    /* ─── Collapsing large title (iOS-style) ── */
-    setupCollapsingHeader(document.getElementById('list-scroll'));
+    /* ─── Collapsing large title + auto-hide chrome ── */
+    {
+      const _scrollEl = document.getElementById('list-scroll');
+      setupCollapsingHeader(_scrollEl);
+      setupAutoHideChrome(_scrollEl);
+    }
 
     /* ─── Init ── */
     renderList();
