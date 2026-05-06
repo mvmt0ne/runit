@@ -166,11 +166,11 @@ sup {
 }
 
 .slide-stats,
-.slide-list {
-  background: var(--slate-gray);
+{
+background: var(--slate-gray);
 }
 
-.slide-home,
+.slide-list .slide-home,
 .slide-pb {
   background: var(--asphalt-black);
 }
