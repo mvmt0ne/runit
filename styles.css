@@ -40,6 +40,7 @@
   --slate-gray: #b9b9b9;
   --cloudy-gray: #818181;
   --asphalt-gray: #5d5d5d;
+  --dark-gray: #363636;
   --asphalt-black: #222222;
 
   /* Run type palette (theme-independent) */
@@ -393,7 +394,7 @@ background: var(--slate-gray);
   padding: 20px;
   cursor: pointer;
   transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-  border-bottom: var(--cloudy-gray) 1px solid;
+  border-bottom: var(--dark-gray) 1px solid;
 }
 
 .lp-row:last-child {
