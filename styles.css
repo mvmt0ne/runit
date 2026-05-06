@@ -1221,6 +1221,7 @@ input[type='range'].range-input::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 20px;
   height: 20px;
+  border: var(--accent) 1px solid;
   border-radius: 100px;
   background: var(--bone);
   pointer-events: auto;
