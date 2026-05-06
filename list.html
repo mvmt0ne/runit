@@ -50,21 +50,21 @@
       position: sticky;
       top: 0;
       z-index: 25;
-      height: 50px;
+      height: 60px;
       padding: calc(env(safe-area-inset-top, 0px) + 8px) 20px 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(185, 185, 185, 0.78);
+      background: rgba(34, 34, 34, 1);
       backdrop-filter: blur(20px) saturate(160%);
       -webkit-backdrop-filter: blur(20px) saturate(160%);
     }
 
     .lp-header-title-compact {
-      font-size: 17px;
-      font-weight: 600;
+      font-size: 14px;
+      font-weight: 500;
       font-family: 'Pretendard Variable', sans-serif;
-      color: var(--asphalt-black);
+      color: var(--slate-gray);
       opacity: 0;
       transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       pointer-events: none;
@@ -73,14 +73,14 @@
     /* ─── Hero (large title — 스크롤 시 자연스럽게 사라짐) ── */
     .lp-hero {
       padding: 12px 20px 20px;
+      background: var(--asphalt-black);
     }
 
     .lp-hero-title {
-      font-size: 34px;
-      font-weight: 700;
+      font-size: 30px;
+      font-weight: 500;
       font-family: 'Pretendard Variable', sans-serif;
-      color: var(--asphalt-black);
-      letter-spacing: -0.025em;
+      color: var(--bone);
       line-height: 1.1;
       margin: 0;
     }
