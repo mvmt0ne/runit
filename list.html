@@ -50,12 +50,12 @@
       position: sticky;
       top: 0;
       z-index: 25;
-      height: 75px;
+      height: 80px;
       padding: calc(env(safe-area-inset-top, 0px) + 8px) 20px 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(34, 34, 34, 1);
+      background: rgba(34, 34, 34, 0.85);
       backdrop-filter: blur(20px) saturate(160%);
       -webkit-backdrop-filter: blur(20px) saturate(160%);
     }
@@ -63,8 +63,6 @@
     .lp-header-title-compact {
       font-size: 14px;
       font-weight: 500;
-      color: var(--slate-gray);
-      opacity: 0;
       transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       pointer-events: none;
     }
@@ -89,7 +87,7 @@
       padding: 14px 20px;
       background-color: var(--dark-gray);
       position: sticky;
-      top: 80px;
+      top: 85px;
       z-index: 5;
       display: flex;
       justify-content: space-between;
