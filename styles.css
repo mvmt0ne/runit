@@ -387,10 +387,7 @@ sup {
    LIST ROW — home / list 공용
 ═══════════════════════════════════════════════════════════ */
 .lp-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 20px;
+  padding: 0 20px;
   cursor: pointer;
   transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
   border-bottom: var(--dark-gray) 1px solid;
@@ -577,7 +574,7 @@ sup {
   display: flex !important;
   justify-content: space-between;
   align-items: stretch;
-  gap: 0;
+  gap: 16px;
   width: 100%;
   margin: 0;
 }
@@ -591,6 +588,7 @@ sup {
 .lp-stats-left {
   flex: 1;
   gap: 16px;
+  border-right: 1px solid var(--dark-gray);
 }
 
 .lp-stats-left .lp-stat {
