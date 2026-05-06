@@ -214,13 +214,13 @@
     .cmp-bar {
       width: 3px;
       border-radius: 0;
-      background: var(--surface-3);
+      background: var(--cloudy-gray);
       transition: background 0.3s, height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     /* 지나간 달 — 현재 달과 동일 컬러 */
     .cmp-col.past .cmp-bar {
-      background: var(--accent);
+      background: var(--bone);
     }
 
     /* 이번 달 — 풀 컬러 */
@@ -230,17 +230,17 @@
 
     /* 미래 달 — 스텁 (고정 높이, 매우 흐리게) */
     .cmp-col.future .cmp-bar {
-      background: var(--surface-3);
-      opacity: 0.4;
+      background: var(--cloudy-gray);
+      opacity: 1;
     }
 
     /* 비활성화 (0km) */
     .cmp-col.inactive .cmp-bar {
-      background: var(--surface-3);
+      background: var(--cloudy-gray);
     }
 
     .cmp-col.inactive .cmp-label {
-      color: var(--text-3);
+      color: var(--cloudy-gray);
     }
 
     /* km 수치 — 전체 표시, past/current 동일 스타일 */
@@ -248,24 +248,22 @@
       font-size: 14px;
       font-weight: 500;
       font-family: 'Space Grotesk', sans-serif;
-      color: var(--accent);
       white-space: nowrap;
       transition: color 0.2s, opacity 0.2s;
     }
 
     .cmp-col.future .cmp-km {
-      display: none;
+      background: var(--cloudy-gray);
     }
 
     .cmp-col.future .cmp-label {
-      color: var(--text-3) !important;
+      color: var(--dark-gray) !important;
     }
 
     /* 레이블 — 기본 (주간·년간), past/current 동일 스타일 */
     .cmp-label {
       font-size: 13px;
-      color: var(--text-3);
-      font-family: 'Pretendard Variable', sans-serif;
+      color: var(--accent);
       transition: color 0.3s;
       white-space: nowrap;
     }
@@ -289,9 +287,6 @@
       font-weight: 300;
     }
 
-    .cmp-chart.vertical .cmp-km {
-      color: var(--accent);
-    }
 
     /* ════════════════════════════════════
        MONTH DETAIL (바 탭 시)
