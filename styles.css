@@ -841,6 +841,7 @@ sup {
   align-items: center;
   padding: 16px 20px 14px;
   flex-shrink: 0;
+  justify-content: space-between;
   gap: 8px;
 }
 
@@ -1127,7 +1128,6 @@ sup {
 .filter-cat-label {
   font-size: 16px;
   font-weight: 300;
-  color: var(--asphalt-gray);
 }
 
 .filter-chips {
@@ -1258,7 +1258,6 @@ input[type='range'].range-input::-moz-range-thumb {
 .range-val {
   font-size: 14px;
   font-family: 'Space Grotesk', sans-serif;
-  color: var(--asphalt-black);
   font-weight: 600;
 }
 
