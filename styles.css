@@ -299,6 +299,21 @@ sup {
   pointer-events: none;
 }
 
+/* ─── Hero (large title — 스크롤 시 자연스럽게 사라짐) ── */
+.lp-hero {
+  padding: 12px 20px 20px;
+  background: var(--asphalt-black);
+}
+
+.lp-hero-title {
+  font-size: 30px;
+  font-weight: 500;
+  font-family: 'Pretendard Variable', sans-serif;
+  color: var(--bone);
+  line-height: 1.1;
+  margin: 0;
+}
+
 /* ═══════════════════════════════════════════════════════════
    TAB BAR — 전 페이지 공통 하단 탭바
 ═══════════════════════════════════════════════════════════ */
