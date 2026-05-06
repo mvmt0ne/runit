@@ -15,7 +15,7 @@
 /* ─── Tokens ────────────────────────────── */
 :root {
   /* Surfaces */
-  --bg: #202020;
+  --bg: #222222;
   --surface-1: #1d1d1d;
   --surface-2: #232323;
   --surface-3: #363636;
@@ -129,7 +129,7 @@ html {
 }
 
 body {
-  background: var(--slate-gray);
+  background: var(--asphalt-black);
   font-family: 'Pretendard Variable', -apple-system, sans-serif;
   width: 100vw;
   height: 100dvh;
@@ -848,9 +848,9 @@ background: var(--slate-gray);
 .sf-sheet-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 16px 20px 14px;
   flex-shrink: 0;
+  gap: 8px;
 }
 
 .sf-sheet-title {
