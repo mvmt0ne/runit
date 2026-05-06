@@ -716,7 +716,7 @@ sup {
   left: 0;
   right: 0;
   bottom: 0;
-  background: var(--bone);
+  background: var(--dark-gray);
   border-radius: 16px 16px 0 0;
   z-index: 999;
   display: flex;
@@ -844,7 +844,6 @@ sup {
   font-size: 18px;
   font-weight: 400;
   font-family: 'Pretendard Variable', sans-serif;
-  color: var(--asphalt-gray);
   transition: color 0.3s;
 }
 
@@ -857,7 +856,7 @@ sup {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--asphalt-black);
+  color: var(--cloudy-gray);
   transition: background 0.15s;
 }
 
@@ -1005,11 +1004,10 @@ sup {
 
 .month-list-label {
   font-size: 18px;
-  color: var(--cloudy-gray);
 }
 
 .month-list-item.ml-selected .month-list-label {
-  color: var(--asphalt-black);
+  color: var(--bone);
   font-weight: 500;
 }
 
