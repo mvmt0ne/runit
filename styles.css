@@ -293,8 +293,8 @@ sup {
   position: absolute;
   /* safe-area는 padding이 아니라 bottom 위치값으로 처리해야 pill 내부가 균형 잡힘 */
   bottom: calc(0px + env(safe-area-inset-bottom, 0px));
-  left: 12px;
-  right: 12px;
+  left: 16px;
+  right: 16px;
   z-index: 30;
   display: flex;
   align-items: stretch;
@@ -302,9 +302,9 @@ sup {
   /* 액체 유리 셋업 */
   isolation: isolate;
   background: rgba(31, 31, 31, 0.5);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.28);
-  backdrop-filter: blur(4px) saturate(160%);
-  -webkit-backdrop-filter: blur(4px) saturate(160%);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.48);
+  backdrop-filter: blur(8px) saturate(160%);
+  -webkit-backdrop-filter: blur(8px) saturate(160%);
 }
 
 /* layer 1 (deepest): backdrop refraction (Chromium) / blur fallback (Safari) */
@@ -353,7 +353,7 @@ sup {
   align-items: center;
   justify-content: center;
   gap: 4px;
-  padding: 10px 0 12px;
+  padding: 16px 0;
   color: var(--slate-gray);
   text-decoration: none;
   cursor: pointer;
