@@ -289,9 +289,9 @@
             history.replaceState(null, '', '#' + TABS[this.activeIndex]);
             // 인접 슬라이드 미리 로드
             preloadNeighbors(this.activeIndex);
-            // 탭 전환 시 chrome 모두 표시 (auto-hide 상태 리셋)
+            // 탭 전환 시 chrome 표시 (auto-hide 상태 리셋)
             document.getElementById('app-tab-bar').classList.remove('chrome-hidden');
-            document.querySelectorAll('.lp-header.chrome-hidden, .tab-row.chrome-hidden, .lp-month-section.chrome-hidden').forEach(el => {
+            document.querySelectorAll('.float-bar-wrap.chrome-hidden').forEach(el => {
               el.classList.remove('chrome-hidden');
             });
           }

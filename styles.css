@@ -349,8 +349,8 @@ sup {
   padding: 0 10px;
   flex-shrink: 0;
   position: sticky;
-  /* lp-header 아래에 sticky */
-  top: 85px;
+  /* lp-header (height: 90px) 바로 밑에 docking — 5px 작으면 헤더가 덮어버림 */
+  top: 90px;
   z-index: 20;
   width: 100%;
   background: rgba(34, 34, 34, 0.75);
@@ -381,27 +381,15 @@ sup {
   transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ─── Auto-hide chrome — 스크롤 다운 시 화면 밖으로 ─── */
-.lp-header,
-.tab-row,
-.lp-month-section {
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.lp-header.chrome-hidden {
-  transform: translateY(-100%);
-}
-
-/* sticky 요소는 자기 height + sticky-top offset 만큼 올려야 viewport 밖.
-   페이지마다 sticky top 값이 달라(50/85px 등) 안전 여유로 -180px 사용. */
-.tab-row.chrome-hidden,
-.lp-month-section.chrome-hidden {
-  transform: translateY(-180px);
-}
-
+/* ─── Auto-hide: 스크롤 다운 시 탭바 사라지고 플로팅 바도 그 자리로 내려옴 ─── */
 .tab-bar.chrome-hidden {
-  /* 박스 그림자까지 가리기 위해 +30px 추가 */
+  /* 박스 그림자까지 가리도록 +30px */
   transform: translateY(calc(100% + 30px));
+}
+
+.float-bar-wrap.chrome-hidden {
+  /* 탭바 사라진 자리(86px 아래)로 내려옴. !important 로 .visible 의 bottom 오버라이드 */
+  bottom: calc(0px + env(safe-area-inset-bottom, 0px)) !important;
 }
 
 /* layer 1 (deepest): backdrop refraction (Chromium) / blur fallback (Safari) */
@@ -1366,6 +1354,7 @@ input[type='range'].range-input::-moz-range-thumb {
 .float-bar-wrap {
   position: fixed;
   bottom: calc(86px + env(safe-area-inset-bottom, 0px));
+  transition: bottom 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   left: 50%;
   /* ─── transform: translateX(-50%) translateY(20px);── */
   display: flex;

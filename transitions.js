@@ -64,11 +64,9 @@
     update();
   };
 
-  /* ── Auto-hide chrome (헤더/스티키 탭/하단 탭바) ──
-     scrollEl 에서 스크롤 방향 감지:
-       - 아래로 스크롤 → 모든 chrome 화면 밖으로 (translateY)
-       - 위로 스크롤   → 다시 보임
-     상단 40px 안에선 항상 보임. */
+  /* ── Auto-hide chrome (탭바 + 플로팅 바만) ──
+     스크롤 방향 감지: 아래로 → 탭바 화면 밖, 플로팅 바도 탭바 자리로 내려옴.
+     위로 스크롤하면 둘 다 다시 올라옴. 헤더는 영향 없음. */
   window.setupAutoHideChrome = function (scrollEl) {
     if (!scrollEl) return;
     let lastY = scrollEl.scrollTop;
@@ -80,11 +78,12 @@
     function setHidden(h) {
       if (hidden === h) return;
       hidden = h;
-      // 부모(app.html) 의 탭바
       const tabBar = document.getElementById('app-tab-bar');
       if (tabBar) tabBar.classList.toggle('chrome-hidden', h);
-      // 슬라이드 내부의 sticky 헤더 / 탭들
-      scrollEl.querySelectorAll('.lp-header, .tab-row, .lp-month-section').forEach(el => {
+      // 슬라이드 내부의 floating bar 도 같이 (탭바 사라진 자리로 내려옴).
+      // .float-bar-wrap 은 .scroll-area 밖에 있을 수 있어서 슬라이드 컨테이너에서 찾음.
+      const slide = scrollEl.closest('.swiper-slide') || document;
+      slide.querySelectorAll('.float-bar-wrap').forEach(el => {
         el.classList.toggle('chrome-hidden', h);
       });
     }
@@ -99,7 +98,6 @@
         pendingDir = 0;
         return;
       }
-      // 방향 변경 시 누적 리셋
       if ((dy > 0) !== (pendingDir > 0)) pendingDir = 0;
       pendingDir += dy;
 

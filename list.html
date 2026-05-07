@@ -45,12 +45,14 @@
       display: none;
     }
 
-    /* ─── Month section header ── */
+    /* ─── Month section header ──
+       lp-header (height: 90px) 바로 밑에 docking — 사이에 간격이 있으면
+       스크롤 콘텐츠가 그 틈으로 비쳐 보임. styles.css 의 .lp-header height와 동기화 필요. */
     .lp-month-section {
       padding: 14px 20px;
       background-color: var(--dark-gray);
       position: sticky;
-      top: 85px;
+      top: 90px;
       z-index: 5;
       display: flex;
       justify-content: space-between;
