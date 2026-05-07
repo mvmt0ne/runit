@@ -80,8 +80,8 @@
       hidden = h;
       const tabBar = document.getElementById('app-tab-bar');
       if (tabBar) tabBar.classList.toggle('chrome-hidden', h);
-      // 슬라이드 내부의 floating bar 도 같이 (탭바 사라진 자리로 내려옴).
-      // .float-bar-wrap 은 .scroll-area 밖에 있을 수 있어서 슬라이드 컨테이너에서 찾음.
+      const ctrlBtn = document.getElementById('list-ctrl-btn');
+      if (ctrlBtn) ctrlBtn.classList.toggle('chrome-hidden', h);
       const slide = scrollEl.closest('.swiper-slide') || document;
       slide.querySelectorAll('.float-bar-wrap').forEach(el => {
         el.classList.toggle('chrome-hidden', h);

@@ -28,6 +28,33 @@
   <!-- 액체 유리 효과 (탭바 backdrop-filter) -->
   <script src="./liquid-glass.js"></script>
   <style>
+    /* ─── List ctrl button ─── */
+    .list-ctrl-btn {
+      position: absolute;
+      left: 16px;
+      bottom: calc(0px + env(safe-area-inset-bottom, 0px));
+      z-index: 35;
+      width: 56px;
+      height: 56px;
+      border-radius: 40px;
+      background: rgba(22, 22, 22, 0.55);
+      backdrop-filter: blur(12px) saturate(160%);
+      -webkit-backdrop-filter: blur(12px) saturate(160%);
+      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.38),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.12),
+                  inset 0 -1px 0 rgba(0, 0, 0, 0.25);
+      border: none;
+      color: var(--slate-gray);
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s;
+    }
+    .list-ctrl-btn.visible { display: flex; }
+    .list-ctrl-btn.chrome-hidden { transform: translateY(calc(100% + 30px)); }
+    .list-ctrl-btn:active { color: var(--bone); }
+
     /* ─── SPA 셸 ─── */
     .phone-inner {
       height: 100dvh;
@@ -146,6 +173,20 @@
         </a>
       </nav>
 
+      <!-- List-only controls button (overlays tab bar left) -->
+      <button class="list-ctrl-btn" id="list-ctrl-btn" aria-label="목록 설정"
+        onclick="window.openCtrlSheet && window.openCtrlSheet()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="6" x2="20" y2="6"/>
+          <line x1="4" y1="12" x2="14" y2="12"/>
+          <line x1="4" y1="18" x2="10" y2="18"/>
+          <circle cx="18" cy="12" r="2.5" fill="currentColor" stroke="none"/>
+          <circle cx="14" cy="18" r="2.5" fill="currentColor" stroke="none"/>
+          <circle cx="14" cy="6" r="2.5" fill="currentColor" stroke="none"/>
+        </svg>
+      </button>
+
     </div>
   </div>
 
@@ -164,7 +205,7 @@
        * 페이지 CSS 를 portal 대상(modal/sheet 등)용 전역 룰과 슬라이드 한정 룰로 분리.
        * portal 대상 엘리먼트는 document.body 로 이동하기 때문에 @scope 안에 두면 스타일이 안 먹음.
        */
-      const PORTAL_RE = /\.(month-modal|sf-sheet|sf-backdrop|sf-section|sf-divider|sf-reset|sf-apply|wheel-|month-list|month-item|filter-|range-|zone-)/;
+      const PORTAL_RE = /\.(month-modal|sf-sheet|sf-backdrop|sf-section|sf-divider|sf-reset|sf-apply|wheel-|month-list|month-item|filter-|range-|zone-|ctrl-)/;
       function splitPageCSS(css) {
         let depth = 0, buf = '', global = '', scoped = '';
         for (let i = 0; i < css.length; i++) {
@@ -291,6 +332,8 @@
             preloadNeighbors(this.activeIndex);
             // 탭 전환 시 chrome 표시 (auto-hide 상태 리셋)
             document.getElementById('app-tab-bar').classList.remove('chrome-hidden');
+            const _ctrlBtn = document.getElementById('list-ctrl-btn');
+            if (_ctrlBtn) _ctrlBtn.classList.remove('chrome-hidden');
             document.querySelectorAll('.float-bar-wrap.chrome-hidden').forEach(el => {
               el.classList.remove('chrome-hidden');
             });
@@ -302,6 +345,8 @@
         document.querySelectorAll('#app-tab-bar .tab-item').forEach((el, i) => {
           el.classList.toggle('active', i === idx);
         });
+        const ctrlBtn = document.getElementById('list-ctrl-btn');
+        if (ctrlBtn) ctrlBtn.classList.toggle('visible', idx === 1);
       }
 
       function preloadNeighbors(idx) {
