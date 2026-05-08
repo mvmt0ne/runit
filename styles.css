@@ -471,32 +471,182 @@ sup {
 /* ═══════════════════════════════════════════════════════════
    LIST ROW — home / list 공용
 ═══════════════════════════════════════════════════════════ */
+/* ─── Row: date-left + content-right layout ── */
 .lp-row {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
   cursor: pointer;
   transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.lp-row:last-child {
+.lp-row:active {
+  opacity: 0.75;
+  transform: scale(0.985);
+}
+
+.lp-date-col {
+  width: 56px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 16px 0;
+  gap: 3px;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.lp-date-month {
+  font-size: 11px;
+  font-weight: 400;
+  font-family: 'Pretendard Variable', sans-serif;
+  color: var(--slate-gray);
+  letter-spacing: -0.01em;
+}
+
+.lp-date-day {
+  font-size: 20px;
+  font-weight: 500;
+  font-family: 'Space Grotesk', sans-serif;
+  line-height: 1;
+  color: var(--slate-gray);
+  font-feature-settings: "tnum";
+}
+
+.lp-date-weekday {
+  font-size: 11px;
+  font-weight: 400;
+  font-family: 'Pretendard Variable', sans-serif;
+  color: var(--slate-gray);
+  letter-spacing: -0.01em;
+  margin-top: 2px;
+}
+
+.lp-date-month--hidden {
+  visibility: hidden;
+}
+
+.lp-content-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 20px 16px 14px;
+  background: var(--asphalt-gray);
+}
+
+.lp-row:last-child .lp-content-col {
   border-bottom: none;
 }
 
-.lp-row:active {
-  opacity: 0.8;
-  transform: scale(0.98);
-  background: rgba(50, 50, 50, 0.1);
+.lp-row-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .lp-badge {
   width: 8px;
   height: 8px;
   border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-shrink: 0;
 }
 
-.lp-title-row {
-  align-items: baseline;
+.lp-run-name {
+  font-size: 15px;
+  font-weight: 300;
+  font-family: 'Pretendard Variable', sans-serif;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--bone);
+  flex: 1;
+}
+
+.lp-head-km {
+  font-size: 15px;
+  font-weight: 500;
+  font-family: 'Space Grotesk', sans-serif;
+  font-feature-settings: "tnum";
+  color: var(--bone);
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.lp-head-km sup {
+  font-size: 10px;
+  font-weight: 400;
+  opacity: 0.6;
+  vertical-align: super;
+}
+
+.lp-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px 0;
+}
+
+.lp-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.lp-stat-value {
+  font-size: 17px;
+  font-weight: 500;
+  font-family: 'Space Grotesk', ui-monospace, monospace;
+  font-feature-settings: "tnum";
+  line-height: 1;
+  color: var(--bone);
+}
+
+.lp-stat-value sup {
+  font-size: 10px;
+  font-weight: 400;
+  vertical-align: super;
+  opacity: 0.7;
+}
+
+.lp-stat-label {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--slate-gray);
+  font-family: 'Pretendard Variable', sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* ─── Zebra striping ── */
+.lp-row:nth-child(even) .lp-content-col {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ─── Compact mode: 이름 + 핵심 3개만 ── */
+.lp-row.compact .lp-date-col {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+.lp-row.compact .lp-date-day {
+  font-size: 20px;
+}
+
+.lp-row.compact .lp-content-col {
+  padding-top: 14px;
+  padding-bottom: 14px;
+  gap: 6px;
+}
+
+.lp-row.compact .lp-stats-grid {
+  display: none;
+}
+
+/* ─── Expanded mode: 모든 스탯 ── */
+.lp-row.expanded .lp-stat--ext {
+  display: flex;
 }
 
 .lp-list {
@@ -519,222 +669,6 @@ sup {
 
 .lp-month-km strong {
   font-weight: 500;
-}
-
-/* ─── Compact mode ── */
-.lp-row.compact {
-  gap: 12px;
-  padding: 14px 20px;
-  border-bottom: 1px solid var(--dark-gray);
-}
-
-.lp-row.compact .lp-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.lp-row.compact .lp-title-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-}
-
-.lp-row.compact .lp-row-left-head {
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-}
-
-.lp-row.compact .lp-run-name {
-  font-size: 16px;
-  font-weight: 300;
-  font-family: 'Pretendard Variable', sans-serif;
-  flex: 1;
-  min-width: 0;
-}
-
-.lp-row.compact .lp-stats {
-  display: none !important;
-}
-
-.lp-row.compact .lp-right-content {
-  text-align: right;
-  margin-left: auto;
-}
-
-.lp-row.compact .lp-expanded-date {
-  display: none;
-}
-
-.lp-row.expanded .lp-compact-km {
-  display: none;
-}
-
-/* ─── Expanded mode ── */
-.lp-row.expanded {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  border-radius: 0;
-}
-
-.lp-row.expanded:active {
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 8px;
-  opacity: 1;
-  transform: scale(0.99);
-}
-
-.lp-row.expanded .lp-info {
-  flex: 1;
-  width: 100%;
-}
-
-.lp-row.expanded .lp-title-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: end;
-  gap: 8px;
-  width: 100%;
-  padding: 20px 20px 10px;
-}
-
-/* badge + name 묶음 */
-.lp-row-left-head {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.lp-row.expanded .lp-run-name {
-  font-size: 18px;
-  font-weight: 300;
-  font-family: 'Pretendard Variable', sans-serif;
-  min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.lp-right-content {
-  font-size: 14px;
-  font-weight: 400;
-  flex-shrink: 0;
-  font-family: 'Space Grotesk', sans-serif;
-  white-space: nowrap;
-}
-
-/* 2-column stats */
-.lp-row.expanded .lp-stats {
-  display: flex !important;
-  justify-content: space-between;
-  align-items: stretch;
-  width: 100%;
-  border-block: 1px solid var(--dark-gray);
-}
-
-.lp-stats {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-.lp-stat {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-
-}
-
-.lp-stat:last-child {
-  align-items: flex-end;
-}
-
-.lp-stat strong {
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.lp-stat span {
-  font-size: 13px;
-  font-weight: 300;
-}
-
-.lp-stats-left,
-.lp-stats-right {
-  display: flex;
-  flex-direction: column;
-}
-
-.lp-stats-left {
-  flex: 1;
-  border-right: 1px solid var(--dark-gray);
-}
-
-.lp-stats-right {
-  flex: 1;
-  align-items: stretch;
-}
-
-/* → .lp-row.expanded .lp-stats-right .lp-stat 으로 통합됨 */
-
-/* 좌 컬럼만 column — 우 컬럼은 .lp-stats-right .lp-stat에서 row로 오버라이드 */
-.lp-stats-left .lp-stat {
-  align-items: flex-start;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 10px 20px;
-}
-
-/* 우 컬럼 row 레이아웃 — specificity 강화로 위 column 규칙 차단 */
-.lp-row.expanded .lp-stats-right .lp-stat {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: baseline;
-  width: 100%;
-  gap: 0;
-}
-
-.lp-row.expanded .lp-stat-row {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  padding: 14px 20px;
-}
-
-.lp-row.expanded .lp-stat-row:not(:last-child) {
-  border-bottom: 1px solid var(--dark-gray);
-}
-
-.lp-row.expanded .lp-stat-label {
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--cloudy-gray);
-}
-
-.lp-stats-left .lp-stat-value {
-  font-size: 22px;
-  font-weight: 500;
-  font-family: 'Space Grotesk', ui-monospace, monospace;
-  font-feature-settings: "tnum";
-}
-
-.lp-stats-right .lp-stat-value {
-  margin-left: auto;
-  font-size: 16px;
-  font-weight: 500;
-  font-family: 'Space Grotesk', ui-monospace, monospace;
-  font-feature-settings: "tnum";
-}
-
-.lp-row.expanded .lp-stat-unit {
-  font-size: 13px;
-  font-weight: 400;
-  font-family: 'Space Grotesk', sans-serif;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -867,9 +801,6 @@ sup {
 .lp-run-time,
 .lp-row.compact .lp-compact-date,
 .lp-row.compact .lp-compact-time,
-.lp-row.expanded .lp-compact-date,
-.lp-row.expanded .lp-stat-unit,
-.lp-row.expanded,
 .range-val,
 .range-val-row,
 .weather-widget,

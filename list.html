@@ -43,17 +43,13 @@
       display: none;
     }
 
-    /* ─── Month section header — sticks just below the floating bar ── */
+    /* ─── Month section header — 위치 추적용 마커만, 시각적으로 완전 숨김 ── */
     .lp-month-section {
-      padding: 14px 20px;
-      background-color: var(--dark-gray);
-      position: sticky;
-      top: calc(env(safe-area-inset-top, 0px) + 48px);
-      z-index: 5;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
+      height: 0;
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+      visibility: hidden;
     }
 
     /* ─── Month floating bar (top) ── */
@@ -448,60 +444,56 @@
             <div class="lp-month-label">${MONTH_LABELS[m]}</div>
             <div class="lp-month-km"><strong>${totalKm}</strong> K</div>
           </div>
-          <div class="lp-list">${runs.map(rowHTML).join('')}</div>`;
+          <div class="lp-list">${runs.map((r, i) => rowHTML(r, i === 0)).join('')}</div>`;
         }).join('');
       } else {
-        container.innerHTML = `<div class="lp-list">${sorted.map(rowHTML).join('')}</div>`;
+        container.innerHTML = `<div class="lp-list">${sorted.map(r => rowHTML(r, false)).join('')}</div>`;
       }
     }
 
-    function rowHTML(r) {
-      const dateStr = r.date.split('-').map((p, i) => i === 0 ? p : parseInt(p)).join('.');
+    function rowHTML(r, showMonth = false) {
+      const parts = r.date.split('-');
+      const month = parseInt(parts[1]) + '월';
+      const day = parseInt(parts[2]);
+      const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
+      const weekday = WEEKDAYS[new Date(r.date).getDay()];
       const strideM = (r.stride / 100).toFixed(2);
       return `<div class="lp-row ${viewMode}" onclick="goTo('detail.html')">
-        <div class="lp-info">
-          <div class="lp-title-row">
-            <div class="lp-row-left-head">
-              <div class="lp-badge type-${r.type}"></div>
-              <div class="lp-run-name">${r.name}</div>
-            </div>
-            <div class="lp-right-content">
-              <span class="lp-compact-km">${r.km} K</span>
-              <span class="lp-expanded-date">${dateStr}</span>
-            </div>
+        <div class="lp-date-col">
+          ${showMonth ? `<span class="lp-date-month">${month}</span>` : `<span class="lp-date-month lp-date-month--hidden"></span>`}
+          <span class="lp-date-day">${day}</span>
+          <span class="lp-date-weekday">${weekday}</span>
+        </div>
+        <div class="lp-content-col">
+          <div class="lp-row-head">
+            <div class="lp-badge type-${r.type}"></div>
+            <span class="lp-run-name">${r.name}</span>
+            <span class="lp-head-km">${r.km}<sup>K</sup></span>
           </div>
-          <div class="lp-stats">
-            <div class="lp-stats-left">
-              <div class="lp-stat">
-                <strong class="lp-stat-value">${r.dur}</strong>
-                <span class="lp-stat-label">시간</span>
-              </div>
-              <div class="lp-stat">
-                <span class="lp-stat-value">${r.km} <sup>K</sup></span>
-                <span class="lp-stat-label">거리</span>
-              </div>
-              <div class="lp-stat">
-                <strong class="lp-stat-value">${r.spm} <sup>SPM</sup></strong>
-                <span class="lp-stat-label">케이던스</span>
-              </div>
+          <div class="lp-stats-grid">
+            <div class="lp-stat">
+              <strong class="lp-stat-value">${r.dur}</strong>
+              <span class="lp-stat-label">시간</span>
             </div>
-            <div class="lp-stats-right">
-              <div class="lp-stat-row">
-                <span class="lp-stat-label">심박수</span>
-                <strong class="lp-stat-value">${r.bpm} <sup>BPM</sup></strong>
-              </div>
-              <div class="lp-stat-row">
-                <span class="lp-stat-label">접지시간</span>
-                <strong class="lp-stat-value">${r.ground} <sup>MS</sup></strong>
-              </div>
-              <div class="lp-stat-row">
-                <span class="lp-stat-label">페이스</span>
-                <strong class="lp-stat-value">${r.pace} <sup>/K</sup></strong>
-              </div>
-              <div class="lp-stat-row">
-                <span class="lp-stat-label">보행길이</span>
-                <strong class="lp-stat-value">${strideM} <sup>M</sup></strong>
-              </div>
+            <div class="lp-stat">
+              <strong class="lp-stat-value">${r.pace}<sup>/K</sup></strong>
+              <span class="lp-stat-label">페이스</span>
+            </div>
+            <div class="lp-stat">
+              <strong class="lp-stat-value">${r.spm}<sup>SPM</sup></strong>
+              <span class="lp-stat-label">케이던스</span>
+            </div>
+            <div class="lp-stat lp-stat--ext">
+              <strong class="lp-stat-value">${r.bpm}<sup>BPM</sup></strong>
+              <span class="lp-stat-label">심박수</span>
+            </div>
+            <div class="lp-stat lp-stat--ext">
+              <strong class="lp-stat-value">${r.ground}<sup>MS</sup></strong>
+              <span class="lp-stat-label">접지시간</span>
+            </div>
+            <div class="lp-stat lp-stat--ext">
+              <strong class="lp-stat-value">${strideM}<sup>M</sup></strong>
+              <span class="lp-stat-label">보폭</span>
             </div>
           </div>
         </div>
@@ -516,6 +508,15 @@
         row.classList.add(viewMode);
       });
       updateCtrlViewSegs();
+      /* 컴팩트 모드에서는 월 바 강제 숨김, 확장 모드에서는 스크롤 상태에 맞게 재평가 */
+      const bar = document.getElementById('month-top-bar');
+      if (bar) {
+        if (mode === 'compact') {
+          bar.classList.remove('visible');
+        } else if (_monthTrackScroll) {
+          _monthTrackScroll();
+        }
+      }
     }
 
     /* ─── Controls dispatch sheet ── */
@@ -766,9 +767,12 @@
         month: sec.getAttribute('data-month'),
         label: sec.getAttribute('data-month-label'),
         km:    sec.getAttribute('data-month-km'),
-        /* viewport-top at scrollTop=0; sections aren't sticky yet so this is their natural position */
         naturalTop: sec.getBoundingClientRect().top
       }));
+
+      /* 타이틀의 natural bottom — 이 지점이 스크롤로 사라진 후에만 bar 표시 */
+      const titleEl = scrollEl.querySelector('.lp-hero-title');
+      const titleNaturalBottom = titleEl ? titleEl.getBoundingClientRect().bottom : 0;
 
       _currentMonthKey     = null;
       _monthBarInitialized = false;
@@ -781,8 +785,14 @@
         const dir       = scrollTop >= lastScrollY ? 1 : -1;
         lastScrollY     = scrollTop;
 
-        /* sectionViewportTop = naturalTop − scrollTop.
-           Active = last section whose top has reached or passed the bar bottom. */
+        /* 컴팩트 모드이거나 타이틀이 아직 화면에 있으면 bar 숨김 */
+        if (viewMode === 'compact' || titleNaturalBottom - scrollTop > 0) {
+          bar.classList.remove('visible');
+          _currentMonthKey     = null;
+          _monthBarInitialized = false;
+          return;
+        }
+
         let active = _monthOffsets[0];
         for (const m of _monthOffsets) {
           if (m.naturalTop - scrollTop <= barBottom) active = m;
@@ -794,7 +804,7 @@
       };
 
       scrollEl.addEventListener('scroll', _monthTrackScroll, { passive: true });
-      _monthTrackScroll(); /* initial state */
+      _monthTrackScroll(); /* initial state — 타이틀 보임 → bar 숨김 */
     }
 
     /* ─── Auto-hide chrome ── */
