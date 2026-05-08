@@ -532,13 +532,9 @@ sup {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 14px;
   padding: 18px 20px 16px 14px;
-  background: var(--asphalt-gray);
-}
-
-.lp-row:last-child .lp-content-col {
-  border-bottom: none;
+  background: #3c3c3c;
 }
 
 .lp-row-head {
@@ -567,11 +563,11 @@ sup {
 }
 
 .lp-head-km {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 500;
   font-family: 'Space Grotesk', sans-serif;
   font-feature-settings: "tnum";
-  color: var(--bone);
+  color: var(--cloudy-gray);
   flex-shrink: 0;
   margin-left: auto;
 }
@@ -586,7 +582,8 @@ sup {
 .lp-stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px 0;
+  gap: 12px 32px;
+  padding-left: 18px;
 }
 
 .lp-stat {
@@ -596,12 +593,11 @@ sup {
 }
 
 .lp-stat-value {
-  font-size: 17px;
+  font-size: 20px;
   font-weight: 500;
   font-family: 'Space Grotesk', ui-monospace, monospace;
   font-feature-settings: "tnum";
   line-height: 1;
-  color: var(--bone);
 }
 
 .lp-stat-value sup {
@@ -612,16 +608,15 @@ sup {
 }
 
 .lp-stat-label {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 400;
-  color: var(--slate-gray);
+  color: var(--cloudy-gray);
   font-family: 'Pretendard Variable', sans-serif;
-  letter-spacing: -0.01em;
 }
 
 /* ─── Zebra striping ── */
 .lp-row:nth-child(even) .lp-content-col {
-  background: rgba(255, 255, 255, 0.05);
+  background: #363636;
 }
 
 /* ─── Compact mode: 이름 + 핵심 3개만 ── */

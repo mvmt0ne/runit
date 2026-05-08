@@ -35,7 +35,7 @@
       flex: 1;
       overflow-y: auto;
       scrollbar-width: none;
-      padding-top: calc(env(safe-area-inset-top, 0px) + 58px);
+      padding-top: calc(env(safe-area-inset-top, 0px) + 10px);
       padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
     }
 
@@ -61,12 +61,12 @@
       z-index: 20;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 80px;
       background: rgba(18, 18, 18, 0.82);
       backdrop-filter: blur(16px) saturate(140%);
       -webkit-backdrop-filter: blur(16px) saturate(140%);
       border-radius: 100px;
-      padding: 9px 18px;
+      padding: 18px 32px;
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -85,25 +85,16 @@
     .month-top-label,
     .month-top-km {
       display: block;
-      font-size: 13px;
+      font-size: 16px;
       font-weight: 400;
-      font-family: 'Pretendard Variable', sans-serif;
       color: var(--bone);
-      line-height: 18px;
       transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.18s;
     }
 
     .month-top-km {
       font-family: 'Space Grotesk', sans-serif;
-      font-weight: 300;
+      font-weight: 500;
       color: var(--slate-gray);
-    }
-
-    .month-top-sep {
-      width: 1px;
-      height: 12px;
-      background: rgba(255, 255, 255, 0.15);
-      flex-shrink: 0;
     }
 
     /* ─── Controls dispatch sheet ── */
@@ -243,7 +234,6 @@
         <div class="month-top-slot">
           <span class="month-top-label" id="month-top-label">—</span>
         </div>
-        <div class="month-top-sep"></div>
         <div class="month-top-slot">
           <span class="month-top-km" id="month-top-km">—</span>
         </div>
@@ -468,7 +458,7 @@
           <div class="lp-row-head">
             <div class="lp-badge type-${r.type}"></div>
             <span class="lp-run-name">${r.name}</span>
-            <span class="lp-head-km">${r.km}<sup>K</sup></span>
+            <span class="lp-head-km">${r.km} K</span>
           </div>
           <div class="lp-stats-grid">
             <div class="lp-stat">
@@ -476,23 +466,23 @@
               <span class="lp-stat-label">시간</span>
             </div>
             <div class="lp-stat">
-              <strong class="lp-stat-value">${r.pace}<sup>/K</sup></strong>
+              <strong class="lp-stat-value">${r.pace}<sup> /K</sup></strong>
               <span class="lp-stat-label">페이스</span>
             </div>
             <div class="lp-stat">
-              <strong class="lp-stat-value">${r.spm}<sup>SPM</sup></strong>
+              <strong class="lp-stat-value">${r.spm}<sup> SPM</sup></strong>
               <span class="lp-stat-label">케이던스</span>
             </div>
             <div class="lp-stat lp-stat--ext">
-              <strong class="lp-stat-value">${r.bpm}<sup>BPM</sup></strong>
+              <strong class="lp-stat-value">${r.bpm}<sup> BPM</sup></strong>
               <span class="lp-stat-label">심박수</span>
             </div>
             <div class="lp-stat lp-stat--ext">
-              <strong class="lp-stat-value">${r.ground}<sup>MS</sup></strong>
+              <strong class="lp-stat-value">${r.ground}<sup> MS</sup></strong>
               <span class="lp-stat-label">접지시간</span>
             </div>
             <div class="lp-stat lp-stat--ext">
-              <strong class="lp-stat-value">${strideM}<sup>M</sup></strong>
+              <strong class="lp-stat-value">${strideM}<sup> M</sup></strong>
               <span class="lp-stat-label">보폭</span>
             </div>
           </div>
