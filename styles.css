@@ -492,16 +492,15 @@ sup {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 16px 0;
-  gap: 3px;
+  padding: 20px 0;
+  gap: 4px;
   background: rgba(0, 0, 0, 0.3);
 }
 
 .lp-date-month {
   font-size: 13px;
   font-weight: 400;
-  color: var(--slate-gray);
-  letter-spacing: -0.01em;
+  color: var(--cloudy-gray);
 }
 
 .lp-date-day {
@@ -509,7 +508,7 @@ sup {
   font-weight: 500;
   font-family: 'Space Grotesk', sans-serif;
   line-height: 1;
-  color: var(--slate-gray);
+  color: var(--cloudy-gray);
   font-feature-settings: "tnum";
 }
 
