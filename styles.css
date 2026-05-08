@@ -146,6 +146,7 @@ sup {
   font-size: 0.5em;
   vertical-align: super;
   font-weight: 400;
+  color: currentColor;
 }
 
 .phone {
@@ -336,13 +337,6 @@ sup {
   font-family: 'Space Grotesk', sans-serif;
 }
 
-.stats-hero-num sup {
-  font-size: 0.5em;
-  vertical-align: super;
-  font-weight: 400;
-  margin-left: 8px;
-}
-
 /* ─── Tabs (stats - 월간탭) ── */
 .tab-row {
   display: flex;
@@ -530,7 +524,7 @@ sup {
   flex-direction: column;
   gap: 14px;
   padding: 20px 20px 20px 10px;
-  background: #3c3c3c;
+  background: #cecece;
 }
 
 .lp-row-head {
@@ -553,31 +547,24 @@ sup {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--bone);
+  color: var(--asphalt-black);
   flex: 1;
 }
 
 .lp-head-km {
-  font-size: 18px;
+  font-size: 28px;
   font-weight: 500;
   font-family: 'Space Grotesk', sans-serif;
   font-feature-settings: "tnum";
-  color: var(--cloudy-gray);
+  color: var(--asphalt-black);
   flex-shrink: 0;
   margin-left: auto;
-}
-
-.lp-head-km sup {
-  font-size: 10px;
-  font-weight: 400;
-  opacity: 0.6;
-  vertical-align: super;
 }
 
 .lp-stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px 32px;
+  gap: 20px 40px;
   padding-left: 18px;
 }
 
@@ -588,18 +575,12 @@ sup {
 }
 
 .lp-stat-value {
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 400;
   font-family: 'Space Grotesk', ui-monospace, monospace;
   font-feature-settings: "tnum";
   line-height: 1;
-}
-
-.lp-stat-value sup {
-  font-size: 10px;
-  font-weight: 400;
-  vertical-align: super;
-  opacity: 0.7;
+  color: var(--asphalt-black);
 }
 
 .lp-stat-label {
@@ -611,7 +592,7 @@ sup {
 
 /* ─── Zebra striping ── */
 .lp-row:nth-child(even) .lp-content-col {
-  background: #363636;
+  background: #c2c2c2;
 }
 
 /* ─── Compact mode: 이름 + 핵심 3개만 ── */
