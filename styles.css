@@ -288,9 +288,7 @@ sup {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(34, 34, 34, 0.85);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  background: var(--asphalt-black);
 }
 
 .lp-header-title-compact {
