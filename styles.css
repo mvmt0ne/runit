@@ -301,12 +301,13 @@ sup {
 /* ─── Hero (large title — 스크롤 시 자연스럽게 사라짐) ── */
 .lp-hero {
   padding: 12px 20px 20px;
+  background: var(--asphalt-black);
 }
 
 .lp-hero-title {
   font-size: 30px;
   font-weight: 500;
-  color: var(--asphalt-black);
+  color: var(--slate-gray);
   line-height: 1.1;
   margin: 0;
 }
@@ -483,9 +484,9 @@ sup {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 20px 0;
+  padding: 24px 0;
   gap: 4px;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--asphalt-black);
 }
 
 .lp-date-month {
@@ -506,7 +507,7 @@ sup {
 .lp-date-weekday {
   font-size: 13px;
   font-weight: 400;
-  color: var(--slate-gray);
+  color: var(--cloudy-gray);
   margin-top: 2px;
 }
 
@@ -521,7 +522,7 @@ sup {
   flex-direction: column;
   gap: 14px;
   padding: 20px 20px 20px 10px;
-  background: #cecece;
+  border-bottom: 1px solid var(--dark-gray);
 }
 
 .lp-row-head {
@@ -589,7 +590,7 @@ sup {
 
 /* ─── Zebra striping ── */
 .lp-row:nth-child(even) .lp-content-col {
-  background: #c2c2c2;
+  
 }
 
 /* ─── Compact mode: 이름 + 핵심 3개만 ── */
