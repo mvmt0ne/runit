@@ -26,7 +26,7 @@
     /* ─── 러닝 종류 차트 ── */
     .type-chart {
       padding: 40px 20px;
-      border-block: 1px solid var(--dark-gray);
+      border-top: 1px solid var(--dark-gray);
     }
 
     .type-chart-row {
@@ -85,15 +85,15 @@
     .tab {
       padding: 12px;
       font-size: 24px;
-      font-weight: 500;
-      font-family: 'Pretendard Variable', sans-serif;
+      font-weight: 400;
       color: var(--asphalt-gray);
       cursor: pointer;
       border: none;
     }
 
     .tab.active {
-      color: var(--text-1);
+      font-weight: 500;
+      color: var(--asphalt-black);
     }
 
     /* ─── Scroll ── */
@@ -114,7 +114,6 @@
        COMPARISON CHART
     ════════════════════════════════════ */
     .chart-block {
-      background: var(--asphalt-black);
       padding: 20px 0;
     }
 
@@ -140,7 +139,6 @@
       background: transparent;
       border: none;
       cursor: pointer;
-      color: var(--slate-gray);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -160,8 +158,6 @@
     .chart-period-label {
       font-size: 20px;
       font-weight: 400;
-      font-family: 'Pretendard Variable', sans-serif;
-      color: var(--slate-gray);
       transition: color 0.3s;
     }
 
@@ -257,7 +253,7 @@
     }
 
     .cmp-col.future .cmp-label {
-      color: var(--dark-gray) !important;
+      opacity: 0.5; !important;
     }
 
     /* 레이블 — 기본 (주간·년간), past/current 동일 스타일 */
@@ -283,7 +279,7 @@
     }
 
     .cmp-chart.vertical .cmp-label {
-      color: var(--slate-gray);
+      color: var(--dark-gray);
       font-weight: 300;
     }
 
@@ -299,16 +295,14 @@
 
     /* 강도 분포 */
     .intensity-breakdown {
-      background: var(--asphalt-black);
       padding: 40px 20px;
+      border-top: 1px solid var(--dark-gray);
     }
 
     /* 강도 카드: 제목 + 도넛 + 범례 */
     .intensity-title {
       font-size: 18px;
       font-weight: 400;
-      color: var(--cloudy-gray);
-      font-family: 'Pretendard Variable', sans-serif;
       letter-spacing: 0;
     }
 
@@ -338,11 +332,10 @@
     }
 
     .intensity-legend-row.mid {
-      color: var(--cloudy-gray);
     }
 
     .intensity-legend-row.low {
-      color: var(--slate-gray);
+      color: var(--bone);
     }
 
     .il-types {
@@ -1573,8 +1566,8 @@
       const RAD = Math.PI / 180;
       // 링 간 viewBox 간격 절반으로 축소: 11 → 5.5 (sw=17 기준 r=100, 77.5, 55)
       const rings = [
-        { r: 100, sw: 17, label: '저', sub: 'Easy, Jogging', pct: low, color: 'var(--slate-gray)', cls: 'low' },
-        { r: 77.5, sw: 17, label: '중', sub: 'Steady, LSD', pct: mid, color: 'var(--asphalt-gray)', cls: 'mid' },
+        { r: 100, sw: 17, label: '저', sub: 'Easy, Jogging', pct: low, color: 'var(--bone)', cls: 'low' },
+        { r: 77.5, sw: 17, label: '중', sub: 'Steady, LSD', pct: mid, color: 'var(--dark-gray)', cls: 'mid' },
         { r: 55, sw: 17, label: '고', sub: 'Race, TT, Tempo, Interval', pct: high, color: 'var(--accent)', cls: 'high' },
       ];
 
@@ -1588,7 +1581,7 @@
 
         return `
           <circle cx="${cx}" cy="${cx}" r="${ring.r}" fill="none"
-            stroke="${ring.color}" stroke-opacity="0.15" stroke-width="${ring.sw}"/>
+            stroke="${ring.color}" stroke-opacity="0.05" stroke-width="${ring.sw}"/>
           <circle cx="${cx}" cy="${cx}" r="${ring.r}" fill="none"
             stroke="${ring.color}" stroke-width="${ring.sw}" stroke-linecap="round"
             stroke-dasharray="${circ.toFixed(1)} ${circ.toFixed(1)}"
