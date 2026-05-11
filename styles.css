@@ -130,7 +130,7 @@ html {
 }
 
 body {
-  background: var(--slate-gray);
+  background: var(--asphalt-black);
   color: var(--dark-gray);
   font-family: 'Pretendard Variable', -apple-system, sans-serif;
   width: 100vw;
@@ -340,7 +340,7 @@ sup {
   padding: 0 10px;
   flex-shrink: 0;
   position: sticky;
-  
+
   /* lp-header (height: 90px) 바로 밑에 docking — 5px 작으면 헤더가 덮어버림 */
   top: 90px;
   z-index: 20;
@@ -523,6 +523,7 @@ sup {
   gap: 14px;
   padding: 20px 20px 20px 10px;
   border-bottom: 1px solid var(--dark-gray);
+  background: var(--slate-gray);
 }
 
 .lp-row-head {
@@ -589,9 +590,7 @@ sup {
 }
 
 /* ─── Zebra striping ── */
-.lp-row:nth-child(even) .lp-content-col {
-  
-}
+.lp-row:nth-child(even) .lp-content-col {}
 
 /* ─── Compact mode: 이름 + 핵심 3개만 ── */
 .lp-row.compact .lp-date-col {
