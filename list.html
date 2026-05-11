@@ -252,13 +252,16 @@
 
       <!-- Controls dispatch sheet (뷰/정렬/필터) -->
       <div class="month-modal" id="ctrl-sheet">
-        <div class="sf-sheet-handle-area"><div class="sf-sheet-handle"></div></div>
+        <div class="sf-sheet-handle-area">
+          <div class="sf-sheet-handle"></div>
+        </div>
         <div class="sf-sheet-header">
           <span class="sf-sheet-title">목록 설정</span>
           <button class="sf-sheet-close" onclick="closeCtrlSheet()">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
             </svg>
           </button>
         </div>
@@ -275,18 +278,18 @@
           <div class="ctrl-row ctrl-row--tap" onclick="ctrlOpenSort()">
             <span class="ctrl-row-label">정렬</span>
             <span class="ctrl-row-value" id="ctrl-sort-val"></span>
-            <svg class="ctrl-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m9 18 6-6-6-6"/>
+            <svg class="ctrl-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m9 18 6-6-6-6" />
             </svg>
           </div>
           <!-- 필터 -->
           <div class="ctrl-row ctrl-row--tap" onclick="ctrlOpenFilter()">
             <span class="ctrl-row-label">필터</span>
             <span class="ctrl-row-value" id="ctrl-filter-val"></span>
-            <svg class="ctrl-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m9 18 6-6-6-6"/>
+            <svg class="ctrl-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m9 18 6-6-6-6" />
             </svg>
           </div>
         </div>
@@ -413,7 +416,7 @@
     let viewMode = 'expanded';
 
     function renderList() {
-      const scrollEl  = document.getElementById('list-scroll');
+      const scrollEl = document.getElementById('list-scroll');
       if (scrollEl) scrollEl.scrollTop = 0;
       const container = document.getElementById('runs-list-container');
       const sorted = applySort(applyFilters(RUNS));
@@ -458,7 +461,7 @@
           <div class="lp-row-head">
             <div class="lp-badge type-${r.type}"></div>
             <span class="lp-run-name">${r.name}</span>
-            <span class="lp-head-km">${r.km} K</span>
+            <span class="lp-head-km">${r.km}<sup>K</sup></span>
           </div>
           <div class="lp-stats-grid">
             <div class="lp-stat">
@@ -684,79 +687,79 @@
     }
 
     /* ─── Month bar slot animation ── */
-    let _currentMonthKey    = null;
+    let _currentMonthKey = null;
     let _monthBarInitialized = false;
 
     function updateMonthBar(label, km, dir) {
-      const bar   = document.getElementById('month-top-bar');
+      const bar = document.getElementById('month-top-bar');
       const lblEl = document.getElementById('month-top-label');
-      const kmEl  = document.getElementById('month-top-km');
+      const kmEl = document.getElementById('month-top-km');
       if (!bar || !lblEl || !kmEl) return;
 
-      const outY   = dir >= 0 ? '-100%' : '100%';
-      const inY    = dir >= 0 ? '100%'  : '-100%';
-      const DUR    = '0.22s cubic-bezier(0.16,1,0.3,1)';
+      const outY = dir >= 0 ? '-100%' : '100%';
+      const inY = dir >= 0 ? '100%' : '-100%';
+      const DUR = '0.22s cubic-bezier(0.16,1,0.3,1)';
 
       if (!_monthBarInitialized) {
         /* First paint — no animation */
         _monthBarInitialized = true;
         lblEl.textContent = label;
-        kmEl.textContent  = km + ' K';
+        kmEl.textContent = km + ' K';
         bar.classList.add('visible');
         return;
       }
 
       lblEl.style.transition = `transform ${DUR}, opacity 0.18s`;
-      kmEl.style.transition  = `transform ${DUR}, opacity 0.18s`;
-      lblEl.style.transform  = `translateY(${outY})`;
-      lblEl.style.opacity    = '0';
-      kmEl.style.transform   = `translateY(${outY})`;
-      kmEl.style.opacity     = '0';
+      kmEl.style.transition = `transform ${DUR}, opacity 0.18s`;
+      lblEl.style.transform = `translateY(${outY})`;
+      lblEl.style.opacity = '0';
+      kmEl.style.transform = `translateY(${outY})`;
+      kmEl.style.opacity = '0';
 
       setTimeout(() => {
         lblEl.textContent = label;
-        kmEl.textContent  = km + ' K';
+        kmEl.textContent = km + ' K';
         lblEl.style.transition = 'none';
-        kmEl.style.transition  = 'none';
-        lblEl.style.transform  = `translateY(${inY})`;
-        lblEl.style.opacity    = '0';
-        kmEl.style.transform   = `translateY(${inY})`;
-        kmEl.style.opacity     = '0';
+        kmEl.style.transition = 'none';
+        lblEl.style.transform = `translateY(${inY})`;
+        lblEl.style.opacity = '0';
+        kmEl.style.transform = `translateY(${inY})`;
+        kmEl.style.opacity = '0';
         /* force reflow */
         lblEl.offsetHeight; // eslint-disable-line
         lblEl.style.transition = `transform ${DUR}, opacity 0.2s`;
-        kmEl.style.transition  = `transform ${DUR}, opacity 0.2s`;
-        lblEl.style.transform  = 'translateY(0)';
-        lblEl.style.opacity    = '1';
-        kmEl.style.transform   = 'translateY(0)';
-        kmEl.style.opacity     = '1';
+        kmEl.style.transition = `transform ${DUR}, opacity 0.2s`;
+        lblEl.style.transform = 'translateY(0)';
+        lblEl.style.opacity = '1';
+        kmEl.style.transform = 'translateY(0)';
+        kmEl.style.opacity = '1';
       }, 200);
     }
 
     /* ─── Month tracking via scroll ── */
     let _monthTrackScroll = null;
-    let _monthOffsets     = []; // natural positions captured at scrollTop=0
+    let _monthOffsets = []; // natural positions captured at scrollTop=0
 
     function setupMonthTracking() {
-      const bar      = document.getElementById('month-top-bar');
+      const bar = document.getElementById('month-top-bar');
       const scrollEl = document.getElementById('list-scroll');
       if (!scrollEl || !bar) return;
 
       const groupByMonth = sortState.key === 'date';
       if (!groupByMonth) {
         bar.classList.remove('visible');
-        _currentMonthKey     = null;
+        _currentMonthKey = null;
         _monthBarInitialized = false;
         return;
       }
 
       /* scrollTop is 0 here (renderList resets it) — capture natural positions */
       const barBottom = bar.getBoundingClientRect().bottom;
-      const sections  = document.querySelectorAll('.lp-month-section[data-month]');
+      const sections = document.querySelectorAll('.lp-month-section[data-month]');
       _monthOffsets = Array.from(sections).map(sec => ({
         month: sec.getAttribute('data-month'),
         label: sec.getAttribute('data-month-label'),
-        km:    sec.getAttribute('data-month-km'),
+        km: sec.getAttribute('data-month-km'),
         naturalTop: sec.getBoundingClientRect().top
       }));
 
@@ -764,21 +767,21 @@
       const titleEl = scrollEl.querySelector('.lp-hero-title');
       const titleNaturalBottom = titleEl ? titleEl.getBoundingClientRect().bottom : 0;
 
-      _currentMonthKey     = null;
+      _currentMonthKey = null;
       _monthBarInitialized = false;
-      let lastScrollY      = 0;
+      let lastScrollY = 0;
 
       if (_monthTrackScroll) scrollEl.removeEventListener('scroll', _monthTrackScroll);
 
       _monthTrackScroll = function () {
         const scrollTop = scrollEl.scrollTop;
-        const dir       = scrollTop >= lastScrollY ? 1 : -1;
-        lastScrollY     = scrollTop;
+        const dir = scrollTop >= lastScrollY ? 1 : -1;
+        lastScrollY = scrollTop;
 
         /* 컴팩트 모드이거나 타이틀이 아직 화면에 있으면 bar 숨김 */
         if (viewMode === 'compact' || titleNaturalBottom - scrollTop > 0) {
           bar.classList.remove('visible');
-          _currentMonthKey     = null;
+          _currentMonthKey = null;
           _monthBarInitialized = false;
           return;
         }

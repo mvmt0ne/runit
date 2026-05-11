@@ -68,7 +68,12 @@
 
 
     /* ─── Bottom section — delta + pace (dark) / runs (light) ── */
+    .stats-top-section {
+      background: var(--slate-gray);
+    }
+
     .stats-bottom-section {
+      background: var(--slate-gray);
       border-block: 1px solid var(--dark-gray);
     }
 
@@ -86,14 +91,14 @@
       padding: 12px;
       font-size: 24px;
       font-weight: 400;
-      color: var(--asphalt-gray);
+      color: var(--cloudy-gray);
       cursor: pointer;
       border: none;
     }
 
     .tab.active {
       font-weight: 500;
-      color: var(--asphalt-black);
+      color: var(--bone);
     }
 
     /* ─── Scroll ── */
@@ -253,7 +258,8 @@
     }
 
     .cmp-col.future .cmp-label {
-      opacity: 0.5; !important;
+      opacity: 0.5;
+      !important;
     }
 
     /* 레이블 — 기본 (주간·년간), past/current 동일 스타일 */
@@ -331,8 +337,7 @@
       color: var(--accent);
     }
 
-    .intensity-legend-row.mid {
-    }
+    .intensity-legend-row.mid {}
 
     .intensity-legend-row.low {
       color: var(--bone);
