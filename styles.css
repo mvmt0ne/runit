@@ -294,6 +294,7 @@ sup {
 .lp-header-title-compact {
   font-size: 14px;
   font-weight: 500;
+  color: var(--slate-gray);
   transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
 }
