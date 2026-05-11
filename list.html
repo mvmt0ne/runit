@@ -451,13 +451,13 @@
       const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
       const weekday = WEEKDAYS[new Date(r.date).getDay()];
       const strideM = (r.stride / 100).toFixed(2);
-      return `<div class="lp-row ${viewMode}" onclick="goTo('detail.html')">
+      return `<div class="lp-row ${viewMode}">
         <div class="lp-date-col">
           ${showMonth ? `<span class="lp-date-month">${month}</span>` : `<span class="lp-date-month lp-date-month--hidden"></span>`}
           <span class="lp-date-day">${day}</span>
           <span class="lp-date-weekday">${weekday}</span>
         </div>
-        <div class="lp-content-col">
+        <div class="lp-content-col" onclick="goTo('detail.html')">
           <div class="lp-row-head">
             <div class="lp-badge type-${r.type}"></div>
             <span class="lp-run-name">${r.name}</span>
