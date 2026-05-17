@@ -154,6 +154,44 @@
       gap: 6px;
     }
 
+    /* lp-hero 안의 인라인 뷰 모드 토글 */
+    .lp-view-toggle {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-bottom: 4px;
+      padding: 0;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 100px;
+      color: var(--cloudy-gray);
+      cursor: pointer;
+      transition: color 0.15s, background 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .lp-view-toggle:active {
+      transform: scale(0.92);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .lp-view-toggle svg {
+      display: none;
+    }
+
+    .lp-view-toggle.view-expanded .icon-expanded,
+    .lp-view-toggle.view-compact .icon-compact {
+      display: block;
+    }
+
+    .lp-view-toggle.view-expanded {
+      background: var(--bone);
+      border-color: transparent;
+      color: var(--asphalt-black);
+    }
+
     .ctrl-seg {
       padding: 8px 18px;
       border-radius: 100px;
@@ -245,6 +283,20 @@
           <!-- Large title (스크롤 시 자연스럽게 위로 사라짐) -->
           <div class="lp-hero">
             <h1 class="lp-hero-title">러닝 활동</h1>
+            <button class="lp-view-toggle" id="lp-view-toggle" aria-label="뷰 모드 전환" onclick="toggleView()">
+              <svg class="icon-expanded" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="6" rx="1" />
+                <rect x="3" y="14" width="18" height="6" rx="1" />
+              </svg>
+              <svg class="icon-compact" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="4" y1="6" x2="20" y2="6" />
+                <line x1="4" y1="10" x2="20" y2="10" />
+                <line x1="4" y1="14" x2="20" y2="14" />
+                <line x1="4" y1="18" x2="20" y2="18" />
+              </svg>
+            </button>
           </div>
           <div id="runs-list-container"></div>
         </div>
@@ -266,14 +318,6 @@
           </button>
         </div>
         <div class="ctrl-sheet-body">
-          <!-- 뷰 모드 -->
-          <div class="ctrl-row ctrl-row--view">
-            <span class="ctrl-row-label">뷰 모드</span>
-            <div class="ctrl-view-segs">
-              <button class="ctrl-seg" id="ctrl-seg-expanded" onclick="ctrlSetView('expanded')">확장</button>
-              <button class="ctrl-seg" id="ctrl-seg-compact" onclick="ctrlSetView('compact')">컴팩트</button>
-            </div>
-          </div>
           <!-- 정렬 -->
           <div class="ctrl-row ctrl-row--tap" onclick="ctrlOpenSort()">
             <span class="ctrl-row-label">정렬</span>
@@ -336,28 +380,39 @@
   </div><!-- /phone -->
 
   <script>
-    /* ─── Data ── */
-    const RUNS = [
-      { id: 1, date: '2026-04-11', label: '4/11', month: 4, type: 'race', group: 'race', name: '2026 인천하프', time: '08:00', dur: '1:46:42', km: 21.2, pace: '5:02', paceV: 302, bpm: 176, spm: 174, ground: 214, stride: 107 },
-      { id: 2, date: '2026-04-10', label: '4/10', month: 4, type: 'jogging', group: 'easy', name: '회복 조깅', time: '07:30', dur: '37:05', km: 5.4, pace: '6:52', paceV: 412, bpm: 142, spm: 163, ground: 268, stride: 88 },
-      { id: 3, date: '2026-04-07', label: '4/7', month: 4, type: 'tempo', group: 'speed', name: '템포 런', time: '06:15', dur: '38:00', km: 8.0, pace: '4:45', paceV: 285, bpm: 169, spm: 180, ground: 208, stride: 112 },
-      { id: 4, date: '2026-04-05', label: '4/5', month: 4, type: 'easy', group: 'easy', name: '이지 런', time: '06:30', dur: '45:00', km: 7.2, pace: '6:15', paceV: 375, bpm: 138, spm: 162, ground: 252, stride: 91 },
-      { id: 5, date: '2026-04-04', label: '4/4', month: 4, type: 'easy', group: 'easy', name: '이지 런', time: '18:00', dur: '43:04', km: 6.8, pace: '6:20', paceV: 380, bpm: 135, spm: 160, ground: 255, stride: 89 },
-      { id: 6, date: '2026-04-03', label: '4/3', month: 4, type: 'easy', group: 'easy', name: '이지 런', time: '07:00', dur: '33:20', km: 5.0, pace: '6:40', paceV: 400, bpm: 132, spm: 158, ground: 260, stride: 86 },
-      { id: 7, date: '2026-03-30', label: '3/30', month: 3, type: 'steady', group: 'endurance', name: '스테디 런', time: '07:30', dur: '57:45', km: 10.5, pace: '5:30', paceV: 330, bpm: 158, spm: 170, ground: 238, stride: 98 },
-      { id: 8, date: '2026-03-28', label: '3/28', month: 3, type: 'steady', group: 'endurance', name: '스테디 런', time: '07:00', dur: '55:12', km: 9.8, pace: '5:38', paceV: 338, bpm: 155, spm: 168, ground: 241, stride: 96 },
-      { id: 9, date: '2026-03-22', label: '3/22', month: 3, type: 'race', group: 'race', name: '서울 10K', time: '09:00', dur: '48:40', km: 10.0, pace: '4:52', paceV: 292, bpm: 172, spm: 177, ground: 216, stride: 105 },
-      { id: 10, date: '2026-03-20', label: '3/20', month: 3, type: 'steady', group: 'endurance', name: '스테디 런', time: '07:15', dur: '1:00:40', km: 11.2, pace: '5:25', paceV: 325, bpm: 160, spm: 171, ground: 244, stride: 100 },
-      { id: 11, date: '2026-03-19', label: '3/19', month: 3, type: 'jogging', group: 'easy', name: '회복 조깅', time: '07:30', dur: '34:00', km: 4.8, pace: '7:05', paceV: 425, bpm: 138, spm: 161, ground: 271, stride: 85 },
-      { id: 12, date: '2026-03-13', label: '3/13', month: 3, type: 'easy', group: 'easy', name: '이지 런', time: '06:45', dur: '52:08', km: 8.5, pace: '6:08', paceV: 368, bpm: 141, spm: 164, ground: 257, stride: 93 },
-      { id: 13, date: '2026-03-09', label: '3/9', month: 3, type: 'easy', group: 'easy', name: '이지 런', time: '07:00', dur: '38:12', km: 6.0, pace: '6:22', paceV: 382, bpm: 136, spm: 160, ground: 262, stride: 90 },
-      { id: 14, date: '2026-02-25', label: '2/25', month: 2, type: 'long', group: 'endurance', name: '롱 런', time: '07:00', dur: '1:44:24', km: 18.0, pace: '5:48', paceV: 348, bpm: 155, spm: 168, ground: 245, stride: 97 },
-      { id: 15, date: '2026-02-18', label: '2/18', month: 2, type: 'tempo', group: 'speed', name: '템포 런', time: '06:30', dur: '36:30', km: 7.5, pace: '4:52', paceV: 292, bpm: 167, spm: 178, ground: 212, stride: 110 },
-      { id: 16, date: '2026-02-10', label: '2/10', month: 2, type: 'steady', group: 'endurance', name: '스테디 런', time: '07:15', dur: '52:26', km: 9.2, pace: '5:42', paceV: 342, bpm: 152, spm: 167, ground: 242, stride: 95 },
-      { id: 17, date: '2026-02-02', label: '2/2', month: 2, type: 'easy', group: 'easy', name: '이지 런', time: '08:00', dur: '35:34', km: 5.5, pace: '6:28', paceV: 388, bpm: 133, spm: 159, ground: 258, stride: 87 },
-    ];
+    /* ─── Data (가민 CSV 로드, 필터/뷰용 필드 매핑) ── */
+    let RUNS = [];
 
-    const MONTH_LABELS = { 4: '4월', 3: '3월', 2: '2월' };
+    const TYPE_TO_GROUP = {
+      race: 'race',
+      tempo: 'speed', interval: 'speed', tt: 'speed',
+      steady: 'endurance', long: 'endurance',
+      easy: 'easy', jogging: 'easy',
+    };
+
+    function activityToRun(a, idx) {
+      const [, mm, dd] = (a.date || '').split('-');
+      return {
+        id: idx + 1,
+        date: a.date,
+        label: `${parseInt(mm)}/${parseInt(dd)}`,
+        month: parseInt(mm),
+        type: a.type,
+        group: TYPE_TO_GROUP[a.type] || 'easy',
+        name: a.name || '러닝',
+        time: a.startTime || '',
+        dur: a.dur,
+        km: a.km,
+        pace: a.pace,
+        paceV: a.paceV,
+        bpm: a.bpm,
+        spm: a.spm,
+        ground: a.ground,
+        stride: a.stride != null ? Math.round(a.stride * 100) : null, // m → cm
+      };
+    }
+
+    function monthLabel(m) { return m + '월'; }
 
     let sortState = { key: 'date', asc: false };
     let filterState = { type: null, bpm: null, distMin: 0, distMax: 42, paceMin: 240, paceMax: 600 };
@@ -433,8 +488,8 @@
           const runs = groups[m];
           const totalKm = runs.reduce((s, r) => s + r.km, 0).toFixed(1);
           const year = runs[0].date.slice(2, 4);
-          return `<div class="lp-month-section" data-month="${m}" data-month-label="${year}년 ${MONTH_LABELS[m]}" data-month-km="${totalKm}">
-            <div class="lp-month-label">${MONTH_LABELS[m]}</div>
+          return `<div class="lp-month-section" data-month="${m}" data-month-label="${year}년 ${monthLabel(m)}" data-month-km="${totalKm}">
+            <div class="lp-month-label">${monthLabel(m)}</div>
             <div class="lp-month-km"><strong>${totalKm}</strong> K</div>
           </div>
           <div class="lp-list">${runs.map((r, i) => rowHTML(r, i === 0)).join('')}</div>`;
@@ -453,11 +508,11 @@
       const strideM = (r.stride / 100).toFixed(2);
       return `<div class="lp-row ${viewMode}">
         <div class="lp-date-col">
-          ${showMonth ? `<span class="lp-date-month">${month}</span>` : `<span class="lp-date-month lp-date-month--hidden"></span>`}
+          ${showMonth ? `<span class="lp-date-month">${month}</span>` : `<span class="lp-date-month lp-date-month--hidden">${month}</span>`}
           <span class="lp-date-day">${day}</span>
           <span class="lp-date-weekday">${weekday}</span>
         </div>
-        <div class="lp-content-col" onclick="goTo('detail.html')">
+        <div class="lp-content-col" onclick="goTo('detail.html?date=${r.date}')">
           <div class="lp-row-head">
             <div class="lp-badge type-${r.type}"></div>
             <span class="lp-run-name">${r.name}</span>
@@ -553,10 +608,15 @@
     }
 
     function updateCtrlViewSegs() {
-      const expBtn = document.getElementById('ctrl-seg-expanded');
-      const cmpBtn = document.getElementById('ctrl-seg-compact');
-      if (expBtn) expBtn.classList.toggle('active', viewMode === 'expanded');
-      if (cmpBtn) cmpBtn.classList.toggle('active', viewMode === 'compact');
+      const toggle = document.getElementById('lp-view-toggle');
+      if (toggle) {
+        toggle.classList.toggle('view-expanded', viewMode === 'expanded');
+        toggle.classList.toggle('view-compact', viewMode === 'compact');
+      }
+    }
+
+    function toggleView() {
+      ctrlSetView(viewMode === 'expanded' ? 'compact' : 'expanded');
     }
 
     /* ─── Sort / Filter sheets ── */
@@ -807,11 +867,21 @@
     }
 
     /* ─── Init ── */
-    renderList();
-    setupMonthTracking();
     renderSortPanel();
     renderFilterPanel();
     updateCtrlSheet();
+
+    if (typeof loadActivities === 'function') {
+      loadActivities().then(list => {
+        RUNS = list.map(activityToRun);
+        renderList();
+        setupMonthTracking();
+      });
+    } else {
+      console.error('[list] activities.js not loaded');
+      renderList();
+      setupMonthTracking();
+    }
   </script>
 
   <script>

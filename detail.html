@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>runit — Run Detail</title>
+  <title>runit — 활동 상세</title>
   <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#202020">
+  <meta name="theme-color" content="#222222">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -22,599 +22,598 @@
   <link rel="stylesheet" href="./styles.css">
   <script src="./transitions.js"></script>
   <style>
-    /* ─── phone-inner: bg + theme transition ── */
-    .phone-inner {
-      background: var(--bg);
-      transition: background 0.3s;
-    }
-
-    /* ─── Status bar ── */
-    .status-bar {
-      padding: 18px 28px 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-shrink: 0;
-    }
-
-    .status-time {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-1);
-      font-family: 'Space Grotesk', sans-serif;
-      transition: color 0.3s;
-    }
-
-    .status-icons {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .status-icons svg {
-      color: var(--text-1);
-      transition: color 0.3s;
-    }
-
-    /* ─── Back header ── */
-
-    /* ─── Scroll area ── */
-    .scroll-area {
-      flex: 1;
-      overflow-y: auto;
-      padding-top: calc(env(safe-area-inset-top, 0px) + 16px);
-      padding-bottom: calc(90px + env(safe-area-inset-bottom, 0px));
-      scrollbar-width: none;
-    }
-
-    .scroll-area::-webkit-scrollbar {
-      display: none;
-    }
-
-    /* ─── Type badge ── */
-    .detail-type-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 7px 14px;
-      border-radius: 0;
-      font-size: 11px;
-      font-weight: 700;
-      margin: 16px 22px 0;
-    }
-
-    .detail-type-badge.type-race {
-      background: var(--type-race-bg);
-      color: var(--type-race-text);
-    }
-
-    .detail-type-badge.type-tempo {
-      background: var(--type-dark-bg);
-      color: var(--type-dark-text);
-    }
-
-    .detail-type-badge.type-steady {
-      background: var(--type-steady-bg);
-      color: var(--type-steady-text);
-    }
-
-    .detail-type-badge.type-easy {
-      background: var(--type-easy-bg);
-      color: var(--type-easy-text);
-    }
-
-    .detail-type-badge.type-jogging {
-      background: var(--type-jog-bg);
-      color: var(--type-jog-text);
-    }
-
-    .detail-type-badge.type-long {
-      background: var(--type-long-bg);
-      color: var(--type-long-text);
-    }
-
-    /* ─── Hero ── */
-    .detail-hero {
-      padding: 12px 22px 0;
-    }
-
-    .detail-km {
-      font-size: 80px;
-      font-weight: 300;
-      color: var(--text-1);
-      letter-spacing: 0;
-      line-height: 1;
-      transition: color 0.3s;
-      font-family: 'Space Grotesk', -apple-system, sans-serif;
-    }
-
-    .detail-km span {
-      font-size: 24px;
-      font-weight: 300;
-      color: var(--text-2);
-      font-family: 'Space Grotesk', -apple-system, sans-serif;
-    }
-
-    .detail-meta {
-      font-size: 13px;
-      color: var(--text-2);
-      margin-top: 4px;
-      transition: color 0.3s;
-    }
-
-    /* ─── Stat grid ── */
-    .detail-stats-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--surface-2);
-      border-radius: 0;
-      overflow: hidden;
-      margin: 18px 22px 0;
-      transition: background 0.3s;
-    }
-
-    .detail-stat-cell {
-      background: var(--surface-1);
-      padding: 14px 10px;
-      text-align: center;
-      transition: background 0.3s;
-    }
-
-    .dsc-label {
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0;
-      text-transform: uppercase;
-      color: var(--text-3);
-      margin-bottom: 5px;
-      transition: color 0.3s;
-    }
-
-    .dsc-value {
-      font-size: 20px;
-      font-weight: 300;
-      color: var(--text-1);
-      letter-spacing: 0;
-      transition: color 0.3s;
-      font-family: 'Space Grotesk', -apple-system, sans-serif;
-    }
-
-    .dsc-value.accent {
-      color: var(--accent);
-    }
-
-    /* ─── Pace chart ── */
-    .detail-pace-chart {
-      margin: 14px 22px 0;
-      background: var(--surface-1);
-      border-radius: 0;
-      padding: 16px;
-      transition: background 0.3s;
-    }
-
-    .chart-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0;
-      text-transform: uppercase;
-      color: var(--text-3);
-      margin-bottom: 14px;
-      transition: color 0.3s;
-    }
-
-    .bar-chart {
-      display: flex;
-      align-items: flex-end;
-      gap: 6px;
-      height: 80px;
-    }
-
-    .bar-col {
+    .detail-page {
       flex: 1;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
+      background: var(--asphalt-black);
+    }
+
+    .detail-scroll {
+      flex: 1;
+      overflow-y: auto;
+      scrollbar-width: none;
+      padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .detail-scroll::-webkit-scrollbar { display: none; }
+
+    /* ─── Hero ─── */
+    .d-hero {
+      padding: 20px 20px 24px;
+    }
+
+    .d-meta-line {
+      display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 10px;
+      margin-bottom: 8px;
     }
 
-    .bar {
+    .d-date {
+      font-size: 13px;
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--cloudy-gray);
+    }
+
+    .d-type-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
+    .d-name {
+      font-size: 30px;
+      font-weight: 500;
+      color: var(--bone);
+      line-height: 1.1;
+      margin: 0;
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
+    .d-time {
+      font-size: 13px;
+      color: var(--cloudy-gray);
+      font-family: 'Space Grotesk', sans-serif;
+      margin-top: 6px;
+    }
+
+    .d-km-row {
+      margin-top: 18px;
+      display: flex;
+      align-items: baseline;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .d-km {
+      font-size: 64px;
+      font-weight: 300;
+      color: var(--bone);
+      line-height: 1;
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: -1px;
+    }
+
+    .d-km sup {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--slate-gray);
+      margin-left: 2px;
+    }
+
+    .d-km-side {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .d-km-side-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .d-km-side-val {
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--bone);
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .d-km-side-label {
+      font-size: 11px;
+      color: var(--cloudy-gray);
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
+    /* ─── Card ─── */
+    .d-card {
+      background: var(--slate-gray);
+      padding: 18px 20px;
+      margin-bottom: 1px;
+    }
+
+    .d-card-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cloudy-gray);
+      margin-bottom: 12px;
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
+    /* ─── Stats grid ─── */
+    .d-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px 12px;
+    }
+
+    .d-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .d-stat-value {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--asphalt-black);
+      font-family: 'Space Grotesk', sans-serif;
+      font-feature-settings: "tnum";
+      line-height: 1;
+    }
+
+    .d-stat-value sup {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--cloudy-gray);
+      margin-left: 2px;
+    }
+
+    .d-stat-label {
+      font-size: 12px;
+      color: var(--cloudy-gray);
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
+    /* ─── Pace chart ─── */
+    .d-bar-chart {
+      display: flex;
+      align-items: stretch;
+      gap: 3px;
+      height: 120px;
+    }
+
+    .d-bar-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .d-bar {
       width: 100%;
-      border-radius: 0;
+      background: var(--asphalt-black);
+      margin-top: auto;
+      min-height: 2px;
     }
 
-    .bar.accent-bar {
+    .d-bar.fastest {
       background: var(--accent);
     }
 
-    .bar-label {
+    .d-bar-label {
       font-size: 10px;
-      color: var(--text-3);
-      transition: color 0.3s;
+      color: var(--cloudy-gray);
+      font-family: 'Space Grotesk', sans-serif;
+      text-align: center;
+      margin-top: 4px;
     }
 
-    /* ─── Heart rate zones ── */
-    .hr-section {
-      margin: 14px 22px 0;
-      background: var(--surface-1);
-      border-radius: 0;
-      padding: 16px;
-      transition: background 0.3s;
+    /* ─── Splits table ─── */
+    .d-splits-table {
+      width: 100%;
+      border-collapse: collapse;
     }
 
-    .hr-row {
+    .d-splits-table th,
+    .d-splits-table td {
+      padding: 9px 6px;
+      text-align: right;
+      font-size: 13px;
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--asphalt-black);
+      font-feature-settings: "tnum";
+    }
+
+    .d-splits-table th {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--cloudy-gray);
+      border-bottom: 1px solid rgba(34, 34, 34, 0.15);
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
+    .d-splits-table th:first-child,
+    .d-splits-table td:first-child {
+      text-align: left;
+    }
+
+    .d-splits-table td.fast {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .d-splits-table tr.partial td {
+      opacity: 0.65;
+      font-style: italic;
+    }
+
+    /* ─── HR zones ─── */
+    .d-zone-row {
       display: flex;
       align-items: center;
       gap: 10px;
       margin-bottom: 10px;
     }
 
-    .hr-row:last-child {
+    .d-zone-row:last-child {
       margin-bottom: 0;
     }
 
-    .hr-zone-label {
-      font-size: 11px;
-      font-weight: 700;
-      font-family: 'Space Grotesk', sans-serif;
-      color: var(--text-3);
-      width: 24px;
-      flex-shrink: 0;
-      transition: color 0.3s;
-    }
-
-    .hr-bar-wrap {
-      flex: 1;
-      height: 6px;
-      background: var(--surface-2);
-      border-radius: 0;
-      overflow: hidden;
-    }
-
-    .hr-bar {
-      height: 100%;
-      border-radius: 0;
-    }
-
-    .hr-pct {
+    .d-zone-label {
       font-size: 12px;
       font-weight: 600;
+      color: var(--asphalt-black);
+      width: 26px;
+      flex-shrink: 0;
       font-family: 'Space Grotesk', sans-serif;
-      color: var(--text-2);
-      width: 32px;
+    }
+
+    .d-zone-range {
+      font-size: 10px;
+      color: var(--cloudy-gray);
+      width: 60px;
+      flex-shrink: 0;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .d-zone-bar-wrap {
+      flex: 1;
+      height: 6px;
+      background: rgba(34, 34, 34, 0.12);
+      overflow: hidden;
+    }
+
+    .d-zone-bar {
+      height: 100%;
+    }
+
+    .d-zone-pct {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--asphalt-black);
+      width: 36px;
       text-align: right;
       flex-shrink: 0;
-      transition: color 0.3s;
+      font-family: 'Space Grotesk', sans-serif;
     }
 
-    /* ─── Split table ── */
-    .split-section {
-      margin: 14px 22px 0;
-      background: var(--surface-1);
-      border-radius: 0;
-      overflow: hidden;
-      transition: background 0.3s;
-    }
+    .d-zone-z1 { background: #64b5f6; }
+    .d-zone-z2 { background: #4fc3f7; }
+    .d-zone-z3 { background: #81c784; }
+    .d-zone-z4 { background: #ffb74d; }
+    .d-zone-z5 { background: #e57373; }
 
-    .split-header {
+    /* ─── TE ─── */
+    .d-te-row {
       display: grid;
-      grid-template-columns: 40px 1fr 80px 80px;
-      padding: 10px 14px;
-      border-bottom: 1px solid rgba(128, 128, 128, 0.1);
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 14px;
     }
 
-    .split-header span {
-      font-size: 9px;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: var(--text-3);
-      transition: color 0.3s;
-    }
-
-    .split-row {
-      display: grid;
-      grid-template-columns: 40px 1fr 80px 80px;
-      padding: 11px 14px;
-      border-bottom: 1px solid rgba(128, 128, 128, 0.06);
-    }
-
-    .split-row:last-child {
-      border-bottom: none;
-    }
-
-    .split-km {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-3);
-      font-family: 'Space Grotesk', sans-serif;
-      transition: color 0.3s;
-    }
-
-    .split-pace {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text-1);
-      font-family: 'Space Grotesk', sans-serif;
-      transition: color 0.3s;
-    }
-
-    .split-pace.fast {
-      color: var(--accent);
-    }
-
-    .split-hr {
-      font-size: 13px;
-      color: var(--text-2);
-      font-family: 'Space Grotesk', sans-serif;
-      text-align: right;
-      transition: color 0.3s;
-    }
-
-    .split-bar-cell {
+    .d-te-cell {
       display: flex;
-      align-items: center;
-      padding-right: 8px;
+      flex-direction: column;
+      gap: 4px;
     }
 
-    .split-mini-bar {
-      height: 4px;
-      background: var(--accent);
-      border-radius: 0;
-      opacity: 0.6;
+    .d-te-val {
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--asphalt-black);
+      font-family: 'Space Grotesk', sans-serif;
+      line-height: 1;
     }
 
-    /* ─── Note ── */
-    .detail-note {
-      margin: 14px 22px 0;
-      background: var(--surface-1);
-      border-radius: 0;
-      padding: 16px;
-      transition: background 0.3s;
+    .d-te-label {
+      font-size: 11px;
+      color: var(--cloudy-gray);
+      font-family: 'Pretendard Variable', sans-serif;
     }
 
-    .detail-note-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0;
-      text-transform: uppercase;
-      color: var(--text-3);
-      margin-bottom: 6px;
-      transition: color 0.3s;
-    }
-
-    .detail-note-text {
+    /* ─── Note ─── */
+    .d-note-text {
       font-size: 14px;
-      color: var(--text-2);
-      font-style: italic;
-      transition: color 0.3s;
+      line-height: 1.5;
+      color: var(--asphalt-black);
+      font-family: 'Pretendard Variable', sans-serif;
+      white-space: pre-wrap;
     }
 
-    /* ─── Shift5 Data Readout Override ── */
-    .status-time,
-    .detail-km, .detail-km span,
-    .dsc-value,
-    .hr-pct,
-    .split-hr, .split-km, .split-pace, .split-pace.fast {
-      font-family: 'Space Mono', ui-monospace, monospace;
-      font-feature-settings: "tnum";
+    /* ─── Empty / error states ─── */
+    .d-empty {
+      padding: 24px 20px;
+      text-align: center;
+      color: var(--cloudy-gray);
+      font-size: 13px;
+      font-family: 'Pretendard Variable', sans-serif;
     }
 
-    /* ─── Shift5 Label Tracking ── */
-    .chart-label, .detail-note-label, .dsc-label,
-    .split-header span {
-      letter-spacing: 0.14em;
-      font-family: 'Space Mono', ui-monospace, monospace;
-      font-weight: 400;
-    }
+    /* ─── Type badge colors (이미 styles.css 의 type-* 변수 사용) ─── */
+    .d-type-badge.type-race { background: var(--type-race-bg); color: var(--type-race-text); }
+    .d-type-badge.type-tempo,
+    .d-type-badge.type-interval,
+    .d-type-badge.type-tt { background: var(--type-dark-bg); color: var(--type-dark-text); }
+    .d-type-badge.type-steady { background: var(--type-steady-bg); color: var(--type-steady-text); }
+    .d-type-badge.type-easy { background: var(--type-easy-bg); color: var(--type-easy-text); }
+    .d-type-badge.type-jogging { background: var(--type-jog-bg); color: var(--type-jog-text); }
+    .d-type-badge.type-long { background: var(--type-long-bg); color: var(--type-long-text); }
   </style>
 </head>
 
 <body>
   <div class="phone">
-    <div class="phone-inner">
-
-
-
-      <div class="scroll-area">
-
-        <div class="detail-type-badge type-race">
-          <span>RACE</span>
+    <div class="phone-inner bg-dark" style="background: var(--asphalt-black);">
+      <div class="detail-page">
+        <div class="back-header back-header--dark">
+          <button class="back-btn" onclick="goBack('app.html#list')">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="m12 19-7-7 7-7" />
+              <path d="M19 12H5" />
+            </svg>
+          </button>
+          <span class="back-title">활동 상세</span>
+          <button class="header-action-btn" onclick="goEdit()" aria-label="수정">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9" />
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z" />
+            </svg>
+          </button>
         </div>
 
-        <div class="detail-hero">
-          <div class="detail-km">21.1<span>K</span></div>
-          <div class="detail-meta">Half Marathon · 8:00 AM</div>
-        </div>
-
-        <div class="detail-stats-row">
-          <div class="detail-stat-cell">
-            <div class="dsc-label">Duration</div>
-            <div class="dsc-value">1:46:22</div>
-          </div>
-          <div class="detail-stat-cell">
-            <div class="dsc-label">Avg Pace</div>
-            <div class="dsc-value accent">5:02</div>
-          </div>
-          <div class="detail-stat-cell">
-            <div class="dsc-label">Calories</div>
-            <div class="dsc-value">1,240</div>
+        <div class="detail-scroll" id="detail-scroll">
+          <div id="detail-body">
+            <div class="d-empty">불러오는 중…</div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
 
-        <!-- Pace chart -->
-        <div class="detail-pace-chart">
-          <div class="chart-label">Pace / km</div>
-          <div class="bar-chart">
-            <div class="bar-col">
-              <div class="bar accent-bar" style="height:55%"></div>
-              <div class="bar-label">1</div>
-            </div>
-            <div class="bar-col">
-              <div class="bar accent-bar" style="height:60%"></div>
-              <div class="bar-label">3</div>
-            </div>
-            <div class="bar-col">
-              <div class="bar accent-bar" style="height:65%"></div>
-              <div class="bar-label">5</div>
-            </div>
-            <div class="bar-col">
-              <div class="bar accent-bar" style="height:70%"></div>
-              <div class="bar-label">7</div>
-            </div>
-            <div class="bar-col">
-              <div class="bar accent-bar" style="height:72%"></div>
-              <div class="bar-label">10</div>
-            </div>
-            <div class="bar-col">
-              <div class="bar accent-bar" style="height:75%"></div>
-              <div class="bar-label">13</div>
-            </div>
-            <div class="bar-col">
-              <div class="bar accent-bar" style="height:80%"></div>
-              <div class="bar-label">16</div>
-            </div>
-            <div class="bar-col">
-              <div class="bar accent-bar" style="height:100%"></div>
-              <div class="bar-label">21</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Heart rate zones -->
-        <div class="hr-section">
-          <div class="chart-label">Heart Rate Zones</div>
-          <div class="hr-row">
-            <span class="hr-zone-label">Z1</span>
-            <div class="hr-bar-wrap">
-              <div class="hr-bar" style="width:5%; background:#64b5f6"></div>
-            </div>
-            <span class="hr-pct">5%</span>
-          </div>
-          <div class="hr-row">
-            <span class="hr-zone-label">Z2</span>
-            <div class="hr-bar-wrap">
-              <div class="hr-bar" style="width:18%; background:#4fc3f7"></div>
-            </div>
-            <span class="hr-pct">18%</span>
-          </div>
-          <div class="hr-row">
-            <span class="hr-zone-label">Z3</span>
-            <div class="hr-bar-wrap">
-              <div class="hr-bar" style="width:35%; background:#81c784"></div>
-            </div>
-            <span class="hr-pct">35%</span>
-          </div>
-          <div class="hr-row">
-            <span class="hr-zone-label">Z4</span>
-            <div class="hr-bar-wrap">
-              <div class="hr-bar" style="width:32%; background:#ffb74d"></div>
-            </div>
-            <span class="hr-pct">32%</span>
-          </div>
-          <div class="hr-row">
-            <span class="hr-zone-label">Z5</span>
-            <div class="hr-bar-wrap">
-              <div class="hr-bar" style="width:10%; background:#e57373"></div>
-            </div>
-            <span class="hr-pct">10%</span>
-          </div>
-        </div>
-
-        <!-- Splits -->
-        <div class="split-section">
-          <div class="split-header">
-            <span>K</span>
-            <span>Pace</span>
-            <span style="text-align:right">BPM</span>
-            <span></span>
-          </div>
-          <div class="split-row">
-            <span class="split-km">1</span>
-            <span class="split-pace fast">4:55</span>
-            <span class="split-hr">158</span>
-            <div class="split-bar-cell">
-              <div class="split-mini-bar" style="width:55%"></div>
-            </div>
-          </div>
-          <div class="split-row">
-            <span class="split-km">5</span>
-            <span class="split-pace">5:01</span>
-            <span class="split-hr">163</span>
-            <div class="split-bar-cell">
-              <div class="split-mini-bar" style="width:62%"></div>
-            </div>
-          </div>
-          <div class="split-row">
-            <span class="split-km">10</span>
-            <span class="split-pace">5:04</span>
-            <span class="split-hr">167</span>
-            <div class="split-bar-cell">
-              <div class="split-mini-bar" style="width:68%"></div>
-            </div>
-          </div>
-          <div class="split-row">
-            <span class="split-km">15</span>
-            <span class="split-pace">5:08</span>
-            <span class="split-hr">170</span>
-            <div class="split-bar-cell">
-              <div class="split-mini-bar" style="width:74%"></div>
-            </div>
-          </div>
-          <div class="split-row">
-            <span class="split-km">21.1</span>
-            <span class="split-pace fast">4:58</span>
-            <span class="split-hr">174</span>
-            <div class="split-bar-cell">
-              <div class="split-mini-bar" style="width:100%"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Note -->
-        <div class="detail-note">
-          <div class="detail-note-label">Note</div>
-          <div class="detail-note-text">네거티브 스플릿. 후반 5km 가장 빠름.</div>
-        </div>
-
-      </div><!-- /scroll-area -->
-
-    </div><!-- /phone-inner -->
-  </div><!-- /phone -->
-
+  <script src="./data/splits.js"></script>
+  <script src="./data/zones.js"></script>
+  <script src="./data/store.js"></script>
+  <script src="./data/activities.js"></script>
   <script>
-    (function () {
-      const THRESHOLD = 80, MAX_PULL = 120, RESIST = 0.45;
-      const scrollEl = document.querySelector('.scroll-area');
-      const headerH = 0;
-      const wrap = document.createElement('div');
-      wrap.style.cssText = `position:fixed;top:${headerH}px;left:50%;transform:translateX(-50%) translateY(-52px);width:44px;height:44px;border-radius:0;background:rgba(35,35,35,0.92);backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;z-index:9;pointer-events:none;transition:transform 0.25s cubic-bezier(0.16,1,0.3,1),opacity 0.25s;opacity:0`;
-      const icon = document.createElement('div');
-      icon.style.cssText = 'display:flex;align-items:center;justify-content:center;';
-      icon.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#cdcdcd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>';
-      wrap.appendChild(icon);
-      document.body.appendChild(wrap);
-      const ks = document.createElement('style');
-      ks.textContent = '@keyframes ptr-spin{to{transform:rotate(360deg)}}';
-      document.head.appendChild(ks);
-      if (sessionStorage.getItem('ptr-return')) {
-        sessionStorage.removeItem('ptr-return');
-        if (scrollEl) { scrollEl.style.transition = 'none'; scrollEl.style.transform = 'translateY(64px)'; }
-        setTimeout(() => { if (scrollEl) { scrollEl.style.transition = 'transform 0.5s cubic-bezier(0.16,1,0.3,1)'; scrollEl.style.transform = ''; } }, 50);
+    /* ── URL ?date= 파싱, 없으면 최신 활동 ── */
+    const _qs = new URLSearchParams(location.search);
+    let _date = _qs.get('date');
+
+    function goEdit() {
+      goTo(`input.html?date=${_date || ''}`);
+    }
+
+    /* ── 페이스 분해 (sec → "M:SS") ── */
+    function secToPace(s) {
+      if (!Number.isFinite(s) || s <= 0) return '--';
+      const m = Math.floor(s / 60), ss = Math.round(s % 60);
+      return `${m}:${String(ss).padStart(2, '0')}`;
+    }
+
+    function paceToSec(p) {
+      const m = String(p || '').match(/^(\d+):(\d+)$/);
+      return m ? parseInt(m[1]) * 60 + parseInt(m[2]) : null;
+    }
+
+    /* ── 메인 렌더 ── */
+    async function render() {
+      const list = await loadActivities();
+      if (!list.length) {
+        document.getElementById('detail-body').innerHTML =
+          '<div class="d-empty">활동 데이터가 없습니다.<br>data/activities.csv 를 확인하세요.</div>';
+        return;
       }
-      let startY = 0, pullDist = 0, tracking = false, triggered = false;
-      function scrollTop() { const el = document.querySelector('.scroll-area,.list-scroll'); return el ? el.scrollTop : window.scrollY; }
-      function setPos(p, o) {
-        const ty = (p / THRESHOLD) * 52 - 52;
-        wrap.style.transform = `translateX(-50%) translateY(${ty}px)`;
-        wrap.style.opacity = o;
-        icon.style.transform = `rotate(${Math.min(p / THRESHOLD, 1) * 210}deg)`;
-        if (scrollEl) scrollEl.style.transform = `translateY(${Math.max(0, p * 0.8)}px)`;
+
+      // date 지정 없으면 최신
+      if (!_date) _date = list[0].date;
+
+      const act = list.find(a => a.date === _date);
+      if (!act) {
+        document.getElementById('detail-body').innerHTML =
+          `<div class="d-empty">${_date} 활동을 찾을 수 없습니다.</div>`;
+        return;
       }
-      document.addEventListener('touchstart', e => { if (triggered || scrollTop() > 2) return; startY = e.touches[0].clientY; pullDist = 0; tracking = true; wrap.style.transition = 'none'; icon.style.transition = 'none'; if (scrollEl) scrollEl.style.transition = 'none'; }, { passive: true });
-      document.addEventListener('touchmove', e => { if (!tracking) return; if (scrollTop() > 2) { tracking = false; return; } const dy = e.touches[0].clientY - startY; if (dy <= 0) return; pullDist = Math.min(dy * RESIST, MAX_PULL); setPos(pullDist, Math.min(pullDist / THRESHOLD, 1)); }, { passive: true });
-      document.addEventListener('touchend', () => { if (!tracking) return; tracking = false; const ease = 'transform 0.25s cubic-bezier(0.16,1,0.3,1),opacity 0.25s'; wrap.style.transition = ease; icon.style.transition = 'transform 0.25s'; if (scrollEl) scrollEl.style.transition = 'transform 0.25s cubic-bezier(0.16,1,0.3,1)'; if (pullDist >= THRESHOLD) { triggered = true; wrap.style.transform = 'translateX(-50%) translateY(8px)'; wrap.style.opacity = '1'; if (scrollEl) scrollEl.style.transform = 'translateY(64px)'; icon.style.transform = 'none'; icon.style.transition = 'none'; icon.style.animation = 'ptr-spin 0.55s linear infinite'; sessionStorage.setItem('ptr-return', '1'); setTimeout(() => window.location.reload(), 700); } else { wrap.style.transform = 'translateX(-50%) translateY(-52px)'; wrap.style.opacity = '0'; if (scrollEl) scrollEl.style.transform = ''; } pullDist = 0; }, { passive: true });
-    })();
+
+      const meta = (typeof getMeta === 'function') ? (getMeta(_date) || {}) : {};
+      const splits = (typeof getSplits === 'function') ? getSplits(_date) : null;
+      const zones  = (typeof getZones  === 'function') ? getZones(_date)  : null;
+
+      const name = meta.name || act.name || '러닝';
+      const type = meta.type || act.type;
+
+      document.getElementById('detail-body').innerHTML = renderHTML({ act, meta, splits, zones, name, type });
+    }
+
+    function renderHTML({ act, meta, splits, zones, name, type }) {
+      const typeText = type.toUpperCase();
+      const hero = `
+        <div class="d-hero">
+          <div class="d-meta-line">
+            <span class="d-date">${act.date}${act.startTime ? ' · ' + act.startTime : ''}</span>
+            <span class="d-type-badge type-${type}">${typeText}</span>
+          </div>
+          <h1 class="d-name">${escapeHTML(name)}</h1>
+          <div class="d-km-row">
+            <div><span class="d-km">${fmtNum(act.km, 2)}</span><sup>K</sup></div>
+            <div class="d-km-side">
+              <div class="d-km-side-row"><span class="d-km-side-val">${act.dur || '--'}</span><span class="d-km-side-label">시간</span></div>
+              <div class="d-km-side-row"><span class="d-km-side-val">${act.pace || '--'}</span><span class="d-km-side-label">평균 페이스</span></div>
+            </div>
+          </div>
+        </div>`;
+
+      const statsCells = [
+        ['심박',       act.bpm,        'BPM'],
+        ['최대 심박',  act.maxBpm,     'BPM'],
+        ['케이던스',   act.spm,        'SPM'],
+        ['칼로리',     act.calories,   'KCAL'],
+        ['보폭',       act.stride,     'M'],
+        ['접지시간',   act.ground,     'MS'],
+        ['GAP',        act.avgGAP,     '/K'],
+        ['상승',       act.ascent,     'M'],
+        ['하강',       act.descent,    'M'],
+      ].filter(([, v]) => v != null && v !== '');
+
+      const stats = statsCells.length ? `
+        <div class="d-card">
+          <div class="d-card-title">스탯</div>
+          <div class="d-stats-grid">
+            ${statsCells.map(([label, val, unit]) => `
+              <div class="d-stat">
+                <div class="d-stat-value">${val}<sup>${unit}</sup></div>
+                <div class="d-stat-label">${label}</div>
+              </div>`).join('')}
+          </div>
+        </div>` : '';
+
+      const splitsChart = renderSplitsChart(splits);
+      const splitsTable = renderSplitsTable(splits);
+      const zonesCard   = renderZones(zones);
+      const teCard      = renderTE(act, zones);
+      const noteCard    = meta.note ? `
+        <div class="d-card">
+          <div class="d-card-title">메모</div>
+          <div class="d-note-text">${escapeHTML(meta.note)}</div>
+        </div>` : '';
+
+      return hero + stats + splitsChart + splitsTable + teCard + zonesCard + noteCard;
+    }
+
+    function renderSplitsChart(splits) {
+      if (!Array.isArray(splits) || !splits.length) return '';
+      const paces = splits.map(s => paceToSec(s.pace)).filter(p => p);
+      if (!paces.length) return '';
+      const min = Math.min(...paces), max = Math.max(...paces);
+      const bars = splits.map(s => {
+        const p = paceToSec(s.pace);
+        if (!p) return '';
+        // 빠를수록(초가 작을수록) 막대 높이 큼
+        const h = max === min ? 60 : 20 + ((max - p) / (max - min)) * 80;
+        const fastest = p === min;
+        return `<div class="d-bar-col">
+          <div class="d-bar ${fastest ? 'fastest' : ''}" style="height:${h}%"></div>
+          <div class="d-bar-label">${s.km}</div>
+        </div>`;
+      }).join('');
+      return `
+        <div class="d-card">
+          <div class="d-card-title">km별 페이스</div>
+          <div class="d-bar-chart">${bars}</div>
+        </div>`;
+    }
+
+    function renderSplitsTable(splits) {
+      if (!Array.isArray(splits) || !splits.length) return '';
+      const paces = splits.map(s => paceToSec(s.pace)).filter(p => p);
+      const fastest = paces.length ? Math.min(...paces) : null;
+      const rows = splits.map(s => {
+        const p = paceToSec(s.pace);
+        const isFast = p && p === fastest;
+        return `<tr class="${s.partial ? 'partial' : ''}">
+          <td>${s.km}${s.partial ? '*' : ''}</td>
+          <td class="${isFast ? 'fast' : ''}">${s.pace}</td>
+          <td>${s.lap}</td>
+          <td>${s.bpm}</td>
+        </tr>`;
+      }).join('');
+      return `
+        <div class="d-card">
+          <div class="d-card-title">스플릿</div>
+          <table class="d-splits-table">
+            <thead>
+              <tr><th>K</th><th>페이스</th><th>랩</th><th>BPM</th></tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>`;
+    }
+
+    function renderZones(zones) {
+      if (!zones || !zones.z1) return '';
+      const order = ['z1', 'z2', 'z3', 'z4', 'z5'];
+      const rows = order.map(k => {
+        const z = zones[k];
+        if (!z) return '';
+        const range = z.range ? `${z.range[0]}-${z.range[1]}` : '';
+        const pct = z.pct || 0;
+        return `<div class="d-zone-row">
+          <span class="d-zone-label">${k.toUpperCase()}</span>
+          <span class="d-zone-range">${range}</span>
+          <div class="d-zone-bar-wrap"><div class="d-zone-bar d-zone-${k}" style="width:${pct}%"></div></div>
+          <span class="d-zone-pct">${pct}%</span>
+        </div>`;
+      }).join('');
+      return `
+        <div class="d-card">
+          <div class="d-card-title">심박 존 ${zones.avgBpm ? `· 평균 ${zones.avgBpm}` : ''}</div>
+          ${rows}
+        </div>`;
+    }
+
+    function renderTE(act, zones) {
+      const aero = (zones && zones.te && zones.te.aerobic != null) ? zones.te.aerobic : act.teAerobic;
+      const anaero = (zones && zones.te && zones.te.anaerobic != null) ? zones.te.anaerobic : null;
+      if (aero == null && anaero == null) return '';
+      return `
+        <div class="d-card">
+          <div class="d-card-title">트레이닝 효과</div>
+          <div class="d-te-row">
+            ${aero != null ? `<div class="d-te-cell"><span class="d-te-val">${aero}</span><span class="d-te-label">유산소</span></div>` : ''}
+            ${anaero != null ? `<div class="d-te-cell"><span class="d-te-val">${anaero}</span><span class="d-te-label">무산소</span></div>` : ''}
+          </div>
+        </div>`;
+    }
+
+    function fmtNum(n, d) {
+      if (n == null || !Number.isFinite(n)) return '--';
+      return d != null ? n.toFixed(d) : String(n);
+    }
+
+    function escapeHTML(s) {
+      return String(s || '').replace(/[&<>"']/g, c =>
+        ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    render();
   </script>
+
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js');

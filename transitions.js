@@ -80,6 +80,8 @@
       hidden = h;
       const tabBar = document.getElementById('app-tab-bar');
       if (tabBar) tabBar.classList.toggle('chrome-hidden', h);
+      const ctrlBtn = document.getElementById('tab-ctrl-btn');
+      if (ctrlBtn) ctrlBtn.classList.toggle('chrome-hidden', h);
       const slide = scrollEl.closest('.swiper-slide') || document;
       slide.querySelectorAll('.float-bar-wrap').forEach(el => {
         el.classList.toggle('chrome-hidden', h);

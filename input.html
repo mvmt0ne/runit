@@ -306,7 +306,28 @@
           <div class="input-section">
             <label class="input-label">활동 날짜</label>
             <input type="date" id="input-date" class="input-field">
-            <div class="input-helper">가민 활동 날짜 (YYYY-MM-DD). 같은 날짜면 덮어씀.</div>
+            <div class="input-helper" id="date-helper">가민 활동 날짜 (YYYY-MM-DD). 같은 날짜면 덮어씀.</div>
+          </div>
+
+          <!-- 활동 메타 (이름 / 타입 / 메모) -->
+          <div class="input-section">
+            <label class="input-label">활동 메타 (수동 오버라이드)</label>
+            <input type="text" id="input-name" class="input-field" placeholder="이름 (예: 인천하프) — 비우면 CSV 값"
+              style="margin-bottom:8px">
+            <select id="input-type" class="input-field" style="margin-bottom:8px">
+              <option value="">-- type (비우면 CSV 자동 추정) --</option>
+              <option value="race">레이스</option>
+              <option value="tempo">템포</option>
+              <option value="interval">인터벌</option>
+              <option value="tt">타임 트라이얼</option>
+              <option value="steady">스테디</option>
+              <option value="long">롱</option>
+              <option value="easy">이지</option>
+              <option value="jogging">조깅</option>
+            </select>
+            <textarea id="input-note" class="input-field" placeholder="메모 (자유 텍스트)"
+              style="min-height:80px;font-family:'Pretendard Variable',sans-serif;font-size:14px"></textarea>
+            <div class="input-helper">이름·타입·메모는 CSV에 없는 값. 입력하면 detail에서 우선 표시.</div>
           </div>
 
           <!-- 스플릿 -->
@@ -372,6 +393,7 @@
   <script src="./data/splits.js"></script>
   <script src="./data/zones.js"></script>
   <script src="./data/store.js"></script>
+  <script src="./data/activities.js"></script>
 
   <script>
     /* ── 초기화 ── */
@@ -380,9 +402,14 @@
     const zonesInput = document.getElementById('input-zones');
     const splitsCheck = document.getElementById('splits-check');
     const zonesCheck = document.getElementById('zones-check');
+    const nameInput = document.getElementById('input-name');
+    const typeInput = document.getElementById('input-type');
+    const noteInput = document.getElementById('input-note');
+    const dateHelper = document.getElementById('date-helper');
 
-    // 기본 날짜 = 오늘
-    dateInput.value = new Date().toISOString().slice(0, 10);
+    // ?date= 우선, 없으면 오늘
+    const _qs = new URLSearchParams(location.search);
+    dateInput.value = _qs.get('date') || new Date().toISOString().slice(0, 10);
 
     /* ── 토스트 ── */
     function showToast(msg, isError) {
@@ -458,6 +485,27 @@
 
     splitsInput.addEventListener('input', () => validate('splits'));
     zonesInput.addEventListener('input', () => validate('zones'));
+    dateInput.addEventListener('change', loadForDate);
+
+    /* ── 날짜 변경 시 CSV + 저장 데이터 자동 로드 ── */
+    async function loadForDate() {
+      const date = dateInput.value;
+      if (!date) return;
+      const meta = getMeta(date) || {};
+      nameInput.value = meta.name || '';
+      typeInput.value = meta.type || '';
+      noteInput.value = meta.note || '';
+      // CSV 활동 힌트 표시
+      try {
+        const act = await getActivity(date);
+        if (act) {
+          dateHelper.textContent = `CSV: ${act.name} (${act.type}) · ${act.km}km · ${act.dur}`;
+        } else {
+          dateHelper.textContent = '가민 활동 날짜 (YYYY-MM-DD). 같은 날짜면 덮어씀.';
+        }
+      } catch (e) { /* ignore */ }
+    }
+    loadForDate();
 
     /* ── 저장 ── */
     function onSave() {
@@ -466,7 +514,12 @@
 
       const sStr = splitsInput.value.trim();
       const zStr = zonesInput.value.trim();
-      if (!sStr && !zStr) { showToast('저장할 데이터가 없습니다', true); return; }
+      const name = nameInput.value.trim();
+      const type = typeInput.value;
+      const note = noteInput.value.trim();
+      const hasMeta = name || type || note;
+
+      if (!sStr && !zStr && !hasMeta) { showToast('저장할 데이터가 없습니다', true); return; }
 
       let saved = [];
 
@@ -484,6 +537,11 @@
         if (!r.ok) { showToast('심박존 JSON 오류', true); return; }
         setZones(date, r.data);
         saved.push('심박존');
+      }
+
+      if (hasMeta) {
+        setMeta(date, { name: name || null, type: type || null, note: note || null });
+        saved.push('메타');
       }
 
       showToast(`${date}: ${saved.join(' + ')} 저장됨`);
@@ -505,6 +563,7 @@
             <div class="saved-tags">
               ${item.hasSplits ? '<span class="saved-tag">스플릿</span>' : ''}
               ${item.hasZones ? '<span class="saved-tag">심박존</span>' : ''}
+              ${item.hasMeta ? '<span class="saved-tag">메타</span>' : ''}
             </div>
           </div>
           <button class="delete-btn" onclick="onRemove('${item.date}')">삭제</button>

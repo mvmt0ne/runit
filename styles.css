@@ -303,6 +303,10 @@ sup {
 .lp-hero {
   padding: 12px 20px 20px;
   background: var(--asphalt-black);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .lp-hero-title {
@@ -597,6 +601,10 @@ sup {
 .lp-row.compact .lp-date-col {
   padding-top: 14px;
   padding-bottom: 14px;
+}
+
+.lp-row.compact .lp-date-month {
+  display: none;
 }
 
 .lp-row.compact .lp-date-day {
