@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "runit",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["-y", "http-server", "/Users/leedongwon/Desktop/wonnyworx/runit", "-p", "8080", "--cors", "-c-1"],
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-I", "-c", "import sys, functools; sys.path = [p for p in sys.path if p]; from http.server import HTTPServer, SimpleHTTPRequestHandler; H = functools.partial(SimpleHTTPRequestHandler, directory='/Users/ryan/Desktop/wonny_worx/Claude/runit'); HTTPServer(('', 8080), H).serve_forever()"],
       "port": 8080
     }
   ]

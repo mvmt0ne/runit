@@ -522,7 +522,14 @@
       min-height: 24px;
       display: flex;
       align-items: flex-end;
-      padding: 0 12px 30px;
+      justify-content: space-between;
+      padding: 0 20px 30px;
+      gap: 16px;
+    }
+
+    .cal-swipe-arrows {
+      display: flex;
+      align-items: center;
       gap: 16px;
     }
 
@@ -588,6 +595,11 @@
       border-radius: 0;
       padding: 2px 6px 2px 2px;
       margin-left: -2px;
+      font-size: 24px;
+      font-weight: 300;
+      color: var(--text-1);
+      line-height: 1;
+      font-family: 'Pretendard Variable', -apple-system, sans-serif;
       transition: background 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -706,13 +718,7 @@
 
             <div class="hero-section">
               <div class="hero-title">
-                <div class="hero-title-line"><span class="hero-month-tap" onclick="openMonthSheet()"><span
-                      id="hero-month-label">4월</span><svg class="hero-month-chevron" width="14" height="14"
-                      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                      stroke-linejoin="round">
-                      <path d="m6 9 6 6 6-6" />
-                    </svg></span></div>
-                <div class="hero-title-line">마일리지는</div>
+                <div class="hero-title-line">이번달 마일리지는</div>
               </div>
               <div class="weather-widget" id="weather-widget">
                 <div class="weather-top">
@@ -730,19 +736,27 @@
               <span class="hero-km-big"><span class="hero-km-value">59.7</span><sup> K</sup></span>
             </div>
 
-            <!-- 가변 여백: 히어로↔캘린더 사이 + 스와이프 인디케이터 -->
+            <!-- 가변 여백: 히어로↔캘린더 사이 + 월 드롭다운(좌) + 스와이프 인디케이터(우) -->
             <div class="cal-flex-spacer">
-              <div class="cal-swipe-arrow" id="cal-arrow-left">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <path d="m15 18-6-6 6-6" />
-                </svg>
-              </div>
-              <div class="cal-swipe-arrow" id="cal-arrow-right">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <path d="m9 18 6-6-6-6" />
-                </svg>
+              <span class="hero-month-tap" onclick="openMonthSheet()"><span
+                  id="hero-month-label">4월</span><svg class="hero-month-chevron" width="14" height="14"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="m6 9 6 6 6-6" />
+                </svg></span>
+              <div class="cal-swipe-arrows">
+                <div class="cal-swipe-arrow" id="cal-arrow-left">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m15 18-6-6 6-6" />
+                  </svg>
+                </div>
+                <div class="cal-swipe-arrow" id="cal-arrow-right">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m9 18 6-6-6-6" />
+                  </svg>
+                </div>
               </div>
             </div>
 
@@ -845,8 +859,16 @@
 
     async function fetchWeather() {
       try {
-        const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej));
-        const { latitude: lat, longitude: lon } = pos.coords;
+        let lat, lon;
+        const cached = localStorage.getItem('runit-coords');
+        if (cached) {
+          ({ lat, lon } = JSON.parse(cached));
+        } else {
+          const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej));
+          lat = pos.coords.latitude;
+          lon = pos.coords.longitude;
+          localStorage.setItem('runit-coords', JSON.stringify({ lat, lon }));
+        }
 
         // Weather + Air Quality
         const [wRes, aRes] = await Promise.all([
