@@ -482,13 +482,18 @@
       const groupByMonth = sortState.key === 'date';
       if (groupByMonth) {
         const groups = {};
-        sorted.forEach(r => { if (!groups[r.month]) groups[r.month] = []; groups[r.month].push(r); });
-        const months = Object.keys(groups).sort((a, b) => sortState.asc ? a - b : b - a);
-        container.innerHTML = months.map(m => {
-          const runs = groups[m];
+        sorted.forEach(r => {
+          const ym = r.date.slice(0, 7); // YYYY-MM
+          if (!groups[ym]) groups[ym] = [];
+          groups[ym].push(r);
+        });
+        const yms = Object.keys(groups).sort((a, b) => sortState.asc ? a.localeCompare(b) : b.localeCompare(a));
+        container.innerHTML = yms.map(ym => {
+          const runs = groups[ym];
           const totalKm = runs.reduce((s, r) => s + r.km, 0).toFixed(1);
-          const year = runs[0].date.slice(2, 4);
-          return `<div class="lp-month-section" data-month="${m}" data-month-label="${year}년 ${monthLabel(m)}" data-month-km="${totalKm}">
+          const [yyyy, mm] = ym.split('-');
+          const m = parseInt(mm);
+          return `<div class="lp-month-section" data-month="${ym}" data-month-label="${yyyy.slice(2)}년 ${monthLabel(m)}" data-month-km="${totalKm}">
             <div class="lp-month-label">${monthLabel(m)}</div>
             <div class="lp-month-km"><strong>${totalKm}</strong> K</div>
           </div>
