@@ -78,13 +78,6 @@
       font-family: 'Pretendard Variable', sans-serif;
     }
 
-    .d-time {
-      font-size: 13px;
-      color: var(--cloudy-gray);
-      font-family: 'Space Grotesk', sans-serif;
-      margin-top: 6px;
-    }
-
     .d-km-row {
       margin-top: 18px;
       display: flex;
@@ -187,175 +180,37 @@
       font-family: 'Pretendard Variable', sans-serif;
     }
 
-    /* ─── Pace chart ─── */
-    .d-bar-chart {
-      display: flex;
-      align-items: stretch;
-      gap: 3px;
-      height: 120px;
-    }
-
-    .d-bar-col {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
-
-    .d-bar {
-      width: 100%;
-      background: var(--asphalt-black);
-      margin-top: auto;
-      min-height: 2px;
-    }
-
-    .d-bar.fastest {
-      background: var(--accent);
-    }
-
-    .d-bar-label {
-      font-size: 10px;
-      color: var(--cloudy-gray);
-      font-family: 'Space Grotesk', sans-serif;
-      text-align: center;
-      margin-top: 4px;
-    }
-
-    /* ─── Splits table ─── */
-    .d-splits-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .d-splits-table th,
-    .d-splits-table td {
-      padding: 9px 6px;
-      text-align: right;
-      font-size: 13px;
-      font-family: 'Space Grotesk', sans-serif;
-      color: var(--asphalt-black);
-      font-feature-settings: "tnum";
-    }
-
-    .d-splits-table th {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--cloudy-gray);
-      border-bottom: 1px solid rgba(34, 34, 34, 0.15);
-      font-family: 'Pretendard Variable', sans-serif;
-    }
-
-    .d-splits-table th:first-child,
-    .d-splits-table td:first-child {
-      text-align: left;
-    }
-
-    .d-splits-table td.fast {
-      color: var(--accent);
-      font-weight: 600;
-    }
-
-    .d-splits-table tr.partial td {
-      opacity: 0.65;
-      font-style: italic;
-    }
-
-    /* ─── HR zones ─── */
-    .d-zone-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-
-    .d-zone-row:last-child {
-      margin-bottom: 0;
-    }
-
-    .d-zone-label {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--asphalt-black);
-      width: 26px;
-      flex-shrink: 0;
-      font-family: 'Space Grotesk', sans-serif;
-    }
-
-    .d-zone-range {
-      font-size: 10px;
-      color: var(--cloudy-gray);
-      width: 60px;
-      flex-shrink: 0;
-      font-family: 'Space Grotesk', sans-serif;
-    }
-
-    .d-zone-bar-wrap {
-      flex: 1;
-      height: 6px;
-      background: rgba(34, 34, 34, 0.12);
-      overflow: hidden;
-    }
-
-    .d-zone-bar {
-      height: 100%;
-    }
-
-    .d-zone-pct {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--asphalt-black);
-      width: 36px;
-      text-align: right;
-      flex-shrink: 0;
-      font-family: 'Space Grotesk', sans-serif;
-    }
-
-    .d-zone-z1 { background: #64b5f6; }
-    .d-zone-z2 { background: #4fc3f7; }
-    .d-zone-z3 { background: #81c784; }
-    .d-zone-z4 { background: #ffb74d; }
-    .d-zone-z5 { background: #e57373; }
-
     /* ─── TE ─── */
     .d-te-row {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-top: 14px;
-    }
-
-    .d-te-cell {
       display: flex;
-      flex-direction: column;
-      gap: 4px;
+      align-items: baseline;
+      gap: 10px;
     }
 
     .d-te-val {
-      font-size: 22px;
-      font-weight: 500;
+      font-size: 32px;
+      font-weight: 400;
       color: var(--asphalt-black);
       font-family: 'Space Grotesk', sans-serif;
       line-height: 1;
     }
 
-    .d-te-label {
-      font-size: 11px;
-      color: var(--cloudy-gray);
-      font-family: 'Pretendard Variable', sans-serif;
-    }
-
-    /* ─── Note ─── */
-    .d-note-text {
+    .d-te-scale {
       font-size: 14px;
-      line-height: 1.5;
-      color: var(--asphalt-black);
-      font-family: 'Pretendard Variable', sans-serif;
-      white-space: pre-wrap;
+      color: var(--cloudy-gray);
+      font-family: 'Space Grotesk', sans-serif;
     }
 
-    /* ─── Empty / error states ─── */
+    /* ─── 러닝화 이미지 ─── */
+    .d-shoe-img {
+      width: 100%;
+      max-height: 280px;
+      object-fit: contain;
+      background: rgba(34, 34, 34, 0.06);
+      display: block;
+    }
+
+    /* ─── Empty / error ─── */
     .d-empty {
       padding: 24px 20px;
       text-align: center;
@@ -364,7 +219,7 @@
       font-family: 'Pretendard Variable', sans-serif;
     }
 
-    /* ─── Type badge colors (이미 styles.css 의 type-* 변수 사용) ─── */
+    /* ─── Type badge colors (styles.css 의 type-* 변수 사용) ─── */
     .d-type-badge.type-race { background: var(--type-race-bg); color: var(--type-race-text); }
     .d-type-badge.type-tempo,
     .d-type-badge.type-interval,
@@ -407,12 +262,9 @@
     </div>
   </div>
 
-  <script src="./data/splits.js"></script>
-  <script src="./data/zones.js"></script>
   <script src="./data/store.js"></script>
   <script src="./data/activities.js"></script>
   <script>
-    /* ── URL ?date= 파싱, 없으면 최신 활동 ── */
     const _qs = new URLSearchParams(location.search);
     let _date = _qs.get('date');
 
@@ -420,19 +272,6 @@
       goTo(`input.html?date=${_date || ''}`);
     }
 
-    /* ── 페이스 분해 (sec → "M:SS") ── */
-    function secToPace(s) {
-      if (!Number.isFinite(s) || s <= 0) return '--';
-      const m = Math.floor(s / 60), ss = Math.round(s % 60);
-      return `${m}:${String(ss).padStart(2, '0')}`;
-    }
-
-    function paceToSec(p) {
-      const m = String(p || '').match(/^(\d+):(\d+)$/);
-      return m ? parseInt(m[1]) * 60 + parseInt(m[2]) : null;
-    }
-
-    /* ── 메인 렌더 ── */
     async function render() {
       const list = await loadActivities();
       if (!list.length) {
@@ -440,8 +279,6 @@
           '<div class="d-empty">활동 데이터가 없습니다.<br>data/activities.csv 를 확인하세요.</div>';
         return;
       }
-
-      // date 지정 없으면 최신
       if (!_date) _date = list[0].date;
 
       const act = list.find(a => a.date === _date);
@@ -452,24 +289,19 @@
       }
 
       const meta = (typeof getMeta === 'function') ? (getMeta(_date) || {}) : {};
-      const splits = (typeof getSplits === 'function') ? getSplits(_date) : null;
-      const zones  = (typeof getZones  === 'function') ? getZones(_date)  : null;
-
-      const name = meta.name || act.name || '러닝';
-      const type = meta.type || act.type;
-
-      document.getElementById('detail-body').innerHTML = renderHTML({ act, meta, splits, zones, name, type });
+      document.getElementById('detail-body').innerHTML = renderHTML(act, meta);
     }
 
-    function renderHTML({ act, meta, splits, zones, name, type }) {
-      const typeText = type.toUpperCase();
+    function renderHTML(act, meta) {
+      const displayName = (meta.name && meta.name.trim()) || act.name || '러닝';
+      const typeText = act.type.toUpperCase();
       const hero = `
         <div class="d-hero">
           <div class="d-meta-line">
             <span class="d-date">${act.date}${act.startTime ? ' · ' + act.startTime : ''}</span>
-            <span class="d-type-badge type-${type}">${typeText}</span>
+            <span class="d-type-badge type-${act.type}">${typeText}</span>
           </div>
-          <h1 class="d-name">${escapeHTML(name)}</h1>
+          <h1 class="d-name">${escapeHTML(displayName)}</h1>
           <div class="d-km-row">
             <div><span class="d-km">${fmtNum(act.km, 2)}</span><sup>K</sup></div>
             <div class="d-km-side">
@@ -480,15 +312,20 @@
         </div>`;
 
       const statsCells = [
-        ['심박',       act.bpm,        'BPM'],
-        ['최대 심박',  act.maxBpm,     'BPM'],
-        ['케이던스',   act.spm,        'SPM'],
-        ['칼로리',     act.calories,   'KCAL'],
-        ['보폭',       act.stride,     'M'],
-        ['접지시간',   act.ground,     'MS'],
-        ['GAP',        act.avgGAP,     '/K'],
-        ['상승',       act.ascent,     'M'],
-        ['하강',       act.descent,    'M'],
+        ['심박',       act.bpm,       'BPM'],
+        ['최대 심박',  act.maxBpm,    'BPM'],
+        ['케이던스',   act.spm,       'SPM'],
+        ['최대 케이던스', act.maxSpm, 'SPM'],
+        ['최대 페이스', act.maxPace,  '/K'],
+        ['GAP',        act.avgGAP,    '/K'],
+        ['보폭',       act.stride,    'M'],
+        ['접지시간',   act.ground,    'MS'],
+        ['수직 진동',  act.vertOsc,   'CM'],
+        ['수직 비율',  act.vertRatio, '%'],
+        ['칼로리',     act.calories,  'KCAL'],
+        ['걸음',       act.steps,     ''],
+        ['상승',       act.ascent,    'M'],
+        ['하강',       act.descent,   'M'],
       ].filter(([, v]) => v != null && v !== '');
 
       const stats = statsCells.length ? `
@@ -497,108 +334,28 @@
           <div class="d-stats-grid">
             ${statsCells.map(([label, val, unit]) => `
               <div class="d-stat">
-                <div class="d-stat-value">${val}<sup>${unit}</sup></div>
+                <div class="d-stat-value">${val}${unit ? `<sup>${unit}</sup>` : ''}</div>
                 <div class="d-stat-label">${label}</div>
               </div>`).join('')}
           </div>
         </div>` : '';
 
-      const splitsChart = renderSplitsChart(splits);
-      const splitsTable = renderSplitsTable(splits);
-      const zonesCard   = renderZones(zones);
-      const teCard      = renderTE(act, zones);
-      const noteCard    = meta.note ? `
+      const te = (act.teAerobic != null) ? `
         <div class="d-card">
-          <div class="d-card-title">메모</div>
-          <div class="d-note-text">${escapeHTML(meta.note)}</div>
+          <div class="d-card-title">유산소 훈련 효과</div>
+          <div class="d-te-row">
+            <span class="d-te-val">${act.teAerobic}</span>
+            <span class="d-te-scale">/ 5.0</span>
+          </div>
         </div>` : '';
 
-      return hero + stats + splitsChart + splitsTable + teCard + zonesCard + noteCard;
-    }
+      const shoe = meta.shoe ? `
+        <div class="d-card" style="padding: 0;">
+          <div class="d-card-title" style="padding: 18px 20px 0;">러닝화</div>
+          <img class="d-shoe-img" src="${meta.shoe}" alt="러닝화">
+        </div>` : '';
 
-    function renderSplitsChart(splits) {
-      if (!Array.isArray(splits) || !splits.length) return '';
-      const paces = splits.map(s => paceToSec(s.pace)).filter(p => p);
-      if (!paces.length) return '';
-      const min = Math.min(...paces), max = Math.max(...paces);
-      const bars = splits.map(s => {
-        const p = paceToSec(s.pace);
-        if (!p) return '';
-        // 빠를수록(초가 작을수록) 막대 높이 큼
-        const h = max === min ? 60 : 20 + ((max - p) / (max - min)) * 80;
-        const fastest = p === min;
-        return `<div class="d-bar-col">
-          <div class="d-bar ${fastest ? 'fastest' : ''}" style="height:${h}%"></div>
-          <div class="d-bar-label">${s.km}</div>
-        </div>`;
-      }).join('');
-      return `
-        <div class="d-card">
-          <div class="d-card-title">km별 페이스</div>
-          <div class="d-bar-chart">${bars}</div>
-        </div>`;
-    }
-
-    function renderSplitsTable(splits) {
-      if (!Array.isArray(splits) || !splits.length) return '';
-      const paces = splits.map(s => paceToSec(s.pace)).filter(p => p);
-      const fastest = paces.length ? Math.min(...paces) : null;
-      const rows = splits.map(s => {
-        const p = paceToSec(s.pace);
-        const isFast = p && p === fastest;
-        return `<tr class="${s.partial ? 'partial' : ''}">
-          <td>${s.km}${s.partial ? '*' : ''}</td>
-          <td class="${isFast ? 'fast' : ''}">${s.pace}</td>
-          <td>${s.lap}</td>
-          <td>${s.bpm}</td>
-        </tr>`;
-      }).join('');
-      return `
-        <div class="d-card">
-          <div class="d-card-title">스플릿</div>
-          <table class="d-splits-table">
-            <thead>
-              <tr><th>K</th><th>페이스</th><th>랩</th><th>BPM</th></tr>
-            </thead>
-            <tbody>${rows}</tbody>
-          </table>
-        </div>`;
-    }
-
-    function renderZones(zones) {
-      if (!zones || !zones.z1) return '';
-      const order = ['z1', 'z2', 'z3', 'z4', 'z5'];
-      const rows = order.map(k => {
-        const z = zones[k];
-        if (!z) return '';
-        const range = z.range ? `${z.range[0]}-${z.range[1]}` : '';
-        const pct = z.pct || 0;
-        return `<div class="d-zone-row">
-          <span class="d-zone-label">${k.toUpperCase()}</span>
-          <span class="d-zone-range">${range}</span>
-          <div class="d-zone-bar-wrap"><div class="d-zone-bar d-zone-${k}" style="width:${pct}%"></div></div>
-          <span class="d-zone-pct">${pct}%</span>
-        </div>`;
-      }).join('');
-      return `
-        <div class="d-card">
-          <div class="d-card-title">심박 존 ${zones.avgBpm ? `· 평균 ${zones.avgBpm}` : ''}</div>
-          ${rows}
-        </div>`;
-    }
-
-    function renderTE(act, zones) {
-      const aero = (zones && zones.te && zones.te.aerobic != null) ? zones.te.aerobic : act.teAerobic;
-      const anaero = (zones && zones.te && zones.te.anaerobic != null) ? zones.te.anaerobic : null;
-      if (aero == null && anaero == null) return '';
-      return `
-        <div class="d-card">
-          <div class="d-card-title">트레이닝 효과</div>
-          <div class="d-te-row">
-            ${aero != null ? `<div class="d-te-cell"><span class="d-te-val">${aero}</span><span class="d-te-label">유산소</span></div>` : ''}
-            ${anaero != null ? `<div class="d-te-cell"><span class="d-te-val">${anaero}</span><span class="d-te-label">무산소</span></div>` : ''}
-          </div>
-        </div>`;
+      return hero + stats + te + shoe;
     }
 
     function fmtNum(n, d) {

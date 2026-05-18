@@ -265,6 +265,42 @@
       display: block;
     }
 
+    /* 러닝화 이미지 */
+    .shoe-preview-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .shoe-preview {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: none;
+    }
+
+    .shoe-preview.has-image {
+      display: block;
+    }
+
+    .shoe-placeholder {
+      font-size: 12px;
+      color: var(--text-2);
+      opacity: 0.5;
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
+    .shoe-preview.has-image + .shoe-placeholder {
+      display: none;
+    }
+
     /* 입력 검증 표시 */
     .check {
       font-size: 12px;
@@ -326,8 +362,20 @@
               <option value="jogging">조깅</option>
             </select>
             <textarea id="input-note" class="input-field" placeholder="메모 (자유 텍스트)"
-              style="min-height:80px;font-family:'Pretendard Variable',sans-serif;font-size:14px"></textarea>
-            <div class="input-helper">이름·타입·메모는 CSV에 없는 값. 입력하면 detail에서 우선 표시.</div>
+              style="min-height:80px;font-family:'Pretendard Variable',sans-serif;font-size:14px;margin-bottom:12px"></textarea>
+
+            <label class="input-label" style="margin-top:4px">러닝화 이미지</label>
+            <div class="shoe-preview-wrap">
+              <img id="shoe-preview" class="shoe-preview" alt="러닝화 미리보기">
+              <div id="shoe-placeholder" class="shoe-placeholder">이미지 선택 안 됨</div>
+            </div>
+            <div class="field-row" style="margin-top:8px">
+              <label class="ghost-btn" for="input-shoe" style="flex:1;text-align:center">이미지 선택</label>
+              <button type="button" class="ghost-btn" onclick="clearShoe()">비우기</button>
+            </div>
+            <input type="file" id="input-shoe" accept="image/*" style="display:none">
+
+            <div class="input-helper">이름·타입·메모·이미지는 CSV에 없는 값. 입력하면 detail에서 표시.</div>
           </div>
 
           <!-- 스플릿 -->
@@ -405,7 +453,63 @@
     const nameInput = document.getElementById('input-name');
     const typeInput = document.getElementById('input-type');
     const noteInput = document.getElementById('input-note');
+    const shoeInput = document.getElementById('input-shoe');
+    const shoePreview = document.getElementById('shoe-preview');
     const dateHelper = document.getElementById('date-helper');
+
+    let _shoeDataURL = null;
+
+    /* ── 이미지 리사이즈 → base64 ── */
+    function imageToBase64(file, maxDim = 800) {
+      return new Promise((res, rej) => {
+        const fr = new FileReader();
+        fr.onload = e => {
+          const img = new Image();
+          img.onload = () => {
+            let { width: w, height: h } = img;
+            if (w > maxDim || h > maxDim) {
+              if (w > h) { h = h * maxDim / w; w = maxDim; }
+              else { w = w * maxDim / h; h = maxDim; }
+            }
+            const c = document.createElement('canvas');
+            c.width = w; c.height = h;
+            c.getContext('2d').drawImage(img, 0, 0, w, h);
+            res(c.toDataURL('image/jpeg', 0.85));
+          };
+          img.onerror = rej;
+          img.src = e.target.result;
+        };
+        fr.onerror = rej;
+        fr.readAsDataURL(file);
+      });
+    }
+
+    function setShoePreview(dataURL) {
+      _shoeDataURL = dataURL || null;
+      if (dataURL) {
+        shoePreview.src = dataURL;
+        shoePreview.classList.add('has-image');
+      } else {
+        shoePreview.src = '';
+        shoePreview.classList.remove('has-image');
+      }
+    }
+
+    function clearShoe() {
+      setShoePreview(null);
+      shoeInput.value = '';
+    }
+
+    shoeInput.addEventListener('change', async () => {
+      const f = shoeInput.files && shoeInput.files[0];
+      if (!f) return;
+      try {
+        const b64 = await imageToBase64(f);
+        setShoePreview(b64);
+      } catch (e) {
+        showToast('이미지 처리 실패', true);
+      }
+    });
 
     // ?date= 우선, 없으면 오늘
     const _qs = new URLSearchParams(location.search);
@@ -495,6 +599,7 @@
       nameInput.value = meta.name || '';
       typeInput.value = meta.type || '';
       noteInput.value = meta.note || '';
+      setShoePreview(meta.shoe || null);
       // CSV 활동 힌트 표시
       try {
         const act = await getActivity(date);
@@ -517,7 +622,8 @@
       const name = nameInput.value.trim();
       const type = typeInput.value;
       const note = noteInput.value.trim();
-      const hasMeta = name || type || note;
+      const shoe = _shoeDataURL;
+      const hasMeta = name || type || note || shoe;
 
       if (!sStr && !zStr && !hasMeta) { showToast('저장할 데이터가 없습니다', true); return; }
 
@@ -540,8 +646,16 @@
       }
 
       if (hasMeta) {
-        setMeta(date, { name: name || null, type: type || null, note: note || null });
-        saved.push('메타');
+        try {
+          setMeta(date, { name: name || null, type: type || null, note: note || null, shoe: shoe || null });
+          saved.push('메타');
+        } catch (e) {
+          if (e && e.name === 'QuotaExceededError') {
+            showToast('저장 공간 부족(이미지 너무 큼)', true);
+            return;
+          }
+          throw e;
+        }
       }
 
       showToast(`${date}: ${saved.join(' + ')} 저장됨`);
