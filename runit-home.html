@@ -915,90 +915,70 @@
       }
     }
 
-    /* ── Month navigation ── */
-    const MONTHS_ORDER = ['march', 'april'];
-    let currentMonthIdx = 1; // april
+    /* ── Month navigation (CSV에서 동적 생성) ── */
+    let MONTHS_ORDER = [];       // ['YYYY-MM', ...] 오름차순 (오래된 → 최신)
+    let MONTH_DATA   = {};       // { 'YYYY-MM': { monthName, km, runCount, calGrid } }
+    let currentMonthIdx = 0;
 
-    const MONTH_DATA = {
-      march: {
-        monthName: '3월',
-        label: 'March 2026',
-        km: '96.2',
-        runCount: '11 runs',
-        calGrid: `
-        <div class="cal-day type-none"><span class="day-num">1</span></div>
-        <div class="cal-day type-easy" onclick="goTo('detail.html')"><span class="day-note">6</span></div>
-        <div class="cal-day type-easy" onclick="goTo('detail.html')"><span class="day-note">9</span></div>
-        <div class="cal-day type-none"><span class="day-num">4</span></div>
-        <div class="cal-day type-none"><span class="day-num">5</span></div>
-        <div class="cal-day type-easy" onclick="goTo('detail.html')"><span class="day-note">6</span></div>
-        <div class="cal-day type-long" onclick="goTo('detail.html')"><span class="day-note">19</span></div>
-        <div class="cal-day type-none"><span class="day-num">8</span></div>
-        <div class="cal-day type-easy" onclick="goTo('detail.html')"><span class="day-note">6</span></div>
-        <div class="cal-day type-none"><span class="day-num">10</span></div>
-        <div class="cal-day type-none"><span class="day-num">11</span></div>
-        <div class="cal-day type-none"><span class="day-num">12</span></div>
-        <div class="cal-day type-easy" onclick="goTo('detail.html')"><span class="day-note">4</span></div>
-        <div class="cal-day type-none"><span class="day-num">14</span></div>
-        <div class="cal-day type-none"><span class="day-num">15</span></div>
-        <div class="cal-day type-none"><span class="day-num">16</span></div>
-        <div class="cal-day type-none"><span class="day-num">17</span></div>
-        <div class="cal-day type-none"><span class="day-num">18</span></div>
-        <div class="cal-day type-jogging" onclick="goTo('detail.html')"><span class="day-note">5</span></div>
-        <div class="cal-day type-steady" onclick="goTo('detail.html')"><span class="day-note">9</span></div>
-        <div class="cal-day type-none"><span class="day-num">21</span></div>
-        <div class="cal-day type-race" onclick="goTo('detail.html')"><span class="day-note">H</span></div>
-        <div class="cal-day type-none"><span class="day-num">23</span></div>
-        <div class="cal-day type-none"><span class="day-num">24</span></div>
-        <div class="cal-day type-none"><span class="day-num">25</span></div>
-        <div class="cal-day type-none"><span class="day-num">26</span></div>
-        <div class="cal-day type-none"><span class="day-num">27</span></div>
-        <div class="cal-day type-steady" onclick="goTo('detail.html')"><span class="day-note">5</span></div>
-        <div class="cal-day type-none"><span class="day-num">29</span></div>
-        <div class="cal-day type-steady" onclick="goTo('detail.html')"><span class="day-note">6</span></div>
-        <div class="cal-day type-none"><span class="day-num">31</span></div>
-        <div class="cal-day"></div><div class="cal-day"></div><div class="cal-day"></div><div class="cal-day"></div>`
-      },
-      april: {
-        monthName: '4월',
-        label: 'April 2026',
-        km: '59.7',
-        runCount: '6 runs',
-        calGrid: `
-        <div class="cal-day"></div><div class="cal-day"></div><div class="cal-day"></div>
-        <div class="cal-day type-none"><span class="day-num">1</span></div>
-        <div class="cal-day type-none"><span class="day-num">2</span></div>
-        <div class="cal-day type-easy" onclick="goTo('detail.html')"><span class="day-note">8</span></div>
-        <div class="cal-day type-easy" onclick="goTo('detail.html')"><span class="day-note">10</span></div>
-        <div class="cal-day type-easy" onclick="goTo('detail.html')"><span class="day-note">9</span></div>
-        <div class="cal-day type-none"><span class="day-num">6</span></div>
-        <div class="cal-day type-tempo" onclick="goTo('detail.html')"><span class="day-note">T</span></div>
-        <div class="cal-day type-none"><span class="day-num">8</span></div>
-        <div class="cal-day type-none"><span class="day-num">9</span></div>
-        <div class="cal-day type-steady" onclick="goTo('detail.html')"><span class="day-note">5</span></div>
-        <div class="cal-day type-race" onclick="goTo('detail.html')"><span class="day-note">H</span></div>
-        <div class="cal-day type-none"><span class="day-num">12</span></div>
-        <div class="cal-day type-none today"><span class="day-num">13</span></div>
-        <div class="cal-day type-none"><span class="day-num">14</span></div>
-        <div class="cal-day type-none"><span class="day-num">15</span></div>
-        <div class="cal-day type-none"><span class="day-num">16</span></div>
-        <div class="cal-day type-none"><span class="day-num">17</span></div>
-        <div class="cal-day type-none"><span class="day-num">18</span></div>
-        <div class="cal-day type-none"><span class="day-num">19</span></div>
-        <div class="cal-day type-none"><span class="day-num">20</span></div>
-        <div class="cal-day type-none"><span class="day-num">21</span></div>
-        <div class="cal-day type-none"><span class="day-num">22</span></div>
-        <div class="cal-day type-none"><span class="day-num">23</span></div>
-        <div class="cal-day type-none"><span class="day-num">24</span></div>
-        <div class="cal-day type-none"><span class="day-num">25</span></div>
-        <div class="cal-day type-none"><span class="day-num">26</span></div>
-        <div class="cal-day type-none"><span class="day-num">27</span></div>
-        <div class="cal-day type-none"><span class="day-num">28</span></div>
-        <div class="cal-day type-none"><span class="day-num">29</span></div>
-        <div class="cal-day type-none"><span class="day-num">30</span></div>
-        <div class="cal-day"></div><div class="cal-day"></div>`
+    function buildCalGrid(ym, dayMap, today) {
+      const [y, m] = ym.split('-').map(n => parseInt(n, 10));
+      const offset = new Date(y, m - 1, 1).getDay();   // 0=Sun..6=Sat
+      const lastDay = new Date(y, m, 0).getDate();
+      let html = '';
+      for (let i = 0; i < offset; i++) html += '<div class="cal-day"></div>';
+      for (let d = 1; d <= lastDay; d++) {
+        const acts = dayMap.get(d) || [];
+        const isToday = today && today.y === y && today.m === m && today.d === d;
+        const todayCls = isToday ? ' today' : '';
+        if (!acts.length) {
+          html += `<div class="cal-day type-none${todayCls}"><span class="day-num">${d}</span></div>`;
+        } else {
+          // 같은 날 여러 활동 있으면 거리가 가장 긴 것 선택
+          const main = acts.reduce((a, b) => (b.km || 0) > (a.km || 0) ? b : a);
+          const dateStr = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+          const note = main.km != null ? Math.round(main.km) : '';
+          html += `<div class="cal-day type-${main.type}${todayCls}" onclick="goTo('detail.html?date=${dateStr}')"><span class="day-note">${note}</span></div>`;
+        }
       }
-    };
+      const total = offset + lastDay;
+      const pad = (7 - (total % 7)) % 7;
+      for (let i = 0; i < pad; i++) html += '<div class="cal-day"></div>';
+      return html;
+    }
+
+    function buildMonthData(activities) {
+      // 월별 그룹핑
+      const byMonth = new Map();   // YYYY-MM → Activity[]
+      activities.forEach(a => {
+        if (!a.date) return;
+        const ym = a.date.slice(0, 7);
+        if (!byMonth.has(ym)) byMonth.set(ym, []);
+        byMonth.get(ym).push(a);
+      });
+      MONTHS_ORDER = [...byMonth.keys()].sort();   // 오름차순
+      MONTH_DATA = {};
+      const now = new Date();
+      const today = { y: now.getFullYear(), m: now.getMonth() + 1, d: now.getDate() };
+      const MONTH_NAMES = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+      MONTHS_ORDER.forEach(ym => {
+        const acts = byMonth.get(ym);
+        const totalKm = acts.reduce((s, a) => s + (a.km || 0), 0);
+        const dayMap = new Map();
+        acts.forEach(a => {
+          const d = parseInt(a.date.slice(8, 10), 10);
+          if (!dayMap.has(d)) dayMap.set(d, []);
+          dayMap.get(d).push(a);
+        });
+        const [, m] = ym.split('-').map(n => parseInt(n, 10));
+        MONTH_DATA[ym] = {
+          monthName: MONTH_NAMES[m - 1],
+          km: totalKm.toFixed(1),
+          runCount: `${acts.length} runs`,
+          calGrid: buildCalGrid(ym, dayMap, today),
+        };
+      });
+      currentMonthIdx = Math.max(0, MONTHS_ORDER.length - 1);
+    }
 
     function navMonth(dir) {
       const next = currentMonthIdx + dir;
@@ -1056,21 +1036,34 @@
     }
 
     /* ═══════════════════════════════════════
-       MONTH LIST PICKER
+       MONTH LIST PICKER (CSV에서 동적 생성)
     ═══════════════════════════════════════ */
-    const ALL_MONTHS = (() => {
-      const list = [];
-      let y = 2026, m = 4;
-      while (y > 2025 || (y === 2025 && m >= 1)) {
-        list.push({ year: y, month: m });
-        m--; if (m === 0) { m = 12; y--; }
+    let ALL_MONTHS = [];        // [{year, month}] 내림차순 (최신 → 과거)
+    let MONTH_KEY_MAP = {};     // 'YYYY-M' → MONTHS_ORDER idx
+    let WHEEL_YEARS = [];
+
+    function buildWheelMonths() {
+      // 데이터 있는 가장 오래된 달 ~ 가장 최신 달 범위로 휠 채움
+      if (!MONTHS_ORDER.length) {
+        const now = new Date();
+        ALL_MONTHS = [{ year: now.getFullYear(), month: now.getMonth() + 1 }];
+      } else {
+        const [yFirst, mFirst] = MONTHS_ORDER[0].split('-').map(n => parseInt(n, 10));
+        const [yLast, mLast] = MONTHS_ORDER[MONTHS_ORDER.length - 1].split('-').map(n => parseInt(n, 10));
+        ALL_MONTHS = [];
+        let y = yLast, m = mLast;
+        while (y > yFirst || (y === yFirst && m >= mFirst)) {
+          ALL_MONTHS.push({ year: y, month: m });
+          m--; if (m === 0) { m = 12; y--; }
+        }
       }
-      return list;
-    })();
-
-    const MONTH_KEY_MAP = { '2026-4': 1, '2026-3': 0 };
-
-    const WHEEL_YEARS = [...new Set(ALL_MONTHS.map(m => m.year))].sort((a, b) => b - a);
+      MONTH_KEY_MAP = {};
+      MONTHS_ORDER.forEach((ym, idx) => {
+        const [y, m] = ym.split('-').map(n => parseInt(n, 10));
+        MONTH_KEY_MAP[`${y}-${m}`] = idx;
+      });
+      WHEEL_YEARS = [...new Set(ALL_MONTHS.map(m => m.year))].sort((a, b) => b - a);
+    }
     const WHEEL_ITEM_H = 44;
 
     function getMonthsForYear(year) {
@@ -1186,7 +1179,16 @@
     /* ═══════════════════════════════════════
        INIT
     ═══════════════════════════════════════ */
-    (function init() {
+    (async function init() {
+      try {
+        if (typeof loadActivities === 'function') {
+          const activities = await loadActivities();
+          buildMonthData(activities);
+          buildWheelMonths();
+        }
+      } catch (e) {
+        console.error('[home] activities load failed', e);
+      }
       renderMonth();
       fetchWeather();
     })();
