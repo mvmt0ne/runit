@@ -96,7 +96,8 @@
       cursor: pointer;
       transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
       transform-style: preserve-3d;
-      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+      /* transition 없음 — rAF 루프가 직접 보간 (안 그러면 뚝뚝 끊김) */
       box-shadow:
         0 24px 60px -20px rgba(123, 91, 255, 0.55),
         0 8px 24px -8px rgba(0, 0, 0, 0.4),
@@ -137,7 +138,7 @@
       mix-blend-mode: overlay;
       opacity: 0.9;
       pointer-events: none;
-      transition: background 0.06s linear;
+      will-change: background;
     }
 
     /* 무지개 sheen — 위치에 따라 색 흐름 */
@@ -154,7 +155,7 @@
       );
       mix-blend-mode: screen;
       pointer-events: none;
-      transition: background 0.1s linear;
+      will-change: background;
     }
 
     /* 큰 거리 숫자 — 카드 watermark */
@@ -524,15 +525,20 @@
       requestAnimationFrame(tick);
     }
 
-    /* ─── 3D tilt + foil shimmer ─── */
-    /*  3가지 소스 우선순위:
-        1) 사용자 터치/드래그 (가장 정밀, 일시적)
-        2) 마우스 이동 (데스크탑)
-        3) 폰 자이로 (idle 상태 — 폰 기울기에 따라 천천히 반응) */
+    /* ─── 3D tilt + foil shimmer ───
+       target/current 분리 + requestAnimationFrame 보간으로 60fps 부드럽게.
+       이벤트는 target만 갱신, rAF가 매 프레임 current → target lerp.
+       (CSS transition은 빠른 갱신과 충돌하므로 제거되어 있음) */
     let _touchActive = false;
     let _gyroEnabled = false;
-    let _gyroSmoothX = 0;
-    let _gyroSmoothY = 0;
+
+    let _targetX = 0, _targetY = 0;
+    let _currentX = 0, _currentY = 0;
+    let _rafRunning = false;
+
+    const EASE_GYRO  = 0.12;   // 자이로 (느린 idle)
+    const EASE_POINT = 0.28;   // 터치/마우스 (즉시 반응)
+    let _currentEase = EASE_GYRO;
 
     function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 
@@ -543,21 +549,24 @@
       const ry = dx * 12;
       const fx = ((dx + 1) / 2) * 100;
       const fy = ((dy + 1) / 2) * 100;
-      card.style.setProperty('--rx', rx + 'deg');
-      card.style.setProperty('--ry', ry + 'deg');
-      card.style.setProperty('--foil-x', fx + '%');
-      card.style.setProperty('--foil-y', fy + '%');
+      card.style.setProperty('--rx', rx.toFixed(2) + 'deg');
+      card.style.setProperty('--ry', ry.toFixed(2) + 'deg');
+      card.style.setProperty('--foil-x', fx.toFixed(2) + '%');
+      card.style.setProperty('--foil-y', fy.toFixed(2) + '%');
       card.style.setProperty('--sheen-angle', (110 + dx * 35).toFixed(1));
     }
 
-    function resetTilt() {
-      const card = document.getElementById('pb-hero-card');
-      if (!card) return;
-      card.style.setProperty('--rx', '0deg');
-      card.style.setProperty('--ry', '0deg');
-      card.style.setProperty('--foil-x', '50%');
-      card.style.setProperty('--foil-y', '40%');
-      card.style.setProperty('--sheen-angle', '110');
+    function startRenderLoop() {
+      if (_rafRunning) return;
+      _rafRunning = true;
+      function tick() {
+        const ease = _touchActive ? EASE_POINT : _currentEase;
+        _currentX += (_targetX - _currentX) * ease;
+        _currentY += (_targetY - _currentY) * ease;
+        applyTilt(_currentX, _currentY);
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
     }
 
     (function setupPointerTilt() {
@@ -568,13 +577,14 @@
         const rect = card.getBoundingClientRect();
         const cx = rect.left + rect.width / 2;
         const cy = rect.top + rect.height / 2;
-        const dx = clamp((clientX - cx) / (rect.width / 2), -1, 1);
-        const dy = clamp((clientY - cy) / (rect.height / 2), -1, 1);
-        applyTilt(dx, dy);
+        _targetX = clamp((clientX - cx) / (rect.width / 2), -1, 1);
+        _targetY = clamp((clientY - cy) / (rect.height / 2), -1, 1);
       }
 
       card.addEventListener('mousemove', e => fromPointer(e.clientX, e.clientY));
-      card.addEventListener('mouseleave', () => { if (!_gyroEnabled) resetTilt(); });
+      card.addEventListener('mouseleave', () => {
+        if (!_gyroEnabled) { _targetX = 0; _targetY = 0; }
+      });
 
       card.addEventListener('touchstart', e => {
         _touchActive = true;
@@ -587,16 +597,18 @@
       }, { passive: true });
       const endTouch = () => {
         _touchActive = false;
-        if (!_gyroEnabled) resetTilt();
+        if (!_gyroEnabled) { _targetX = 0; _targetY = 0; }
       };
       card.addEventListener('touchend', endTouch);
       card.addEventListener('touchcancel', endTouch);
+
+      startRenderLoop();
     })();
 
-    /* ─── 자이로(폰 기울기) → 카드 tilt ───
+    /* ─── 자이로(폰 기울기) → target만 갱신, rAF가 부드럽게 따라감 ───
        beta : 폰 앞뒤 기울기 (-180..180). 손에 든 자세 보통 30~60도.
        gamma: 폰 좌우 기울기 (-90..90). 똑바로 들면 0.
-       세로 모드 가정. 화면 회전은 screen.orientation.angle 로 보정. */
+       세로 모드 기본. screen.orientation.angle 로 가로/뒤집힘 보정. */
     function handleOrient(e) {
       if (_touchActive) return;
       let gamma = e.gamma || 0;
@@ -606,19 +618,17 @@
       else if (ang === 270 || ang === -90) { const g = gamma; gamma = -beta; beta = g; }
       else if (ang === 180)      { gamma = -gamma; beta = -beta; }
 
-      const targetX = clamp(gamma / 25, -1, 1);
-      const targetY = clamp((beta - 45) / 25, -1, 1);
-      // 부드럽게 평활화 (저역 통과)
-      _gyroSmoothX = _gyroSmoothX * 0.85 + targetX * 0.15;
-      _gyroSmoothY = _gyroSmoothY * 0.85 + targetY * 0.15;
-      applyTilt(_gyroSmoothX, _gyroSmoothY);
+      _targetX = clamp(gamma / 25, -1, 1);
+      _targetY = clamp((beta - 45) / 25, -1, 1);
     }
 
     function enableGyro() {
       if (_gyroEnabled) return;
       const start = () => {
         _gyroEnabled = true;
+        _currentEase = EASE_GYRO;
         window.addEventListener('deviceorientation', handleOrient);
+        startRenderLoop();
       };
       // iOS 13+ 권한 요청
       if (typeof DeviceOrientationEvent !== 'undefined' &&

@@ -2,6 +2,85 @@
 
 ---
 
+## [2026-05-17 → 18] CSV 데이터 파이프라인 + UI 통일 + PB 인터랙션
+
+### 서버 실행
+- `.claude/launch.json` 의 `runit` 설정: `python3` 로컬 서버 (port 8080)
+- 진입점: **`app.html`** (Swiper로 home/list/stats/pb 슬라이드를 동적 로드)
+- 단독 페이지: `detail.html?date=YYYY-MM-DD`, `input.html?date=YYYY-MM-DD`
+- file:// 직접 열기 NG — fetch CORS 때문 (활동 CSV 로드 안 됨)
+
+### 데이터 모델 (중요)
+- **CSV (1차 데이터)**: `data/activities.csv` — 가민 앱 내보내기 그대로. ~173개 러닝 활동.
+  - 35 컬럼 중 사용: 날짜, 제목, 거리, 시간, 평균 페이스/최대 페이스, 평균/최대 심박, TE(유산소), 케이던스, 보폭(m), 접지시간, 수직 진동/비율, 칼로리, 걸음, 상승/하강
+  - **없는 것**: km별 페이스(분할), 심박존 분포 — 가민 CSV 익스포트엔 미포함
+- **JS 파서**: `data/activities.js` — `loadActivities() / getActivity(date)` Promise 기반.
+  - `inferType(title)` 매핑: E·러닝→easy / S→steady / T→tempo / J→jogging / TT→tt / L→long / I→interval / R·한글대회명→race
+  - 보폭 단위: CSV는 m, list 렌더는 cm — `Math.round(stride * 100)`
+- **메타 (사용자 오버라이드)**: `data/store.js` — localStorage 키 `runit:meta`
+  - `getMeta(date) / setMeta(date, { name, type, note, shoe })`
+  - `shoe`: base64 JPEG (입력 시 max 800px / quality 0.85 자동 리사이즈)
+- `splits.js`, `zones.js`: 현재 detail에서는 사용 안 함. 향후 분할/심박존 데이터 수동 입력 용도로 보존.
+
+### 페이지별 변경
+
+#### list.html — CSV에서 활동 173개 자동 로드
+- 하드코딩 `RUNS` 17개 제거 → `loadActivities()` → `activityToRun()` 매핑
+- 월 그룹핑 키 `r.month`(int) → `r.date.slice(0,7)`(YYYY-MM): 다년도 정렬 버그 수정 (이제 2026-05 → 2026-04 → ... → 2025-12 순서)
+- 행 클릭 → `detail.html?date=YYYY-MM-DD` 라우팅
+- lp-hero에 인라인 뷰 토글(`.lp-view-toggle`) — 단일 아이콘 버튼, on/off 색상 (확장=흰색 배경, 컴팩트=아웃라인)
+- 컴팩트 모드 행 높이 통일: 숨김 `.lp-date-month` span에 빈 값 → 실제 월 텍스트로 (visibility:hidden로 자리만 잡기). `display:none`으로 월 라벨 자체를 컴팩트에서 숨김.
+- 필터/뷰 토글 FAB은 탭바 밖 플로팅 버튼으로 분리 ([app.html:32-58](app.html)) — 자동 숨김 동기화 ([transitions.js:78-86](transitions.js))
+
+#### detail.html — list/home 톤으로 재설계, CSV-only
+- 색: asphalt-black 배경 + slate-gray 카드 + bone 텍스트 (list와 동일)
+- 표시 항목: 헤더(date·time·type 배지·name) → 핵심(km/dur/avgPace) → CSV 스탯 14개 → 유산소 TE → **러닝화 카드** (메타에 이미지 있으면 표시, 없으면 점선 placeholder → 탭하면 input.html로 이동)
+- 우상단 ✏️ → `input.html?date=`
+- meta.name 있으면 CSV 제목 오버라이드
+- splits/zones 차트·테이블·HR존 섹션 모두 제거 (CSV에 없는 데이터)
+
+#### input.html — 메타 입력 (러닝화 이미지 + 이름·타입·메모)
+- `?date=` 자동 파싱, 헬퍼에 CSV 활동 요약 표시
+- 메타 입력: 이름 / 타입 select / 메모 / **러닝화 이미지(파일 선택 + 미리보기)**
+- 이미지 처리: canvas 리사이즈 800px max + JPEG 0.85
+- 저장 흐름은 기존 splits/zones 패턴 그대로 + `setMeta()` 추가
+- localStorage 용량 초과 시 토스트 알림
+
+#### pb.html — Podium 레이아웃 + 홀로그래픽 hero + 자이로
+- 기존 pile/expanded 스택 모드 폐기
+- 헤더/탭: stats와 동일 (`.lp-hero` + `.lp-header` 스크롤 컴팩트 전환, sticky `.dist-tabs`)
+- 거리 탭 6개: **1K / 3K / 5K / 10K / 하프 / 풀** (폰트 17px)
+- Hero 카드 (1위):
+  - 보라/블루 그라데이션 + 코너 핑크/블루 글로우 + 우하단 거대 워터마크 숫자
+  - **3D tilt**: 터치(우선) > 마우스 > 자이로 → `--rx/--ry` ±9~12°
+  - **자이로(폰 기울기)**: `deviceorientation` (beta/gamma) → 평활화 후 카드 회전. `screen.orientation.angle` 보정. iOS 13+는 카드 탭 시 `requestPermission()` 트리거.
+  - **Foil shimmer**: `--foil-x/--foil-y` 따라 흰색 radial highlight 이동, mix-blend-mode: overlay
+  - **Rainbow sheen**: 각도에 따라 색상 흐름
+  - **슬롯머신 카운터**: 거리 탭 전환 시 시간 숫자가 0.62초 동안 scramble 후 정착
+  - **탭 펄스**: 0.42s scale 0.96 ↔ 1
+- 2~5위는 컴팩트 리스트 (호버 시 좌측 보라 라인)
+
+#### runit-home.html
+- 위치 권한 팝업 매번 뜨는 문제 해결: 좌표를 `localStorage('runit-coords')` 캐시 → 첫 허용 후엔 다시 안 묻음
+- 4월 ▼ 드롭다운을 hero에서 분리해 캘린더 위쪽 좌측으로 이동, 스와이프 화살표는 우측 그룹화
+
+### 다음 작업 후보
+- splits/zones 입력은 input.html에 살아있으나 detail에 표시 경로 없음 — 차후 detail에 "수동 분할 추가" 토글 부활 여부 결정
+- pb.html `PB_DATA` 는 여전히 하드코딩 — CSV에서 거리별 최고기록 자동 추출 로직 도입 가능 (distance 매칭 + time 정렬)
+- localStorage 용량 모니터링: 활동 메타 이미지 다수 저장 시 ~5MB 한계 도달 가능, IndexedDB 이전 고려
+
+### 디렉터리 메모
+```
+data/
+  activities.csv     # 가민 익스포트 — 새 CSV 받으면 이 파일만 교체
+  activities.js      # 파서 + 로더 (fetch 기반)
+  store.js           # localStorage 오버라이드 + meta
+  splits.js          # (현재 미사용, 보존)
+  zones.js           # (현재 미사용, 보존)
+```
+
+---
+
 ## [2026-04-23] Shift5 디자인 시스템 적용
 
 ### Theme Migration
