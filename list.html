@@ -35,7 +35,6 @@
       flex: 1;
       overflow-y: auto;
       scrollbar-width: none;
-      padding-top: calc(env(safe-area-inset-top, 0px) + 10px);
       padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
     }
 
@@ -55,7 +54,7 @@
     /* ─── Month floating bar (top) ── */
     .month-top-bar {
       position: fixed;
-      top: calc(env(safe-area-inset-top, 0px) + 10px);
+      top: calc(env(safe-area-inset-top, 0px) + 100px);
       left: 50%;
       transform: translateX(-50%);
       z-index: 20;
@@ -154,7 +153,7 @@
       gap: 6px;
     }
 
-    /* lp-hero 안의 인라인 뷰 모드 토글 */
+    /* tab-row 안의 뷰 모드 토글 */
     .lp-view-toggle {
       width: 36px;
       height: 36px;
@@ -162,7 +161,6 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      margin-bottom: 4px;
       padding: 0;
       background: transparent;
       border: 1px solid rgba(255, 255, 255, 0.12);
@@ -190,6 +188,65 @@
       background: var(--bone);
       border-color: transparent;
       color: var(--asphalt-black);
+    }
+
+    /* ─── List tab-row (모드/정렬/필터) ── */
+    .list-tab-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px 12px;
+    }
+
+    .list-ctrl-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      height: 36px;
+      padding: 0 14px;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 100px;
+      color: var(--bone);
+      font-family: 'Pretendard Variable', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .list-ctrl-btn:active {
+      transform: scale(0.96);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .list-ctrl-btn .ctrl-btn-label {
+      color: var(--cloudy-gray);
+    }
+
+    .list-ctrl-btn .ctrl-btn-value {
+      margin-left: auto;
+      color: var(--bone);
+      font-weight: 500;
+      max-width: 110px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .list-ctrl-btn .ctrl-btn-chevron {
+      color: var(--surface-5);
+      flex-shrink: 0;
+    }
+
+    .list-ctrl-btn.has-active {
+      border-color: var(--bone);
+    }
+
+    .list-ctrl-btn.has-active .ctrl-btn-label,
+    .list-ctrl-btn.has-active .ctrl-btn-value {
+      color: var(--bone);
     }
 
     .ctrl-seg {
@@ -280,9 +337,16 @@
       <!-- 리스트 -->
       <div class="list-page">
         <div class="list-scroll" id="list-scroll">
-          <!-- Large title (스크롤 시 자연스럽게 위로 사라짐) -->
+          <!-- Compact sticky header -->
+          <div class="lp-header">
+            <span class="lp-header-title-compact">러닝 활동</span>
+          </div>
+          <!-- Large title -->
           <div class="lp-hero">
             <h1 class="lp-hero-title">러닝 활동</h1>
+          </div>
+          <!-- Tab area: 모드 / 정렬 / 필터 -->
+          <div class="tab-row list-tab-row">
             <button class="lp-view-toggle" id="lp-view-toggle" aria-label="뷰 모드 전환" onclick="toggleView()">
               <svg class="icon-expanded" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                 stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
@@ -295,6 +359,22 @@
                 <line x1="4" y1="10" x2="20" y2="10" />
                 <line x1="4" y1="14" x2="20" y2="14" />
                 <line x1="4" y1="18" x2="20" y2="18" />
+              </svg>
+            </button>
+            <button class="list-ctrl-btn" id="tab-sort-btn" onclick="openSortSheet()">
+              <span class="ctrl-btn-label">정렬</span>
+              <span class="ctrl-btn-value" id="tab-sort-val"></span>
+              <svg class="ctrl-btn-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </button>
+            <button class="list-ctrl-btn" id="tab-filter-btn" onclick="openFilterSheet()">
+              <span class="ctrl-btn-label">필터</span>
+              <span class="ctrl-btn-value" id="tab-filter-val"></span>
+              <svg class="ctrl-btn-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m6 9 6 6 6-6" />
               </svg>
             </button>
           </div>
@@ -471,6 +551,7 @@
     let viewMode = 'expanded';
 
     function renderList() {
+      updateCtrlSheet();
       const scrollEl = document.getElementById('list-scroll');
       if (scrollEl) scrollEl.scrollTop = 0;
       const container = document.getElementById('runs-list-container');
@@ -600,14 +681,23 @@
 
     function updateCtrlSheet() {
       const opt = SORT_OPTS.find(o => o.key === sortState.key && o.asc === sortState.asc);
+      const sortLabel = opt ? opt.label : '';
       const sortEl = document.getElementById('ctrl-sort-val');
-      if (sortEl) sortEl.textContent = opt ? opt.label : '';
+      if (sortEl) sortEl.textContent = sortLabel;
+      const tabSortEl = document.getElementById('tab-sort-val');
+      if (tabSortEl) tabSortEl.textContent = sortLabel;
 
-      const hasFilter = filterState.type || filterState.bpm ||
-        filterState.distMin > 0 || filterState.distMax < 42 ||
-        filterState.paceMin > 240 || filterState.paceMax < 600;
+      const activeCount =
+        (filterState.type ? 1 : 0) +
+        (filterState.bpm ? 1 : 0) +
+        ((filterState.distMin > 0 || filterState.distMax < 42) ? 1 : 0) +
+        ((filterState.paceMin > 240 || filterState.paceMax < 600) ? 1 : 0);
       const filterEl = document.getElementById('ctrl-filter-val');
-      if (filterEl) filterEl.textContent = hasFilter ? '활성' : '없음';
+      if (filterEl) filterEl.textContent = activeCount > 0 ? '활성' : '없음';
+      const tabFilterVal = document.getElementById('tab-filter-val');
+      if (tabFilterVal) tabFilterVal.textContent = activeCount > 0 ? String(activeCount) : '';
+      const tabFilterBtn = document.getElementById('tab-filter-btn');
+      if (tabFilterBtn) tabFilterBtn.classList.toggle('has-active', activeCount > 0);
 
       updateCtrlViewSegs();
     }
