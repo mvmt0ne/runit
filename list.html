@@ -137,59 +137,35 @@
     .list-tab-row {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 8px 16px 12px;
+      gap: 16px;
+      padding: 0 16px;
     }
 
     .list-ctrl-btn {
-      flex: 1;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 6px;
-      height: 36px;
-      padding: 0 14px;
+      gap: 2px;
+      padding: 12px 0;
       background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 100px;
-      color: var(--bone);
-      font-family: 'Pretendard Variable', sans-serif;
-      font-size: 14px;
+      border: none;
+      color: var(--cloudy-gray);
+      font-size: 24px;
       font-weight: 400;
       cursor: pointer;
-      transition: background 0.15s, border-color 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: color 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .list-ctrl-btn:active {
       transform: scale(0.96);
-      background: rgba(255, 255, 255, 0.06);
-    }
-
-    .list-ctrl-btn .ctrl-btn-label {
-      color: var(--cloudy-gray);
-    }
-
-    .list-ctrl-btn .ctrl-btn-value {
-      margin-left: auto;
-      color: var(--bone);
-      font-weight: 500;
-      max-width: 110px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
 
     .list-ctrl-btn .ctrl-btn-chevron {
-      color: var(--surface-5);
       flex-shrink: 0;
     }
 
     .list-ctrl-btn.has-active {
-      border-color: var(--bone);
-    }
-
-    .list-ctrl-btn.has-active .ctrl-btn-label,
-    .list-ctrl-btn.has-active .ctrl-btn-value {
       color: var(--bone);
+      font-weight: 500;
     }
 
 
@@ -287,17 +263,15 @@
               </svg>
             </button>
             <button class="list-ctrl-btn" id="tab-sort-btn" onclick="openSortSheet()">
-              <span class="ctrl-btn-label">정렬</span>
-              <span class="ctrl-btn-value" id="tab-sort-val"></span>
-              <svg class="ctrl-btn-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              정렬
+              <svg class="ctrl-btn-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="m6 9 6 6 6-6" />
               </svg>
             </button>
             <button class="list-ctrl-btn" id="tab-filter-btn" onclick="openFilterSheet()">
-              <span class="ctrl-btn-label">필터</span>
-              <span class="ctrl-btn-value" id="tab-filter-val"></span>
-              <svg class="ctrl-btn-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              필터
+              <svg class="ctrl-btn-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="m6 9 6 6 6-6" />
               </svg>
@@ -543,20 +517,12 @@
 
     /* ─── Controls dispatch sheet ── */
     function updateCtrlSheet() {
-      const opt = SORT_OPTS.find(o => o.key === sortState.key && o.asc === sortState.asc);
-      const sortLabel = opt ? opt.label : '';
-      const tabSortEl = document.getElementById('tab-sort-val');
-      if (tabSortEl) tabSortEl.textContent = sortLabel;
-
-      const activeCount =
-        (filterState.type ? 1 : 0) +
-        (filterState.bpm ? 1 : 0) +
-        ((filterState.distMin > 0 || filterState.distMax < 42) ? 1 : 0) +
-        ((filterState.paceMin > 240 || filterState.paceMax < 600) ? 1 : 0);
-      const tabFilterVal = document.getElementById('tab-filter-val');
-      if (tabFilterVal) tabFilterVal.textContent = activeCount > 0 ? String(activeCount) : '';
+      const hasActiveFilter =
+        filterState.type || filterState.bpm ||
+        filterState.distMin > 0 || filterState.distMax < 42 ||
+        filterState.paceMin > 240 || filterState.paceMax < 600;
       const tabFilterBtn = document.getElementById('tab-filter-btn');
-      if (tabFilterBtn) tabFilterBtn.classList.toggle('has-active', activeCount > 0);
+      if (tabFilterBtn) tabFilterBtn.classList.toggle('has-active', !!hasActiveFilter);
 
       updateCtrlViewSegs();
     }
