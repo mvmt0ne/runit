@@ -226,9 +226,9 @@
               background: var(--bone);
             }
 
-            /* 이번 달 — 풀 컬러 */
+            /* 이번 달 — 흰색 */
             .cmp-col.current .cmp-bar {
-              background: var(--accent);
+              background: var(--bone);
             }
 
             /* 미래 달 — 스텁 (고정 높이, 매우 흐리게) */
@@ -446,14 +446,18 @@
               transition: color 0.3s;
             }
 
-            /* 선택된 바만 강조 */
+            /* 선택된 바 — 월/바/마일리지 모두 accent */
+            .cmp-col.selected .cmp-bar {
+              background: var(--accent) !important;
+            }
+
             .cmp-col.selected .cmp-km {
               color: var(--accent) !important;
               font-weight: 600 !important;
             }
 
             .cmp-col.selected .cmp-label {
-              color: var(--text-1) !important;
+              color: var(--accent) !important;
               font-weight: 600 !important;
             }
 
