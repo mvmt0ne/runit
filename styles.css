@@ -363,6 +363,79 @@ sup {
     -webkit-backdrop-filter: blur(40px) saturate(160%);
 }
 
+/* tab-row 안의 뷰 모드 토글 */
+.lp-view-toggle {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    transition:
+        color 0.15s,
+        background 0.15s,
+        transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lp-view-toggle:active {
+    transform: scale(0.92);
+}
+
+.lp-view-toggle svg {
+    display: none;
+}
+
+.lp-view-toggle.view-expanded .icon-expanded,
+.lp-view-toggle.view-compact .icon-compact {
+    display: block;
+}
+
+.lp-view-toggle.view-expanded {
+    border-color: transparent;
+    color: var(--asphalt-black);
+}
+
+/* ─── List tab-row (모드/정렬/필터) ── */
+.list-tab-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 16px;
+}
+
+.list-ctrl-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 12px 0;
+    background: transparent;
+    border: none;
+    color: var(--asphalt-black);
+    font-size: 24px;
+    font-weight: 400;
+    cursor: pointer;
+    transition:
+        color 0.15s,
+        transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.list-ctrl-btn:active {
+    transform: scale(0.96);
+}
+
+.list-ctrl-btn .ctrl-btn-chevron {
+    flex-shrink: 0;
+}
+
+.list-ctrl-btn.has-active {
+    color: var(--bone);
+    font-weight: 500;
+}
+
 /* ═══════════════════════════════════════════════════════════
    TAB BAR — 전 페이지 공통 하단 탭바
 ═══════════════════════════════════════════════════════════ */

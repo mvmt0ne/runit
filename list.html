@@ -1,460 +1,462 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+        <title>runit — 러닝 활동</title>
+        <link rel="manifest" href="./manifest.json" />
+        <meta name="theme-color" content="#202020" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="runit" />
+        <link rel="apple-touch-icon" href="./icon.svg" />
+        <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable.min.css"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="./styles.css" />
+        <script src="./transitions.js"></script>
+        <style>
+            /* ─── List page layout ── */
+            .list-page {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+            }
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>runit — 러닝 활동</title>
-  <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#202020">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="runit">
-  <link rel="apple-touch-icon" href="./icon.svg">
-  <link rel="icon" type="image/svg+xml" href="./icon.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
-    rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable.min.css"
-    rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css">
-  <script src="./transitions.js"></script>
-  <style>
-    /* ─── List page layout ── */
-    .list-page {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
+            .list-scroll {
+                flex: 1;
+                overflow-y: auto;
+                scrollbar-width: none;
+                padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
+            }
 
-    .list-scroll {
-      flex: 1;
-      overflow-y: auto;
-      scrollbar-width: none;
-      padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
-    }
+            .list-scroll::-webkit-scrollbar {
+                display: none;
+            }
 
-    .list-scroll::-webkit-scrollbar {
-      display: none;
-    }
+            /* ─── Month section header — 위치 추적용 마커만, 시각적으로 완전 숨김 ── */
+            .lp-month-section {
+                height: 0;
+                padding: 0;
+                margin: 0;
+                overflow: hidden;
+                visibility: hidden;
+            }
 
-    /* ─── Month section header — 위치 추적용 마커만, 시각적으로 완전 숨김 ── */
-    .lp-month-section {
-      height: 0;
-      padding: 0;
-      margin: 0;
-      overflow: hidden;
-      visibility: hidden;
-    }
+            /* ─── Month floating bar (top) ── */
+            .month-top-bar {
+                position: fixed;
+                top: calc(env(safe-area-inset-top, 0px) + 100px);
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 20;
+                display: flex;
+                align-items: center;
+                gap: 80px;
+                background: rgba(18, 18, 18, 0.82);
+                backdrop-filter: blur(16px) saturate(140%);
+                -webkit-backdrop-filter: blur(16px) saturate(140%);
+                border-radius: 100px;
+                padding: 18px 32px;
+                pointer-events: none;
+                opacity: 0;
+                transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                white-space: nowrap;
+            }
 
-    /* ─── Month floating bar (top) ── */
-    .month-top-bar {
-      position: fixed;
-      top: calc(env(safe-area-inset-top, 0px) + 100px);
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 20;
-      display: flex;
-      align-items: center;
-      gap: 80px;
-      background: rgba(18, 18, 18, 0.82);
-      backdrop-filter: blur(16px) saturate(140%);
-      -webkit-backdrop-filter: blur(16px) saturate(140%);
-      border-radius: 100px;
-      padding: 18px 32px;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      white-space: nowrap;
-    }
+            .month-top-bar.visible {
+                opacity: 1;
+            }
 
-    .month-top-bar.visible {
-      opacity: 1;
-    }
+            .month-top-slot {
+                overflow: hidden;
+                height: 18px;
+            }
 
-    .month-top-slot {
-      overflow: hidden;
-      height: 18px;
-    }
+            .month-top-label,
+            .month-top-km {
+                display: block;
+                font-size: 16px;
+                font-weight: 400;
+                color: var(--bone);
+                transition:
+                    transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                    opacity 0.18s;
+            }
 
-    .month-top-label,
-    .month-top-km {
-      display: block;
-      font-size: 16px;
-      font-weight: 400;
-      color: var(--bone);
-      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.18s;
-    }
+            .month-top-km {
+                font-family: 'Space Grotesk', sans-serif;
+                font-weight: 500;
+                color: var(--slate-gray);
+            }
 
-    .month-top-km {
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 500;
-      color: var(--slate-gray);
-    }
+            /* ─── Type colors ── */
+            .type-race {
+                background: var(--type-race-bg);
+                color: var(--type-race-text);
+            }
 
-    /* tab-row 안의 뷰 모드 토글 */
-    .lp-view-toggle {
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      padding: 0;
-      background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 100px;
-      color: var(--cloudy-gray);
-      cursor: pointer;
-      transition: color 0.15s, background 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-    }
+            .type-tempo {
+                background: var(--type-dark-bg);
+                color: var(--type-dark-text);
+            }
 
-    .lp-view-toggle:active {
-      transform: scale(0.92);
-      background: rgba(255, 255, 255, 0.06);
-    }
+            .type-interval {
+                background: var(--type-dark-bg);
+                color: var(--type-dark-text);
+            }
 
-    .lp-view-toggle svg {
-      display: none;
-    }
+            .type-steady {
+                background: var(--type-steady-bg);
+                color: var(--type-steady-text);
+            }
 
-    .lp-view-toggle.view-expanded .icon-expanded,
-    .lp-view-toggle.view-compact .icon-compact {
-      display: block;
-    }
+            .type-easy {
+                background: var(--type-easy-bg);
+                color: var(--type-easy-text);
+            }
 
-    .lp-view-toggle.view-expanded {
-      background: var(--bone);
-      border-color: transparent;
-      color: var(--asphalt-black);
-    }
+            .type-jogging {
+                background: var(--type-jog-bg);
+                color: var(--type-jog-text);
+            }
 
-    /* ─── List tab-row (모드/정렬/필터) ── */
-    .list-tab-row {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 0 16px;
-    }
+            .type-long {
+                background: var(--type-long-bg);
+                color: var(--type-long-text);
+            }
 
-    .list-ctrl-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 2px;
-      padding: 12px 0;
-      background: transparent;
-      border: none;
-      color: var(--cloudy-gray);
-      font-size: 24px;
-      font-weight: 400;
-      cursor: pointer;
-      transition: color 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-    }
+            /* ─── Empty ── */
+            .empty-result {
+                padding: 48px 20px;
+                text-align: center;
+                font-size: 14px;
+                color: var(--text-2);
+                font-family: 'Pretendard Variable', sans-serif;
+                opacity: 0.5;
+            }
+        </style>
+    </head>
 
-    .list-ctrl-btn:active {
-      transform: scale(0.96);
-    }
+    <body>
+        <div class="phone">
+            <div class="phone-inner bg-dark">
+                <!-- 월 마일리지 플로팅 바 (상단) -->
+                <div class="month-top-bar" id="month-top-bar">
+                    <div class="month-top-slot">
+                        <span class="month-top-label" id="month-top-label">—</span>
+                    </div>
+                    <div class="month-top-slot">
+                        <span class="month-top-km" id="month-top-km">—</span>
+                    </div>
+                </div>
 
-    .list-ctrl-btn .ctrl-btn-chevron {
-      flex-shrink: 0;
-    }
+                <!-- 리스트 -->
+                <div class="list-page">
+                    <div class="list-scroll" id="list-scroll">
+                        <!-- Compact sticky header -->
+                        <div class="lp-header">
+                            <span class="lp-header-title-compact">러닝 활동</span>
+                        </div>
+                        <!-- Large title -->
+                        <div class="lp-hero">
+                            <h1 class="lp-hero-title">러닝 활동</h1>
+                        </div>
+                        <!-- Tab area: 모드 / 정렬 / 필터 -->
+                        <div class="tab-row list-tab-row">
+                            <button
+                                class="lp-view-toggle"
+                                id="lp-view-toggle"
+                                aria-label="뷰 모드 전환"
+                                onclick="toggleView()"
+                            >
+                                <svg
+                                    class="icon-expanded"
+                                    width="22"
+                                    height="22"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.6"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <rect x="3" y="4" width="18" height="6" rx="1" />
+                                    <rect x="3" y="14" width="18" height="6" rx="1" />
+                                </svg>
+                                <svg
+                                    class="icon-compact"
+                                    width="22"
+                                    height="22"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.6"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <line x1="4" y1="6" x2="20" y2="6" />
+                                    <line x1="4" y1="10" x2="20" y2="10" />
+                                    <line x1="4" y1="14" x2="20" y2="14" />
+                                    <line x1="4" y1="18" x2="20" y2="18" />
+                                </svg>
+                            </button>
+                            <button class="list-ctrl-btn" id="tab-sort-btn" onclick="openSortSheet()">
+                                정렬
+                                <svg
+                                    class="ctrl-btn-chevron"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <path d="m6 9 6 6 6-6" />
+                                </svg>
+                            </button>
+                            <button class="list-ctrl-btn" id="tab-filter-btn" onclick="openFilterSheet()">
+                                필터
+                                <svg
+                                    class="ctrl-btn-chevron"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <path d="m6 9 6 6 6-6" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div id="runs-list-container"></div>
+                    </div>
+                </div>
 
-    .list-ctrl-btn.has-active {
-      color: var(--bone);
-      font-weight: 500;
-    }
+                <!-- Sort sheet -->
+                <div class="sf-backdrop" id="sf-backdrop" onclick="closeSFSheet()"></div>
+                <div class="month-modal" id="sort-sheet">
+                    <div class="sf-sheet-header">
+                        <span class="sf-sheet-title">정렬</span>
+                        <button class="sf-sheet-close" onclick="closeSFSheet()">
+                            <svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <path d="M18 6 6 18" />
+                                <path d="m6 6 12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="month-list" id="sf-sort-opts" style="padding: 0 20px 20px"></div>
+                </div>
 
-
-
-
-
-
-    /* ─── Type colors ── */
-    .type-race {
-      background: var(--type-race-bg);
-      color: var(--type-race-text);
-    }
-
-    .type-tempo {
-      background: var(--type-dark-bg);
-      color: var(--type-dark-text);
-    }
-
-    .type-interval {
-      background: var(--type-dark-bg);
-      color: var(--type-dark-text);
-    }
-
-    .type-steady {
-      background: var(--type-steady-bg);
-      color: var(--type-steady-text);
-    }
-
-    .type-easy {
-      background: var(--type-easy-bg);
-      color: var(--type-easy-text);
-    }
-
-    .type-jogging {
-      background: var(--type-jog-bg);
-      color: var(--type-jog-text);
-    }
-
-    .type-long {
-      background: var(--type-long-bg);
-      color: var(--type-long-text);
-    }
-
-    /* ─── Empty ── */
-    .empty-result {
-      padding: 48px 20px;
-      text-align: center;
-      font-size: 14px;
-      color: var(--text-2);
-      font-family: 'Pretendard Variable', sans-serif;
-      opacity: 0.5;
-    }
-  </style>
-</head>
-
-<body>
-  <div class="phone">
-    <div class="phone-inner bg-dark">
-
-      <!-- 월 마일리지 플로팅 바 (상단) -->
-      <div class="month-top-bar" id="month-top-bar">
-        <div class="month-top-slot">
-          <span class="month-top-label" id="month-top-label">—</span>
+                <!-- Filter sheet -->
+                <div class="month-modal" id="filter-sheet">
+                    <div class="sf-sheet-header">
+                        <span class="sf-sheet-title">필터</span>
+                        <button class="sf-sheet-close" onclick="closeSFSheet()">
+                            <svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <path d="M18 6 6 18" />
+                                <path d="m6 6 12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="sf-sheet-body">
+                        <div class="filter-cats" id="sf-filter-cats"></div>
+                    </div>
+                    <div class="sf-sheet-footer">
+                        <button class="sf-reset-btn" onclick="resetFilters()">초기화</button>
+                        <button class="sf-apply-btn" onclick="closeSFSheet()">적용</button>
+                    </div>
+                </div>
+            </div>
+            <!-- /phone-inner -->
         </div>
-        <div class="month-top-slot">
-          <span class="month-top-km" id="month-top-km">—</span>
-        </div>
-      </div>
+        <!-- /phone -->
 
-      <!-- 리스트 -->
-      <div class="list-page">
-        <div class="list-scroll" id="list-scroll">
-          <!-- Compact sticky header -->
-          <div class="lp-header">
-            <span class="lp-header-title-compact">러닝 활동</span>
-          </div>
-          <!-- Large title -->
-          <div class="lp-hero">
-            <h1 class="lp-hero-title">러닝 활동</h1>
-          </div>
-          <!-- Tab area: 모드 / 정렬 / 필터 -->
-          <div class="tab-row list-tab-row">
-            <button class="lp-view-toggle" id="lp-view-toggle" aria-label="뷰 모드 전환" onclick="toggleView()">
-              <svg class="icon-expanded" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="4" width="18" height="6" rx="1" />
-                <rect x="3" y="14" width="18" height="6" rx="1" />
-              </svg>
-              <svg class="icon-compact" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="4" y1="6" x2="20" y2="6" />
-                <line x1="4" y1="10" x2="20" y2="10" />
-                <line x1="4" y1="14" x2="20" y2="14" />
-                <line x1="4" y1="18" x2="20" y2="18" />
-              </svg>
-            </button>
-            <button class="list-ctrl-btn" id="tab-sort-btn" onclick="openSortSheet()">
-              정렬
-              <svg class="ctrl-btn-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m6 9 6 6 6-6" />
-              </svg>
-            </button>
-            <button class="list-ctrl-btn" id="tab-filter-btn" onclick="openFilterSheet()">
-              필터
-              <svg class="ctrl-btn-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m6 9 6 6 6-6" />
-              </svg>
-            </button>
-          </div>
-          <div id="runs-list-container"></div>
-        </div>
-      </div>
+        <script>
+            /* ─── Data (가민 CSV 로드, 필터/뷰용 필드 매핑) ── */
+            let RUNS = [];
 
-      <!-- Sort sheet -->
-      <div class="sf-backdrop" id="sf-backdrop" onclick="closeSFSheet()"></div>
-      <div class="month-modal" id="sort-sheet">
-        <div class="sf-sheet-header">
-          <span class="sf-sheet-title">정렬</span>
-          <button class="sf-sheet-close" onclick="closeSFSheet()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 6 6 18" />
-              <path d="m6 6 12 12" />
-            </svg>
-          </button>
-        </div>
-        <div class="month-list" id="sf-sort-opts" style="padding: 0 20px 20px;"></div>
-      </div>
+            const TYPE_TO_GROUP = {
+                race: 'race',
+                tempo: 'speed',
+                interval: 'speed',
+                tt: 'speed',
+                steady: 'endurance',
+                long: 'endurance',
+                easy: 'easy',
+                jogging: 'easy',
+            };
 
-      <!-- Filter sheet -->
-      <div class="month-modal" id="filter-sheet">
-        <div class="sf-sheet-header">
-          <span class="sf-sheet-title">필터</span>
-          <button class="sf-sheet-close" onclick="closeSFSheet()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 6 6 18" />
-              <path d="m6 6 12 12" />
-            </svg>
-          </button>
-        </div>
-        <div class="sf-sheet-body">
-          <div class="filter-cats" id="sf-filter-cats"></div>
-        </div>
-        <div class="sf-sheet-footer">
-          <button class="sf-reset-btn" onclick="resetFilters()">초기화</button>
-          <button class="sf-apply-btn" onclick="closeSFSheet()">적용</button>
-        </div>
-      </div>
+            function activityToRun(a, idx) {
+                const [, mm, dd] = (a.date || '').split('-');
+                return {
+                    id: idx + 1,
+                    date: a.date,
+                    label: `${parseInt(mm)}/${parseInt(dd)}`,
+                    month: parseInt(mm),
+                    type: a.type,
+                    group: TYPE_TO_GROUP[a.type] || 'easy',
+                    name: a.name || '러닝',
+                    time: a.startTime || '',
+                    dur: a.dur,
+                    km: a.km,
+                    pace: a.pace,
+                    paceV: a.paceV,
+                    bpm: a.bpm,
+                    spm: a.spm,
+                    ground: a.ground,
+                    stride: a.stride != null ? Math.round(a.stride * 100) : null, // m → cm
+                };
+            }
 
-    </div><!-- /phone-inner -->
-  </div><!-- /phone -->
+            function monthLabel(m) {
+                return m + '월';
+            }
 
-  <script>
-    /* ─── Data (가민 CSV 로드, 필터/뷰용 필드 매핑) ── */
-    let RUNS = [];
+            let sortState = { key: 'date', asc: false };
+            let filterState = { type: null, bpm: null, distMin: 0, distMax: 42, paceMin: 240, paceMax: 600 };
 
-    const TYPE_TO_GROUP = {
-      race: 'race',
-      tempo: 'speed', interval: 'speed', tt: 'speed',
-      steady: 'endurance', long: 'endurance',
-      easy: 'easy', jogging: 'easy',
-    };
+            const SORT_OPTS = [
+                { key: 'date', asc: false, label: '날짜 최신순' },
+                { key: 'date', asc: true, label: '날짜 오래된순' },
+                { key: 'km', asc: false, label: '거리 긴순' },
+                { key: 'km', asc: true, label: '거리 짧은순' },
+                { key: 'paceV', asc: true, label: '페이스 빠른순' },
+                { key: 'paceV', asc: false, label: '페이스 느린순' },
+                { key: 'bpm', asc: false, label: '심박수 높은순' },
+                { key: 'bpm', asc: true, label: '심박수 낮은순' },
+                { key: 'spm', asc: false, label: '케이던스 높은순' },
+                { key: 'spm', asc: true, label: '케이던스 낮은순' },
+                { key: 'stride', asc: false, label: '보행길이 긴 순' },
+                { key: 'stride', asc: true, label: '보행길이 짧은 순' },
+            ];
 
-    function activityToRun(a, idx) {
-      const [, mm, dd] = (a.date || '').split('-');
-      return {
-        id: idx + 1,
-        date: a.date,
-        label: `${parseInt(mm)}/${parseInt(dd)}`,
-        month: parseInt(mm),
-        type: a.type,
-        group: TYPE_TO_GROUP[a.type] || 'easy',
-        name: a.name || '러닝',
-        time: a.startTime || '',
-        dur: a.dur,
-        km: a.km,
-        pace: a.pace,
-        paceV: a.paceV,
-        bpm: a.bpm,
-        spm: a.spm,
-        ground: a.ground,
-        stride: a.stride != null ? Math.round(a.stride * 100) : null, // m → cm
-      };
-    }
+            const FILTER_TYPE_OPTS = [
+                { val: 'race', label: '레이스' },
+                { val: 'speed', label: '스피드' },
+                { val: 'endurance', label: '지구력' },
+                { val: 'easy', label: '이지' },
+            ];
+            const FILTER_ZONE_OPTS = [
+                { val: 'z1', label: 'Z1', desc: '회복' },
+                { val: 'z2', label: 'Z2', desc: '유산소' },
+                { val: 'z3', label: 'Z3', desc: '유산소+' },
+                { val: 'z4', label: 'Z4', desc: '젖산' },
+                { val: 'z5', label: 'Z5', desc: '최대' },
+            ];
 
-    function monthLabel(m) { return m + '월'; }
+            /* ─── Sort/Filter ── */
+            function applyFilters(runs) {
+                return runs.filter(r => {
+                    if (filterState.type && r.group !== filterState.type) return false;
+                    if (r.km < filterState.distMin || r.km > filterState.distMax) return false;
+                    if (r.paceV < filterState.paceMin || r.paceV > filterState.paceMax) return false;
+                    if (filterState.bpm) {
+                        const z = { z1: [0, 119], z2: [120, 139], z3: [140, 159], z4: [160, 174], z5: [175, 999] }[
+                            filterState.bpm
+                        ];
+                        if (r.bpm < z[0] || r.bpm > z[1]) return false;
+                    }
+                    return true;
+                });
+            }
 
-    let sortState = { key: 'date', asc: false };
-    let filterState = { type: null, bpm: null, distMin: 0, distMax: 42, paceMin: 240, paceMax: 600 };
+            function applySort(runs) {
+                const { key, asc } = sortState;
+                return [...runs].sort((a, b) => {
+                    let va = a[key],
+                        vb = b[key];
+                    if (key === 'date') {
+                        va = va.replace(/-/g, '');
+                        vb = vb.replace(/-/g, '');
+                    }
+                    return asc ? (va > vb ? 1 : -1) : va < vb ? 1 : -1;
+                });
+            }
 
-    const SORT_OPTS = [
-      { key: 'date', asc: false, label: '날짜 최신순' },
-      { key: 'date', asc: true, label: '날짜 오래된순' },
-      { key: 'km', asc: false, label: '거리 긴순' },
-      { key: 'km', asc: true, label: '거리 짧은순' },
-      { key: 'paceV', asc: true, label: '페이스 빠른순' },
-      { key: 'paceV', asc: false, label: '페이스 느린순' },
-      { key: 'bpm', asc: false, label: '심박수 높은순' },
-      { key: 'bpm', asc: true, label: '심박수 낮은순' },
-      { key: 'spm', asc: false, label: '케이던스 높은순' },
-      { key: 'spm', asc: true, label: '케이던스 낮은순' },
-      { key: 'stride', asc: false, label: '보행길이 긴 순' },
-      { key: 'stride', asc: true, label: '보행길이 짧은 순' },
-    ];
+            /* ─── Render ── */
+            let viewMode = 'expanded';
 
-    const FILTER_TYPE_OPTS = [
-      { val: 'race', label: '레이스' },
-      { val: 'speed', label: '스피드' },
-      { val: 'endurance', label: '지구력' },
-      { val: 'easy', label: '이지' },
-    ];
-    const FILTER_ZONE_OPTS = [
-      { val: 'z1', label: 'Z1', desc: '회복' }, { val: 'z2', label: 'Z2', desc: '유산소' },
-      { val: 'z3', label: 'Z3', desc: '유산소+' }, { val: 'z4', label: 'Z4', desc: '젖산' },
-      { val: 'z5', label: 'Z5', desc: '최대' },
-    ];
-
-    /* ─── Sort/Filter ── */
-    function applyFilters(runs) {
-      return runs.filter(r => {
-        if (filterState.type && r.group !== filterState.type) return false;
-        if (r.km < filterState.distMin || r.km > filterState.distMax) return false;
-        if (r.paceV < filterState.paceMin || r.paceV > filterState.paceMax) return false;
-        if (filterState.bpm) {
-          const z = { z1: [0, 119], z2: [120, 139], z3: [140, 159], z4: [160, 174], z5: [175, 999] }[filterState.bpm];
-          if (r.bpm < z[0] || r.bpm > z[1]) return false;
-        }
-        return true;
-      });
-    }
-
-    function applySort(runs) {
-      const { key, asc } = sortState;
-      return [...runs].sort((a, b) => {
-        let va = a[key], vb = b[key];
-        if (key === 'date') { va = va.replace(/-/g, ''); vb = vb.replace(/-/g, ''); }
-        return asc ? (va > vb ? 1 : -1) : (va < vb ? 1 : -1);
-      });
-    }
-
-    /* ─── Render ── */
-    let viewMode = 'expanded';
-
-    function renderList() {
-      updateCtrlSheet();
-      const scrollEl = document.getElementById('list-scroll');
-      if (scrollEl) scrollEl.scrollTop = 0;
-      const container = document.getElementById('runs-list-container');
-      const sorted = applySort(applyFilters(RUNS));
-      if (sorted.length === 0) {
-        container.innerHTML = '<div class="empty-result">해당하는 활동이 없습니다</div>';
-        return;
-      }
-      const groupByMonth = sortState.key === 'date';
-      if (groupByMonth) {
-        const groups = {};
-        sorted.forEach(r => {
-          const ym = r.date.slice(0, 7); // YYYY-MM
-          if (!groups[ym]) groups[ym] = [];
-          groups[ym].push(r);
-        });
-        const yms = Object.keys(groups).sort((a, b) => sortState.asc ? a.localeCompare(b) : b.localeCompare(a));
-        container.innerHTML = yms.map(ym => {
-          const runs = groups[ym];
-          const totalKm = runs.reduce((s, r) => s + r.km, 0).toFixed(1);
-          const [yyyy, mm] = ym.split('-');
-          const m = parseInt(mm);
-          return `<div class="lp-month-section" data-month="${ym}" data-month-label="${yyyy.slice(2)}년 ${monthLabel(m)}" data-month-km="${totalKm}">
+            function renderList() {
+                updateCtrlSheet();
+                const scrollEl = document.getElementById('list-scroll');
+                if (scrollEl) scrollEl.scrollTop = 0;
+                const container = document.getElementById('runs-list-container');
+                const sorted = applySort(applyFilters(RUNS));
+                if (sorted.length === 0) {
+                    container.innerHTML = '<div class="empty-result">해당하는 활동이 없습니다</div>';
+                    return;
+                }
+                const groupByMonth = sortState.key === 'date';
+                if (groupByMonth) {
+                    const groups = {};
+                    sorted.forEach(r => {
+                        const ym = r.date.slice(0, 7); // YYYY-MM
+                        if (!groups[ym]) groups[ym] = [];
+                        groups[ym].push(r);
+                    });
+                    const yms = Object.keys(groups).sort((a, b) =>
+                        sortState.asc ? a.localeCompare(b) : b.localeCompare(a),
+                    );
+                    container.innerHTML = yms
+                        .map(ym => {
+                            const runs = groups[ym];
+                            const totalKm = runs.reduce((s, r) => s + r.km, 0).toFixed(1);
+                            const [yyyy, mm] = ym.split('-');
+                            const m = parseInt(mm);
+                            return `<div class="lp-month-section" data-month="${ym}" data-month-label="${yyyy.slice(2)}년 ${monthLabel(m)}" data-month-km="${totalKm}">
             <div class="lp-month-label">${monthLabel(m)}</div>
             <div class="lp-month-km"><strong>${totalKm}</strong> K</div>
           </div>
           <div class="lp-list">${runs.map((r, i) => rowHTML(r, i === 0)).join('')}</div>`;
-        }).join('');
-      } else {
-        container.innerHTML = `<div class="lp-list">${sorted.map(r => rowHTML(r, false)).join('')}</div>`;
-      }
-    }
+                        })
+                        .join('');
+                } else {
+                    container.innerHTML = `<div class="lp-list">${sorted.map(r => rowHTML(r, false)).join('')}</div>`;
+                }
+            }
 
-    function rowHTML(r, showMonth = false) {
-      const parts = r.date.split('-');
-      const month = parseInt(parts[1]) + '월';
-      const day = parseInt(parts[2]);
-      const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
-      const weekday = WEEKDAYS[new Date(r.date).getDay()];
-      const strideM = (r.stride / 100).toFixed(2);
-      return `<div class="lp-row ${viewMode}">
+            function rowHTML(r, showMonth = false) {
+                const parts = r.date.split('-');
+                const month = parseInt(parts[1]) + '월';
+                const day = parseInt(parts[2]);
+                const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
+                const weekday = WEEKDAYS[new Date(r.date).getDay()];
+                const strideM = (r.stride / 100).toFixed(2);
+                return `<div class="lp-row ${viewMode}">
         <div class="lp-date-col">
           ${showMonth ? `<span class="lp-date-month">${month}</span>` : `<span class="lp-date-month lp-date-month--hidden">${month}</span>`}
           <span class="lp-date-day">${day}</span>
@@ -494,110 +496,115 @@
           </div>
         </div>
       </div>`;
-    }
+            }
 
-    /* ─── View mode ── */
-    function ctrlSetView(mode) {
-      viewMode = mode;
-      document.querySelectorAll('.lp-row').forEach(row => {
-        row.classList.remove('compact', 'expanded');
-        row.classList.add(viewMode);
-      });
-      updateCtrlViewSegs();
-      /* 컴팩트 모드에서는 월 바 강제 숨김, 확장 모드에서는 스크롤 상태에 맞게 재평가 */
-      const bar = document.getElementById('month-top-bar');
-      if (bar) {
-        if (mode === 'compact') {
-          bar.classList.remove('visible');
-        } else if (_monthTrackScroll) {
-          _monthTrackScroll();
-        }
-      }
-    }
+            /* ─── View mode ── */
+            function ctrlSetView(mode) {
+                viewMode = mode;
+                document.querySelectorAll('.lp-row').forEach(row => {
+                    row.classList.remove('compact', 'expanded');
+                    row.classList.add(viewMode);
+                });
+                updateCtrlViewSegs();
+                /* 컴팩트 모드에서는 월 바 강제 숨김, 확장 모드에서는 스크롤 상태에 맞게 재평가 */
+                const bar = document.getElementById('month-top-bar');
+                if (bar) {
+                    if (mode === 'compact') {
+                        bar.classList.remove('visible');
+                    } else if (_monthTrackScroll) {
+                        _monthTrackScroll();
+                    }
+                }
+            }
 
-    /* ─── Controls dispatch sheet ── */
-    function updateCtrlSheet() {
-      const hasActiveFilter =
-        filterState.type || filterState.bpm ||
-        filterState.distMin > 0 || filterState.distMax < 42 ||
-        filterState.paceMin > 240 || filterState.paceMax < 600;
-      const tabFilterBtn = document.getElementById('tab-filter-btn');
-      if (tabFilterBtn) tabFilterBtn.classList.toggle('has-active', !!hasActiveFilter);
+            /* ─── Controls dispatch sheet ── */
+            function updateCtrlSheet() {
+                const hasActiveFilter =
+                    filterState.type ||
+                    filterState.bpm ||
+                    filterState.distMin > 0 ||
+                    filterState.distMax < 42 ||
+                    filterState.paceMin > 240 ||
+                    filterState.paceMax < 600;
+                const tabFilterBtn = document.getElementById('tab-filter-btn');
+                if (tabFilterBtn) tabFilterBtn.classList.toggle('has-active', !!hasActiveFilter);
 
-      updateCtrlViewSegs();
-    }
+                updateCtrlViewSegs();
+            }
 
-    function updateCtrlViewSegs() {
-      const toggle = document.getElementById('lp-view-toggle');
-      if (toggle) {
-        toggle.classList.toggle('view-expanded', viewMode === 'expanded');
-        toggle.classList.toggle('view-compact', viewMode === 'compact');
-      }
-    }
+            function updateCtrlViewSegs() {
+                const toggle = document.getElementById('lp-view-toggle');
+                if (toggle) {
+                    toggle.classList.toggle('view-expanded', viewMode === 'expanded');
+                    toggle.classList.toggle('view-compact', viewMode === 'compact');
+                }
+            }
 
-    function toggleView() {
-      ctrlSetView(viewMode === 'expanded' ? 'compact' : 'expanded');
-    }
+            function toggleView() {
+                ctrlSetView(viewMode === 'expanded' ? 'compact' : 'expanded');
+            }
 
-    /* ─── Sort / Filter sheets ── */
-    function openSortSheet() {
-      renderSortPanel();
-      document.getElementById('sort-sheet').classList.add('open');
-      document.getElementById('sf-backdrop').classList.add('open');
-    }
+            /* ─── Sort / Filter sheets ── */
+            function openSortSheet() {
+                renderSortPanel();
+                document.getElementById('sort-sheet').classList.add('open');
+                document.getElementById('sf-backdrop').classList.add('open');
+            }
 
-    function openFilterSheet() {
-      renderFilterPanel();
-      document.getElementById('filter-sheet').classList.add('open');
-      document.getElementById('sf-backdrop').classList.add('open');
-    }
+            function openFilterSheet() {
+                renderFilterPanel();
+                document.getElementById('filter-sheet').classList.add('open');
+                document.getElementById('sf-backdrop').classList.add('open');
+            }
 
-    function closeSFSheet() {
-      ['sort-sheet', 'filter-sheet'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.remove('open');
-      });
-      const bd = document.getElementById('sf-backdrop');
-      if (bd) bd.classList.remove('open');
-    }
+            function closeSFSheet() {
+                ['sort-sheet', 'filter-sheet'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.classList.remove('open');
+                });
+                const bd = document.getElementById('sf-backdrop');
+                if (bd) bd.classList.remove('open');
+            }
 
-    function renderSortPanel() {
-      const container = document.getElementById('sf-sort-opts');
-      container.innerHTML = SORT_OPTS.map((opt, i) => {
-        const active = sortState.key === opt.key && sortState.asc === opt.asc;
-        return `<div class="month-list-item${active ? ' ml-selected' : ''}" onclick="selectSort(${i})">
+            function renderSortPanel() {
+                const container = document.getElementById('sf-sort-opts');
+                container.innerHTML = SORT_OPTS.map((opt, i) => {
+                    const active = sortState.key === opt.key && sortState.asc === opt.asc;
+                    return `<div class="month-list-item${active ? ' ml-selected' : ''}" onclick="selectSort(${i})">
           <span class="month-list-label">${opt.label}</span>
           <svg class="month-list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20 6 9 17l-5-5"/>
           </svg>
         </div>`;
-      }).join('');
-    }
+                }).join('');
+            }
 
-    function selectSort(i) {
-      const opt = SORT_OPTS[i];
-      sortState.key = opt.key;
-      sortState.asc = opt.asc;
-      renderList();
-      setupMonthTracking();
-      closeSFSheet();
-    }
+            function selectSort(i) {
+                const opt = SORT_OPTS[i];
+                sortState.key = opt.key;
+                sortState.asc = opt.asc;
+                renderList();
+                setupMonthTracking();
+                closeSFSheet();
+            }
 
-    function renderFilterPanel() {
-      const { distMin, distMax, paceMin, paceMax } = filterState;
-      const typeChips = FILTER_TYPE_OPTS.map(o => {
-        const a = filterState.type === o.val;
-        return `<div class="filter-chip ${a ? 'active' : ''}" onclick="selectFilter('type','${o.val}')">${o.label}</div>`;
-      }).join('');
-      const zoneChips = FILTER_ZONE_OPTS.map(o => {
-        const a = filterState.bpm === o.val;
-        return `<div class="filter-chip zone-chip ${a ? 'active' : ''}" onclick="selectFilter('bpm','${o.val}')">
+            function renderFilterPanel() {
+                const { distMin, distMax, paceMin, paceMax } = filterState;
+                const typeChips = FILTER_TYPE_OPTS.map(o => {
+                    const a = filterState.type === o.val;
+                    return `<div class="filter-chip ${a ? 'active' : ''}" onclick="selectFilter('type','${o.val}')">${o.label}</div>`;
+                }).join('');
+                const zoneChips = FILTER_ZONE_OPTS.map(o => {
+                    const a = filterState.bpm === o.val;
+                    return `<div class="filter-chip zone-chip ${a ? 'active' : ''}" onclick="selectFilter('bpm','${o.val}')">
           <span class="zone-label">${o.label}</span>
         </div>`;
-      }).join('');
-      const distLoV = distMin, distHiV = distMax;
-      const paceLoV = fmtPace(paceMin), paceHiV = fmtPace(paceMax);
-      document.getElementById('sf-filter-cats').innerHTML = `
+                }).join('');
+                const distLoV = distMin,
+                    distHiV = distMax;
+                const paceLoV = fmtPace(paceMin),
+                    paceHiV = fmtPace(paceMax);
+                document.getElementById('sf-filter-cats').innerHTML = `
         <div class="filter-cat"><div class="filter-cat-label">타입</div><div class="filter-chips">${typeChips}</div></div>
         <div class="filter-cat"><div class="filter-cat-label">거리</div>
           <div class="range-val-row"><span class="range-val" id="dist-lo-val">${distLoV}K</span><span class="range-val" id="dist-hi-val">${distHiV}K</span></div>
@@ -616,203 +623,209 @@
           </div>
         </div>
         <div class="filter-cat"><div class="filter-cat-label">심박 존</div><div class="filter-chips">${zoneChips}</div></div>`;
-      updateRangeFill('dist');
-      updateRangeFill('pace');
-    }
+                updateRangeFill('dist');
+                updateRangeFill('pace');
+            }
 
-    function selectFilter(key, val) {
-      if (key === 'type') filterState.type = filterState.type === val ? null : val;
-      if (key === 'bpm') filterState.bpm = filterState.bpm === val ? null : val;
-      renderFilterPanel();
-      renderList();
-    }
+            function selectFilter(key, val) {
+                if (key === 'type') filterState.type = filterState.type === val ? null : val;
+                if (key === 'bpm') filterState.bpm = filterState.bpm === val ? null : val;
+                renderFilterPanel();
+                renderList();
+            }
 
-    function onRangeInput(key) {
-      const lo = document.getElementById(key + '-lo');
-      const hi = document.getElementById(key + '-hi');
-      if (+lo.value >= +hi.value) lo.value = +hi.value - +lo.step;
-      if (key === 'dist') {
-        filterState.distMin = +lo.value; filterState.distMax = +hi.value;
-        document.getElementById('dist-lo-val').textContent = lo.value + 'K';
-        document.getElementById('dist-hi-val').textContent = hi.value + 'K';
-      } else {
-        filterState.paceMin = +lo.value; filterState.paceMax = +hi.value;
-        document.getElementById('pace-lo-val').textContent = fmtPace(+lo.value) + '/km';
-        document.getElementById('pace-hi-val').textContent = fmtPace(+hi.value) + '/km';
-      }
-      updateRangeFill(key);
-      renderList();
-    }
+            function onRangeInput(key) {
+                const lo = document.getElementById(key + '-lo');
+                const hi = document.getElementById(key + '-hi');
+                if (+lo.value >= +hi.value) lo.value = +hi.value - +lo.step;
+                if (key === 'dist') {
+                    filterState.distMin = +lo.value;
+                    filterState.distMax = +hi.value;
+                    document.getElementById('dist-lo-val').textContent = lo.value + 'K';
+                    document.getElementById('dist-hi-val').textContent = hi.value + 'K';
+                } else {
+                    filterState.paceMin = +lo.value;
+                    filterState.paceMax = +hi.value;
+                    document.getElementById('pace-lo-val').textContent = fmtPace(+lo.value) + '/km';
+                    document.getElementById('pace-hi-val').textContent = fmtPace(+hi.value) + '/km';
+                }
+                updateRangeFill(key);
+                renderList();
+            }
 
-    function updateRangeFill(key) {
-      const lo = document.getElementById(key + '-lo');
-      const hi = document.getElementById(key + '-hi');
-      const fill = document.getElementById(key + '-fill');
-      if (!lo || !hi || !fill) return;
-      const min = +lo.min, max = +lo.max;
-      const l = ((+lo.value - min) / (max - min)) * 100;
-      const r = ((+hi.value - min) / (max - min)) * 100;
-      fill.style.left = l + '%'; fill.style.width = (r - l) + '%';
-    }
+            function updateRangeFill(key) {
+                const lo = document.getElementById(key + '-lo');
+                const hi = document.getElementById(key + '-hi');
+                const fill = document.getElementById(key + '-fill');
+                if (!lo || !hi || !fill) return;
+                const min = +lo.min,
+                    max = +lo.max;
+                const l = ((+lo.value - min) / (max - min)) * 100;
+                const r = ((+hi.value - min) / (max - min)) * 100;
+                fill.style.left = l + '%';
+                fill.style.width = r - l + '%';
+            }
 
-    function fmtPace(sec) {
-      const m = Math.floor(sec / 60), s = sec % 60;
-      return `${m}:${String(s).padStart(2, '0')}`;
-    }
+            function fmtPace(sec) {
+                const m = Math.floor(sec / 60),
+                    s = sec % 60;
+                return `${m}:${String(s).padStart(2, '0')}`;
+            }
 
-    function resetFilters() {
-      filterState = { type: null, bpm: null, distMin: 0, distMax: 42, paceMin: 240, paceMax: 600 };
-      renderFilterPanel();
-      renderList();
-    }
+            function resetFilters() {
+                filterState = { type: null, bpm: null, distMin: 0, distMax: 42, paceMin: 240, paceMax: 600 };
+                renderFilterPanel();
+                renderList();
+            }
 
-    /* ─── Month bar slot animation ── */
-    let _currentMonthKey = null;
-    let _monthBarInitialized = false;
+            /* ─── Month bar slot animation ── */
+            let _currentMonthKey = null;
+            let _monthBarInitialized = false;
 
-    function updateMonthBar(label, km, dir) {
-      const bar = document.getElementById('month-top-bar');
-      const lblEl = document.getElementById('month-top-label');
-      const kmEl = document.getElementById('month-top-km');
-      if (!bar || !lblEl || !kmEl) return;
+            function updateMonthBar(label, km, dir) {
+                const bar = document.getElementById('month-top-bar');
+                const lblEl = document.getElementById('month-top-label');
+                const kmEl = document.getElementById('month-top-km');
+                if (!bar || !lblEl || !kmEl) return;
 
-      const outY = dir >= 0 ? '-100%' : '100%';
-      const inY = dir >= 0 ? '100%' : '-100%';
-      const DUR = '0.22s cubic-bezier(0.16,1,0.3,1)';
+                const outY = dir >= 0 ? '-100%' : '100%';
+                const inY = dir >= 0 ? '100%' : '-100%';
+                const DUR = '0.22s cubic-bezier(0.16,1,0.3,1)';
 
-      if (!_monthBarInitialized) {
-        /* First paint — no animation */
-        _monthBarInitialized = true;
-        lblEl.textContent = label;
-        kmEl.textContent = km + ' K';
-        bar.classList.add('visible');
-        return;
-      }
+                if (!_monthBarInitialized) {
+                    /* First paint — no animation */
+                    _monthBarInitialized = true;
+                    lblEl.textContent = label;
+                    kmEl.textContent = km + ' K';
+                    bar.classList.add('visible');
+                    return;
+                }
 
-      lblEl.style.transition = `transform ${DUR}, opacity 0.18s`;
-      kmEl.style.transition = `transform ${DUR}, opacity 0.18s`;
-      lblEl.style.transform = `translateY(${outY})`;
-      lblEl.style.opacity = '0';
-      kmEl.style.transform = `translateY(${outY})`;
-      kmEl.style.opacity = '0';
+                lblEl.style.transition = `transform ${DUR}, opacity 0.18s`;
+                kmEl.style.transition = `transform ${DUR}, opacity 0.18s`;
+                lblEl.style.transform = `translateY(${outY})`;
+                lblEl.style.opacity = '0';
+                kmEl.style.transform = `translateY(${outY})`;
+                kmEl.style.opacity = '0';
 
-      setTimeout(() => {
-        lblEl.textContent = label;
-        kmEl.textContent = km + ' K';
-        lblEl.style.transition = 'none';
-        kmEl.style.transition = 'none';
-        lblEl.style.transform = `translateY(${inY})`;
-        lblEl.style.opacity = '0';
-        kmEl.style.transform = `translateY(${inY})`;
-        kmEl.style.opacity = '0';
-        /* force reflow */
-        lblEl.offsetHeight; // eslint-disable-line
-        lblEl.style.transition = `transform ${DUR}, opacity 0.2s`;
-        kmEl.style.transition = `transform ${DUR}, opacity 0.2s`;
-        lblEl.style.transform = 'translateY(0)';
-        lblEl.style.opacity = '1';
-        kmEl.style.transform = 'translateY(0)';
-        kmEl.style.opacity = '1';
-      }, 200);
-    }
+                setTimeout(() => {
+                    lblEl.textContent = label;
+                    kmEl.textContent = km + ' K';
+                    lblEl.style.transition = 'none';
+                    kmEl.style.transition = 'none';
+                    lblEl.style.transform = `translateY(${inY})`;
+                    lblEl.style.opacity = '0';
+                    kmEl.style.transform = `translateY(${inY})`;
+                    kmEl.style.opacity = '0';
+                    /* force reflow */
+                    lblEl.offsetHeight; // eslint-disable-line
+                    lblEl.style.transition = `transform ${DUR}, opacity 0.2s`;
+                    kmEl.style.transition = `transform ${DUR}, opacity 0.2s`;
+                    lblEl.style.transform = 'translateY(0)';
+                    lblEl.style.opacity = '1';
+                    kmEl.style.transform = 'translateY(0)';
+                    kmEl.style.opacity = '1';
+                }, 200);
+            }
 
-    /* ─── Month tracking via scroll ── */
-    let _monthTrackScroll = null;
-    let _monthOffsets = []; // natural positions captured at scrollTop=0
+            /* ─── Month tracking via scroll ── */
+            let _monthTrackScroll = null;
+            let _monthOffsets = []; // natural positions captured at scrollTop=0
 
-    function setupMonthTracking() {
-      const bar = document.getElementById('month-top-bar');
-      const scrollEl = document.getElementById('list-scroll');
-      if (!scrollEl || !bar) return;
+            function setupMonthTracking() {
+                const bar = document.getElementById('month-top-bar');
+                const scrollEl = document.getElementById('list-scroll');
+                if (!scrollEl || !bar) return;
 
-      const groupByMonth = sortState.key === 'date';
-      if (!groupByMonth) {
-        bar.classList.remove('visible');
-        _currentMonthKey = null;
-        _monthBarInitialized = false;
-        return;
-      }
+                const groupByMonth = sortState.key === 'date';
+                if (!groupByMonth) {
+                    bar.classList.remove('visible');
+                    _currentMonthKey = null;
+                    _monthBarInitialized = false;
+                    return;
+                }
 
-      /* scrollTop is 0 here (renderList resets it) — capture natural positions */
-      const barBottom = bar.getBoundingClientRect().bottom;
-      const sections = document.querySelectorAll('.lp-month-section[data-month]');
-      _monthOffsets = Array.from(sections).map(sec => ({
-        month: sec.getAttribute('data-month'),
-        label: sec.getAttribute('data-month-label'),
-        km: sec.getAttribute('data-month-km'),
-        naturalTop: sec.getBoundingClientRect().top
-      }));
+                /* scrollTop is 0 here (renderList resets it) — capture natural positions */
+                const barBottom = bar.getBoundingClientRect().bottom;
+                const sections = document.querySelectorAll('.lp-month-section[data-month]');
+                _monthOffsets = Array.from(sections).map(sec => ({
+                    month: sec.getAttribute('data-month'),
+                    label: sec.getAttribute('data-month-label'),
+                    km: sec.getAttribute('data-month-km'),
+                    naturalTop: sec.getBoundingClientRect().top,
+                }));
 
-      /* 타이틀의 natural bottom — 이 지점이 스크롤로 사라진 후에만 bar 표시 */
-      const titleEl = scrollEl.querySelector('.lp-hero-title');
-      const titleNaturalBottom = titleEl ? titleEl.getBoundingClientRect().bottom : 0;
+                /* 타이틀의 natural bottom — 이 지점이 스크롤로 사라진 후에만 bar 표시 */
+                const titleEl = scrollEl.querySelector('.lp-hero-title');
+                const titleNaturalBottom = titleEl ? titleEl.getBoundingClientRect().bottom : 0;
 
-      _currentMonthKey = null;
-      _monthBarInitialized = false;
-      let lastScrollY = 0;
+                _currentMonthKey = null;
+                _monthBarInitialized = false;
+                let lastScrollY = 0;
 
-      if (_monthTrackScroll) scrollEl.removeEventListener('scroll', _monthTrackScroll);
+                if (_monthTrackScroll) scrollEl.removeEventListener('scroll', _monthTrackScroll);
 
-      _monthTrackScroll = function () {
-        const scrollTop = scrollEl.scrollTop;
-        const dir = scrollTop >= lastScrollY ? 1 : -1;
-        lastScrollY = scrollTop;
+                _monthTrackScroll = function () {
+                    const scrollTop = scrollEl.scrollTop;
+                    const dir = scrollTop >= lastScrollY ? 1 : -1;
+                    lastScrollY = scrollTop;
 
-        /* 컴팩트 모드이거나 타이틀이 아직 화면에 있으면 bar 숨김 */
-        if (viewMode === 'compact' || titleNaturalBottom - scrollTop > 0) {
-          bar.classList.remove('visible');
-          _currentMonthKey = null;
-          _monthBarInitialized = false;
-          return;
-        }
+                    /* 컴팩트 모드이거나 타이틀이 아직 화면에 있으면 bar 숨김 */
+                    if (viewMode === 'compact' || titleNaturalBottom - scrollTop > 0) {
+                        bar.classList.remove('visible');
+                        _currentMonthKey = null;
+                        _monthBarInitialized = false;
+                        return;
+                    }
 
-        let active = _monthOffsets[0];
-        for (const m of _monthOffsets) {
-          if (m.naturalTop - scrollTop <= barBottom) active = m;
-        }
+                    let active = _monthOffsets[0];
+                    for (const m of _monthOffsets) {
+                        if (m.naturalTop - scrollTop <= barBottom) active = m;
+                    }
 
-        if (!active || active.month === _currentMonthKey) return;
-        _currentMonthKey = active.month;
-        updateMonthBar(active.label, active.km, dir);
-      };
+                    if (!active || active.month === _currentMonthKey) return;
+                    _currentMonthKey = active.month;
+                    updateMonthBar(active.label, active.km, dir);
+                };
 
-      scrollEl.addEventListener('scroll', _monthTrackScroll, { passive: true });
-      _monthTrackScroll(); /* initial state — 타이틀 보임 → bar 숨김 */
-    }
+                scrollEl.addEventListener('scroll', _monthTrackScroll, { passive: true });
+                _monthTrackScroll(); /* initial state — 타이틀 보임 → bar 숨김 */
+            }
 
-    /* ─── Collapsing large title + auto-hide chrome ── */
-    {
-      const _scrollEl = document.getElementById('list-scroll');
-      setupCollapsingHeader(_scrollEl);
-      setupAutoHideChrome(_scrollEl);
-    }
+            /* ─── Collapsing large title + auto-hide chrome ── */
+            {
+                const _scrollEl = document.getElementById('list-scroll');
+                setupCollapsingHeader(_scrollEl);
+                setupAutoHideChrome(_scrollEl);
+            }
 
-    /* ─── Init ── */
-    renderSortPanel();
-    renderFilterPanel();
-    updateCtrlSheet();
+            /* ─── Init ── */
+            renderSortPanel();
+            renderFilterPanel();
+            updateCtrlSheet();
 
-    if (typeof loadActivities === 'function') {
-      loadActivities().then(list => {
-        RUNS = list.map(activityToRun);
-        renderList();
-        setupMonthTracking();
-      });
-    } else {
-      console.error('[list] activities.js not loaded');
-      renderList();
-      setupMonthTracking();
-    }
-  </script>
+            if (typeof loadActivities === 'function') {
+                loadActivities().then(list => {
+                    RUNS = list.map(activityToRun);
+                    renderList();
+                    setupMonthTracking();
+                });
+            } else {
+                console.error('[list] activities.js not loaded');
+                renderList();
+                setupMonthTracking();
+            }
+        </script>
 
-  <script>
-    function goToStats() { goTo('stats.html'); }
-  </script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js');
-    }
-  </script>
-</body>
-
+        <script>
+            function goToStats() {
+                goTo('stats.html');
+            }
+        </script>
+        <script>
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('./sw.js');
+            }
+        </script>
+    </body>
 </html>
