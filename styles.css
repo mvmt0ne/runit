@@ -1232,6 +1232,7 @@ sup {
 .filter-cat-label {
     font-size: 16px;
     font-weight: 300;
+    color: var(--slate-gray);
 }
 
 .filter-chips {
