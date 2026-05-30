@@ -44,13 +44,27 @@
                 display: none;
             }
 
-            /* ─── Month section header — 위치 추적용 마커만, 시각적으로 완전 숨김 ── */
+            /* ─── Month section header — expanded에선 위치 추적용 마커만, compact에선 가시화 ── */
             .lp-month-section {
                 height: 0;
                 padding: 0;
                 margin: 0;
                 overflow: hidden;
                 visibility: hidden;
+            }
+
+            #runs-list-container.view-compact .lp-month-section {
+                height: auto;
+                overflow: visible;
+                visibility: visible;
+                display: flex;
+                align-items: baseline;
+                justify-content: space-between;
+                padding: 20px 20px 8px;
+            }
+
+            #runs-list-container.view-compact .lp-month-section:first-child {
+                padding-top: 8px;
             }
 
             /* ─── Month floating bar (top) ── */
@@ -415,6 +429,8 @@
                 const scrollEl = document.getElementById('list-scroll');
                 if (scrollEl) scrollEl.scrollTop = 0;
                 const container = document.getElementById('runs-list-container');
+                container.classList.toggle('view-compact', viewMode === 'compact');
+                container.classList.toggle('view-expanded', viewMode === 'expanded');
                 const sorted = applySort(applyFilters(RUNS));
                 if (sorted.length === 0) {
                     container.innerHTML = '<div class="empty-result">해당하는 활동이 없습니다</div>';
@@ -505,6 +521,11 @@
                     row.classList.remove('compact', 'expanded');
                     row.classList.add(viewMode);
                 });
+                const container = document.getElementById('runs-list-container');
+                if (container) {
+                    container.classList.toggle('view-compact', viewMode === 'compact');
+                    container.classList.toggle('view-expanded', viewMode === 'expanded');
+                }
                 updateCtrlViewSegs();
                 /* 컴팩트 모드에서는 월 바 강제 숨김, 확장 모드에서는 스크롤 상태에 맞게 재평가 */
                 const bar = document.getElementById('month-top-bar');
