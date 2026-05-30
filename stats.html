@@ -1760,6 +1760,26 @@
                 if (col) selectMonth(parseInt(col.dataset.idx));
             });
 
+            // 주간/년간 차트 — 탭 시 시각 선택만 (detail 콘텐츠 없음)
+            function attachSimpleBarSelect(chartId) {
+                const chart = document.getElementById(chartId);
+                if (!chart) return;
+                chart.addEventListener('click', e => {
+                    const col = e.target.closest('[data-idx]');
+                    if (!col) return;
+                    const wasSelected = col.classList.contains('selected');
+                    chart.querySelectorAll('.cmp-col').forEach(c => c.classList.remove('selected'));
+                    if (wasSelected) {
+                        chart.classList.remove('has-selection');
+                    } else {
+                        chart.classList.add('has-selection');
+                        col.classList.add('selected');
+                    }
+                });
+            }
+            attachSimpleBarSelect('week-chart');
+            attachSimpleBarSelect('year-chart');
+
             // 터치 스와이프
             (function () {
                 let touchStartX = 0;
