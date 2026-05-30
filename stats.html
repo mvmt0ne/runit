@@ -1,944 +1,1004 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>runit — 마일리지</title>
-  <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#202020">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="runit">
-  <link rel="apple-touch-icon" href="./icon.svg">
-  <link rel="icon" type="image/svg+xml" href="./icon.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
-    rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable.min.css"
-    rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css">
-  <script src="./transitions.js"></script>
-  <style>
-    /* ─── 러닝 종류 차트 ── */
-    .type-chart {
-      padding: 40px 20px;
-      border-top: 1px solid var(--dark-gray);
-    }
-
-    .type-chart-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 11px;
-      transition: opacity 0.3s;
-    }
-
-    .type-chart-label {
-      font-size: 13px;
-      width: 54px;
-      flex-shrink: 0;
-    }
-
-    .type-chart-track {
-      flex: 1;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-
-    .type-chart-fill {
-      height: 100%;
-      background: var(--bone);
-      border-radius: 3px;
-      width: 0%;
-    }
-
-    .type-chart-count {
-      font-size: 12px;
-      font-family: 'Space Grotesk', sans-serif;
-      width: 16px;
-      text-align: right;
-      flex-shrink: 0;
-    }
-
-
-    /* ─── Bottom section — delta + pace (dark) / runs (light) ── */
-    .stats-top-section {
-      background: var(--slate-gray);
-    }
-
-    .stats-bottom-section {
-      background: var(--slate-gray);
-      border-block: 1px solid var(--dark-gray);
-    }
-
-    .month-runs {
-      padding: 40px 0 20px 0;
-    }
-
-    /* delta · pace 텍스트 — 어두운 배경 위 */
-
-    .pace-name {
-      color: var(--cloudy-gray);
-    }
-
-    .tab {
-      padding: 12px;
-      font-size: 24px;
-      font-weight: 400;
-      color: var(--cloudy-gray);
-      cursor: pointer;
-      border: none;
-    }
-
-    .tab.active {
-      font-weight: 500;
-      color: var(--bone);
-    }
-
-    /* ─── Scroll ── */
-    .scroll-area {
-      flex: 1;
-      overflow-y: auto;
-      overflow-x: hidden;
-      scrollbar-width: none;
-      /* padding-top: calc(env(safe-area-inset-top, 0px) + 16px);  */
-      padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
-    }
-
-    .scroll-area::-webkit-scrollbar {
-      display: none;
-    }
-
-    /* ════════════════════════════════════
-       COMPARISON CHART
-    ════════════════════════════════════ */
-    .chart-block {
-      padding: 20px 0;
-    }
-
-    .chart-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-      padding: 0 20px;
-    }
-
-
-    .year-nav {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .year-arrow {
-      width: 26px;
-      height: 26px;
-      border-radius: 0;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: opacity 0.2s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-      flex-shrink: 0;
-    }
-
-    .year-arrow:active {
-      transform: scale(0.92);
-    }
-
-    .year-arrow.disabled {
-      opacity: 0.18;
-      pointer-events: none;
-    }
-
-    .chart-period-label {
-      font-size: 20px;
-      font-weight: 400;
-      transition: color 0.3s;
-    }
-
-    .chart-avg-line-label {
-      color: var(--cloudy-gray);
-      font-family: 'Space Grotesk', monospace;
-    }
-
-    .avg-line-dash {
-      width: 16px;
-      height: 2px;
-      background: repeating-linear-gradient(90deg, var(--text-2) 0 4px, transparent 4px 8px);
-    }
-
-    /* 스와이프 래퍼 */
-    .chart-swipe-wrap {
-      overflow: hidden;
-    }
-
-    /* 바 차트 — 회전 레이블 수용 */
-    .cmp-chart {
-      position: relative;
-      height: 220px;
-      display: flex;
-      align-items: flex-end;
-      gap: 0;
-      padding: 0 10px;
-      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s;
-    }
-
-    .avg-line {
-      position: absolute;
-      left: 0;
-      right: 0;
-      border-top: 1.5px dashed rgba(128, 128, 128, 0.2);
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .cmp-col {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2px;
-      min-width: 0;
-    }
-
-    /* 슬림 바 */
-    .cmp-bar {
-      width: 3px;
-      border-radius: 0;
-      background: var(--cloudy-gray);
-      transition: background 0.3s, height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    /* 지나간 달 — 현재 달과 동일 컬러 */
-    .cmp-col.past .cmp-bar {
-      background: var(--bone);
-    }
-
-    /* 이번 달 — 풀 컬러 */
-    .cmp-col.current .cmp-bar {
-      background: var(--accent);
-    }
-
-    /* 미래 달 — 스텁 (고정 높이, 매우 흐리게) */
-    .cmp-col.future .cmp-bar {
-      background: var(--cloudy-gray);
-      opacity: 1;
-    }
-
-    /* 비활성화 (0km) */
-    .cmp-col.inactive .cmp-bar {
-      background: var(--cloudy-gray);
-    }
-
-    .cmp-col.inactive .cmp-label {
-      color: var(--cloudy-gray);
-    }
-
-    /* km 수치 — 전체 표시, past/current 동일 스타일 */
-    .cmp-km {
-      font-size: 14px;
-      font-weight: 500;
-      font-family: 'Space Grotesk', sans-serif;
-      white-space: nowrap;
-      transition: color 0.2s, opacity 0.2s;
-    }
-
-    .cmp-col.future .cmp-km {
-      background: var(--cloudy-gray);
-    }
-
-    .cmp-col.future .cmp-label {
-      opacity: 0.5;
-      !important;
-    }
-
-    /* 레이블 — 기본 (주간·년간), past/current 동일 스타일 */
-    .cmp-label {
-      font-size: 13px;
-      color: var(--accent);
-      transition: color 0.3s;
-      white-space: nowrap;
-    }
-
-    /* 레이블·km — 90° 회전 (월간 12개월) */
-    .cmp-chart.vertical .cmp-label,
-    .cmp-chart.vertical .cmp-km {
-      transform: rotate(-90deg);
-      /* 가로 폭을 고정하여 중앙 정렬 보장 */
-      height: 38px;
-      /* 회전 후 차지할 세로 공간 */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      white-space: nowrap;
-      transition: color 0.2s;
-    }
-
-    .cmp-chart.vertical .cmp-label {
-      color: var(--dark-gray);
-      font-weight: 300;
-    }
-
-
-    /* ════════════════════════════════════
-       MONTH DETAIL (바 탭 시)
-    ════════════════════════════════════ */
-    .month-detail {
-      margin: 0;
-    }
-
-
-
-    /* 강도 분포 */
-    .intensity-breakdown {
-      padding: 40px 20px;
-      border-top: 1px solid var(--dark-gray);
-    }
-
-    /* 강도 카드: 제목 + 도넛 + 범례 */
-    .intensity-title {
-      font-size: 18px;
-      font-weight: 400;
-      letter-spacing: 0;
-    }
-
-    .intensity-donut-wrap {
-      display: flex;
-      justify-content: center;
-      margin-top: -20px;
-    }
-
-    .intensity-legend {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .intensity-legend-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      font-family: 'Pretendard Variable', sans-serif;
-      font-size: 16px;
-      font-weight: 400;
-    }
-
-    .intensity-legend-row.high {
-      color: var(--accent);
-    }
-
-    .intensity-legend-row.mid {}
-
-    .intensity-legend-row.low {
-      color: var(--bone);
-    }
-
-    .il-types {
-      font-weight: 400;
-    }
-
-    .il-pct {
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700;
-      font-size: 16px;
-    }
-
-    .il-pct-unit {
-      font-weight: 400;
-      font-size: 14px;
-      margin-left: 4px;
-      opacity: 0.85;
-    }
-
-    .components-title {
-      font-size: 18px;
-      font-weight: 400;
-      color: var(--asphalt-gray);
-      margin-bottom: 12px;
-      transition: color 1s;
-      letter-spacing: 0;
-      font-family: 'Pretendard Variable', sans-serif;
-    }
-
-    .components-title.dark {
-      font-size: 16px;
-      font-weight: 400;
-      color: var(--asphalt-black);
-      margin-bottom: 12px;
-      transition: color 1s;
-      letter-spacing: 0;
-      font-family: 'Pretendard Variable', sans-serif;
-    }
-
-    /* 강도 스택 바 */
-    .intensity-stacked-bar {
-      display: flex;
-      height: 60px;
-      gap: 0;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .isb-seg {
-      display: flex;
-      align-items: flex-end;
-      justify-content: flex-end;
-      min-width: 0;
-      padding: 0 8px 8px;
-      clip-path: inset(0 100% 0 0);
-      transition: clip-path 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .isb-seg span {
-      font-size: 16px;
-      font-weight: 600;
-      font-family: 'Space Grotesk', monospace;
-      white-space: nowrap;
-    }
-
-    .isb-low {
-      background: var(--slate-gray);
-    }
-
-    .isb-low span {
-      color: var(--asphalt-black);
-    }
-
-    .isb-mid {
-      background: var(--asphalt-gray);
-    }
-
-    .isb-mid span {
-      color: var(--bone);
-    }
-
-    .isb-high {
-      background: var(--accent);
-    }
-
-    .isb-high span {
-      color: #000;
-    }
-
-    .isb-axis {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 10px;
-    }
-
-    .isb-axis-label {
-      font-size: 15px;
-      font-weight: 300;
-      color: var(--slate-gray);
-      font-family: 'Pretendard Variable', sans-serif;
-      transition: color 0.3s;
-    }
-
-    /* 선택된 바만 강조 */
-    .cmp-col.selected .cmp-km {
-      color: var(--accent) !important;
-      font-weight: 600 !important;
-    }
-
-    .cmp-col.selected .cmp-label {
-      color: var(--text-1) !important;
-      font-weight: 600 !important;
-    }
-
-    /* 다른 달 선택 시 — current 포함 비선택 바 모두 흐리게 */
-    .cmp-chart.has-selection .cmp-col:not(.selected) {
-      opacity: 0.3;
-      transition: opacity 0.2s;
-    }
-
-    .cmp-chart.has-selection .cmp-col.selected {
-      opacity: 1;
-    }
-
-    /* ════════════════════════════════════
-       DELTA CARDS
-    ════════════════════════════════════ */
-    .delta-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0;
-      margin: 0;
-      padding: 0 20px;
-    }
-
-    .delta-card {
-      padding: 40px 0;
-      transition: background 0.3s;
-    }
-
-    .delta-card+.delta-card {
-      padding: 40px 0 30px 20px;
-      border-left: 1px solid var(--dark-gray);
-    }
-
-    .delta-km {
-      font-size: 32px;
-      font-weight: 400;
-      transition: color 0.3s;
-      line-height: 1;
-    }
-
-    .delta-km span {
-      font-size: 14px;
-      font-weight: 400;
-      margin-left: 2px;
-    }
-
-    .delta-pct {
-      font-size: 14px;
-      margin-top: 6px;
-      font-weight: 400;
-      transition: color 0.3s;
-    }
-
-    .delta-pct.up {
-      color: var(--accent);
-    }
-
-    .delta-pct.down {
-      color: var(--cloudy-gray);
-    }
-
-    /* ════════════════════════════════════
-       PACE 요약
-    ════════════════════════════════════ */
-    .pace-block {
-      padding: 40px 20px;
-    }
-
-    .pace-block-title {
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0;
-      text-transform: uppercase;
-      color: var(--text-2);
-      transition: color 0.3s;
-    }
-
-    .pace-row {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      padding: 12px 0;
-    }
-
-    .pace-row:last-child {
-      padding-bottom: 0;
-    }
-
-    .pace-row:first-of-type {
-      padding-top: 0;
-    }
-
-    .pace-name {
-      font-size: 16px;
-      font-weight: 400;
-      transition: color 0.3s;
-    }
-
-    .title-area {
-      padding: 0 20px;
-    }
-
-
-    /* ════════════════════════════════════
-       ACTIVITY LIST
-    ════════════════════════════════════ */
-
-    .month-runs-title {
-      padding: 0 20px;
-      margin-bottom: 10px;
-    }
-
-    /* ─── Run type dot badge ── */
-    .type-race {
-      background: var(--type-race-bg);
-      color: var(--type-race-text);
-    }
-
-    .type-tempo {
-      background: var(--type-dark-bg);
-      color: var(--type-dark-text);
-    }
-
-    .type-interval {
-      background: var(--type-dark-bg);
-      color: var(--type-dark-text);
-    }
-
-    .type-steady {
-      background: var(--type-steady-bg);
-      color: var(--type-steady-text);
-    }
-
-    .type-easy {
-      background: var(--type-easy-bg);
-      color: var(--type-easy-text);
-    }
-
-    .type-jogging {
-      background: var(--type-jog-bg);
-      color: var(--type-jog-text);
-    }
-
-    .type-long {
-      background: var(--type-long-bg);
-      color: var(--type-long-text);
-    }
-
-    .type-tt {
-      background: var(--type-dark-bg);
-      color: var(--type-dark-text);
-    }
-
-    /* ─── 전체 러닝 활동 FAB — 스크롤 콘텐츠 하단에 포함 ── */
-    .list-fab {
-      flex-shrink: 0;
-      display: none;
-      /* JS로 월간 탭에서만 표시 */
-      align-items: center;
-      justify-content: space-between;
-      padding: 50px 20px calc(env(safe-area-inset-bottom, 0px)) 26px;
-      background-color: var(--accent);
-      color: #202020;
-      text-decoration: none;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-
-    .list-fab:active {
-      opacity: 0.8;
-    }
-
-    .list-fab-title {
-      font-size: 20px;
-      font-weight: 500;
-      font-family: 'Pretendard Variable', sans-serif;
-      color: #202020;
-    }
-
-    .month-runs-title {
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0;
-      text-transform: uppercase;
-      color: var(--text-2);
-      transition: color 0.3s;
-    }
-
-    .run-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 0;
-      text-decoration: none;
-      cursor: pointer;
-      transition: opacity 0.15s;
-    }
-
-    .run-item:active {
-      opacity: 0.5;
-    }
-
-    .run-left {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .run-date {
-      font-size: 12px;
-      color: var(--text-2);
-      opacity: 0.55;
-      margin-bottom: 4px;
-      transition: color 0.3s;
-    }
-
-    .run-name {
-      font-size: 15px;
-      font-weight: 400;
-      color: var(--text-1);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      transition: color 0.3s;
-    }
-
-    .run-sub {
-      font-size: 13px;
-      color: var(--text-2);
-      margin-top: 3px;
-      transition: color 0.3s;
-    }
-
-    .run-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-      margin-left: 16px;
-    }
-
-    .run-km {
-      font-size: 20px;
-      font-weight: 300;
-      font-family: 'Space Grotesk', sans-serif;
-      color: var(--text-1);
-      text-align: right;
-      transition: color 0.3s;
-    }
-
-    .run-km span {
-      font-size: 12px;
-      font-weight: 400;
-      color: var(--text-2);
-      margin-left: 2px;
-    }
-
-    .run-chevron {
-      color: var(--text-2);
-      opacity: 0.4;
-      flex-shrink: 0;
-    }
-
-    /* ─── Shift5 Data Readout Override ── */
-    .cmp-km,
-    .delta-km,
-    .delta-km span,
-    .delta-pct,
-    .run-km,
-    .isb-seg span {
-      font-family: 'Space Mono', ui-monospace, monospace;
-      font-feature-settings: "tnum";
-    }
-
-    /* ─── Shift5 Label Tracking ── */
-    .delta-vs,
-    .month-runs-title,
-    .pace-block-title {
-      font-family: 'Space Mono', ui-monospace, monospace;
-      font-weight: 400;
-    }
-  </style>
-</head>
-
-<body>
-  <div class="phone">
-    <div class="phone-inner">
-
-      <div class="scroll-area">
-        <!-- Compact sticky header -->
-        <div class="lp-header">
-          <span class="lp-header-title-compact">마일리지</span>
-        </div>
-        <!-- Large title -->
-        <div class="lp-hero">
-          <h1 class="lp-hero-title">마일리지</h1>
-        </div>
-        <div class="tab-row">
-          <div class="tab" data-tab="week">주간</div>
-          <div class="tab active" data-tab="month">월간</div>
-          <div class="tab" data-tab="year">년간</div>
-        </div>
-
-        <!-- ══════════════════════════════
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+        <title>runit — 마일리지</title>
+        <link rel="manifest" href="./manifest.json" />
+        <meta name="theme-color" content="#202020" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="runit" />
+        <link rel="apple-touch-icon" href="./icon.svg" />
+        <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable.min.css"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="./styles.css" />
+        <script src="./transitions.js"></script>
+        <style>
+            /* ─── 러닝 종류 차트 ── */
+            .type-chart {
+              padding: 40px 20px;
+              border-top: 1px solid var(--dark-gray);
+            }
+
+            .type-chart-row {
+              display: flex;
+              align-items: center;
+              gap: 10px;
+              margin-bottom: 11px;
+              transition: opacity 0.3s;
+            }
+
+            .type-chart-label {
+              font-size: 13px;
+              width: 54px;
+              flex-shrink: 0;
+            }
+
+            .type-chart-track {
+              flex: 1;
+              height: 4px;
+              background: rgba(255, 255, 255, 0.1);
+              border-radius: 2px;
+              overflow: hidden;
+            }
+
+            .type-chart-fill {
+              height: 100%;
+              background: var(--bone);
+              border-radius: 3px;
+              width: 0%;
+            }
+
+            .type-chart-count {
+              font-size: 12px;
+              font-family: 'Space Grotesk', sans-serif;
+              width: 16px;
+              text-align: right;
+              flex-shrink: 0;
+            }
+
+
+            /* ─── Bottom section — delta + pace (dark) / runs (light) ── */
+            .stats-top-section {
+              background: var(--slate-gray);
+            }
+
+            .stats-bottom-section {
+              background: var(--slate-gray);
+              border-block: 1px solid var(--dark-gray);
+            }
+
+            .month-runs {
+              padding: 40px 0 20px 0;
+            }
+
+            /* delta · pace 텍스트 — 어두운 배경 위 */
+
+            .pace-name {
+              color: var(--cloudy-gray);
+            }
+
+            .tab {
+              padding: 12px;
+              font-size: 24px;
+              font-weight: 400;
+              color: var(--asphalt-black);
+              cursor: pointer;
+              border: none;
+            }
+
+            .tab.active {
+              font-weight: 500;
+              color: var(--bone);
+            }
+
+            /* ─── Scroll ── */
+            .scroll-area {
+              flex: 1;
+              overflow-y: auto;
+              overflow-x: hidden;
+              scrollbar-width: none;
+              /* padding-top: calc(env(safe-area-inset-top, 0px) + 16px);  */
+              padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
+            }
+
+            .scroll-area::-webkit-scrollbar {
+              display: none;
+            }
+
+            /* ════════════════════════════════════
+               COMPARISON CHART
+            ════════════════════════════════════ */
+            .chart-block {
+              padding: 20px 0;
+            }
+
+            .chart-top {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 24px;
+              padding: 0 20px;
+            }
+
+
+            .year-nav {
+              display: flex;
+              align-items: center;
+              gap: 6px;
+            }
+
+            .year-arrow {
+              width: 26px;
+              height: 26px;
+              border-radius: 0;
+              background: transparent;
+              border: none;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              transition: opacity 0.2s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+              flex-shrink: 0;
+            }
+
+            .year-arrow:active {
+              transform: scale(0.92);
+            }
+
+            .year-arrow.disabled {
+              opacity: 0.18;
+              pointer-events: none;
+            }
+
+            .chart-period-label {
+              font-size: 20px;
+              font-weight: 400;
+              transition: color 0.3s;
+            }
+
+            .chart-avg-line-label {
+              color: var(--cloudy-gray);
+              font-family: 'Space Grotesk', monospace;
+            }
+
+            .avg-line-dash {
+              width: 16px;
+              height: 2px;
+              background: repeating-linear-gradient(90deg, var(--text-2) 0 4px, transparent 4px 8px);
+            }
+
+            /* 스와이프 래퍼 */
+            .chart-swipe-wrap {
+              overflow: hidden;
+            }
+
+            /* 바 차트 — 회전 레이블 수용 */
+            .cmp-chart {
+              position: relative;
+              height: 220px;
+              display: flex;
+              align-items: flex-end;
+              gap: 0;
+              padding: 0 10px;
+              transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s;
+            }
+
+            .avg-line {
+              position: absolute;
+              left: 0;
+              right: 0;
+              border-top: 1.5px dashed rgba(128, 128, 128, 0.2);
+              pointer-events: none;
+              z-index: 1;
+            }
+
+            .cmp-col {
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 2px;
+              min-width: 0;
+            }
+
+            /* 슬림 바 */
+            .cmp-bar {
+              width: 3px;
+              border-radius: 0;
+              background: var(--cloudy-gray);
+              transition: background 0.3s, height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+
+            /* 지나간 달 — 현재 달과 동일 컬러 */
+            .cmp-col.past .cmp-bar {
+              background: var(--bone);
+            }
+
+            /* 이번 달 — 풀 컬러 */
+            .cmp-col.current .cmp-bar {
+              background: var(--accent);
+            }
+
+            /* 미래 달 — 스텁 (고정 높이, 매우 흐리게) */
+            .cmp-col.future .cmp-bar {
+              background: var(--cloudy-gray);
+              opacity: 1;
+            }
+
+            /* 비활성화 (0km) */
+            .cmp-col.inactive .cmp-bar {
+              background: var(--cloudy-gray);
+            }
+
+            .cmp-col.inactive .cmp-label {
+              color: var(--cloudy-gray);
+            }
+
+            /* km 수치 — 전체 표시, past/current 동일 스타일 */
+            .cmp-km {
+              font-size: 14px;
+              font-weight: 500;
+              font-family: 'Space Grotesk', sans-serif;
+              white-space: nowrap;
+              transition: color 0.2s, opacity 0.2s;
+            }
+
+            .cmp-col.future .cmp-km {
+              background: var(--cloudy-gray);
+            }
+
+            .cmp-col.future .cmp-label {
+              opacity: 0.5;
+              !important;
+            }
+
+            /* 레이블 — 기본 (주간·년간), past/current 동일 스타일 */
+            .cmp-label {
+              font-size: 13px;
+              color: var(--accent);
+              transition: color 0.3s;
+              white-space: nowrap;
+            }
+
+            /* 레이블·km — 90° 회전 (월간 12개월) */
+            .cmp-chart.vertical .cmp-label,
+            .cmp-chart.vertical .cmp-km {
+              transform: rotate(-90deg);
+              /* 가로 폭을 고정하여 중앙 정렬 보장 */
+              height: 38px;
+              /* 회전 후 차지할 세로 공간 */
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              white-space: nowrap;
+              transition: color 0.2s;
+            }
+
+            .cmp-chart.vertical .cmp-label {
+              color: var(--dark-gray);
+              font-weight: 300;
+            }
+
+
+            /* ════════════════════════════════════
+               MONTH DETAIL (바 탭 시)
+            ════════════════════════════════════ */
+            .month-detail {
+              margin: 0;
+            }
+
+
+
+            /* 강도 분포 */
+            .intensity-breakdown {
+              padding: 40px 20px;
+              border-top: 1px solid var(--dark-gray);
+            }
+
+            /* 강도 카드: 제목 + 도넛 + 범례 */
+            .intensity-title {
+              font-size: 18px;
+              font-weight: 400;
+              letter-spacing: 0;
+            }
+
+            .intensity-donut-wrap {
+              display: flex;
+              justify-content: center;
+              margin-top: -20px;
+            }
+
+            .intensity-legend {
+              display: flex;
+              flex-direction: column;
+              gap: 14px;
+            }
+
+            .intensity-legend-row {
+              display: flex;
+              justify-content: space-between;
+              align-items: baseline;
+              font-family: 'Pretendard Variable', sans-serif;
+              font-size: 16px;
+              font-weight: 400;
+            }
+
+            .intensity-legend-row.high {
+              color: var(--accent);
+            }
+
+            .intensity-legend-row.mid {}
+
+            .intensity-legend-row.low {
+              color: var(--bone);
+            }
+
+            .il-types {
+              font-weight: 400;
+            }
+
+            .il-pct {
+              font-family: 'Space Grotesk', sans-serif;
+              font-weight: 700;
+              font-size: 16px;
+            }
+
+            .il-pct-unit {
+              font-weight: 400;
+              font-size: 14px;
+              margin-left: 4px;
+              opacity: 0.85;
+            }
+
+            .components-title {
+              font-size: 18px;
+              font-weight: 400;
+              color: var(--asphalt-gray);
+              margin-bottom: 12px;
+              transition: color 1s;
+              letter-spacing: 0;
+              font-family: 'Pretendard Variable', sans-serif;
+            }
+
+            .components-title.dark {
+              font-size: 16px;
+              font-weight: 400;
+              color: var(--asphalt-black);
+              margin-bottom: 12px;
+              transition: color 1s;
+              letter-spacing: 0;
+              font-family: 'Pretendard Variable', sans-serif;
+            }
+
+            /* 강도 스택 바 */
+            .intensity-stacked-bar {
+              display: flex;
+              height: 60px;
+              gap: 0;
+              border-radius: 4px;
+              overflow: hidden;
+            }
+
+            .isb-seg {
+              display: flex;
+              align-items: flex-end;
+              justify-content: flex-end;
+              min-width: 0;
+              padding: 0 8px 8px;
+              clip-path: inset(0 100% 0 0);
+              transition: clip-path 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+
+            .isb-seg span {
+              font-size: 16px;
+              font-weight: 600;
+              font-family: 'Space Grotesk', monospace;
+              white-space: nowrap;
+            }
+
+            .isb-low {
+              background: var(--slate-gray);
+            }
+
+            .isb-low span {
+              color: var(--asphalt-black);
+            }
+
+            .isb-mid {
+              background: var(--asphalt-gray);
+            }
+
+            .isb-mid span {
+              color: var(--bone);
+            }
+
+            .isb-high {
+              background: var(--accent);
+            }
+
+            .isb-high span {
+              color: #000;
+            }
+
+            .isb-axis {
+              display: flex;
+              justify-content: space-between;
+              margin-top: 10px;
+            }
+
+            .isb-axis-label {
+              font-size: 15px;
+              font-weight: 300;
+              color: var(--slate-gray);
+              font-family: 'Pretendard Variable', sans-serif;
+              transition: color 0.3s;
+            }
+
+            /* 선택된 바만 강조 */
+            .cmp-col.selected .cmp-km {
+              color: var(--accent) !important;
+              font-weight: 600 !important;
+            }
+
+            .cmp-col.selected .cmp-label {
+              color: var(--text-1) !important;
+              font-weight: 600 !important;
+            }
+
+            /* 다른 달 선택 시 — current 포함 비선택 바 모두 흐리게 */
+            .cmp-chart.has-selection .cmp-col:not(.selected) {
+              opacity: 0.3;
+              transition: opacity 0.2s;
+            }
+
+            .cmp-chart.has-selection .cmp-col.selected {
+              opacity: 1;
+            }
+
+            /* ════════════════════════════════════
+               DELTA CARDS
+            ════════════════════════════════════ */
+            .delta-row {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 0;
+              margin: 0;
+              padding: 0 20px;
+            }
+
+            .delta-card {
+              padding: 40px 0;
+              transition: background 0.3s;
+            }
+
+            .delta-card+.delta-card {
+              padding: 40px 0 30px 20px;
+              border-left: 1px solid var(--dark-gray);
+            }
+
+            .delta-km {
+              font-size: 32px;
+              font-weight: 400;
+              transition: color 0.3s;
+              line-height: 1;
+            }
+
+            .delta-km span {
+              font-size: 14px;
+              font-weight: 400;
+              margin-left: 2px;
+            }
+
+            .delta-pct {
+              font-size: 14px;
+              margin-top: 6px;
+              font-weight: 400;
+              transition: color 0.3s;
+            }
+
+            .delta-pct.up {
+              color: var(--accent);
+            }
+
+            .delta-pct.down {
+              color: var(--cloudy-gray);
+            }
+
+            /* ════════════════════════════════════
+               PACE 요약
+            ════════════════════════════════════ */
+            .pace-block {
+              padding: 40px 20px;
+            }
+
+            .pace-block-title {
+              font-size: 14px;
+              font-weight: 500;
+              letter-spacing: 0;
+              text-transform: uppercase;
+              color: var(--text-2);
+              transition: color 0.3s;
+            }
+
+            .pace-row {
+              display: flex;
+              align-items: baseline;
+              justify-content: space-between;
+              padding: 12px 0;
+            }
+
+            .pace-row:last-child {
+              padding-bottom: 0;
+            }
+
+            .pace-row:first-of-type {
+              padding-top: 0;
+            }
+
+            .pace-name {
+              font-size: 16px;
+              font-weight: 400;
+              transition: color 0.3s;
+            }
+
+            .title-area {
+              padding: 0 20px;
+            }
+
+
+            /* ════════════════════════════════════
+               ACTIVITY LIST
+            ════════════════════════════════════ */
+
+            .month-runs-title {
+              padding: 0 20px;
+              margin-bottom: 10px;
+            }
+
+            /* ─── Run type dot badge ── */
+            .type-race {
+              background: var(--type-race-bg);
+              color: var(--type-race-text);
+            }
+
+            .type-tempo {
+              background: var(--type-dark-bg);
+              color: var(--type-dark-text);
+            }
+
+            .type-interval {
+              background: var(--type-dark-bg);
+              color: var(--type-dark-text);
+            }
+
+            .type-steady {
+              background: var(--type-steady-bg);
+              color: var(--type-steady-text);
+            }
+
+            .type-easy {
+              background: var(--type-easy-bg);
+              color: var(--type-easy-text);
+            }
+
+            .type-jogging {
+              background: var(--type-jog-bg);
+              color: var(--type-jog-text);
+            }
+
+            .type-long {
+              background: var(--type-long-bg);
+              color: var(--type-long-text);
+            }
+
+            .type-tt {
+              background: var(--type-dark-bg);
+              color: var(--type-dark-text);
+            }
+
+            /* ─── 전체 러닝 활동 FAB — 스크롤 콘텐츠 하단에 포함 ── */
+            .list-fab {
+              flex-shrink: 0;
+              display: none;
+              /* JS로 월간 탭에서만 표시 */
+              align-items: center;
+              justify-content: space-between;
+              padding: 50px 20px calc(env(safe-area-inset-bottom, 0px)) 26px;
+              background-color: var(--accent);
+              color: #202020;
+              text-decoration: none;
+              cursor: pointer;
+              transition: opacity 0.2s;
+            }
+
+            .list-fab:active {
+              opacity: 0.8;
+            }
+
+            .list-fab-title {
+              font-size: 20px;
+              font-weight: 500;
+              font-family: 'Pretendard Variable', sans-serif;
+              color: #202020;
+            }
+
+            .month-runs-title {
+              font-size: 14px;
+              font-weight: 500;
+              letter-spacing: 0;
+              text-transform: uppercase;
+              color: var(--text-2);
+              transition: color 0.3s;
+            }
+
+            .run-item {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              padding: 14px 0;
+              text-decoration: none;
+              cursor: pointer;
+              transition: opacity 0.15s;
+            }
+
+            .run-item:active {
+              opacity: 0.5;
+            }
+
+            .run-left {
+              flex: 1;
+              min-width: 0;
+            }
+
+            .run-date {
+              font-size: 12px;
+              color: var(--text-2);
+              opacity: 0.55;
+              margin-bottom: 4px;
+              transition: color 0.3s;
+            }
+
+            .run-name {
+              font-size: 15px;
+              font-weight: 400;
+              color: var(--text-1);
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              transition: color 0.3s;
+            }
+
+            .run-sub {
+              font-size: 13px;
+              color: var(--text-2);
+              margin-top: 3px;
+              transition: color 0.3s;
+            }
+
+            .run-right {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              flex-shrink: 0;
+              margin-left: 16px;
+            }
+
+            .run-km {
+              font-size: 20px;
+              font-weight: 300;
+              font-family: 'Space Grotesk', sans-serif;
+              color: var(--text-1);
+              text-align: right;
+              transition: color 0.3s;
+            }
+
+            .run-km span {
+              font-size: 12px;
+              font-weight: 400;
+              color: var(--text-2);
+              margin-left: 2px;
+            }
+
+            .run-chevron {
+              color: var(--text-2);
+              opacity: 0.4;
+              flex-shrink: 0;
+            }
+
+            /* ─── Shift5 Data Readout Override ── */
+            .cmp-km,
+            .delta-km,
+            .delta-km span,
+            .delta-pct,
+            .run-km,
+            .isb-seg span {
+              font-family: 'Space Mono', ui-monospace, monospace;
+              font-feature-settings: "tnum";
+            }
+
+            /* ─── Shift5 Label Tracking ── */
+            .delta-vs,
+            .month-runs-title,
+            .pace-block-title {
+              font-family: 'Space Mono', ui-monospace, monospace;
+              font-weight: 400;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="phone">
+            <div class="phone-inner">
+                <div class="scroll-area">
+                    <!-- Compact sticky header -->
+                    <div class="lp-header">
+                        <span class="lp-header-title-compact">마일리지</span>
+                    </div>
+                    <!-- Large title -->
+                    <div class="lp-hero">
+                        <h1 class="lp-hero-title">마일리지</h1>
+                    </div>
+                    <div class="tab-row">
+                        <div class="tab" data-tab="week">주간</div>
+                        <div class="tab active" data-tab="month">월간</div>
+                        <div class="tab" data-tab="year">년간</div>
+                    </div>
+
+                    <!-- ══════════════════════════════
          WEEK VIEW (주간)
     ══════════════════════════════ -->
-        <div id="view-week" style="display:none">
-          <div class="stats-top-section">
-            <div class="chart-block">
-              <div class="chart-top">
-                <div class="year-nav">
-                  <span class="chart-period-label" id="week-period-label">3.9 — 5.25</span>
-                  <button class="year-arrow" id="week-period-prev" onclick="changeWeekPeriod(-1)">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round" stroke-linejoin="round">
-                      <path d="m15 18-6-6 6-6" />
-                    </svg>
-                  </button>
-                  <button class="year-arrow disabled" id="week-period-next" onclick="changeWeekPeriod(1)">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round" stroke-linejoin="round">
-                      <path d="m9 18 6-6-6-6" />
-                    </svg>
-                  </button>
-                </div>
-                <span class="chart-avg-line-label">
-                  <span class="avg-line-dash"></span><span id="week-avg-label"></span>
-                </span>
-              </div>
-              <div class="chart-swipe-wrap" id="week-chart-swipe-wrap">
-                <div class="cmp-chart vertical" id="week-chart">
-                  <div class="avg-line" id="week-avg-line"></div>
-                </div>
-              </div>
-            </div>
-            <div class="month-detail">
-              <div class="intensity-breakdown">
-                <div id="week-intensity"></div>
-              </div>
-              <div class="type-chart">
-                <div class="components-title">러닝 종류</div>
-                <div id="week-type-chart"></div>
-              </div>
-            </div>
-          </div>
+                    <div id="view-week" style="display: none">
+                        <div class="stats-top-section">
+                            <div class="chart-block">
+                                <div class="chart-top">
+                                    <div class="year-nav">
+                                        <span class="chart-period-label" id="week-period-label">3.9 — 5.25</span>
+                                        <button class="year-arrow" id="week-period-prev" onclick="changeWeekPeriod(-1)">
+                                            <svg
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            >
+                                                <path d="m15 18-6-6 6-6" />
+                                            </svg>
+                                        </button>
+                                        <button
+                                            class="year-arrow disabled"
+                                            id="week-period-next"
+                                            onclick="changeWeekPeriod(1)"
+                                        >
+                                            <svg
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            >
+                                                <path d="m9 18 6-6-6-6" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <span class="chart-avg-line-label">
+                                        <span class="avg-line-dash"></span><span id="week-avg-label"></span>
+                                    </span>
+                                </div>
+                                <div class="chart-swipe-wrap" id="week-chart-swipe-wrap">
+                                    <div class="cmp-chart vertical" id="week-chart">
+                                        <div class="avg-line" id="week-avg-line"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="month-detail">
+                                <div class="intensity-breakdown">
+                                    <div id="week-intensity"></div>
+                                </div>
+                                <div class="type-chart">
+                                    <div class="components-title">러닝 종류</div>
+                                    <div id="week-type-chart"></div>
+                                </div>
+                            </div>
+                        </div>
 
-          <div class="stats-bottom-section">
-            <div class="delta-row">
-              <div class="delta-card">
-                <div class="components-title">지난주 대비</div>
-                <div class="delta-km down">−19.7<sup>K</sup></div>
-                <div class="delta-pct down">↓ 78%</div>
-              </div>
-              <div class="delta-card">
-                <div class="components-title">8주 평균 대비</div>
-                <div class="delta-km down">−16.2<span>K</span></div>
-                <div class="delta-pct down">↓ 74%</div>
-              </div>
-            </div>
-          </div>
-        </div><!-- /view-week -->
+                        <div class="stats-bottom-section">
+                            <div class="delta-row">
+                                <div class="delta-card">
+                                    <div class="components-title">지난주 대비</div>
+                                    <div class="delta-km down">−19.7<sup>K</sup></div>
+                                    <div class="delta-pct down">↓ 78%</div>
+                                </div>
+                                <div class="delta-card">
+                                    <div class="components-title">8주 평균 대비</div>
+                                    <div class="delta-km down">−16.2<span>K</span></div>
+                                    <div class="delta-pct down">↓ 74%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /view-week -->
 
-        <!-- ══════════════════════════════
+                    <!-- ══════════════════════════════
          MONTH VIEW (월간)
     ══════════════════════════════ -->
-        <div id="view-month">
-          <div class="stats-top-section">
-            <div class="chart-block">
-              <div class="chart-top">
-                <div class="year-nav">
-                  <span class="chart-period-label" id="month-year-label">2026년</span>
-                  <button class="year-arrow" id="year-prev" onclick="changeYear(-1)">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round" stroke-linejoin="round">
-                      <path d="m15 18-6-6 6-6" />
-                    </svg>
-                  </button>
-                  <button class="year-arrow disabled" id="year-next" onclick="changeYear(1)">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round" stroke-linejoin="round">
-                      <path d="m9 18 6-6-6-6" />
-                    </svg>
-                  </button>
-                </div>
-                <span class="chart-avg-line-label"><span id="month-avg-label"></span></span>
-              </div>
-              <div class="chart-swipe-wrap" id="chart-swipe-wrap">
-                <div class="cmp-chart vertical" id="month-chart">
-                  <div class="avg-line" id="month-avg-line"></div>
-                </div>
-              </div>
-            </div>
+                    <div id="view-month">
+                        <div class="stats-top-section">
+                            <div class="chart-block">
+                                <div class="chart-top">
+                                    <div class="year-nav">
+                                        <span class="chart-period-label" id="month-year-label">2026년</span>
+                                        <button class="year-arrow" id="year-prev" onclick="changeYear(-1)">
+                                            <svg
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            >
+                                                <path d="m15 18-6-6 6-6" />
+                                            </svg>
+                                        </button>
+                                        <button class="year-arrow disabled" id="year-next" onclick="changeYear(1)">
+                                            <svg
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            >
+                                                <path d="m9 18 6-6-6-6" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <span class="chart-avg-line-label"><span id="month-avg-label"></span></span>
+                                </div>
+                                <div class="chart-swipe-wrap" id="chart-swipe-wrap">
+                                    <div class="cmp-chart vertical" id="month-chart">
+                                        <div class="avg-line" id="month-avg-line"></div>
+                                    </div>
+                                </div>
+                            </div>
 
-            <!-- 강도 분포 -->
-            <div class="month-detail" id="month-detail">
-              <div class="intensity-breakdown">
-                <div id="detail-intensity"></div>
-              </div>
-              <div class="type-chart">
-                <div class="components-title">러닝 종류</div>
-                <div id="month-type-chart" style="margin-top: 20px;"></div>
-              </div>
-            </div>
-          </div><!-- /stats-top-section -->
+                            <!-- 강도 분포 -->
+                            <div class="month-detail" id="month-detail">
+                                <div class="intensity-breakdown">
+                                    <div id="detail-intensity"></div>
+                                </div>
+                                <div class="type-chart">
+                                    <div class="components-title">러닝 종류</div>
+                                    <div id="month-type-chart" style="margin-top: 20px"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /stats-top-section -->
 
-          <div class="stats-bottom-section">
-            <div class="delta-row" id="month-delta-row">
-              <div class="delta-card">
-                <div class="components-title">지난달 대비</div>
-                <div class="delta-km down">−27.9<sup> K</sup></div>
-                <div class="delta-pct down">↓ 32%</div>
-              </div>
-              <div class="delta-card">
-                <div class="components-title">12개월 평균 대비</div>
-                <div class="delta-km down">−9.4<sup> K</sup></div>
-                <div class="delta-pct down">↓ 14%</div>
-              </div>
-            </div>
+                        <div class="stats-bottom-section">
+                            <div class="delta-row" id="month-delta-row">
+                                <div class="delta-card">
+                                    <div class="components-title">지난달 대비</div>
+                                    <div class="delta-km down">−27.9<sup> K</sup></div>
+                                    <div class="delta-pct down">↓ 32%</div>
+                                </div>
+                                <div class="delta-card">
+                                    <div class="components-title">12개월 평균 대비</div>
+                                    <div class="delta-km down">−9.4<sup> K</sup></div>
+                                    <div class="delta-pct down">↓ 14%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /stats-bottom-section -->
+                    </div>
+                    <!-- /view-month -->
 
-          </div><!-- /stats-bottom-section -->
-
-        </div><!-- /view-month -->
-
-        <!-- ══════════════════════════════
+                    <!-- ══════════════════════════════
          YEAR VIEW (년간)
     ══════════════════════════════ -->
-        <div id="view-year" style="display:none">
-          <div class="stats-hero-bar" id="stats-hero">
-            <div class="stats-hero-label">총 마일리지는</div>
-            <div class="stats-hero-num">247.3<sup>K</sup></div>
-          </div>
-          <div class="stats-top-section">
-            <div class="chart-block">
-              <div class="chart-top">
-                <div class="year-nav">
-                  <span class="chart-period-label" id="year-period-label">2022 — 2026</span>
-                  <button class="year-arrow" id="year-period-prev" onclick="changeYearPeriod(-1)">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round" stroke-linejoin="round">
-                      <path d="m15 18-6-6 6-6" />
-                    </svg>
-                  </button>
-                  <button class="year-arrow disabled" id="year-period-next" onclick="changeYearPeriod(1)">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round" stroke-linejoin="round">
-                      <path d="m9 18 6-6-6-6" />
-                    </svg>
-                  </button>
-                </div>
-                <span class="chart-avg-line-label">
-                  <span class="avg-line-dash"></span><span id="year-avg-label"></span>
-                </span>
-              </div>
-              <div class="chart-swipe-wrap" id="year-chart-swipe-wrap">
-                <div class="cmp-chart vertical" id="year-chart">
-                  <div class="avg-line" id="year-avg-line"></div>
-                </div>
-              </div>
-            </div>
-            <div class="month-detail">
-              <div class="intensity-breakdown">
-                <div id="year-intensity"></div>
-              </div>
-              <div class="type-chart">
-                <div class="components-title">러닝 종류</div>
-                <div id="year-type-chart"></div>
-              </div>
-            </div>
-          </div>
+                    <div id="view-year" style="display: none">
+                        <div class="stats-hero-bar" id="stats-hero">
+                            <div class="stats-hero-label">총 마일리지는</div>
+                            <div class="stats-hero-num">247.3<sup>K</sup></div>
+                        </div>
+                        <div class="stats-top-section">
+                            <div class="chart-block">
+                                <div class="chart-top">
+                                    <div class="year-nav">
+                                        <span class="chart-period-label" id="year-period-label">2022 — 2026</span>
+                                        <button class="year-arrow" id="year-period-prev" onclick="changeYearPeriod(-1)">
+                                            <svg
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            >
+                                                <path d="m15 18-6-6 6-6" />
+                                            </svg>
+                                        </button>
+                                        <button
+                                            class="year-arrow disabled"
+                                            id="year-period-next"
+                                            onclick="changeYearPeriod(1)"
+                                        >
+                                            <svg
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            >
+                                                <path d="m9 18 6-6-6-6" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <span class="chart-avg-line-label">
+                                        <span class="avg-line-dash"></span><span id="year-avg-label"></span>
+                                    </span>
+                                </div>
+                                <div class="chart-swipe-wrap" id="year-chart-swipe-wrap">
+                                    <div class="cmp-chart vertical" id="year-chart">
+                                        <div class="avg-line" id="year-avg-line"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="month-detail">
+                                <div class="intensity-breakdown">
+                                    <div id="year-intensity"></div>
+                                </div>
+                                <div class="type-chart">
+                                    <div class="components-title">러닝 종류</div>
+                                    <div id="year-type-chart"></div>
+                                </div>
+                            </div>
+                        </div>
 
-          <div class="stats-bottom-section">
-            <div class="delta-row">
-              <div class="delta-card">
-                <div class="components-title">작년 동기 대비</div>
-                <div class="delta-km up">+14.2<span>K</span></div>
-                <div class="delta-pct up">↑ 5%</div>
-              </div>
-              <div class="delta-card">
-                <div class="components-title">3년 평균 대비</div>
-                <div class="delta-km down">−12.6<span>K</span></div>
-                <div class="delta-pct down">↓ 4%</div>
-              </div>
-            </div>
-          </div>
-        </div><!-- /view-year -->
+                        <div class="stats-bottom-section">
+                            <div class="delta-row">
+                                <div class="delta-card">
+                                    <div class="components-title">작년 동기 대비</div>
+                                    <div class="delta-km up">+14.2<span>K</span></div>
+                                    <div class="delta-pct up">↑ 5%</div>
+                                </div>
+                                <div class="delta-card">
+                                    <div class="components-title">3년 평균 대비</div>
+                                    <div class="delta-km down">−12.6<span>K</span></div>
+                                    <div class="delta-pct down">↓ 4%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /view-year -->
 
-        <!-- 전체 러닝 활동 FAB — 리스트 뒤에 고정 
+                    <!-- 전체 러닝 활동 FAB — 리스트 뒤에 고정 
         <a class="list-fab" id="list-fab" href="list.html" onclick="event.preventDefault(); goTo('list.html')">
           <div class="list-fab-title">러닝 활동</div>
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#202020" stroke-width="1.5"
@@ -946,542 +1006,820 @@
             <polyline points="9 18 15 12 9 6"></polyline>
           </svg>
         </a>-->
+                </div>
+                <!-- /scroll-area -->
+            </div>
+            <!-- /phone-inner -->
+        </div>
+        <!-- /phone -->
 
-      </div><!-- /scroll-area -->
+        <script>
+            // ── 탭 전환 ──
+            const tabs = document.querySelectorAll('.tab');
+            const listFab = document.getElementById('list-fab');
 
-    </div><!-- /phone-inner -->
-  </div><!-- /phone -->
+            function setFabVisible(show) {
+                if (listFab) listFab.style.display = show ? 'flex' : 'none';
+            }
 
-  <script>
-    // ── 탭 전환 ──
-    const tabs = document.querySelectorAll('.tab');
-    const listFab = document.getElementById('list-fab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    const t = tab.dataset.tab;
+                    document.getElementById('view-week').style.display = t === 'week' ? '' : 'none';
+                    document.getElementById('view-month').style.display = t === 'month' ? '' : 'none';
+                    document.getElementById('view-year').style.display = t === 'year' ? '' : 'none';
+                    setFabVisible(true);
+                    if (t === 'week') renderWeekChart();
+                    if (t === 'year') renderYearChart();
+                });
+            });
 
-    function setFabVisible(show) {
-      if (listFab) listFab.style.display = show ? 'flex' : 'none';
-    }
+            // 초기 상태: 월간 탭이 기본 활성
+            setFabVisible(true);
 
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        const t = tab.dataset.tab;
-        document.getElementById('view-week').style.display = t === 'week' ? '' : 'none';
-        document.getElementById('view-month').style.display = t === 'month' ? '' : 'none';
-        document.getElementById('view-year').style.display = t === 'year' ? '' : 'none';
-        setFabVisible(true);
-        if (t === 'week') renderWeekChart();
-        if (t === 'year') renderYearChart();
-      });
-    });
+            // ══════════════════════════════════════
+            // 데이터
+            // ══════════════════════════════════════
 
-    // 초기 상태: 월간 탭이 기본 활성
-    setFabVisible(true);
+            // 주간 (최근 8주)
+            const WEEK_DATA = [
+                { label: '2.24', km: 22.1 },
+                { label: '3.3', km: 18.7 },
+                { label: '3.10', km: 26.4 },
+                { label: '3.17', km: 31.2 },
+                { label: '3.24', km: 19.8 },
+                { label: '3.31', km: 28.5 },
+                { label: '4.7', km: 15.3 },
+                { label: '4.14', km: 5.6, current: true },
+            ];
 
-    // ══════════════════════════════════════
-    // 데이터
-    // ══════════════════════════════════════
+            // ── 연도별 월간 데이터 ──
+            const YEAR_MONTH_DATA = {
+                2024: [
+                    { label: '1월', km: 58.4, past: true },
+                    { label: '2월', km: 62.1, past: true },
+                    { label: '3월', km: 71.8, past: true },
+                    { label: '4월', km: 79.3, past: true },
+                    { label: '5월', km: 74.2, past: true },
+                    { label: '6월', km: 61.5, past: true },
+                    { label: '7월', km: 49.8, past: true },
+                    { label: '8월', km: 44.6, past: true },
+                    { label: '9월', km: 77.1, past: true },
+                    { label: '10월', km: 89.4, past: true },
+                    { label: '11월', km: 83.7, past: true },
+                    { label: '12월', km: 59.2, past: true },
+                ],
+                2025: [
+                    { label: '1월', km: 66.0, past: true },
+                    { label: '2월', km: 71.4, past: true },
+                    { label: '3월', km: 79.8, past: true },
+                    { label: '4월', km: 87.5, past: true },
+                    { label: '5월', km: 75.3, past: true },
+                    { label: '6월', km: 64.2, past: true },
+                    { label: '7월', km: 51.6, past: true },
+                    { label: '8월', km: 47.1, past: true },
+                    { label: '9월', km: 73.8, past: true },
+                    { label: '10월', km: 87.9, past: true },
+                    { label: '11월', km: 81.4, past: true },
+                    { label: '12월', km: 63.6, past: true },
+                ],
+                2026: [
+                    { label: '1월', km: 72.3, past: true },
+                    { label: '2월', km: 68.1, past: true },
+                    { label: '3월', km: 87.6, past: true },
+                    { label: '4월', km: 59.7, current: true },
+                    { label: '5월', km: 0, future: true },
+                    { label: '6월', km: 0, future: true },
+                    { label: '7월', km: 0, future: true },
+                    { label: '8월', km: 0, future: true },
+                    { label: '9월', km: 0, future: true },
+                    { label: '10월', km: 0, future: true },
+                    { label: '11월', km: 0, future: true },
+                    { label: '12월', km: 0, future: true },
+                ],
+            };
 
-    // 주간 (최근 8주)
-    const WEEK_DATA = [
-      { label: '2.24', km: 22.1 },
-      { label: '3.3', km: 18.7 },
-      { label: '3.10', km: 26.4 },
-      { label: '3.17', km: 31.2 },
-      { label: '3.24', km: 19.8 },
-      { label: '3.31', km: 28.5 },
-      { label: '4.7', km: 15.3 },
-      { label: '4.14', km: 5.6, current: true },
-    ];
+            let currentYear = 2026;
+            const MIN_YEAR = 2024;
+            const MAX_YEAR = 2026;
 
-    // ── 연도별 월간 데이터 ──
-    const YEAR_MONTH_DATA = {
-      2024: [
-        { label: '1월', km: 58.4, past: true },
-        { label: '2월', km: 62.1, past: true },
-        { label: '3월', km: 71.8, past: true },
-        { label: '4월', km: 79.3, past: true },
-        { label: '5월', km: 74.2, past: true },
-        { label: '6월', km: 61.5, past: true },
-        { label: '7월', km: 49.8, past: true },
-        { label: '8월', km: 44.6, past: true },
-        { label: '9월', km: 77.1, past: true },
-        { label: '10월', km: 89.4, past: true },
-        { label: '11월', km: 83.7, past: true },
-        { label: '12월', km: 59.2, past: true },
-      ],
-      2025: [
-        { label: '1월', km: 66.0, past: true },
-        { label: '2월', km: 71.4, past: true },
-        { label: '3월', km: 79.8, past: true },
-        { label: '4월', km: 87.5, past: true },
-        { label: '5월', km: 75.3, past: true },
-        { label: '6월', km: 64.2, past: true },
-        { label: '7월', km: 51.6, past: true },
-        { label: '8월', km: 47.1, past: true },
-        { label: '9월', km: 73.8, past: true },
-        { label: '10월', km: 87.9, past: true },
-        { label: '11월', km: 81.4, past: true },
-        { label: '12월', km: 63.6, past: true },
-      ],
-      2026: [
-        { label: '1월', km: 72.3, past: true },
-        { label: '2월', km: 68.1, past: true },
-        { label: '3월', km: 87.6, past: true },
-        { label: '4월', km: 59.7, current: true },
-        { label: '5월', km: 0, future: true },
-        { label: '6월', km: 0, future: true },
-        { label: '7월', km: 0, future: true },
-        { label: '8월', km: 0, future: true },
-        { label: '9월', km: 0, future: true },
-        { label: '10월', km: 0, future: true },
-        { label: '11월', km: 0, future: true },
-        { label: '12월', km: 0, future: true },
-      ],
-    };
+            // 현재 연도 데이터 접근용 (기존 코드 호환)
+            const MONTH_DATA = YEAR_MONTH_DATA[2026];
 
-    let currentYear = 2026;
-    const MIN_YEAR = 2024;
-    const MAX_YEAR = 2026;
+            // 년간 (레거시 — AVG_YEAR 계산용)
+            const YEAR_DATA = [
+                { label: '22년', km: 680 },
+                { label: '23년', km: 754 },
+                { label: '24년', km: 821 },
+                { label: '25년', km: 783 },
+                { label: '26년', km: 287.7, current: true },
+            ];
 
-    // 현재 연도 데이터 접근용 (기존 코드 호환)
-    const MONTH_DATA = YEAR_MONTH_DATA[2026];
+            // ── 주간 기간별 데이터 (12주 × 3기간) ──
+            const WEEK_PERIOD_DATA = {
+                0: {
+                    label: '9.22 — 12.14',
+                    weeks: [
+                        { label: '9.22', km: 18.5, past: true },
+                        { label: '9.29', km: 22.8, past: true },
+                        { label: '10.6', km: 27.3, past: true },
+                        { label: '10.13', km: 31.5, past: true },
+                        { label: '10.20', km: 29.8, past: true },
+                        { label: '10.27', km: 25.6, past: true },
+                        { label: '11.3', km: 22.4, past: true },
+                        { label: '11.10', km: 28.9, past: true },
+                        { label: '11.17', km: 23.5, past: true },
+                        { label: '11.24', km: 17.2, past: true },
+                        { label: '12.1', km: 20.3, past: true },
+                        { label: '12.8', km: 15.8, past: true },
+                    ],
+                    bpms: [155, 162, 158, 165, 160, 153, 148, 162, 154, 147, 156, 150],
+                },
+                1: {
+                    label: '12.15 — 3.8',
+                    weeks: [
+                        { label: '12.15', km: 14.1, past: true },
+                        { label: '12.22', km: 11.4, past: true },
+                        { label: '12.29', km: 18.5, past: true },
+                        { label: '1.5', km: 22.6, past: true },
+                        { label: '1.12', km: 24.2, past: true },
+                        { label: '1.19', km: 26.4, past: true },
+                        { label: '1.26', km: 21.8, past: true },
+                        { label: '2.2', km: 19.5, past: true },
+                        { label: '2.9', km: 22.1, past: true },
+                        { label: '2.16', km: 18.7, past: true },
+                        { label: '2.23', km: 26.4, past: true },
+                        { label: '3.2', km: 31.2, past: true },
+                    ],
+                    bpms: [145, 142, 149, 153, 157, 161, 156, 150, 146, 143, 159, 168],
+                },
+                2: {
+                    label: '3.9 — 5.25',
+                    weeks: [
+                        { label: '3.9', km: 19.8, past: true },
+                        { label: '3.16', km: 28.5, past: true },
+                        { label: '3.23', km: 15.3, past: true },
+                        { label: '3.30', km: 26.4, past: true },
+                        { label: '4.6', km: 31.2, past: true },
+                        { label: '4.13', km: 5.6, past: true },
+                        { label: '4.20', km: 11.2, past: true },
+                        { label: '4.27', km: 3.5, current: true },
+                        { label: '5.4', km: 0, future: true },
+                        { label: '5.11', km: 0, future: true },
+                        { label: '5.18', km: 0, future: true },
+                        { label: '5.25', km: 0, future: true },
+                    ],
+                    bpms: [155, 163, 172, 162, 169, 176, 155, 148],
+                },
+            };
+            let currentWeekPeriodIdx = 2;
+            const MIN_WEEK_PERIOD = 0;
+            const MAX_WEEK_PERIOD = 2;
 
-    // 년간 (레거시 — AVG_YEAR 계산용)
-    const YEAR_DATA = [
-      { label: '22년', km: 680 },
-      { label: '23년', km: 754 },
-      { label: '24년', km: 821 },
-      { label: '25년', km: 783 },
-      { label: '26년', km: 287.7, current: true },
-    ];
+            // ── 년간 기간별 데이터 (12년 × 2기간) ──
+            const YEAR_PERIOD_DATA = {
+                0: {
+                    label: '13 — 24',
+                    years: [
+                        { label: '13년', km: 215, past: true },
+                        { label: '14년', km: 284, past: true },
+                        { label: '15년', km: 312, past: true },
+                        { label: '16년', km: 428, past: true },
+                        { label: '17년', km: 542, past: true },
+                        { label: '18년', km: 598, past: true },
+                        { label: '19년', km: 635, past: true },
+                        { label: '20년', km: 612, past: true },
+                        { label: '21년', km: 656, past: true },
+                        { label: '22년', km: 680, past: true },
+                        { label: '23년', km: 754, past: true },
+                        { label: '24년', km: 821, past: true },
+                    ],
+                    bpms: [152, 158, 145, 163, 149, 156, 141, 162, 154, 147, 160, 153],
+                },
+                1: {
+                    label: '15 — 26',
+                    years: [
+                        { label: '15년', km: 312, past: true },
+                        { label: '16년', km: 428, past: true },
+                        { label: '17년', km: 542, past: true },
+                        { label: '18년', km: 598, past: true },
+                        { label: '19년', km: 635, past: true },
+                        { label: '20년', km: 612, past: true },
+                        { label: '21년', km: 656, past: true },
+                        { label: '22년', km: 680, past: true },
+                        { label: '23년', km: 754, past: true },
+                        { label: '24년', km: 821, past: true },
+                        { label: '25년', km: 783, past: true },
+                        { label: '26년', km: 287.7, current: true },
+                    ],
+                    bpms: null, // RUNS 실데이터 사용
+                },
+            };
+            let currentYearPeriodIdx = 1;
+            const MIN_YEAR_PERIOD = 0;
+            const MAX_YEAR_PERIOD = 1;
 
-    // ── 주간 기간별 데이터 (12주 × 3기간) ──
-    const WEEK_PERIOD_DATA = {
-      0: {
-        label: '9.22 — 12.14',
-        weeks: [
-          { label: '9.22', km: 18.5, past: true },
-          { label: '9.29', km: 22.8, past: true },
-          { label: '10.6', km: 27.3, past: true },
-          { label: '10.13', km: 31.5, past: true },
-          { label: '10.20', km: 29.8, past: true },
-          { label: '10.27', km: 25.6, past: true },
-          { label: '11.3', km: 22.4, past: true },
-          { label: '11.10', km: 28.9, past: true },
-          { label: '11.17', km: 23.5, past: true },
-          { label: '11.24', km: 17.2, past: true },
-          { label: '12.1', km: 20.3, past: true },
-          { label: '12.8', km: 15.8, past: true },
-        ],
-        bpms: [155, 162, 158, 165, 160, 153, 148, 162, 154, 147, 156, 150],
-      },
-      1: {
-        label: '12.15 — 3.8',
-        weeks: [
-          { label: '12.15', km: 14.1, past: true },
-          { label: '12.22', km: 11.4, past: true },
-          { label: '12.29', km: 18.5, past: true },
-          { label: '1.5', km: 22.6, past: true },
-          { label: '1.12', km: 24.2, past: true },
-          { label: '1.19', km: 26.4, past: true },
-          { label: '1.26', km: 21.8, past: true },
-          { label: '2.2', km: 19.5, past: true },
-          { label: '2.9', km: 22.1, past: true },
-          { label: '2.16', km: 18.7, past: true },
-          { label: '2.23', km: 26.4, past: true },
-          { label: '3.2', km: 31.2, past: true },
-        ],
-        bpms: [145, 142, 149, 153, 157, 161, 156, 150, 146, 143, 159, 168],
-      },
-      2: {
-        label: '3.9 — 5.25',
-        weeks: [
-          { label: '3.9', km: 19.8, past: true },
-          { label: '3.16', km: 28.5, past: true },
-          { label: '3.23', km: 15.3, past: true },
-          { label: '3.30', km: 26.4, past: true },
-          { label: '4.6', km: 31.2, past: true },
-          { label: '4.13', km: 5.6, past: true },
-          { label: '4.20', km: 11.2, past: true },
-          { label: '4.27', km: 3.5, current: true },
-          { label: '5.4', km: 0, future: true },
-          { label: '5.11', km: 0, future: true },
-          { label: '5.18', km: 0, future: true },
-          { label: '5.25', km: 0, future: true },
-        ],
-        bpms: [155, 163, 172, 162, 169, 176, 155, 148],
-      },
-    };
-    let currentWeekPeriodIdx = 2;
-    const MIN_WEEK_PERIOD = 0;
-    const MAX_WEEK_PERIOD = 2;
+            const avg = arr => Math.round((arr.reduce((s, d) => s + d.km, 0) / arr.length) * 10) / 10;
 
-    // ── 년간 기간별 데이터 (12년 × 2기간) ──
-    const YEAR_PERIOD_DATA = {
-      0: {
-        label: '13 — 24',
-        years: [
-          { label: '13년', km: 215, past: true },
-          { label: '14년', km: 284, past: true },
-          { label: '15년', km: 312, past: true },
-          { label: '16년', km: 428, past: true },
-          { label: '17년', km: 542, past: true },
-          { label: '18년', km: 598, past: true },
-          { label: '19년', km: 635, past: true },
-          { label: '20년', km: 612, past: true },
-          { label: '21년', km: 656, past: true },
-          { label: '22년', km: 680, past: true },
-          { label: '23년', km: 754, past: true },
-          { label: '24년', km: 821, past: true },
-        ],
-        bpms: [152, 158, 145, 163, 149, 156, 141, 162, 154, 147, 160, 153],
-      },
-      1: {
-        label: '15 — 26',
-        years: [
-          { label: '15년', km: 312, past: true },
-          { label: '16년', km: 428, past: true },
-          { label: '17년', km: 542, past: true },
-          { label: '18년', km: 598, past: true },
-          { label: '19년', km: 635, past: true },
-          { label: '20년', km: 612, past: true },
-          { label: '21년', km: 656, past: true },
-          { label: '22년', km: 680, past: true },
-          { label: '23년', km: 754, past: true },
-          { label: '24년', km: 821, past: true },
-          { label: '25년', km: 783, past: true },
-          { label: '26년', km: 287.7, current: true },
-        ],
-        bpms: null, // RUNS 실데이터 사용
-      },
-    };
-    let currentYearPeriodIdx = 1;
-    const MIN_YEAR_PERIOD = 0;
-    const MAX_YEAR_PERIOD = 1;
+            const AVG_WEEK = avg(WEEK_DATA);
+            // 월간 avg — 완료된 달(past+current)만 계산
+            const AVG_MONTH = avg(MONTH_DATA.filter(d => !d.future));
+            const AVG_YEAR = avg(YEAR_DATA);
 
-    const avg = arr => Math.round(arr.reduce((s, d) => s + d.km, 0) / arr.length * 10) / 10;
+            // ══════════════════════════════════════
+            // 차트 렌더러
+            // opts.barMaxPx  : 바 최대 높이 (px)
+            // opts.labelOffset: 레이블 높이 포함 바닥 오프셋 (px)
+            // ══════════════════════════════════════
+            function renderChart(containerId, avgLineId, data, avg, opts) {
+                const BAR_MAX_PX = opts.barMaxPx || 115;
+                const LABEL_OFFSET = opts.labelOffset || 20;
+                const FUTURE_H = 0; // 미래 달 스텁 높이 (px)
 
-    const AVG_WEEK = avg(WEEK_DATA);
-    // 월간 avg — 완료된 달(past+current)만 계산
-    const AVG_MONTH = avg(MONTH_DATA.filter(d => !d.future));
-    const AVG_YEAR = avg(YEAR_DATA);
+                const container = document.getElementById(containerId);
+                // maxKm — 미래(km=0) 제외하고 계산
+                const activeData = data.filter(d => !d.future);
+                const maxKm = Math.max(...activeData.map(d => d.km), avg * 1.05);
 
-    // ══════════════════════════════════════
-    // 차트 렌더러
-    // opts.barMaxPx  : 바 최대 높이 (px)
-    // opts.labelOffset: 레이블 높이 포함 바닥 오프셋 (px)
-    // ══════════════════════════════════════
-    function renderChart(containerId, avgLineId, data, avg, opts) {
-      const BAR_MAX_PX = opts.barMaxPx || 115;
-      const LABEL_OFFSET = opts.labelOffset || 20;
-      const FUTURE_H = 0; // 미래 달 스텁 높이 (px)
+                // 평균선 위치
+                const avgPx = Math.round((avg / maxKm) * BAR_MAX_PX) + LABEL_OFFSET;
+                document.getElementById(avgLineId).style.bottom = avgPx + 'px';
 
-      const container = document.getElementById(containerId);
-      // maxKm — 미래(km=0) 제외하고 계산
-      const activeData = data.filter(d => !d.future);
-      const maxKm = Math.max(...activeData.map(d => d.km), avg * 1.05);
+                // 컬럼 생성
+                const cols = data
+                    .map((d, i) => {
+                        let cls = 'cmp-col';
+                        if (d.past) cls += ' past';
+                        if (d.current) cls += ' current';
+                        if (d.future) cls += ' future';
+                        if (d.km === 0) cls += ' inactive';
 
-      // 평균선 위치
-      const avgPx = Math.round(avg / maxKm * BAR_MAX_PX) + LABEL_OFFSET;
-      document.getElementById(avgLineId).style.bottom = avgPx + 'px';
+                        const barPx = d.future ? FUTURE_H : Math.max(3, Math.round((d.km / maxKm) * BAR_MAX_PX));
 
-      // 컬럼 생성
-      const cols = data.map((d, i) => {
-        let cls = 'cmp-col';
-        if (d.past) cls += ' past';
-        if (d.current) cls += ' current';
-        if (d.future) cls += ' future';
-        if (d.km === 0) cls += ' inactive';
+                        const clickable = !d.future && d.km > 0;
+                        const kmDisplay = Math.floor(d.km);
 
-        const barPx = d.future
-          ? FUTURE_H
-          : Math.max(3, Math.round(d.km / maxKm * BAR_MAX_PX));
-
-        const clickable = !d.future && d.km > 0;
-        const kmDisplay = Math.floor(d.km);
-
-        return `<div class="${cls}" data-idx="${i}" ${clickable ? 'style="cursor:pointer"' : ''}>
+                        return `<div class="${cls}" data-idx="${i}" ${clickable ? 'style="cursor:pointer"' : ''}>
         ${d.km > 0 ? `<span class="cmp-km">${kmDisplay}</span>` : ''}
         <div class="cmp-bar" style="height:${barPx}px"></div>
         <span class="cmp-label">${d.label}</span>
       </div>`;
-      }).join('');
+                    })
+                    .join('');
 
-      const avgLine = document.getElementById(avgLineId);
-      container.innerHTML = '';
-      container.appendChild(avgLine);
-      container.insertAdjacentHTML('beforeend', cols);
-    }
+                const avgLine = document.getElementById(avgLineId);
+                container.innerHTML = '';
+                container.appendChild(avgLine);
+                container.insertAdjacentHTML('beforeend', cols);
+            }
 
-    // ── 연도 변경 ──
-    function updateYearNav() {
-      document.getElementById('month-year-label').textContent = currentYear + '년';
-      document.getElementById('year-prev').classList.toggle('disabled', currentYear <= MIN_YEAR);
-      document.getElementById('year-next').classList.toggle('disabled', currentYear >= MAX_YEAR);
-    }
+            // ── 연도 변경 ──
+            function updateYearNav() {
+                document.getElementById('month-year-label').textContent = currentYear + '년';
+                document.getElementById('year-prev').classList.toggle('disabled', currentYear <= MIN_YEAR);
+                document.getElementById('year-next').classList.toggle('disabled', currentYear >= MAX_YEAR);
+            }
 
-    function updateMonthChart(animate) {
-      const data = YEAR_MONTH_DATA[currentYear];
-      const activeAvg = avg(data.filter(d => !d.future));
-      renderChart('month-chart', 'month-avg-line', data, activeAvg, {
-        barMaxPx: 115, labelOffset: 34
-      });
-      document.getElementById('month-avg-label').textContent = 'avg ' + activeAvg + 'K';
+            function updateMonthChart(animate) {
+                const data = YEAR_MONTH_DATA[currentYear];
+                const activeAvg = avg(data.filter(d => !d.future));
+                renderChart('month-chart', 'month-avg-line', data, activeAvg, {
+                    barMaxPx: 115,
+                    labelOffset: 34,
+                });
+                document.getElementById('month-avg-label').textContent = 'avg ' + activeAvg + 'K';
 
-      // 현재 달 인덱스로 디폴트 상세 패널 초기화
-      const defaultIdx = data.findIndex(d => d.current);
-      showDetailContent(defaultIdx, /* isDefault */ true);
+                // 현재 달 인덱스로 디폴트 상세 패널 초기화
+                const defaultIdx = data.findIndex(d => d.current);
+                showDetailContent(defaultIdx, /* isDefault */ true);
 
-      const monthRuns = currentYear === 2026 ? RUNS : [];
-      renderTypeChart('month-type-chart', monthRuns);
+                const monthRuns = currentYear === 2026 ? RUNS : [];
+                renderTypeChart('month-type-chart', monthRuns);
 
-      if (animate) animateChartIn('month-chart', 60);
-    }
+                if (animate) animateChartIn('month-chart', 60);
+            }
 
-    // ── 바 진입 애니메이션 ──
-    function animateChartIn(containerId, stagger) {
-      const bars = document.querySelectorAll(`#${containerId} .cmp-bar`);
-      bars.forEach((bar, i) => {
-        const target = bar.style.height;
-        bar.style.transition = 'none';
-        bar.style.height = '0px';
-        bar.style.opacity = '0';
-        setTimeout(() => {
-          bar.style.transition = 'height 0.55s cubic-bezier(0.16,1,0.3,1), opacity 0.3s';
-          bar.style.height = target;
-          bar.style.opacity = '1';
-        }, i * stagger + 40);
-      });
-    }
+            // ── 바 진입 애니메이션 ──
+            function animateChartIn(containerId, stagger) {
+                const bars = document.querySelectorAll(`#${containerId} .cmp-bar`);
+                bars.forEach((bar, i) => {
+                    const target = bar.style.height;
+                    bar.style.transition = 'none';
+                    bar.style.height = '0px';
+                    bar.style.opacity = '0';
+                    setTimeout(
+                        () => {
+                            bar.style.transition = 'height 0.55s cubic-bezier(0.16,1,0.3,1), opacity 0.3s';
+                            bar.style.height = target;
+                            bar.style.opacity = '1';
+                        },
+                        i * stagger + 40,
+                    );
+                });
+            }
 
-    function changeYear(dir) {
-      const next = currentYear + dir;
-      if (next < MIN_YEAR || next > MAX_YEAR) return;
+            function changeYear(dir) {
+                const next = currentYear + dir;
+                if (next < MIN_YEAR || next > MAX_YEAR) return;
 
-      const chart = document.getElementById('month-chart');
+                const chart = document.getElementById('month-chart');
 
-      // 슬라이드 아웃
-      chart.style.transition = 'transform 0.22s cubic-bezier(0.4,0,1,1), opacity 0.22s';
-      chart.style.transform = `translateX(${dir > 0 ? '-40px' : '40px'})`;
-      chart.style.opacity = '0';
+                // 슬라이드 아웃
+                chart.style.transition = 'transform 0.22s cubic-bezier(0.4,0,1,1), opacity 0.22s';
+                chart.style.transform = `translateX(${dir > 0 ? '-40px' : '40px'})`;
+                chart.style.opacity = '0';
 
-      setTimeout(() => {
-        currentYear = next;
-        selectedIdx = -1;
-        updateYearNav();
-        updateMonthChart(/* animate */ true);
+                setTimeout(() => {
+                    currentYear = next;
+                    selectedIdx = -1;
+                    updateYearNav();
+                    updateMonthChart(/* animate */ true);
 
-        // 진입 위치 세팅 (트랜지션 없이)
-        chart.style.transition = 'none';
-        chart.style.transform = `translateX(${dir > 0 ? '40px' : '-40px'})`;
+                    // 진입 위치 세팅 (트랜지션 없이)
+                    chart.style.transition = 'none';
+                    chart.style.transform = `translateX(${dir > 0 ? '40px' : '-40px'})`;
 
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            chart.style.transition = 'transform 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.3s';
-            chart.style.transform = 'translateX(0)';
-            chart.style.opacity = '1';
-          });
-        });
-      }, 220);
-    }
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            chart.style.transition = 'transform 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.3s';
+                            chart.style.transform = 'translateX(0)';
+                            chart.style.opacity = '1';
+                        });
+                    });
+                }, 220);
+            }
 
-    // ══════════════════════════════════════
-    // RUNS 데이터
-    // ══════════════════════════════════════
-    const RUNS = [
-      // 4월
-      { date: '2026-04-25', label: '4/25', month: 4, type: 'interval', name: '400m 인터벌', dur: '44:00', km: 9.2, pace: '4:47', bpm: 182, spm: 186, ground: 198, stride: 118 },
-      { date: '2026-04-11', label: '4/11', month: 4, type: 'race', name: '2026 인천하프', dur: '1:46:42', km: 21.2, pace: '5:02', bpm: 176, spm: 174, ground: 214, stride: 107 },
-      { date: '2026-04-10', label: '4/10', month: 4, type: 'jogging', name: '회복 조깅', dur: '37:05', km: 5.4, pace: '6:52', bpm: 142, spm: 163, ground: 268, stride: 88 },
-      { date: '2026-04-07', label: '4/7', month: 4, type: 'tempo', name: '템포 런', dur: '38:00', km: 8.0, pace: '4:45', bpm: 169, spm: 180, ground: 208, stride: 112 },
-      { date: '2026-04-05', label: '4/5', month: 4, type: 'easy', name: '이지 런', dur: '45:00', km: 7.2, pace: '6:15', bpm: 138, spm: 162, ground: 252, stride: 91 },
-      { date: '2026-04-04', label: '4/4', month: 4, type: 'easy', name: '이지 런', dur: '43:04', km: 6.8, pace: '6:20', bpm: 135, spm: 160, ground: 255, stride: 89 },
-      { date: '2026-04-03', label: '4/3', month: 4, type: 'easy', name: '이지 런', dur: '33:20', km: 5.0, pace: '6:40', bpm: 132, spm: 158, ground: 260, stride: 86 },
-      // 3월
-      { date: '2026-03-30', label: '3/30', month: 3, type: 'steady', name: '스테디 런', dur: '57:45', km: 10.5, pace: '5:30', bpm: 158, spm: 170, ground: 238, stride: 98 },
-      { date: '2026-03-28', label: '3/28', month: 3, type: 'steady', name: '스테디 런', dur: '55:12', km: 9.8, pace: '5:38', bpm: 155, spm: 168, ground: 241, stride: 96 },
-      { date: '2026-03-26', label: '3/26', month: 3, type: 'tt', name: '5K TT', dur: '22:18', km: 5.0, pace: '4:28', bpm: 181, spm: 185, ground: 200, stride: 116 },
-      { date: '2026-03-22', label: '3/22', month: 3, type: 'race', name: '서울 10K', dur: '48:40', km: 10.0, pace: '4:52', bpm: 172, spm: 177, ground: 216, stride: 105 },
-      { date: '2026-03-20', label: '3/20', month: 3, type: 'steady', name: '스테디 런', dur: '1:00:40', km: 11.2, pace: '5:25', bpm: 160, spm: 171, ground: 244, stride: 100 },
-      { date: '2026-03-19', label: '3/19', month: 3, type: 'jogging', name: '회복 조깅', dur: '34:00', km: 4.8, pace: '7:05', bpm: 138, spm: 161, ground: 271, stride: 85 },
-      { date: '2026-03-13', label: '3/13', month: 3, type: 'easy', name: '이지 런', dur: '52:08', km: 8.5, pace: '6:08', bpm: 141, spm: 164, ground: 257, stride: 93 },
-      { date: '2026-03-09', label: '3/9', month: 3, type: 'easy', name: '이지 런', dur: '38:12', km: 6.0, pace: '6:22', bpm: 136, spm: 160, ground: 262, stride: 90 },
-      // 2월
-      { date: '2026-02-25', label: '2/25', month: 2, type: 'long', name: '롱 런', dur: '1:44:24', km: 18.0, pace: '5:48', bpm: 155, spm: 168, ground: 245, stride: 97 },
-      { date: '2026-02-18', label: '2/18', month: 2, type: 'tempo', name: '템포 런', dur: '36:30', km: 7.5, pace: '4:52', bpm: 167, spm: 178, ground: 212, stride: 110 },
-      { date: '2026-02-10', label: '2/10', month: 2, type: 'steady', name: '스테디 런', dur: '52:26', km: 9.2, pace: '5:42', bpm: 152, spm: 167, ground: 242, stride: 95 },
-      { date: '2026-02-02', label: '2/2', month: 2, type: 'easy', name: '이지 런', dur: '35:34', km: 5.5, pace: '6:28', bpm: 133, spm: 159, ground: 258, stride: 87 },
-    ];
+            // ══════════════════════════════════════
+            // RUNS 데이터
+            // ══════════════════════════════════════
+            const RUNS = [
+                // 4월
+                {
+                    date: '2026-04-25',
+                    label: '4/25',
+                    month: 4,
+                    type: 'interval',
+                    name: '400m 인터벌',
+                    dur: '44:00',
+                    km: 9.2,
+                    pace: '4:47',
+                    bpm: 182,
+                    spm: 186,
+                    ground: 198,
+                    stride: 118,
+                },
+                {
+                    date: '2026-04-11',
+                    label: '4/11',
+                    month: 4,
+                    type: 'race',
+                    name: '2026 인천하프',
+                    dur: '1:46:42',
+                    km: 21.2,
+                    pace: '5:02',
+                    bpm: 176,
+                    spm: 174,
+                    ground: 214,
+                    stride: 107,
+                },
+                {
+                    date: '2026-04-10',
+                    label: '4/10',
+                    month: 4,
+                    type: 'jogging',
+                    name: '회복 조깅',
+                    dur: '37:05',
+                    km: 5.4,
+                    pace: '6:52',
+                    bpm: 142,
+                    spm: 163,
+                    ground: 268,
+                    stride: 88,
+                },
+                {
+                    date: '2026-04-07',
+                    label: '4/7',
+                    month: 4,
+                    type: 'tempo',
+                    name: '템포 런',
+                    dur: '38:00',
+                    km: 8.0,
+                    pace: '4:45',
+                    bpm: 169,
+                    spm: 180,
+                    ground: 208,
+                    stride: 112,
+                },
+                {
+                    date: '2026-04-05',
+                    label: '4/5',
+                    month: 4,
+                    type: 'easy',
+                    name: '이지 런',
+                    dur: '45:00',
+                    km: 7.2,
+                    pace: '6:15',
+                    bpm: 138,
+                    spm: 162,
+                    ground: 252,
+                    stride: 91,
+                },
+                {
+                    date: '2026-04-04',
+                    label: '4/4',
+                    month: 4,
+                    type: 'easy',
+                    name: '이지 런',
+                    dur: '43:04',
+                    km: 6.8,
+                    pace: '6:20',
+                    bpm: 135,
+                    spm: 160,
+                    ground: 255,
+                    stride: 89,
+                },
+                {
+                    date: '2026-04-03',
+                    label: '4/3',
+                    month: 4,
+                    type: 'easy',
+                    name: '이지 런',
+                    dur: '33:20',
+                    km: 5.0,
+                    pace: '6:40',
+                    bpm: 132,
+                    spm: 158,
+                    ground: 260,
+                    stride: 86,
+                },
+                // 3월
+                {
+                    date: '2026-03-30',
+                    label: '3/30',
+                    month: 3,
+                    type: 'steady',
+                    name: '스테디 런',
+                    dur: '57:45',
+                    km: 10.5,
+                    pace: '5:30',
+                    bpm: 158,
+                    spm: 170,
+                    ground: 238,
+                    stride: 98,
+                },
+                {
+                    date: '2026-03-28',
+                    label: '3/28',
+                    month: 3,
+                    type: 'steady',
+                    name: '스테디 런',
+                    dur: '55:12',
+                    km: 9.8,
+                    pace: '5:38',
+                    bpm: 155,
+                    spm: 168,
+                    ground: 241,
+                    stride: 96,
+                },
+                {
+                    date: '2026-03-26',
+                    label: '3/26',
+                    month: 3,
+                    type: 'tt',
+                    name: '5K TT',
+                    dur: '22:18',
+                    km: 5.0,
+                    pace: '4:28',
+                    bpm: 181,
+                    spm: 185,
+                    ground: 200,
+                    stride: 116,
+                },
+                {
+                    date: '2026-03-22',
+                    label: '3/22',
+                    month: 3,
+                    type: 'race',
+                    name: '서울 10K',
+                    dur: '48:40',
+                    km: 10.0,
+                    pace: '4:52',
+                    bpm: 172,
+                    spm: 177,
+                    ground: 216,
+                    stride: 105,
+                },
+                {
+                    date: '2026-03-20',
+                    label: '3/20',
+                    month: 3,
+                    type: 'steady',
+                    name: '스테디 런',
+                    dur: '1:00:40',
+                    km: 11.2,
+                    pace: '5:25',
+                    bpm: 160,
+                    spm: 171,
+                    ground: 244,
+                    stride: 100,
+                },
+                {
+                    date: '2026-03-19',
+                    label: '3/19',
+                    month: 3,
+                    type: 'jogging',
+                    name: '회복 조깅',
+                    dur: '34:00',
+                    km: 4.8,
+                    pace: '7:05',
+                    bpm: 138,
+                    spm: 161,
+                    ground: 271,
+                    stride: 85,
+                },
+                {
+                    date: '2026-03-13',
+                    label: '3/13',
+                    month: 3,
+                    type: 'easy',
+                    name: '이지 런',
+                    dur: '52:08',
+                    km: 8.5,
+                    pace: '6:08',
+                    bpm: 141,
+                    spm: 164,
+                    ground: 257,
+                    stride: 93,
+                },
+                {
+                    date: '2026-03-09',
+                    label: '3/9',
+                    month: 3,
+                    type: 'easy',
+                    name: '이지 런',
+                    dur: '38:12',
+                    km: 6.0,
+                    pace: '6:22',
+                    bpm: 136,
+                    spm: 160,
+                    ground: 262,
+                    stride: 90,
+                },
+                // 2월
+                {
+                    date: '2026-02-25',
+                    label: '2/25',
+                    month: 2,
+                    type: 'long',
+                    name: '롱 런',
+                    dur: '1:44:24',
+                    km: 18.0,
+                    pace: '5:48',
+                    bpm: 155,
+                    spm: 168,
+                    ground: 245,
+                    stride: 97,
+                },
+                {
+                    date: '2026-02-18',
+                    label: '2/18',
+                    month: 2,
+                    type: 'tempo',
+                    name: '템포 런',
+                    dur: '36:30',
+                    km: 7.5,
+                    pace: '4:52',
+                    bpm: 167,
+                    spm: 178,
+                    ground: 212,
+                    stride: 110,
+                },
+                {
+                    date: '2026-02-10',
+                    label: '2/10',
+                    month: 2,
+                    type: 'steady',
+                    name: '스테디 런',
+                    dur: '52:26',
+                    km: 9.2,
+                    pace: '5:42',
+                    bpm: 152,
+                    spm: 167,
+                    ground: 242,
+                    stride: 95,
+                },
+                {
+                    date: '2026-02-02',
+                    label: '2/2',
+                    month: 2,
+                    type: 'easy',
+                    name: '이지 런',
+                    dur: '35:34',
+                    km: 5.5,
+                    pace: '6:28',
+                    bpm: 133,
+                    spm: 159,
+                    ground: 258,
+                    stride: 87,
+                },
+            ];
 
-    function fmtDate(dateStr) {
-      const [, m, d] = dateStr.split('-');
-      return `${parseInt(m)}/${parseInt(d)}`;
-    }
+            function fmtDate(dateStr) {
+                const [, m, d] = dateStr.split('-');
+                return `${parseInt(m)}/${parseInt(d)}`;
+            }
 
-    // ══════════════════════════════════════
-    // 존 설정 & 강도 분포
-    // ══════════════════════════════════════
+            // ══════════════════════════════════════
+            // 존 설정 & 강도 분포
+            // ══════════════════════════════════════
 
-    // 사용자 설정 (추후 settings에서 변경 가능)
-    const ZONE_CONFIG = {
-      z1Max: 120,   // Z1: ~120
-      z2Max: 140,   // Z2: 121~140
-      z3Max: 160,   // Z3: 141~160
-      z4Max: 175,   // Z4: 161~175
-      // Z5: 176+
-    };
+            // 사용자 설정 (추후 settings에서 변경 가능)
+            const ZONE_CONFIG = {
+                z1Max: 120, // Z1: ~120
+                z2Max: 140, // Z2: 121~140
+                z3Max: 160, // Z3: 141~160
+                z4Max: 175, // Z4: 161~175
+                // Z5: 176+
+            };
 
-    // 목표 비율
-    const INTENSITY_TARGET = { low: 80, mid: 15, high: 5 };
+            // 목표 비율
+            const INTENSITY_TARGET = { low: 80, mid: 15, high: 5 };
 
-    // 실제 RUNS 데이터 (avg bpm 기준)
-    const RUNS_BPM = {
-      // month: [bpm, bpm, ...]
-      4: [176, 142, 169, 138, 135, 132],
-      3: [158, 155, 172, 160, 138, 141, 136],
-      2: [155, 167, 152, 133],
-    };
+            // 실제 RUNS 데이터 (avg bpm 기준)
+            const RUNS_BPM = {
+                // month: [bpm, bpm, ...]
+                4: [176, 142, 169, 138, 135, 132],
+                3: [158, 155, 172, 160, 138, 141, 136],
+                2: [155, 167, 152, 133],
+            };
 
-    function bpmToIntensity(bpm) {
-      if (bpm <= ZONE_CONFIG.z2Max) return 'low';
-      if (bpm <= ZONE_CONFIG.z3Max) return 'mid';
-      return 'high';
-    }
+            function bpmToIntensity(bpm) {
+                if (bpm <= ZONE_CONFIG.z2Max) return 'low';
+                if (bpm <= ZONE_CONFIG.z3Max) return 'mid';
+                return 'high';
+            }
 
-    function calcIntensity(mIdx) {
-      const bpms = RUNS_BPM[mIdx];
-      if (bpms) {
-        // 실제 데이터 기반 계산
-        const total = bpms.length;
-        let low = 0, mid = 0, high = 0;
-        bpms.forEach(b => {
-          const i = bpmToIntensity(b);
-          if (i === 'low') low++;
-          else if (i === 'mid') mid++;
-          else high++;
-        });
-        return {
-          low: Math.round(low / total * 100),
-          mid: Math.round(mid / total * 100),
-          high: Math.round(high / total * 100),
-        };
-      }
-      // 실데이터 없는 달 — mock
-      if (mIdx >= 6 && mIdx <= 8) return { low: 72, mid: 20, high: 8 };
-      if (mIdx === 12 || mIdx <= 2) return { low: 68, mid: 24, high: 8 };
-      return { low: 60, mid: 28, high: 12 };
-    }
+            function calcIntensity(mIdx) {
+                const bpms = RUNS_BPM[mIdx];
+                if (bpms) {
+                    // 실제 데이터 기반 계산
+                    const total = bpms.length;
+                    let low = 0,
+                        mid = 0,
+                        high = 0;
+                    bpms.forEach(b => {
+                        const i = bpmToIntensity(b);
+                        if (i === 'low') low++;
+                        else if (i === 'mid') mid++;
+                        else high++;
+                    });
+                    return {
+                        low: Math.round((low / total) * 100),
+                        mid: Math.round((mid / total) * 100),
+                        high: Math.round((high / total) * 100),
+                    };
+                }
+                // 실데이터 없는 달 — mock
+                if (mIdx >= 6 && mIdx <= 8) return { low: 72, mid: 20, high: 8 };
+                if (mIdx === 12 || mIdx <= 2) return { low: 68, mid: 24, high: 8 };
+                return { low: 60, mid: 28, high: 12 };
+            }
 
-    // ══════════════════════════════════════
-    // 월 상세 패널
-    // ══════════════════════════════════════
-    let selectedIdx = -1;
+            // ══════════════════════════════════════
+            // 월 상세 패널
+            // ══════════════════════════════════════
+            let selectedIdx = -1;
 
-    // 패널 콘텐츠만 업데이트 (show/hide 없이)
-    function showDetailContent(idx, isDefault) {
-      const data = YEAR_MONTH_DATA[currentYear];
-      const d = data[idx];
-      if (!d || d.future || d.km === 0) return;
+            // 패널 콘텐츠만 업데이트 (show/hide 없이)
+            function showDetailContent(idx, isDefault) {
+                const data = YEAR_MONTH_DATA[currentYear];
+                const d = data[idx];
+                if (!d || d.future || d.km === 0) return;
 
-      const mIdx = idx + 1;
-      const intensity = calcIntensity(mIdx);
+                const mIdx = idx + 1;
+                const intensity = calcIntensity(mIdx);
 
-      renderIntensityDonut('detail-intensity',
-        intensity.low, intensity.mid, intensity.high,
-        isDefault ? 300 : 60);
+                renderIntensityDonut(
+                    'detail-intensity',
+                    intensity.low,
+                    intensity.mid,
+                    intensity.high,
+                    isDefault ? 300 : 60,
+                );
+            }
 
-    }
+            function selectMonth(idx) {
+                const data = YEAR_MONTH_DATA[currentYear];
+                const d = data[idx];
+                if (!d || d.future || d.km === 0) return;
 
-    function selectMonth(idx) {
-      const data = YEAR_MONTH_DATA[currentYear];
-      const d = data[idx];
-      if (!d || d.future || d.km === 0) return;
+                const currentIdx = data.findIndex(d => d.current);
 
-      const currentIdx = data.findIndex(d => d.current);
+                // 현재 달 탭 → 디폴트 상태로 리셋
+                if (idx === currentIdx) {
+                    resetToCurrentMonth();
+                    return;
+                }
+                // 같은 비현재 달 다시 탭 → 디폴트 리셋
+                if (selectedIdx === idx) {
+                    resetToCurrentMonth();
+                    return;
+                }
 
-      // 현재 달 탭 → 디폴트 상태로 리셋
-      if (idx === currentIdx) { resetToCurrentMonth(); return; }
-      // 같은 비현재 달 다시 탭 → 디폴트 리셋
-      if (selectedIdx === idx) { resetToCurrentMonth(); return; }
+                selectedIdx = idx;
 
-      selectedIdx = idx;
+                // 바 선택 — current 포함 모두 비활성화
+                const chart = document.getElementById('month-chart');
+                chart.querySelectorAll('.cmp-col').forEach(c => c.classList.remove('selected'));
+                chart.classList.add('has-selection');
+                chart.querySelectorAll('.cmp-col')[idx].classList.add('selected');
 
-      // 바 선택 — current 포함 모두 비활성화
-      const chart = document.getElementById('month-chart');
-      chart.querySelectorAll('.cmp-col').forEach(c => c.classList.remove('selected'));
-      chart.classList.add('has-selection');
-      chart.querySelectorAll('.cmp-col')[idx].classList.add('selected');
+                showDetailContent(idx, /* isDefault */ false);
+            }
 
-      showDetailContent(idx, /* isDefault */ false);
-    }
+            function resetToCurrentMonth() {
+                selectedIdx = -1;
+                const chart = document.getElementById('month-chart');
+                chart.classList.remove('has-selection');
+                chart.querySelectorAll('.cmp-col').forEach(c => c.classList.remove('selected'));
 
-    function resetToCurrentMonth() {
-      selectedIdx = -1;
-      const chart = document.getElementById('month-chart');
-      chart.classList.remove('has-selection');
-      chart.querySelectorAll('.cmp-col').forEach(c => c.classList.remove('selected'));
+                const data = YEAR_MONTH_DATA[currentYear];
+                const currentIdx = data.findIndex(d => d.current);
+                showDetailContent(currentIdx, /* isDefault */ true);
+            }
 
-      const data = YEAR_MONTH_DATA[currentYear];
-      const currentIdx = data.findIndex(d => d.current);
-      showDetailContent(currentIdx, /* isDefault */ true);
-    }
+            // 차트 클릭 이벤트 (한 번만 등록)
+            document.getElementById('month-chart').addEventListener('click', e => {
+                const col = e.target.closest('[data-idx]');
+                if (col) selectMonth(parseInt(col.dataset.idx));
+            });
 
-    // 차트 클릭 이벤트 (한 번만 등록)
-    document.getElementById('month-chart').addEventListener('click', e => {
-      const col = e.target.closest('[data-idx]');
-      if (col) selectMonth(parseInt(col.dataset.idx));
-    });
+            // 터치 스와이프
+            (function () {
+                let touchStartX = 0;
+                let touchStartY = 0;
+                let isHorizontal = null; // null = 아직 판별 안 됨
+                const swipeWrap = document.getElementById('chart-swipe-wrap');
 
-    // 터치 스와이프
-    (function () {
-      let touchStartX = 0;
-      let touchStartY = 0;
-      let isHorizontal = null; // null = 아직 판별 안 됨
-      const swipeWrap = document.getElementById('chart-swipe-wrap');
+                if (!swipeWrap) return;
 
-      if (!swipeWrap) return;
+                swipeWrap.addEventListener(
+                    'touchstart',
+                    e => {
+                        touchStartX = e.touches[0].clientX;
+                        touchStartY = e.touches[0].clientY;
+                        isHorizontal = null;
+                    },
+                    { passive: true },
+                );
 
-      swipeWrap.addEventListener('touchstart', (e) => {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-        isHorizontal = null;
-      }, { passive: true });
+                swipeWrap.addEventListener(
+                    'touchmove',
+                    e => {
+                        const dx = Math.abs(e.touches[0].clientX - touchStartX);
+                        const dy = Math.abs(e.touches[0].clientY - touchStartY);
 
-      swipeWrap.addEventListener('touchmove', (e) => {
-        const dx = Math.abs(e.touches[0].clientX - touchStartX);
-        const dy = Math.abs(e.touches[0].clientY - touchStartY);
+                        // 처음 움직임으로 방향 판별
+                        if (isHorizontal === null && (dx > 4 || dy > 4)) {
+                            isHorizontal = dx > dy;
+                        }
 
-        // 처음 움직임으로 방향 판별
-        if (isHorizontal === null && (dx > 4 || dy > 4)) {
-          isHorizontal = dx > dy;
-        }
+                        // 수평 스와이프 확정 시 페이지 스크롤 막기
+                        if (isHorizontal) {
+                            e.preventDefault();
+                        }
+                    },
+                    { passive: false },
+                );
 
-        // 수평 스와이프 확정 시 페이지 스크롤 막기
-        if (isHorizontal) {
-          e.preventDefault();
-        }
-      }, { passive: false });
+                swipeWrap.addEventListener(
+                    'touchend',
+                    e => {
+                        if (!isHorizontal) return;
+                        const dx = touchStartX - e.changedTouches[0].clientX;
+                        if (Math.abs(dx) > 60) {
+                            changeYear(dx > 0 ? 1 : -1);
+                        }
+                        isHorizontal = null;
+                    },
+                    { passive: true },
+                );
+            })();
 
-      swipeWrap.addEventListener('touchend', (e) => {
-        if (!isHorizontal) return;
-        const dx = touchStartX - e.changedTouches[0].clientX;
-        if (Math.abs(dx) > 60) {
-          changeYear(dx > 0 ? 1 : -1);
-        }
-        isHorizontal = null;
-      }, { passive: true });
-    })();
+            // ── 초기 렌더 (월간) — 진입 애니메이션 포함 ──
+            updateYearNav();
+            updateMonthChart(/* animate */ true);
 
-    // ── 초기 렌더 (월간) — 진입 애니메이션 포함 ──
-    updateYearNav();
-    updateMonthChart(/* animate */ true);
-
-    // ── 런 카드 HTML 공통 템플릿 ──
-    function runRowHTML(r) {
-      const dateStr = r.date.split('-').map((p, i) => i === 0 ? p : parseInt(p)).join('.');
-      const strideM = (r.stride / 100).toFixed(2);
-      return `<div class="lp-row expanded" onclick="goTo('detail.html')">
+            // ── 런 카드 HTML 공통 템플릿 ──
+            function runRowHTML(r) {
+                const dateStr = r.date
+                    .split('-')
+                    .map((p, i) => (i === 0 ? p : parseInt(p)))
+                    .join('.');
+                const strideM = (r.stride / 100).toFixed(2);
+                return `<div class="lp-row expanded" onclick="goTo('detail.html')">
         <div class="lp-info">
           <div class="lp-title-row">
             <div class="lp-row-left-head">
@@ -1508,83 +1846,105 @@
           </div>
         </div>
       </div>`;
-    }
+            }
 
-    function renderRunsList(containerId, runs) {
-      const el = document.getElementById(containerId);
-      if (!el) return;
-      const sorted = [...runs].sort((a, b) => a.date < b.date ? 1 : -1);
-      el.innerHTML = sorted.length
-        ? `<div class="lp-list">${sorted.map(runRowHTML).join('')}</div>`
-        : `<div class="lp-row expanded"><span class="lp-stat-label">데이터 없음</span></div>`;
-    }
+            function renderRunsList(containerId, runs) {
+                const el = document.getElementById(containerId);
+                if (!el) return;
+                const sorted = [...runs].sort((a, b) => (a.date < b.date ? 1 : -1));
+                el.innerHTML = sorted.length
+                    ? `<div class="lp-list">${sorted.map(runRowHTML).join('')}</div>`
+                    : `<div class="lp-row expanded"><span class="lp-stat-label">데이터 없음</span></div>`;
+            }
 
-    // ── 러닝 종류 차트 ──
-    function renderTypeChart(containerId, runs) {
-      const RUN_TYPES = [
-        { key: 'race', label: 'Race', color: 'var(--type-race-text)' },
-        { key: 'tt', label: 'TT', color: 'var(--type-dark-bg)' },
-        { key: 'tempo', label: 'Tempo', color: 'var(--type-dark-bg)' },
-        { key: 'interval', label: 'Interval', color: 'var(--type-dark-bg)' },
-        { key: 'steady', label: 'Steady', color: 'var(--type-steady-bg)' },
-        { key: 'easy', label: 'Easy', color: 'var(--type-easy-bg)' },
-        { key: 'jogging', label: 'Jogging', color: 'var(--type-jog-bg)' },
-        { key: 'long', label: 'LSD', color: 'var(--type-long-bg)' },
-      ];
-      const el = document.getElementById(containerId);
-      if (!el) return;
-      const counts = {};
-      RUN_TYPES.forEach(t => counts[t.key] = 0);
-      runs.forEach(r => { if (r.type in counts) counts[r.type]++; });
-      const maxCount = Math.max(...RUN_TYPES.map(t => counts[t.key]), 1);
-      el.innerHTML = RUN_TYPES.map(t => {
-        const count = counts[t.key];
-        const pct = Math.round(count / maxCount * 100);
-        const dimStyle = count === 0 ? ' style="opacity:0.5"' : '';
-        return `<div class="type-chart-row"${dimStyle}>
+            // ── 러닝 종류 차트 ──
+            function renderTypeChart(containerId, runs) {
+                const RUN_TYPES = [
+                    { key: 'race', label: 'Race', color: 'var(--type-race-text)' },
+                    { key: 'tt', label: 'TT', color: 'var(--type-dark-bg)' },
+                    { key: 'tempo', label: 'Tempo', color: 'var(--type-dark-bg)' },
+                    { key: 'interval', label: 'Interval', color: 'var(--type-dark-bg)' },
+                    { key: 'steady', label: 'Steady', color: 'var(--type-steady-bg)' },
+                    { key: 'easy', label: 'Easy', color: 'var(--type-easy-bg)' },
+                    { key: 'jogging', label: 'Jogging', color: 'var(--type-jog-bg)' },
+                    { key: 'long', label: 'LSD', color: 'var(--type-long-bg)' },
+                ];
+                const el = document.getElementById(containerId);
+                if (!el) return;
+                const counts = {};
+                RUN_TYPES.forEach(t => (counts[t.key] = 0));
+                runs.forEach(r => {
+                    if (r.type in counts) counts[r.type]++;
+                });
+                const maxCount = Math.max(...RUN_TYPES.map(t => counts[t.key]), 1);
+                el.innerHTML = RUN_TYPES.map(t => {
+                    const count = counts[t.key];
+                    const pct = Math.round((count / maxCount) * 100);
+                    const dimStyle = count === 0 ? ' style="opacity:0.5"' : '';
+                    return `<div class="type-chart-row"${dimStyle}>
           <span class="type-chart-label">${t.label}</span>
           <div class="type-chart-track">
             <div class="type-chart-fill" data-pct="${pct}" ></div>
           </div>
           <span class="type-chart-count">${count}</span>
         </div>`;
-      }).join('');
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        el.querySelectorAll('.type-chart-fill').forEach(bar => {
-          bar.style.transition = 'width 0.55s cubic-bezier(0.16, 1, 0.3, 1)';
-          bar.style.width = bar.dataset.pct + '%';
-        });
-      }));
-    }
+                }).join('');
+                requestAnimationFrame(() =>
+                    requestAnimationFrame(() => {
+                        el.querySelectorAll('.type-chart-fill').forEach(bar => {
+                            bar.style.transition = 'width 0.55s cubic-bezier(0.16, 1, 0.3, 1)';
+                            bar.style.width = bar.dataset.pct + '%';
+                        });
+                    }),
+                );
+            }
 
-    /* ── 도넛 차트: 러닝 강도 ──
+            /* ── 도넛 차트: 러닝 강도 ──
        설계: 세 링 모두 360° 전체 원 기준.
        각 링이 pct% × 360°를 채우므로 저+중+고=100% → 합산 arc = 360° (= 100%)
        모두 12시(270°)에서 시계방향 시작, round-linecap 각도 보정 포함.
        텍스트는 SVG 내부에서 제거 — 제목/범례는 컴포넌트 레벨에서 분리 렌더.
     ── */
-    function renderIntensityDonut(containerId, low, mid, high, animDelay) {
-      const el = document.getElementById(containerId);
-      if (!el) return;
+            function renderIntensityDonut(containerId, low, mid, high, animDelay) {
+                const el = document.getElementById(containerId);
+                if (!el) return;
 
-      const W = 300, cx = W / 2;
-      const RAD = Math.PI / 180;
-      // 링 간 viewBox 간격 절반으로 축소: 11 → 5.5 (sw=17 기준 r=100, 77.5, 55)
-      const rings = [
-        { r: 100, sw: 17, label: '저', sub: 'Easy, Jogging', pct: low, color: 'var(--bone)', cls: 'low' },
-        { r: 77.5, sw: 17, label: '중', sub: 'Steady, LSD', pct: mid, color: 'var(--dark-gray)', cls: 'mid' },
-        { r: 55, sw: 17, label: '고', sub: 'Race, TT, Tempo, Interval', pct: high, color: 'var(--accent)', cls: 'high' },
-      ];
+                const W = 300,
+                    cx = W / 2;
+                const RAD = Math.PI / 180;
+                // 링 간 viewBox 간격 절반으로 축소: 11 → 5.5 (sw=17 기준 r=100, 77.5, 55)
+                const rings = [
+                    { r: 100, sw: 17, label: '저', sub: 'Easy, Jogging', pct: low, color: 'var(--bone)', cls: 'low' },
+                    {
+                        r: 77.5,
+                        sw: 17,
+                        label: '중',
+                        sub: 'Steady, LSD',
+                        pct: mid,
+                        color: 'var(--dark-gray)',
+                        cls: 'mid',
+                    },
+                    {
+                        r: 55,
+                        sw: 17,
+                        label: '고',
+                        sub: 'Race, TT, Tempo, Interval',
+                        pct: high,
+                        color: 'var(--accent)',
+                        cls: 'high',
+                    },
+                ];
 
-      const arcs = rings.map((ring, i) => {
-        const circ = 2 * Math.PI * ring.r;
-        const fillLen = ring.pct / 100 * circ;   // pct% of 360°
-        const delay = (animDelay || 0) + i * 130;
-        // round-linecap 시작점 보정: arcsin(sw/2 / r)
-        const capDeg = Math.asin((ring.sw / 2) / ring.r) / RAD;
-        const rot = (270 + capDeg).toFixed(2);
+                const arcs = rings
+                    .map((ring, i) => {
+                        const circ = 2 * Math.PI * ring.r;
+                        const fillLen = (ring.pct / 100) * circ; // pct% of 360°
+                        const delay = (animDelay || 0) + i * 130;
+                        // round-linecap 시작점 보정: arcsin(sw/2 / r)
+                        const capDeg = Math.asin(ring.sw / 2 / ring.r) / RAD;
+                        const rot = (270 + capDeg).toFixed(2);
 
-        return `
+                        return `
           <circle cx="${cx}" cy="${cx}" r="${ring.r}" fill="none"
             stroke="${ring.color}" stroke-opacity="0.05" stroke-width="${ring.sw}"/>
           <circle cx="${cx}" cy="${cx}" r="${ring.r}" fill="none"
@@ -1594,18 +1954,23 @@
             transform="rotate(${rot},${cx},${cx})"
             class="donut-arc" data-target="${(circ - fillLen).toFixed(1)}"
             style="transition:stroke-dashoffset 0.65s cubic-bezier(0.16,1,0.3,1) ${delay}ms"/>`;
-      }).join('');
+                    })
+                    .join('');
 
-      // 범례는 고 → 중 → 저 순 (이미지 디자인 기준)
-      const legendOrder = [rings[2], rings[1], rings[0]];
-      const legendRows = legendOrder.map(ring => `
+                // 범례는 고 → 중 → 저 순 (이미지 디자인 기준)
+                const legendOrder = [rings[2], rings[1], rings[0]];
+                const legendRows = legendOrder
+                    .map(
+                        ring => `
         <div class="intensity-legend-row ${ring.cls}">
           <div class="il-label">${ring.label}<span class="il-types">(${ring.sub})</span></div>
           <div class="il-pct">${ring.pct}<span class="il-pct-unit">%</span></div>
         </div>
-      `).join('');
+      `,
+                    )
+                    .join('');
 
-      el.innerHTML = `
+                el.innerHTML = `
         <div class="intensity-title">러닝 강도</div>
         <div class="intensity-donut-wrap">
           <svg viewBox="0 0 ${W} ${W}" xmlns="http://www.w3.org/2000/svg"
@@ -1617,166 +1982,197 @@
           ${legendRows}
         </div>`;
 
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        el.querySelectorAll('.donut-arc').forEach(c => {
-          c.style.strokeDashoffset = c.dataset.target;
-        });
-      }));
-    }
+                requestAnimationFrame(() =>
+                    requestAnimationFrame(() => {
+                        el.querySelectorAll('.donut-arc').forEach(c => {
+                            c.style.strokeDashoffset = c.dataset.target;
+                        });
+                    }),
+                );
+            }
 
-    function renderIntensityBar(containerId, bpms, animate) {
-      if (!bpms || !bpms.length) return;
-      const total = bpms.length;
-      let low = 0, mid = 0, high = 0;
-      bpms.forEach(b => {
-        const z = bpmToIntensity(b);
-        if (z === 'low') low++;
-        else if (z === 'mid') mid++;
-        else high++;
-      });
-      const lp = Math.round(low / total * 100);
-      const mp = Math.round(mid / total * 100);
-      const hp = 100 - lp - mp;
-      renderIntensityDonut(containerId, lp, mp, hp, animate ? 300 : 0);
-    }
+            function renderIntensityBar(containerId, bpms, animate) {
+                if (!bpms || !bpms.length) return;
+                const total = bpms.length;
+                let low = 0,
+                    mid = 0,
+                    high = 0;
+                bpms.forEach(b => {
+                    const z = bpmToIntensity(b);
+                    if (z === 'low') low++;
+                    else if (z === 'mid') mid++;
+                    else high++;
+                });
+                const lp = Math.round((low / total) * 100);
+                const mp = Math.round((mid / total) * 100);
+                const hp = 100 - lp - mp;
+                renderIntensityDonut(containerId, lp, mp, hp, animate ? 300 : 0);
+            }
 
-    // ══════════════════════════════════════
-    // 주간 네비게이션
-    // ══════════════════════════════════════
-    function updateWeekPeriodNav() {
-      document.getElementById('week-period-label').textContent = WEEK_PERIOD_DATA[currentWeekPeriodIdx].label;
-      document.getElementById('week-period-prev').classList.toggle('disabled', currentWeekPeriodIdx <= MIN_WEEK_PERIOD);
-      document.getElementById('week-period-next').classList.toggle('disabled', currentWeekPeriodIdx >= MAX_WEEK_PERIOD);
-    }
+            // ══════════════════════════════════════
+            // 주간 네비게이션
+            // ══════════════════════════════════════
+            function updateWeekPeriodNav() {
+                document.getElementById('week-period-label').textContent = WEEK_PERIOD_DATA[currentWeekPeriodIdx].label;
+                document
+                    .getElementById('week-period-prev')
+                    .classList.toggle('disabled', currentWeekPeriodIdx <= MIN_WEEK_PERIOD);
+                document
+                    .getElementById('week-period-next')
+                    .classList.toggle('disabled', currentWeekPeriodIdx >= MAX_WEEK_PERIOD);
+            }
 
-    function updateWeekChart(animate) {
-      const period = WEEK_PERIOD_DATA[currentWeekPeriodIdx];
-      const data = period.weeks;
-      const periodAvg = avg(data.filter(d => !d.future && d.km > 0));
-      renderChart('week-chart', 'week-avg-line', data, periodAvg, { barMaxPx: 115, labelOffset: 34 });
-      document.getElementById('week-avg-label').textContent = 'avg ' + periodAvg + 'K';
-      const bpms = currentWeekPeriodIdx === 2 ? RUNS_BPM[4] : period.bpms;
-      renderIntensityBar('week-intensity', bpms, animate);
-      const weekRuns = currentWeekPeriodIdx === 2 ? RUNS.filter(r => r.date >= '2026-03-09') : [];
-      renderTypeChart('week-type-chart', weekRuns);
-      if (animate) animateChartIn('week-chart', 60);
-    }
+            function updateWeekChart(animate) {
+                const period = WEEK_PERIOD_DATA[currentWeekPeriodIdx];
+                const data = period.weeks;
+                const periodAvg = avg(data.filter(d => !d.future && d.km > 0));
+                renderChart('week-chart', 'week-avg-line', data, periodAvg, { barMaxPx: 115, labelOffset: 34 });
+                document.getElementById('week-avg-label').textContent = 'avg ' + periodAvg + 'K';
+                const bpms = currentWeekPeriodIdx === 2 ? RUNS_BPM[4] : period.bpms;
+                renderIntensityBar('week-intensity', bpms, animate);
+                const weekRuns = currentWeekPeriodIdx === 2 ? RUNS.filter(r => r.date >= '2026-03-09') : [];
+                renderTypeChart('week-type-chart', weekRuns);
+                if (animate) animateChartIn('week-chart', 60);
+            }
 
-    function changeWeekPeriod(dir) {
-      const next = currentWeekPeriodIdx + dir;
-      if (next < MIN_WEEK_PERIOD || next > MAX_WEEK_PERIOD) return;
-      const chart = document.getElementById('week-chart');
-      chart.style.transition = 'transform 0.22s cubic-bezier(0.4,0,1,1), opacity 0.22s';
-      chart.style.transform = `translateX(${dir > 0 ? '-40px' : '40px'})`;
-      chart.style.opacity = '0';
-      setTimeout(() => {
-        currentWeekPeriodIdx = next;
-        updateWeekPeriodNav();
-        updateWeekChart(true);
-        chart.style.transition = 'none';
-        chart.style.transform = `translateX(${dir > 0 ? '40px' : '-40px'})`;
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          chart.style.transition = 'transform 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.3s';
-          chart.style.transform = 'translateX(0)';
-          chart.style.opacity = '1';
-        }));
-      }, 220);
-    }
+            function changeWeekPeriod(dir) {
+                const next = currentWeekPeriodIdx + dir;
+                if (next < MIN_WEEK_PERIOD || next > MAX_WEEK_PERIOD) return;
+                const chart = document.getElementById('week-chart');
+                chart.style.transition = 'transform 0.22s cubic-bezier(0.4,0,1,1), opacity 0.22s';
+                chart.style.transform = `translateX(${dir > 0 ? '-40px' : '40px'})`;
+                chart.style.opacity = '0';
+                setTimeout(() => {
+                    currentWeekPeriodIdx = next;
+                    updateWeekPeriodNav();
+                    updateWeekChart(true);
+                    chart.style.transition = 'none';
+                    chart.style.transform = `translateX(${dir > 0 ? '40px' : '-40px'})`;
+                    requestAnimationFrame(() =>
+                        requestAnimationFrame(() => {
+                            chart.style.transition = 'transform 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.3s';
+                            chart.style.transform = 'translateX(0)';
+                            chart.style.opacity = '1';
+                        }),
+                    );
+                }, 220);
+            }
 
-    function renderWeekChart() {
-      updateWeekPeriodNav();
-      updateWeekChart(true);
-    }
+            function renderWeekChart() {
+                updateWeekPeriodNav();
+                updateWeekChart(true);
+            }
 
-    // ══════════════════════════════════════
-    // 년간 네비게이션
-    // ══════════════════════════════════════
-    function updateYearPeriodNav() {
-      document.getElementById('year-period-label').textContent = YEAR_PERIOD_DATA[currentYearPeriodIdx].label;
-      document.getElementById('year-period-prev').classList.toggle('disabled', currentYearPeriodIdx <= MIN_YEAR_PERIOD);
-      document.getElementById('year-period-next').classList.toggle('disabled', currentYearPeriodIdx >= MAX_YEAR_PERIOD);
-    }
+            // ══════════════════════════════════════
+            // 년간 네비게이션
+            // ══════════════════════════════════════
+            function updateYearPeriodNav() {
+                document.getElementById('year-period-label').textContent = YEAR_PERIOD_DATA[currentYearPeriodIdx].label;
+                document
+                    .getElementById('year-period-prev')
+                    .classList.toggle('disabled', currentYearPeriodIdx <= MIN_YEAR_PERIOD);
+                document
+                    .getElementById('year-period-next')
+                    .classList.toggle('disabled', currentYearPeriodIdx >= MAX_YEAR_PERIOD);
+            }
 
-    function updateYearChart(animate) {
-      const period = YEAR_PERIOD_DATA[currentYearPeriodIdx];
-      const data = period.years;
-      const periodAvg = avg(data.filter(d => !d.future && d.km > 0));
-      renderChart('year-chart', 'year-avg-line', data, periodAvg, { barMaxPx: 115, labelOffset: 34 });
-      document.getElementById('year-avg-label').textContent = 'avg ' + periodAvg + 'K';
-      const bpms = period.bpms || RUNS.map(r => r.bpm);
-      renderIntensityBar('year-intensity', bpms, animate);
-      const yearRuns = currentYearPeriodIdx === 1 ? RUNS : [];
-      renderTypeChart('year-type-chart', yearRuns);
-      if (animate) animateChartIn('year-chart', 60);
-    }
+            function updateYearChart(animate) {
+                const period = YEAR_PERIOD_DATA[currentYearPeriodIdx];
+                const data = period.years;
+                const periodAvg = avg(data.filter(d => !d.future && d.km > 0));
+                renderChart('year-chart', 'year-avg-line', data, periodAvg, { barMaxPx: 115, labelOffset: 34 });
+                document.getElementById('year-avg-label').textContent = 'avg ' + periodAvg + 'K';
+                const bpms = period.bpms || RUNS.map(r => r.bpm);
+                renderIntensityBar('year-intensity', bpms, animate);
+                const yearRuns = currentYearPeriodIdx === 1 ? RUNS : [];
+                renderTypeChart('year-type-chart', yearRuns);
+                if (animate) animateChartIn('year-chart', 60);
+            }
 
-    function changeYearPeriod(dir) {
-      const next = currentYearPeriodIdx + dir;
-      if (next < MIN_YEAR_PERIOD || next > MAX_YEAR_PERIOD) return;
-      const chart = document.getElementById('year-chart');
-      chart.style.transition = 'transform 0.22s cubic-bezier(0.4,0,1,1), opacity 0.22s';
-      chart.style.transform = `translateX(${dir > 0 ? '-40px' : '40px'})`;
-      chart.style.opacity = '0';
-      setTimeout(() => {
-        currentYearPeriodIdx = next;
-        updateYearPeriodNav();
-        updateYearChart(true);
-        chart.style.transition = 'none';
-        chart.style.transform = `translateX(${dir > 0 ? '40px' : '-40px'})`;
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          chart.style.transition = 'transform 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.3s';
-          chart.style.transform = 'translateX(0)';
-          chart.style.opacity = '1';
-        }));
-      }, 220);
-    }
+            function changeYearPeriod(dir) {
+                const next = currentYearPeriodIdx + dir;
+                if (next < MIN_YEAR_PERIOD || next > MAX_YEAR_PERIOD) return;
+                const chart = document.getElementById('year-chart');
+                chart.style.transition = 'transform 0.22s cubic-bezier(0.4,0,1,1), opacity 0.22s';
+                chart.style.transform = `translateX(${dir > 0 ? '-40px' : '40px'})`;
+                chart.style.opacity = '0';
+                setTimeout(() => {
+                    currentYearPeriodIdx = next;
+                    updateYearPeriodNav();
+                    updateYearChart(true);
+                    chart.style.transition = 'none';
+                    chart.style.transform = `translateX(${dir > 0 ? '40px' : '-40px'})`;
+                    requestAnimationFrame(() =>
+                        requestAnimationFrame(() => {
+                            chart.style.transition = 'transform 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.3s';
+                            chart.style.transform = 'translateX(0)';
+                            chart.style.opacity = '1';
+                        }),
+                    );
+                }, 220);
+            }
 
-    function renderYearChart() {
-      updateYearPeriodNav();
-      updateYearChart(true);
-    }
+            function renderYearChart() {
+                updateYearPeriodNav();
+                updateYearChart(true);
+            }
 
-    // ── 주간/년간 스와이프 핸들러 ──
-    function addChartSwipe(wrapperId, changeFn) {
-      let startX = 0, startY = 0, isHorizontal = null;
-      const wrap = document.getElementById(wrapperId);
-      if (!wrap) return;
-      wrap.addEventListener('touchstart', e => {
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-        isHorizontal = null;
-      }, { passive: true });
-      wrap.addEventListener('touchmove', e => {
-        const dx = Math.abs(e.touches[0].clientX - startX);
-        const dy = Math.abs(e.touches[0].clientY - startY);
-        if (isHorizontal === null && (dx > 4 || dy > 4)) isHorizontal = dx > dy;
-        if (isHorizontal) e.preventDefault();
-      }, { passive: false });
-      wrap.addEventListener('touchend', e => {
-        if (!isHorizontal) return;
-        const dx = startX - e.changedTouches[0].clientX;
-        if (Math.abs(dx) > 60) changeFn(dx > 0 ? 1 : -1);
-      }, { passive: true });
-    }
-    addChartSwipe('week-chart-swipe-wrap', changeWeekPeriod);
-    addChartSwipe('year-chart-swipe-wrap', changeYearPeriod);
+            // ── 주간/년간 스와이프 핸들러 ──
+            function addChartSwipe(wrapperId, changeFn) {
+                let startX = 0,
+                    startY = 0,
+                    isHorizontal = null;
+                const wrap = document.getElementById(wrapperId);
+                if (!wrap) return;
+                wrap.addEventListener(
+                    'touchstart',
+                    e => {
+                        startX = e.touches[0].clientX;
+                        startY = e.touches[0].clientY;
+                        isHorizontal = null;
+                    },
+                    { passive: true },
+                );
+                wrap.addEventListener(
+                    'touchmove',
+                    e => {
+                        const dx = Math.abs(e.touches[0].clientX - startX);
+                        const dy = Math.abs(e.touches[0].clientY - startY);
+                        if (isHorizontal === null && (dx > 4 || dy > 4)) isHorizontal = dx > dy;
+                        if (isHorizontal) e.preventDefault();
+                    },
+                    { passive: false },
+                );
+                wrap.addEventListener(
+                    'touchend',
+                    e => {
+                        if (!isHorizontal) return;
+                        const dx = startX - e.changedTouches[0].clientX;
+                        if (Math.abs(dx) > 60) changeFn(dx > 0 ? 1 : -1);
+                    },
+                    { passive: true },
+                );
+            }
+            addChartSwipe('week-chart-swipe-wrap', changeWeekPeriod);
+            addChartSwipe('year-chart-swipe-wrap', changeYearPeriod);
 
-    /* ─── Collapsing large title + auto-hide chrome ── */
-    {
-      const _scrollEl = document.querySelector('.scroll-area');
-      setupCollapsingHeader(_scrollEl);
-      setupAutoHideChrome(_scrollEl);
-    }
-  </script>
+            /* ─── Collapsing large title + auto-hide chrome ── */
+            {
+                const _scrollEl = document.querySelector('.scroll-area');
+                setupCollapsingHeader(_scrollEl);
+                setupAutoHideChrome(_scrollEl);
+            }
+        </script>
 
-  <script>
-    function goToPB() { goTo('pb.html'); }
-  </script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js');
-    }
-  </script>
-</body>
-
+        <script>
+            function goToPB() {
+                goTo('pb.html');
+            }
+        </script>
+        <script>
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('./sw.js');
+            }
+        </script>
+    </body>
 </html>
