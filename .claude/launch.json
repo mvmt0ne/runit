@@ -4,7 +4,7 @@
     {
       "name": "runit",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-I", "-c", "import sys, functools; sys.path = [p for p in sys.path if p]; from http.server import HTTPServer, SimpleHTTPRequestHandler; H = functools.partial(SimpleHTTPRequestHandler, directory='/Users/ryan/Desktop/wonny_worx/Claude/runit'); HTTPServer(('', 8080), H).serve_forever()"],
+      "runtimeArgs": ["-m", "http.server", "8080", "-d", "/Users/ryan/Desktop/wonny_worx/Claude/runit"],
       "port": 8080
     }
   ]
