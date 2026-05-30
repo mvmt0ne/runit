@@ -955,9 +955,10 @@
       _monthTrackScroll(); /* initial state — 타이틀 보임 → bar 숨김 */
     }
 
-    /* ─── Auto-hide chrome ── */
+    /* ─── Collapsing large title + auto-hide chrome ── */
     {
       const _scrollEl = document.getElementById('list-scroll');
+      setupCollapsingHeader(_scrollEl);
       setupAutoHideChrome(_scrollEl);
     }
 
