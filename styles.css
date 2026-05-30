@@ -16,11 +16,24 @@
 button {
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
+    -webkit-appearance: none;
+    appearance: none;
+    color: inherit;
+    background: none;
+    border: none;
+    font: inherit;
 }
 
 button:focus,
-button:focus-visible {
+button:focus-visible,
+button:active {
     outline: none;
+}
+
+:where(button):focus,
+:where(button):focus-visible,
+:where(button):active {
+    color: inherit;
 }
 
 /* ─── Tokens ────────────────────────────── */
