@@ -30,35 +30,6 @@
   <!-- 액체 유리 효과 (탭바 backdrop-filter) -->
   <script src="./liquid-glass.js"></script>
   <style>
-    /* ─── List ctrl 플로팅 버튼 (탭바 우측 상단 위) ─── */
-    .tab-ctrl-btn {
-      position: absolute;
-      right: 16px;
-      bottom: calc(env(safe-area-inset-bottom, 0px) + 96px);
-      z-index: 31;
-      width: 52px;
-      height: 52px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      color: var(--bone);
-      background: rgba(31, 31, 31, 0.7);
-      border: none;
-      border-radius: 100px;
-      backdrop-filter: blur(16px) saturate(160%);
-      -webkit-backdrop-filter: blur(16px) saturate(160%);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.32);
-      cursor: pointer;
-      transition: color 0.2s, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s;
-    }
-    .tab-ctrl-btn.visible { display: flex; }
-    .tab-ctrl-btn:active { transform: scale(0.92); }
-    .tab-ctrl-btn.chrome-hidden {
-      transform: translateY(140px);
-      opacity: 0;
-      pointer-events: none;
-    }
-
     /* ─── SPA 셸 ─── */
     .phone-inner {
       height: 100dvh;
@@ -124,19 +95,6 @@
           <div class="swiper-slide slide-pb loading" data-tab="pb" data-src="./pb.html"></div>
         </div>
       </div>
-
-      <button class="tab-ctrl-btn" id="tab-ctrl-btn" aria-label="목록 설정"
-        onclick="window.openCtrlSheet && window.openCtrlSheet()">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-          stroke-linecap="round" stroke-linejoin="round">
-          <line x1="4" y1="6" x2="20" y2="6"/>
-          <line x1="4" y1="12" x2="14" y2="12"/>
-          <line x1="4" y1="18" x2="10" y2="18"/>
-          <circle cx="18" cy="12" r="2.5" fill="currentColor" stroke="none"/>
-          <circle cx="14" cy="18" r="2.5" fill="currentColor" stroke="none"/>
-          <circle cx="14" cy="6" r="2.5" fill="currentColor" stroke="none"/>
-        </svg>
-      </button>
 
       <nav class="tab-bar" id="app-tab-bar">
         <a class="tab-item active" data-idx="0" href="#home">
@@ -336,8 +294,6 @@
             preloadNeighbors(this.activeIndex);
             // 탭 전환 시 chrome 표시 (auto-hide 상태 리셋)
             document.getElementById('app-tab-bar').classList.remove('chrome-hidden');
-            const _ctrlBtn = document.getElementById('tab-ctrl-btn');
-            if (_ctrlBtn) _ctrlBtn.classList.remove('chrome-hidden');
             document.querySelectorAll('.float-bar-wrap.chrome-hidden').forEach(el => {
               el.classList.remove('chrome-hidden');
             });
@@ -349,8 +305,6 @@
         document.querySelectorAll('#app-tab-bar [data-idx]').forEach(el => {
           el.classList.toggle('active', parseInt(el.dataset.idx) === idx);
         });
-        const ctrlBtn = document.getElementById('tab-ctrl-btn');
-        if (ctrlBtn) ctrlBtn.classList.toggle('visible', idx === 1);
       }
 
       function preloadNeighbors(idx) {

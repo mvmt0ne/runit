@@ -96,63 +96,6 @@
       color: var(--slate-gray);
     }
 
-    /* ─── Controls dispatch sheet ── */
-    .ctrl-sheet-body {
-      padding: 0 20px 24px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .ctrl-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .ctrl-row:last-child {
-      border-bottom: none;
-    }
-
-    .ctrl-row--tap {
-      cursor: pointer;
-      transition: opacity 0.15s;
-    }
-
-    .ctrl-row--tap:active {
-      opacity: 0.6;
-    }
-
-    .ctrl-row-label {
-      font-size: 16px;
-      font-weight: 300;
-      font-family: 'Pretendard Variable', sans-serif;
-      color: var(--bone);
-      min-width: 48px;
-    }
-
-    .ctrl-row-value {
-      flex: 1;
-      font-size: 14px;
-      font-weight: 400;
-      font-family: 'Pretendard Variable', sans-serif;
-      color: var(--cloudy-gray);
-      text-align: right;
-    }
-
-    .ctrl-row-chevron {
-      color: var(--surface-5);
-      flex-shrink: 0;
-    }
-
-    .ctrl-view-segs {
-      flex: 1;
-      display: flex;
-      justify-content: flex-end;
-      gap: 6px;
-    }
-
     /* tab-row 안의 뷰 모드 토글 */
     .lp-view-toggle {
       width: 36px;
@@ -249,24 +192,6 @@
       color: var(--bone);
     }
 
-    .ctrl-seg {
-      padding: 8px 18px;
-      border-radius: 100px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: transparent;
-      font-size: 14px;
-      font-weight: 400;
-      font-family: 'Pretendard Variable', sans-serif;
-      color: var(--cloudy-gray);
-      cursor: pointer;
-      transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .ctrl-seg.active {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: transparent;
-      color: var(--bone);
-    }
 
 
 
@@ -379,43 +304,6 @@
             </button>
           </div>
           <div id="runs-list-container"></div>
-        </div>
-      </div>
-
-      <!-- Controls dispatch sheet (뷰/정렬/필터) -->
-      <div class="month-modal" id="ctrl-sheet">
-        <div class="sf-sheet-handle-area">
-          <div class="sf-sheet-handle"></div>
-        </div>
-        <div class="sf-sheet-header">
-          <span class="sf-sheet-title">목록 설정</span>
-          <button class="sf-sheet-close" onclick="closeCtrlSheet()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 6 6 18" />
-              <path d="m6 6 12 12" />
-            </svg>
-          </button>
-        </div>
-        <div class="ctrl-sheet-body">
-          <!-- 정렬 -->
-          <div class="ctrl-row ctrl-row--tap" onclick="ctrlOpenSort()">
-            <span class="ctrl-row-label">정렬</span>
-            <span class="ctrl-row-value" id="ctrl-sort-val"></span>
-            <svg class="ctrl-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m9 18 6-6-6-6" />
-            </svg>
-          </div>
-          <!-- 필터 -->
-          <div class="ctrl-row ctrl-row--tap" onclick="ctrlOpenFilter()">
-            <span class="ctrl-row-label">필터</span>
-            <span class="ctrl-row-value" id="ctrl-filter-val"></span>
-            <svg class="ctrl-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m9 18 6-6-6-6" />
-            </svg>
-          </div>
         </div>
       </div>
 
@@ -654,36 +542,9 @@
     }
 
     /* ─── Controls dispatch sheet ── */
-    function openCtrlSheet() {
-      updateCtrlSheet();
-      document.getElementById('ctrl-sheet').classList.add('open');
-      document.getElementById('sf-backdrop').classList.add('open');
-    }
-
-    function closeCtrlSheet() {
-      document.getElementById('ctrl-sheet').classList.remove('open');
-      document.getElementById('sf-backdrop').classList.remove('open');
-    }
-
-    function ctrlOpenSort() {
-      document.getElementById('ctrl-sheet').classList.remove('open');
-      renderSortPanel();
-      document.getElementById('sort-sheet').classList.add('open');
-      /* backdrop stays open */
-    }
-
-    function ctrlOpenFilter() {
-      document.getElementById('ctrl-sheet').classList.remove('open');
-      renderFilterPanel();
-      document.getElementById('filter-sheet').classList.add('open');
-      /* backdrop stays open */
-    }
-
     function updateCtrlSheet() {
       const opt = SORT_OPTS.find(o => o.key === sortState.key && o.asc === sortState.asc);
       const sortLabel = opt ? opt.label : '';
-      const sortEl = document.getElementById('ctrl-sort-val');
-      if (sortEl) sortEl.textContent = sortLabel;
       const tabSortEl = document.getElementById('tab-sort-val');
       if (tabSortEl) tabSortEl.textContent = sortLabel;
 
@@ -692,8 +553,6 @@
         (filterState.bpm ? 1 : 0) +
         ((filterState.distMin > 0 || filterState.distMax < 42) ? 1 : 0) +
         ((filterState.paceMin > 240 || filterState.paceMax < 600) ? 1 : 0);
-      const filterEl = document.getElementById('ctrl-filter-val');
-      if (filterEl) filterEl.textContent = activeCount > 0 ? '활성' : '없음';
       const tabFilterVal = document.getElementById('tab-filter-val');
       if (tabFilterVal) tabFilterVal.textContent = activeCount > 0 ? String(activeCount) : '';
       const tabFilterBtn = document.getElementById('tab-filter-btn');
@@ -728,7 +587,7 @@
     }
 
     function closeSFSheet() {
-      ['sort-sheet', 'filter-sheet', 'ctrl-sheet'].forEach(id => {
+      ['sort-sheet', 'filter-sheet'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.remove('open');
       });
