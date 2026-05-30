@@ -10,6 +10,17 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+button {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+button:focus,
+button:focus-visible {
+    outline: none;
 }
 
 /* ─── Tokens ────────────────────────────── */
@@ -374,11 +385,18 @@ sup {
     padding: 0;
     border: none;
     background: none;
+    color: var(--asphalt-black);
     cursor: pointer;
     transition:
         color 0.15s,
         background 0.15s,
         transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lp-view-toggle:active,
+.lp-view-toggle:focus,
+.lp-view-toggle:focus-visible {
+    color: var(--asphalt-black);
 }
 
 .lp-view-toggle:active {
@@ -421,6 +439,18 @@ sup {
     transition:
         color 0.15s,
         transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.list-ctrl-btn:active,
+.list-ctrl-btn:focus,
+.list-ctrl-btn:focus-visible {
+    color: var(--asphalt-black);
+}
+
+.list-ctrl-btn.has-active:active,
+.list-ctrl-btn.has-active:focus,
+.list-ctrl-btn.has-active:focus-visible {
+    color: var(--bone);
 }
 
 .list-ctrl-btn:active {
