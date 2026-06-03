@@ -387,6 +387,21 @@ sup {
     -webkit-backdrop-filter: blur(40px) saturate(160%);
 }
 
+.tab {
+    padding: 12px;
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--asphalt-black);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+}
+
+.tab.active {
+    font-weight: 500;
+    color: var(--bone);
+}
+
 /* tab-row 안의 뷰 모드 토글 */
 .lp-view-toggle {
     width: 36px;
