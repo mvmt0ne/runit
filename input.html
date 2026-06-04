@@ -70,6 +70,10 @@
       font-family: 'Pretendard Variable', sans-serif;
     }
 
+    .hidden-block {
+      display: none;
+    }
+
     .input-field {
       width: 100%;
       padding: 14px 16px;
@@ -400,6 +404,23 @@
             <div class="input-helper">거리만 채워도 추가됨. 이름·타입은 위 메타값 사용. 마일리지·리스트에 즉시 반영(새로고침).</div>
           </div>
 
+          <!-- CSV 누적 추가 -->
+          <div class="input-section">
+            <label class="input-label">CSV 추가 (덮어쓰기 대신 누적)</label>
+            <div class="field-row" style="gap:8px">
+              <label class="ghost-btn" for="csv-file" style="flex:1;text-align:center">CSV 파일 선택</label>
+              <button type="button" class="ghost-btn" onclick="document.getElementById('csv-paste').classList.toggle('hidden-block')">붙여넣기</button>
+            </div>
+            <input type="file" id="csv-file" accept=".csv,text/csv" style="display:none">
+            <textarea id="csv-paste" class="input-field hidden-block"
+              placeholder="가민 Activities.csv 내용을 붙여넣기 (헤더 포함)" style="margin-top:8px"></textarea>
+            <div class="field-row" style="margin-top:8px">
+              <button class="ghost-btn" id="csv-paste-btn" onclick="onAppendPastedCSV()" style="flex:1">붙여넣은 CSV 추가</button>
+            </div>
+            <div class="check" id="csv-check"></div>
+            <div class="input-helper">가민에서 받은 CSV를 그대로 추가하면 기존 데이터에 누적됩니다. 같은 활동(날짜·시간·거리)은 자동으로 건너뜀.</div>
+          </div>
+
           <!-- 스플릿 -->
           <div class="input-section">
             <label class="input-label">스플릿 (km별 랩)</label>
@@ -568,6 +589,59 @@
     /* ── 예시 토글 ── */
     function toggleExample(id) {
       document.getElementById(id).classList.toggle('open');
+    }
+
+    /* ── CSV 누적 추가 ──
+       가민 CSV(헤더 포함)를 파싱해 러닝 활동을 localStorage에 append.
+       같은 활동(날짜·시간·거리)은 건너뜀. */
+    async function importCSVText(text) {
+      const check = document.getElementById('csv-check');
+      const rows = (typeof parseCSV === 'function' ? parseCSV(text) : []).filter(r => r.length > 1);
+      if (rows.length < 2) { check.textContent = '✗ CSV 내용이 비어있습니다'; check.className = 'check err'; return; }
+      const headers = rows[0].map(h => h.trim());
+      const parsed = rows.slice(1)
+        .map(r => normalizeRow(headers, r))
+        .filter(a => a.date && a.activityKind === '러닝');
+      if (!parsed.length) {
+        check.textContent = '✗ 추가할 러닝 활동이 없습니다 (헤더/형식 확인)';
+        check.className = 'check err';
+        return;
+      }
+      // 기존(CSV+수동) 키 집합으로 중복 제거
+      const keyOf = a => `${a.date}|${a.startTime || ''}|${a.km}`;
+      let existing = [];
+      try { existing = await loadActivities(); } catch (e) { /* ignore */ }
+      const seen = new Set(existing.map(keyOf));
+      // loadActivities 캐시가 세션 중 저장분을 못 잡으므로 현재 수동활동도 직접 포함
+      getManualActivities().forEach(a => seen.add(keyOf(a)));
+      let added = 0, dup = 0;
+      parsed.forEach(a => {
+        const key = keyOf(a);
+        if (seen.has(key)) { dup++; return; }
+        seen.add(key);
+        saveManualActivity({ ...a, id: `csv-${key}`, manual: true });
+        added++;
+      });
+      check.textContent = `✓ ${added}건 추가${dup ? ` · ${dup}건 중복 건너뜀` : ''}`;
+      check.className = added ? 'check ok' : 'check err';
+      showToast(`${added}건 추가${dup ? `, ${dup}건 중복` : ''}`);
+      renderSavedList();
+    }
+
+    document.getElementById('csv-file').addEventListener('change', e => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const fr = new FileReader();
+      fr.onload = () => importCSVText(String(fr.result || ''));
+      fr.onerror = () => showToast('파일 읽기 실패', true);
+      fr.readAsText(file, 'utf-8');
+      e.target.value = '';
+    });
+
+    function onAppendPastedCSV() {
+      const text = document.getElementById('csv-paste').value.trim();
+      if (!text) { showToast('붙여넣은 CSV가 없습니다', true); return; }
+      importCSVText(text);
     }
 
     /* ── 샘플 채우기 (4/26 데이터) ── */
