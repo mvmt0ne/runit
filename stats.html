@@ -1585,7 +1585,8 @@
             let trendMetric = 'pace';
 
             function renderTrend() {
-                const months = lastSixMonths();
+                // 최신 달이 위로 오도록 역순 (이번 달 → 6개월 전)
+                const months = lastSixMonths().reverse();
                 const metric = TREND_METRICS.find(m => m.key === trendMetric);
 
                 document.getElementById('trend-chips').innerHTML = TREND_METRICS.map(
