@@ -573,24 +573,28 @@
             }
 
             /* 월별 행 */
+            /* 러닝 종류 차트(.type-chart-*)와 스타일 통일 */
             .trend-row {
-              display: grid;
-              grid-template-columns: 40px 1fr auto;
+              display: flex;
               align-items: center;
-              gap: 12px;
-              padding: 9px 0;
+              gap: 10px;
+              margin-bottom: 11px;
+              transition: opacity 0.3s;
             }
 
             .trend-mlabel {
-              font-size: 14px;
+              font-size: 13px;
+              width: 54px;
+              flex-shrink: 0;
               color: var(--asphalt-gray);
               font-family: 'Space Grotesk', sans-serif;
             }
 
             .trend-bar-wrap {
-              height: 8px;
-              background: rgba(0, 0, 0, 0.06);
-              border-radius: 100px;
+              flex: 1;
+              height: 4px;
+              background: rgba(255, 255, 255, 0.1);
+              border-radius: 2px;
               overflow: hidden;
             }
 
@@ -598,17 +602,18 @@
               display: block;
               height: 100%;
               width: 0;
-              background: var(--asphalt-gray);
-              border-radius: 100px;
-              transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+              background: var(--bone);
+              border-radius: 3px;
+              transition: width 0.55s cubic-bezier(0.16, 1, 0.3, 1);
             }
 
             .trend-val {
-              font-size: 15px;
+              font-size: 13px;
               color: var(--asphalt-black);
               font-family: 'Space Grotesk', sans-serif;
               text-align: right;
-              min-width: 64px;
+              flex-shrink: 0;
+              min-width: 60px;
             }
 
             .trend-val i {
