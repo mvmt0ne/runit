@@ -311,7 +311,7 @@
                     </div>
                     <div class="sf-sheet-footer">
                         <button class="sf-reset-btn" onclick="resetFilters()">초기화</button>
-                        <button class="sf-apply-btn" onclick="closeSFSheet()">적용</button>
+                        <button class="sf-apply-btn" id="sf-apply-btn" onclick="applyFilter()" disabled>적용</button>
                     </div>
                 </div>
             </div>
@@ -363,7 +363,9 @@
             }
 
             let sortState = { key: 'date', asc: false };
-            let filterState = { type: null, bpm: null, distMin: 0, distMax: 42, paceMin: 240, paceMax: 600 };
+            const FILTER_DEFAULT = { type: null, bpm: null, distMin: 0, distMax: 42, paceMin: 240, paceMax: 600 };
+            let filterState = { ...FILTER_DEFAULT }; // 실제 적용된(commit) 필터
+            let draftFilter = { ...FILTER_DEFAULT }; // 시트에서 편집 중인 초안
 
             const SORT_OPTS = [
                 { key: 'date', asc: false, label: '날짜 최신순' },
@@ -463,20 +465,23 @@
                         })
                         .join('');
                 } else {
-                    container.innerHTML = `<div class="lp-list">${sorted.map(r => rowHTML(r, false)).join('')}</div>`;
+                    container.innerHTML = `<div class="lp-list">${sorted.map(r => rowHTML(r, false, true)).join('')}</div>`;
                 }
             }
 
-            function rowHTML(r, showMonth = false) {
+            function rowHTML(r, showMonth = false, flat = false) {
                 const parts = r.date.split('-');
                 const month = parseInt(parts[1]) + '월';
                 const day = parseInt(parts[2]);
                 const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
                 const weekday = WEEKDAYS[new Date(r.date).getDay()];
                 const strideM = (r.stride / 100).toFixed(2);
+                // 평면(비날짜 정렬) 모드: 연·월을 항상 표시(예: 25.11) → 뒤섞여도 어느 달인지 명확
+                const topLabel = flat ? `${parts[0].slice(2)}.${parseInt(parts[1])}` : month;
+                const topClass = flat || showMonth ? 'lp-date-month' : 'lp-date-month lp-date-month--hidden';
                 return `<div class="lp-row ${viewMode}">
         <div class="lp-date-col">
-          ${showMonth ? `<span class="lp-date-month">${month}</span>` : `<span class="lp-date-month lp-date-month--hidden">${month}</span>`}
+          <span class="${topClass}">${topLabel}</span>
           <span class="lp-date-day">${day}</span>
           <span class="lp-date-weekday">${weekday}</span>
         </div>
@@ -575,9 +580,25 @@
             }
 
             function openFilterSheet() {
+                draftFilter = { ...filterState }; // 현재 적용값을 초안으로 복사
                 renderFilterPanel();
+                updateApplyState();
                 document.getElementById('filter-sheet').classList.add('open');
                 document.getElementById('sf-backdrop').classList.add('open');
+            }
+
+            // 초안이 적용값과 다르면 적용 버튼 활성화
+            function updateApplyState() {
+                const btn = document.getElementById('sf-apply-btn');
+                if (btn) btn.disabled = JSON.stringify(draftFilter) === JSON.stringify(filterState);
+            }
+
+            // 초안을 실제 필터에 반영 → 목록·월바 갱신 후 닫기
+            function applyFilter() {
+                filterState = { ...draftFilter };
+                renderList();
+                setupMonthTracking();
+                closeSFSheet();
             }
 
             function closeSFSheet() {
@@ -612,13 +633,13 @@
             }
 
             function renderFilterPanel() {
-                const { distMin, distMax, paceMin, paceMax } = filterState;
+                const { distMin, distMax, paceMin, paceMax } = draftFilter;
                 const typeChips = FILTER_TYPE_OPTS.map(o => {
-                    const a = filterState.type === o.val;
+                    const a = draftFilter.type === o.val;
                     return `<div class="filter-chip ${a ? 'active' : ''}" onclick="selectFilter('type','${o.val}')">${o.label}</div>`;
                 }).join('');
                 const zoneChips = FILTER_ZONE_OPTS.map(o => {
-                    const a = filterState.bpm === o.val;
+                    const a = draftFilter.bpm === o.val;
                     return `<div class="filter-chip zone-chip ${a ? 'active' : ''}" onclick="selectFilter('bpm','${o.val}')">
           <span class="zone-label">${o.label}</span>
         </div>`;
@@ -651,10 +672,10 @@
             }
 
             function selectFilter(key, val) {
-                if (key === 'type') filterState.type = filterState.type === val ? null : val;
-                if (key === 'bpm') filterState.bpm = filterState.bpm === val ? null : val;
+                if (key === 'type') draftFilter.type = draftFilter.type === val ? null : val;
+                if (key === 'bpm') draftFilter.bpm = draftFilter.bpm === val ? null : val;
                 renderFilterPanel();
-                renderList();
+                updateApplyState();
             }
 
             function onRangeInput(key) {
@@ -662,18 +683,18 @@
                 const hi = document.getElementById(key + '-hi');
                 if (+lo.value >= +hi.value) lo.value = +hi.value - +lo.step;
                 if (key === 'dist') {
-                    filterState.distMin = +lo.value;
-                    filterState.distMax = +hi.value;
+                    draftFilter.distMin = +lo.value;
+                    draftFilter.distMax = +hi.value;
                     document.getElementById('dist-lo-val').textContent = lo.value + 'K';
                     document.getElementById('dist-hi-val').textContent = hi.value + 'K';
                 } else {
-                    filterState.paceMin = +lo.value;
-                    filterState.paceMax = +hi.value;
+                    draftFilter.paceMin = +lo.value;
+                    draftFilter.paceMax = +hi.value;
                     document.getElementById('pace-lo-val').textContent = fmtPace(+lo.value) + '/km';
                     document.getElementById('pace-hi-val').textContent = fmtPace(+hi.value) + '/km';
                 }
                 updateRangeFill(key);
-                renderList();
+                updateApplyState();
             }
 
             function updateRangeFill(key) {
@@ -696,9 +717,9 @@
             }
 
             function resetFilters() {
-                filterState = { type: null, bpm: null, distMin: 0, distMax: 42, paceMin: 240, paceMax: 600 };
+                draftFilter = { ...FILTER_DEFAULT };
                 renderFilterPanel();
-                renderList();
+                updateApplyState();
             }
 
             /* ─── Month bar slot animation ── */

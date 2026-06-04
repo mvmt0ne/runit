@@ -1075,12 +1075,20 @@ sup {
     padding: 20px;
     border-radius: 100px;
     border: none;
-    background: rgba(213, 213, 213, 0.1);
+    background: var(--accent);
     font-size: 18px;
     font-weight: 500;
     font-family: 'Pretendard Variable', sans-serif;
-    color: var(--bone);
+    color: #202020;
     cursor: pointer;
+    transition: background 0.2s, color 0.2s, opacity 0.2s;
+}
+
+.sf-apply-btn:disabled {
+    background: rgba(213, 213, 213, 0.1);
+    color: var(--bone);
+    opacity: 0.45;
+    cursor: default;
 }
 
 /* ═══════════════════════════════════════════════════════════
