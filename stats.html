@@ -508,6 +508,138 @@
             }
 
             /* ════════════════════════════════════
+               6개월 추이 (월간)
+            ════════════════════════════════════ */
+            .trend-block {
+              padding: 40px 20px;
+              border-top: 1px solid var(--dark-gray);
+              background: var(--slate-gray);
+            }
+
+            .trend-head {
+              display: flex;
+              align-items: baseline;
+              justify-content: space-between;
+              gap: 12px;
+            }
+
+            .trend-head .components-title {
+              margin-bottom: 0;
+            }
+
+            .trend-delta {
+              font-size: 13px;
+              font-family: 'Space Grotesk', sans-serif;
+              white-space: nowrap;
+            }
+
+            .trend-delta.good {
+              color: var(--accent);
+            }
+
+            .trend-delta.bad {
+              color: var(--cloudy-gray);
+            }
+
+            /* 지표 토글 칩 */
+            .trend-chips {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 6px;
+              margin: 18px 0 24px;
+            }
+
+            .trend-chip {
+              font-size: 13px;
+              font-weight: 400;
+              font-family: 'Pretendard Variable', sans-serif;
+              color: var(--asphalt-gray);
+              background: transparent;
+              border: 1px solid var(--dark-gray);
+              border-radius: 100px;
+              padding: 6px 14px;
+              cursor: pointer;
+              transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+
+            .trend-chip:active {
+              transform: scale(0.96);
+            }
+
+            .trend-chip.active {
+              color: #202020;
+              background: var(--accent);
+              border-color: var(--accent);
+            }
+
+            /* 월별 행 */
+            .trend-row {
+              display: grid;
+              grid-template-columns: 40px 1fr auto;
+              align-items: center;
+              gap: 12px;
+              padding: 9px 0;
+            }
+
+            .trend-mlabel {
+              font-size: 14px;
+              color: var(--asphalt-gray);
+              font-family: 'Space Grotesk', sans-serif;
+            }
+
+            .trend-bar-wrap {
+              height: 8px;
+              background: rgba(0, 0, 0, 0.06);
+              border-radius: 100px;
+              overflow: hidden;
+            }
+
+            .trend-bar {
+              display: block;
+              height: 100%;
+              width: 0;
+              background: var(--asphalt-gray);
+              border-radius: 100px;
+              transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+
+            .trend-val {
+              font-size: 15px;
+              color: var(--asphalt-black);
+              font-family: 'Space Grotesk', sans-serif;
+              text-align: right;
+              min-width: 64px;
+            }
+
+            .trend-val i {
+              font-style: normal;
+              font-size: 11px;
+              color: var(--cloudy-gray);
+              margin-left: 2px;
+            }
+
+            /* 이번 달 강조 */
+            .trend-row.current .trend-mlabel,
+            .trend-row.current .trend-val {
+              color: var(--accent);
+              font-weight: 500;
+            }
+
+            .trend-row.current .trend-val i {
+              color: var(--accent);
+            }
+
+            .trend-row.current .trend-bar {
+              background: var(--accent);
+            }
+
+            .trend-row.empty .trend-mlabel,
+            .trend-row.empty .trend-val {
+              color: var(--cloudy-gray);
+              opacity: 0.5;
+            }
+
+            /* ════════════════════════════════════
                PACE 요약
             ════════════════════════════════════ */
             .pace-block {
@@ -902,6 +1034,16 @@
                             </div>
                         </div>
                         <!-- /stats-bottom-section -->
+
+                        <!-- 6개월 추이 -->
+                        <div class="trend-block" id="trend-block">
+                            <div class="trend-head">
+                                <div class="components-title">최근 6개월 추이</div>
+                                <div class="trend-delta" id="trend-delta"></div>
+                            </div>
+                            <div class="trend-chips" id="trend-chips"></div>
+                            <div class="trend-rows" id="trend-rows"></div>
+                        </div>
                     </div>
                     <!-- /view-month -->
 
@@ -1004,6 +1146,8 @@
         </div>
         <!-- /phone -->
 
+        <script src="./data/activities.js"></script>
+        <script src="./data/stats-agg.js"></script>
         <script>
             // ── 탭 전환 ──
             const tabs = document.querySelectorAll('.tab');
@@ -1034,190 +1178,25 @@
             // 데이터
             // ══════════════════════════════════════
 
-            // 주간 (최근 8주)
-            const WEEK_DATA = [
-                { label: '2.24', km: 22.1 },
-                { label: '3.3', km: 18.7 },
-                { label: '3.10', km: 26.4 },
-                { label: '3.17', km: 31.2 },
-                { label: '3.24', km: 19.8 },
-                { label: '3.31', km: 28.5 },
-                { label: '4.7', km: 15.3 },
-                { label: '4.14', km: 5.6, current: true },
-            ];
+            // ══════════════════════════════════════
+            // 데이터 — CSV(loadActivities) 파생, 부트스트랩에서 주입
+            // ══════════════════════════════════════
+            let RUNS = [];
+            let YEAR_MONTH_DATA = {};
+            let WEEK_PERIOD_DATA = [];
+            let YEAR_PERIOD_DATA = [];
+            let currentYear = new Date().getUTCFullYear();
+            let MIN_YEAR = currentYear,
+                MAX_YEAR = currentYear;
+            let currentWeekPeriodIdx = 0,
+                MIN_WEEK_PERIOD = 0,
+                MAX_WEEK_PERIOD = 0;
+            let currentYearPeriodIdx = 0,
+                MIN_YEAR_PERIOD = 0,
+                MAX_YEAR_PERIOD = 0;
 
-            // ── 연도별 월간 데이터 ──
-            const YEAR_MONTH_DATA = {
-                2024: [
-                    { label: '1월', km: 58.4, past: true },
-                    { label: '2월', km: 62.1, past: true },
-                    { label: '3월', km: 71.8, past: true },
-                    { label: '4월', km: 79.3, past: true },
-                    { label: '5월', km: 74.2, past: true },
-                    { label: '6월', km: 61.5, past: true },
-                    { label: '7월', km: 49.8, past: true },
-                    { label: '8월', km: 44.6, past: true },
-                    { label: '9월', km: 77.1, past: true },
-                    { label: '10월', km: 89.4, past: true },
-                    { label: '11월', km: 83.7, past: true },
-                    { label: '12월', km: 59.2, past: true },
-                ],
-                2025: [
-                    { label: '1월', km: 66.0, past: true },
-                    { label: '2월', km: 71.4, past: true },
-                    { label: '3월', km: 79.8, past: true },
-                    { label: '4월', km: 87.5, past: true },
-                    { label: '5월', km: 75.3, past: true },
-                    { label: '6월', km: 64.2, past: true },
-                    { label: '7월', km: 51.6, past: true },
-                    { label: '8월', km: 47.1, past: true },
-                    { label: '9월', km: 73.8, past: true },
-                    { label: '10월', km: 87.9, past: true },
-                    { label: '11월', km: 81.4, past: true },
-                    { label: '12월', km: 63.6, past: true },
-                ],
-                2026: [
-                    { label: '1월', km: 72.3, past: true },
-                    { label: '2월', km: 68.1, past: true },
-                    { label: '3월', km: 87.6, past: true },
-                    { label: '4월', km: 59.7, current: true },
-                    { label: '5월', km: 0, future: true },
-                    { label: '6월', km: 0, future: true },
-                    { label: '7월', km: 0, future: true },
-                    { label: '8월', km: 0, future: true },
-                    { label: '9월', km: 0, future: true },
-                    { label: '10월', km: 0, future: true },
-                    { label: '11월', km: 0, future: true },
-                    { label: '12월', km: 0, future: true },
-                ],
-            };
-
-            let currentYear = 2026;
-            const MIN_YEAR = 2024;
-            const MAX_YEAR = 2026;
-
-            // 현재 연도 데이터 접근용 (기존 코드 호환)
-            const MONTH_DATA = YEAR_MONTH_DATA[2026];
-
-            // 년간 (레거시 — AVG_YEAR 계산용)
-            const YEAR_DATA = [
-                { label: '22년', km: 680 },
-                { label: '23년', km: 754 },
-                { label: '24년', km: 821 },
-                { label: '25년', km: 783 },
-                { label: '26년', km: 287.7, current: true },
-            ];
-
-            // ── 주간 기간별 데이터 (12주 × 3기간) ──
-            const WEEK_PERIOD_DATA = {
-                0: {
-                    label: '9.22 — 12.14',
-                    weeks: [
-                        { label: '9.22', km: 18.5, past: true },
-                        { label: '9.29', km: 22.8, past: true },
-                        { label: '10.6', km: 27.3, past: true },
-                        { label: '10.13', km: 31.5, past: true },
-                        { label: '10.20', km: 29.8, past: true },
-                        { label: '10.27', km: 25.6, past: true },
-                        { label: '11.3', km: 22.4, past: true },
-                        { label: '11.10', km: 28.9, past: true },
-                        { label: '11.17', km: 23.5, past: true },
-                        { label: '11.24', km: 17.2, past: true },
-                        { label: '12.1', km: 20.3, past: true },
-                        { label: '12.8', km: 15.8, past: true },
-                    ],
-                    bpms: [155, 162, 158, 165, 160, 153, 148, 162, 154, 147, 156, 150],
-                },
-                1: {
-                    label: '12.15 — 3.8',
-                    weeks: [
-                        { label: '12.15', km: 14.1, past: true },
-                        { label: '12.22', km: 11.4, past: true },
-                        { label: '12.29', km: 18.5, past: true },
-                        { label: '1.5', km: 22.6, past: true },
-                        { label: '1.12', km: 24.2, past: true },
-                        { label: '1.19', km: 26.4, past: true },
-                        { label: '1.26', km: 21.8, past: true },
-                        { label: '2.2', km: 19.5, past: true },
-                        { label: '2.9', km: 22.1, past: true },
-                        { label: '2.16', km: 18.7, past: true },
-                        { label: '2.23', km: 26.4, past: true },
-                        { label: '3.2', km: 31.2, past: true },
-                    ],
-                    bpms: [145, 142, 149, 153, 157, 161, 156, 150, 146, 143, 159, 168],
-                },
-                2: {
-                    label: '3.9 — 5.25',
-                    weeks: [
-                        { label: '3.9', km: 19.8, past: true },
-                        { label: '3.16', km: 28.5, past: true },
-                        { label: '3.23', km: 15.3, past: true },
-                        { label: '3.30', km: 26.4, past: true },
-                        { label: '4.6', km: 31.2, past: true },
-                        { label: '4.13', km: 5.6, past: true },
-                        { label: '4.20', km: 11.2, past: true },
-                        { label: '4.27', km: 3.5, current: true },
-                        { label: '5.4', km: 0, future: true },
-                        { label: '5.11', km: 0, future: true },
-                        { label: '5.18', km: 0, future: true },
-                        { label: '5.25', km: 0, future: true },
-                    ],
-                    bpms: [155, 163, 172, 162, 169, 176, 155, 148],
-                },
-            };
-            let currentWeekPeriodIdx = 2;
-            const MIN_WEEK_PERIOD = 0;
-            const MAX_WEEK_PERIOD = 2;
-
-            // ── 년간 기간별 데이터 (12년 × 2기간) ──
-            const YEAR_PERIOD_DATA = {
-                0: {
-                    label: '13 — 24',
-                    years: [
-                        { label: '13년', km: 215, past: true },
-                        { label: '14년', km: 284, past: true },
-                        { label: '15년', km: 312, past: true },
-                        { label: '16년', km: 428, past: true },
-                        { label: '17년', km: 542, past: true },
-                        { label: '18년', km: 598, past: true },
-                        { label: '19년', km: 635, past: true },
-                        { label: '20년', km: 612, past: true },
-                        { label: '21년', km: 656, past: true },
-                        { label: '22년', km: 680, past: true },
-                        { label: '23년', km: 754, past: true },
-                        { label: '24년', km: 821, past: true },
-                    ],
-                    bpms: [152, 158, 145, 163, 149, 156, 141, 162, 154, 147, 160, 153],
-                },
-                1: {
-                    label: '15 — 26',
-                    years: [
-                        { label: '15년', km: 312, past: true },
-                        { label: '16년', km: 428, past: true },
-                        { label: '17년', km: 542, past: true },
-                        { label: '18년', km: 598, past: true },
-                        { label: '19년', km: 635, past: true },
-                        { label: '20년', km: 612, past: true },
-                        { label: '21년', km: 656, past: true },
-                        { label: '22년', km: 680, past: true },
-                        { label: '23년', km: 754, past: true },
-                        { label: '24년', km: 821, past: true },
-                        { label: '25년', km: 783, past: true },
-                        { label: '26년', km: 287.7, current: true },
-                    ],
-                    bpms: null, // RUNS 실데이터 사용
-                },
-            };
-            let currentYearPeriodIdx = 1;
-            const MIN_YEAR_PERIOD = 0;
-            const MAX_YEAR_PERIOD = 1;
-
-            const avg = arr => Math.round((arr.reduce((s, d) => s + d.km, 0) / arr.length) * 10) / 10;
-
-            const AVG_WEEK = avg(WEEK_DATA);
-            // 월간 avg — 완료된 달(past+current)만 계산
-            const AVG_MONTH = avg(MONTH_DATA.filter(d => !d.future));
-            const AVG_YEAR = avg(YEAR_DATA);
+            const avg = arr =>
+                arr.length ? Math.round((arr.reduce((s, d) => s + d.km, 0) / arr.length) * 10) / 10 : 0;
 
             // ══════════════════════════════════════
             // 차트 렌더러
@@ -1283,10 +1262,19 @@
                 document.getElementById('month-avg-label').textContent = 'avg ' + activeAvg + 'K';
 
                 // 현재 달 인덱스로 디폴트 상세 패널 초기화
-                const defaultIdx = data.findIndex(d => d.current);
+                // 디폴트 상세: 이번 달에 데이터 없으면 가장 최근 데이터 달로 폴백
+                let defaultIdx = data.findIndex(d => d.current);
+                if (defaultIdx < 0 || data[defaultIdx].km === 0) {
+                    for (let i = data.length - 1; i >= 0; i--) {
+                        if (!data[i].future && data[i].km > 0) {
+                            defaultIdx = i;
+                            break;
+                        }
+                    }
+                }
                 showDetailContent(defaultIdx, /* isDefault */ true);
 
-                const monthRuns = currentYear === 2026 ? RUNS : [];
+                const monthRuns = RUNS.filter(r => +r.date.slice(0, 4) === currentYear);
                 renderTypeChart('month-type-chart', monthRuns);
 
                 if (animate) animateChartIn('month-chart', 60);
@@ -1345,277 +1333,7 @@
             // ══════════════════════════════════════
             // RUNS 데이터
             // ══════════════════════════════════════
-            const RUNS = [
-                // 4월
-                {
-                    date: '2026-04-25',
-                    label: '4/25',
-                    month: 4,
-                    type: 'interval',
-                    name: '400m 인터벌',
-                    dur: '44:00',
-                    km: 9.2,
-                    pace: '4:47',
-                    bpm: 182,
-                    spm: 186,
-                    ground: 198,
-                    stride: 118,
-                },
-                {
-                    date: '2026-04-11',
-                    label: '4/11',
-                    month: 4,
-                    type: 'race',
-                    name: '2026 인천하프',
-                    dur: '1:46:42',
-                    km: 21.2,
-                    pace: '5:02',
-                    bpm: 176,
-                    spm: 174,
-                    ground: 214,
-                    stride: 107,
-                },
-                {
-                    date: '2026-04-10',
-                    label: '4/10',
-                    month: 4,
-                    type: 'jogging',
-                    name: '회복 조깅',
-                    dur: '37:05',
-                    km: 5.4,
-                    pace: '6:52',
-                    bpm: 142,
-                    spm: 163,
-                    ground: 268,
-                    stride: 88,
-                },
-                {
-                    date: '2026-04-07',
-                    label: '4/7',
-                    month: 4,
-                    type: 'tempo',
-                    name: '템포 런',
-                    dur: '38:00',
-                    km: 8.0,
-                    pace: '4:45',
-                    bpm: 169,
-                    spm: 180,
-                    ground: 208,
-                    stride: 112,
-                },
-                {
-                    date: '2026-04-05',
-                    label: '4/5',
-                    month: 4,
-                    type: 'easy',
-                    name: '이지 런',
-                    dur: '45:00',
-                    km: 7.2,
-                    pace: '6:15',
-                    bpm: 138,
-                    spm: 162,
-                    ground: 252,
-                    stride: 91,
-                },
-                {
-                    date: '2026-04-04',
-                    label: '4/4',
-                    month: 4,
-                    type: 'easy',
-                    name: '이지 런',
-                    dur: '43:04',
-                    km: 6.8,
-                    pace: '6:20',
-                    bpm: 135,
-                    spm: 160,
-                    ground: 255,
-                    stride: 89,
-                },
-                {
-                    date: '2026-04-03',
-                    label: '4/3',
-                    month: 4,
-                    type: 'easy',
-                    name: '이지 런',
-                    dur: '33:20',
-                    km: 5.0,
-                    pace: '6:40',
-                    bpm: 132,
-                    spm: 158,
-                    ground: 260,
-                    stride: 86,
-                },
-                // 3월
-                {
-                    date: '2026-03-30',
-                    label: '3/30',
-                    month: 3,
-                    type: 'steady',
-                    name: '스테디 런',
-                    dur: '57:45',
-                    km: 10.5,
-                    pace: '5:30',
-                    bpm: 158,
-                    spm: 170,
-                    ground: 238,
-                    stride: 98,
-                },
-                {
-                    date: '2026-03-28',
-                    label: '3/28',
-                    month: 3,
-                    type: 'steady',
-                    name: '스테디 런',
-                    dur: '55:12',
-                    km: 9.8,
-                    pace: '5:38',
-                    bpm: 155,
-                    spm: 168,
-                    ground: 241,
-                    stride: 96,
-                },
-                {
-                    date: '2026-03-26',
-                    label: '3/26',
-                    month: 3,
-                    type: 'tt',
-                    name: '5K TT',
-                    dur: '22:18',
-                    km: 5.0,
-                    pace: '4:28',
-                    bpm: 181,
-                    spm: 185,
-                    ground: 200,
-                    stride: 116,
-                },
-                {
-                    date: '2026-03-22',
-                    label: '3/22',
-                    month: 3,
-                    type: 'race',
-                    name: '서울 10K',
-                    dur: '48:40',
-                    km: 10.0,
-                    pace: '4:52',
-                    bpm: 172,
-                    spm: 177,
-                    ground: 216,
-                    stride: 105,
-                },
-                {
-                    date: '2026-03-20',
-                    label: '3/20',
-                    month: 3,
-                    type: 'steady',
-                    name: '스테디 런',
-                    dur: '1:00:40',
-                    km: 11.2,
-                    pace: '5:25',
-                    bpm: 160,
-                    spm: 171,
-                    ground: 244,
-                    stride: 100,
-                },
-                {
-                    date: '2026-03-19',
-                    label: '3/19',
-                    month: 3,
-                    type: 'jogging',
-                    name: '회복 조깅',
-                    dur: '34:00',
-                    km: 4.8,
-                    pace: '7:05',
-                    bpm: 138,
-                    spm: 161,
-                    ground: 271,
-                    stride: 85,
-                },
-                {
-                    date: '2026-03-13',
-                    label: '3/13',
-                    month: 3,
-                    type: 'easy',
-                    name: '이지 런',
-                    dur: '52:08',
-                    km: 8.5,
-                    pace: '6:08',
-                    bpm: 141,
-                    spm: 164,
-                    ground: 257,
-                    stride: 93,
-                },
-                {
-                    date: '2026-03-09',
-                    label: '3/9',
-                    month: 3,
-                    type: 'easy',
-                    name: '이지 런',
-                    dur: '38:12',
-                    km: 6.0,
-                    pace: '6:22',
-                    bpm: 136,
-                    spm: 160,
-                    ground: 262,
-                    stride: 90,
-                },
-                // 2월
-                {
-                    date: '2026-02-25',
-                    label: '2/25',
-                    month: 2,
-                    type: 'long',
-                    name: '롱 런',
-                    dur: '1:44:24',
-                    km: 18.0,
-                    pace: '5:48',
-                    bpm: 155,
-                    spm: 168,
-                    ground: 245,
-                    stride: 97,
-                },
-                {
-                    date: '2026-02-18',
-                    label: '2/18',
-                    month: 2,
-                    type: 'tempo',
-                    name: '템포 런',
-                    dur: '36:30',
-                    km: 7.5,
-                    pace: '4:52',
-                    bpm: 167,
-                    spm: 178,
-                    ground: 212,
-                    stride: 110,
-                },
-                {
-                    date: '2026-02-10',
-                    label: '2/10',
-                    month: 2,
-                    type: 'steady',
-                    name: '스테디 런',
-                    dur: '52:26',
-                    km: 9.2,
-                    pace: '5:42',
-                    bpm: 152,
-                    spm: 167,
-                    ground: 242,
-                    stride: 95,
-                },
-                {
-                    date: '2026-02-02',
-                    label: '2/2',
-                    month: 2,
-                    type: 'easy',
-                    name: '이지 런',
-                    dur: '35:34',
-                    km: 5.5,
-                    pace: '6:28',
-                    bpm: 133,
-                    spm: 159,
-                    ground: 258,
-                    stride: 87,
-                },
-            ];
+            // RUNS — 부트스트랩에서 buildStatsData 결과로 주입
 
             function fmtDate(dateStr) {
                 const [, m, d] = dateStr.split('-');
@@ -1638,44 +1356,31 @@
             // 목표 비율
             const INTENSITY_TARGET = { low: 80, mid: 15, high: 5 };
 
-            // 실제 RUNS 데이터 (avg bpm 기준)
-            const RUNS_BPM = {
-                // month: [bpm, bpm, ...]
-                4: [176, 142, 169, 138, 135, 132],
-                3: [158, 155, 172, 160, 138, 141, 136],
-                2: [155, 167, 152, 133],
-            };
-
             function bpmToIntensity(bpm) {
                 if (bpm <= ZONE_CONFIG.z2Max) return 'low';
                 if (bpm <= ZONE_CONFIG.z3Max) return 'mid';
                 return 'high';
             }
 
-            function calcIntensity(mIdx) {
-                const bpms = RUNS_BPM[mIdx];
-                if (bpms) {
-                    // 실제 데이터 기반 계산
-                    const total = bpms.length;
-                    let low = 0,
-                        mid = 0,
-                        high = 0;
-                    bpms.forEach(b => {
-                        const i = bpmToIntensity(b);
-                        if (i === 'low') low++;
-                        else if (i === 'mid') mid++;
-                        else high++;
-                    });
-                    return {
-                        low: Math.round((low / total) * 100),
-                        mid: Math.round((mid / total) * 100),
-                        high: Math.round((high / total) * 100),
-                    };
-                }
-                // 실데이터 없는 달 — mock
-                if (mIdx >= 6 && mIdx <= 8) return { low: 72, mid: 20, high: 8 };
-                if (mIdx === 12 || mIdx <= 2) return { low: 68, mid: 24, high: 8 };
-                return { low: 60, mid: 28, high: 12 };
+            // 특정 연·월의 강도 분포 — RUNS의 평균 심박 기준. 데이터 없으면 null.
+            function calcIntensity(year, month) {
+                const bpms = RUNS.filter(
+                    r => +r.date.slice(0, 4) === year && +r.date.slice(5, 7) === month && r.bpm != null,
+                ).map(r => r.bpm);
+                if (!bpms.length) return null;
+                const total = bpms.length;
+                let low = 0,
+                    mid = 0,
+                    high = 0;
+                bpms.forEach(b => {
+                    const i = bpmToIntensity(b);
+                    if (i === 'low') low++;
+                    else if (i === 'mid') mid++;
+                    else high++;
+                });
+                const lp = Math.round((low / total) * 100);
+                const mp = Math.round((mid / total) * 100);
+                return { low: lp, mid: mp, high: 100 - lp - mp };
             }
 
             // ══════════════════════════════════════
@@ -1689,8 +1394,8 @@
                 const d = data[idx];
                 if (!d || d.future || d.km === 0) return;
 
-                const mIdx = idx + 1;
-                const intensity = calcIntensity(mIdx);
+                const intensity = calcIntensity(currentYear, idx + 1);
+                if (!intensity) return;
 
                 renderIntensityDonut(
                     'detail-intensity',
@@ -1819,9 +1524,160 @@
                 );
             })();
 
-            // ── 초기 렌더 (월간) — 진입 애니메이션 포함 ──
-            updateYearNav();
-            updateMonthChart(/* animate */ true);
+            // ══════════════════════════════════════
+            // 6개월 추이 — RUNS 월별 집계 (전 지표)
+            // paceToSec 는 activities.js 의 전역 함수를 재사용
+            // ══════════════════════════════════════
+            const secToPace = sec => {
+                const t = Math.round(sec);
+                return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`;
+            };
+
+            // 지표 정의 — lowerBetter: 값이 낮을수록 개선
+            const TREND_METRICS = [
+                { key: 'pace', label: '페이스', unit: '/km', lowerBetter: true, fmt: secToPace },
+                { key: 'km', label: '거리', unit: 'K', lowerBetter: false, fmt: v => v.toFixed(1) },
+                { key: 'bpm', label: '심박', unit: 'bpm', lowerBetter: true, fmt: v => Math.round(v) },
+                { key: 'spm', label: '케이던스', unit: 'spm', lowerBetter: false, fmt: v => Math.round(v) },
+                { key: 'ground', label: '접지', unit: 'ms', lowerBetter: true, fmt: v => Math.round(v) },
+                { key: 'stride', label: '보폭', unit: 'cm', lowerBetter: false, fmt: v => Math.round(v) },
+            ];
+
+            // 기준월 = '이번 달' — 부트스트랩에서 주입
+            let TREND_REF_Y = new Date().getUTCFullYear(),
+                TREND_REF_M = new Date().getUTCMonth() + 1;
+
+            // 한 달 집계 — 데이터 없으면 null (거리가중 페이스)
+            function aggregateMonth(year, month) {
+                const runs = RUNS.filter(r => {
+                    const [y, m] = r.date.split('-').map(Number);
+                    return y === year && m === month;
+                });
+                if (!runs.length) return null;
+                const totalKm = runs.reduce((s, r) => s + r.km, 0);
+                const avg = f => runs.reduce((s, r) => s + r[f], 0) / runs.length;
+                return {
+                    km: totalKm,
+                    pace: runs.reduce((s, r) => s + paceToSec(r.pace) * r.km, 0) / totalKm,
+                    bpm: avg('bpm'),
+                    spm: avg('spm'),
+                    ground: avg('ground'),
+                    stride: avg('stride'),
+                };
+            }
+
+            // 기준월 포함 직전 6개월 (오래된→최신)
+            function lastSixMonths() {
+                const arr = [];
+                for (let off = 5; off >= 0; off--) {
+                    let m = TREND_REF_M - off,
+                        y = TREND_REF_Y;
+                    while (m <= 0) {
+                        m += 12;
+                        y--;
+                    }
+                    arr.push({ year: y, month: m, isCurrent: off === 0, agg: aggregateMonth(y, m) });
+                }
+                return arr;
+            }
+
+            let trendMetric = 'pace';
+
+            function renderTrend() {
+                const months = lastSixMonths();
+                const metric = TREND_METRICS.find(m => m.key === trendMetric);
+
+                document.getElementById('trend-chips').innerHTML = TREND_METRICS.map(
+                    m =>
+                        `<button class="trend-chip${m.key === trendMetric ? ' active' : ''}" data-metric="${m.key}">${m.label}</button>`,
+                ).join('');
+
+                // 막대 스케일 — 데이터 있는 달만 min/max
+                const vals = months.filter(x => x.agg).map(x => x.agg[metric.key]);
+                const min = Math.min(...vals),
+                    max = Math.max(...vals);
+                const span = max - min || 1;
+
+                document.getElementById('trend-rows').innerHTML = months
+                    .map(x => {
+                        const mLabel = `${x.month}월`;
+                        if (!x.agg) {
+                            return `<div class="trend-row empty"><span class="trend-mlabel">${mLabel}</span><span class="trend-bar-wrap"></span><span class="trend-val">—</span></div>`;
+                        }
+                        const v = x.agg[metric.key];
+                        const w = Math.round(20 + ((v - min) / span) * 80);
+                        return `<div class="trend-row${x.isCurrent ? ' current' : ''}">
+            <span class="trend-mlabel">${mLabel}</span>
+            <span class="trend-bar-wrap"><span class="trend-bar" style="width:${w}%"></span></span>
+            <span class="trend-val">${metric.fmt(v)}<i>${metric.unit}</i></span>
+          </div>`;
+                    })
+                    .join('');
+
+                // 델타 — 이번달 vs 이전 평균
+                const cur = months.find(x => x.isCurrent);
+                const others = months.filter(x => !x.isCurrent && x.agg).map(x => x.agg[metric.key]);
+                const dEl = document.getElementById('trend-delta');
+                if (cur && cur.agg && others.length) {
+                    const avgO = others.reduce((a, b) => a + b, 0) / others.length;
+                    const cv = cur.agg[metric.key];
+                    const diff = cv - avgO;
+                    const better = metric.lowerBetter ? diff < 0 : diff > 0;
+                    const pct = Math.round((Math.abs(diff) / avgO) * 100);
+                    const diffStr =
+                        metric.key === 'pace' ? secToPace(Math.abs(diff)) : metric.fmt(Math.abs(diff));
+                    dEl.className = 'trend-delta ' + (better ? 'good' : 'bad');
+                    dEl.innerHTML = `이전 평균 대비 ${diff < 0 ? '−' : '+'}${diffStr}${metric.unit} (${pct}%)`;
+                } else {
+                    dEl.className = 'trend-delta';
+                    dEl.innerHTML = '';
+                }
+            }
+
+            document.getElementById('trend-chips').addEventListener('click', e => {
+                const chip = e.target.closest('[data-metric]');
+                if (!chip) return;
+                trendMetric = chip.dataset.metric;
+                renderTrend();
+            });
+
+            // ══════════════════════════════════════
+            // 부트스트랩 — CSV 로드 → 집계 주입 → 렌더
+            // ══════════════════════════════════════
+            loadActivities()
+                .then(acts => {
+                    const S = buildStatsData(acts);
+
+                    RUNS = S.RUNS;
+                    YEAR_MONTH_DATA = S.YEAR_MONTH_DATA;
+                    WEEK_PERIOD_DATA = S.WEEK_PERIOD_DATA;
+                    YEAR_PERIOD_DATA = S.YEAR_PERIOD_DATA;
+
+                    currentYear = S.curYear;
+                    MIN_YEAR = S.minYear;
+                    MAX_YEAR = S.maxYear;
+
+                    currentWeekPeriodIdx = S.weekDefaultIdx;
+                    MAX_WEEK_PERIOD = Math.max(0, S.WEEK_PERIOD_DATA.length - 1);
+
+                    currentYearPeriodIdx = S.yearDefaultIdx;
+                    MAX_YEAR_PERIOD = Math.max(0, S.YEAR_PERIOD_DATA.length - 1);
+
+                    TREND_REF_Y = S.curYear;
+                    TREND_REF_M = S.curMonth;
+
+                    // 연간 hero — 총 마일리지
+                    const heroNum = document.querySelector('.stats-hero-num');
+                    if (heroNum) heroNum.innerHTML = `${S.totalKm}<sup>K</sup>`;
+
+                    // 초기 렌더 (월간 탭 + 추이)
+                    updateYearNav();
+                    updateMonthChart(/* animate */ true);
+                    renderTrend();
+                })
+                .catch(err => {
+                    console.error('[stats] 데이터 로드 실패', err);
+                });
 
             // ── 런 카드 HTML 공통 템플릿 ──
             function runRowHTML(r) {
@@ -2035,14 +1891,13 @@
 
             function updateWeekChart(animate) {
                 const period = WEEK_PERIOD_DATA[currentWeekPeriodIdx];
+                if (!period) return;
                 const data = period.weeks;
                 const periodAvg = avg(data.filter(d => !d.future && d.km > 0));
                 renderChart('week-chart', 'week-avg-line', data, periodAvg, { barMaxPx: 115, labelOffset: 34 });
                 document.getElementById('week-avg-label').textContent = 'avg ' + periodAvg + 'K';
-                const bpms = currentWeekPeriodIdx === 2 ? RUNS_BPM[4] : period.bpms;
-                renderIntensityBar('week-intensity', bpms, animate);
-                const weekRuns = currentWeekPeriodIdx === 2 ? RUNS.filter(r => r.date >= '2026-03-09') : [];
-                renderTypeChart('week-type-chart', weekRuns);
+                renderIntensityBar('week-intensity', period.bpms, animate);
+                renderTypeChart('week-type-chart', period.runs);
                 if (animate) animateChartIn('week-chart', 60);
             }
 
@@ -2089,14 +1944,13 @@
 
             function updateYearChart(animate) {
                 const period = YEAR_PERIOD_DATA[currentYearPeriodIdx];
+                if (!period) return;
                 const data = period.years;
                 const periodAvg = avg(data.filter(d => !d.future && d.km > 0));
                 renderChart('year-chart', 'year-avg-line', data, periodAvg, { barMaxPx: 115, labelOffset: 34 });
                 document.getElementById('year-avg-label').textContent = 'avg ' + periodAvg + 'K';
-                const bpms = period.bpms || RUNS.map(r => r.bpm);
-                renderIntensityBar('year-intensity', bpms, animate);
-                const yearRuns = currentYearPeriodIdx === 1 ? RUNS : [];
-                renderTypeChart('year-type-chart', yearRuns);
+                renderIntensityBar('year-intensity', period.bpms, animate);
+                renderTypeChart('year-type-chart', period.runs);
                 if (animate) animateChartIn('year-chart', 60);
             }
 

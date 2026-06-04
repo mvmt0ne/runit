@@ -1,4 +1,4 @@
-const CACHE = 'runit-v5';
+const CACHE = 'runit-v6';
 const CORE = [
   './app.html',
   './runit-home.html',
@@ -39,11 +39,12 @@ self.addEventListener('fetch', e => {
 
   const path = url.pathname;
 
-  // HTML / CSS / JS — 네트워크 우선 (pull-to-refresh 시 항상 최신 버전 보장)
+  // HTML / CSS / JS / CSV(데이터) — 네트워크 우선 (pull-to-refresh 시 항상 최신 버전 보장)
   const isFresh =
     path.endsWith('.html') ||
     path.endsWith('.css')  ||
     path.endsWith('.js')   ||
+    path.endsWith('.csv')  ||
     path === '/' ||
     path.endsWith('/');
 
