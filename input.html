@@ -378,6 +378,28 @@
             <div class="input-helper">이름·타입·메모·이미지는 CSV에 없는 값. 입력하면 detail에서 표시.</div>
           </div>
 
+          <!-- 활동 본체 (CSV 없이 직접 추가) -->
+          <div class="input-section">
+            <label class="input-label">활동 본체 (CSV 없이 직접 추가)</label>
+            <div class="field-row" style="gap:8px;margin-bottom:8px">
+              <input type="number" step="0.01" inputmode="decimal" id="act-km" class="input-field" placeholder="거리 (km)" style="flex:1">
+              <input type="text" id="act-dur" class="input-field" placeholder="시간 (44:00 / 1:46:42)" style="flex:1">
+            </div>
+            <div class="field-row" style="gap:8px;margin-bottom:8px">
+              <input type="text" id="act-pace" class="input-field" placeholder="페이스 (비우면 자동)" style="flex:1">
+              <input type="number" inputmode="numeric" id="act-bpm" class="input-field" placeholder="평균 심박" style="flex:1">
+            </div>
+            <div class="field-row" style="gap:8px;margin-bottom:8px">
+              <input type="number" inputmode="numeric" id="act-spm" class="input-field" placeholder="케이던스 spm" style="flex:1">
+              <input type="number" inputmode="numeric" id="act-ground" class="input-field" placeholder="접지 ms" style="flex:1">
+            </div>
+            <div class="field-row" style="gap:8px">
+              <input type="number" step="0.01" inputmode="decimal" id="act-stride" class="input-field" placeholder="보폭 m (예: 0.95)" style="flex:1">
+              <div style="flex:1"></div>
+            </div>
+            <div class="input-helper">거리만 채워도 추가됨. 이름·타입은 위 메타값 사용. 마일리지·리스트에 즉시 반영(새로고침).</div>
+          </div>
+
           <!-- 스플릿 -->
           <div class="input-section">
             <label class="input-label">스플릿 (km별 랩)</label>
@@ -458,6 +480,24 @@
     const dateHelper = document.getElementById('date-helper');
 
     let _shoeDataURL = null;
+    let _editingManualId = null; // 편집 중인 수동 활동 id (없으면 새로 추가)
+
+    /* ── 활동 본체 입력칸 채우기/비우기 ── */
+    const ACT_FIELDS = ['act-km', 'act-dur', 'act-pace', 'act-bpm', 'act-spm', 'act-ground', 'act-stride'];
+    function clearActFields() {
+      _editingManualId = null;
+      ACT_FIELDS.forEach(id => (document.getElementById(id).value = ''));
+    }
+    function fillActFields(act) {
+      _editingManualId = act.id;
+      document.getElementById('act-km').value = act.km != null ? act.km : '';
+      document.getElementById('act-dur').value = act.dur || '';
+      document.getElementById('act-pace').value = act.pace || '';
+      document.getElementById('act-bpm').value = act.bpm != null ? act.bpm : '';
+      document.getElementById('act-spm').value = act.spm != null ? act.spm : '';
+      document.getElementById('act-ground').value = act.ground != null ? act.ground : '';
+      document.getElementById('act-stride').value = act.stride != null ? act.stride : '';
+    }
 
     /* ── 이미지 리사이즈 → base64 ── */
     function imageToBase64(file, maxDim = 800) {
@@ -600,6 +640,7 @@
       typeInput.value = meta.type || '';
       noteInput.value = meta.note || '';
       setShoePreview(meta.shoe || null);
+      clearActFields(); // 본체는 저장목록의 '불러오기'로만 편집
       // CSV 활동 힌트 표시
       try {
         const act = await getActivity(date);
@@ -625,9 +666,33 @@
       const shoe = _shoeDataURL;
       const hasMeta = name || type || note || shoe;
 
-      if (!sStr && !zStr && !hasMeta) { showToast('저장할 데이터가 없습니다', true); return; }
+      const kmStr = document.getElementById('act-km').value.trim();
+      const hasBody = kmStr !== '';
+
+      if (!sStr && !zStr && !hasMeta && !hasBody) { showToast('저장할 데이터가 없습니다', true); return; }
 
       let saved = [];
+
+      if (hasBody) {
+        const km = parseFloat(kmStr);
+        if (!Number.isFinite(km) || km <= 0) { showToast('거리(km)를 올바르게 입력하세요', true); return; }
+        const act = buildManualActivity({
+          id: _editingManualId,
+          date,
+          name,
+          type,
+          km: kmStr,
+          dur: document.getElementById('act-dur').value.trim(),
+          pace: document.getElementById('act-pace').value.trim(),
+          bpm: document.getElementById('act-bpm').value.trim(),
+          spm: document.getElementById('act-spm').value.trim(),
+          ground: document.getElementById('act-ground').value.trim(),
+          stride: document.getElementById('act-stride').value.trim(),
+        });
+        saveManualActivity(act);
+        _editingManualId = act.id;
+        saved.push('활동');
+      }
 
       if (sStr) {
         const r = parseJSON(sStr);
@@ -666,11 +731,27 @@
     function renderSavedList() {
       const list = document.getElementById('saved-list');
       const items = listSavedDates();
-      if (!items.length) {
+      const acts = listManualActivities();
+      if (!items.length && !acts.length) {
         list.innerHTML = '<div class="saved-empty">저장된 활동 없음</div>';
         return;
       }
-      list.innerHTML = items.map(item => `
+      const manualHTML = acts.map(a => `
+        <li class="saved-item">
+          <div>
+            <div class="saved-date">${a.date} · ${a.km ?? '?'}km</div>
+            <div class="saved-tags">
+              <span class="saved-tag">활동</span>
+              <span class="saved-tag">${a.name || a.type || ''}</span>
+            </div>
+          </div>
+          <div class="field-row" style="gap:6px">
+            <button class="ghost-btn" onclick="onLoadManual('${a.id}')">불러오기</button>
+            <button class="delete-btn" onclick="onRemoveManual('${a.id}')">삭제</button>
+          </div>
+        </li>
+      `).join('');
+      const metaHTML = items.map(item => `
         <li class="saved-item">
           <div>
             <div class="saved-date">${item.date}</div>
@@ -683,6 +764,26 @@
           <button class="delete-btn" onclick="onRemove('${item.date}')">삭제</button>
         </li>
       `).join('');
+      list.innerHTML = manualHTML + metaHTML;
+    }
+
+    function onLoadManual(id) {
+      const a = getManualActivity(id);
+      if (!a) return;
+      dateInput.value = a.date;
+      loadForDate().then(() => {
+        nameInput.value = a.name || '';
+        typeInput.value = a.type || '';
+        fillActFields(a);
+        showToast('불러옴 — 수정 후 저장하면 덮어씁니다');
+      });
+    }
+
+    function onRemoveManual(id) {
+      removeManualActivity(id);
+      if (_editingManualId === id) clearActFields();
+      showToast('활동 삭제됨');
+      renderSavedList();
     }
 
     function onRemove(date) {

@@ -135,6 +135,50 @@ function normalizeRow(headers, row) {
   };
 }
 
+/* ── 수동 입력 → 정규화 활동 객체 (CSV 행과 동일 형태) ──
+   in: { id?, date, name, type, km, dur, pace?, bpm?, spm?, ground?, stride? }
+   - pace 비우면 dur/km 로 자동 계산
+   - stride 는 미터 단위로 저장 (CSV '평균 보폭'과 동일) */
+function buildManualActivity(input) {
+  const km = num(input.km);
+  const durSec = durToSec(input.dur);
+  let pace = (input.pace || '').trim() || null;
+  let paceV = paceToSec(pace);
+  if (!paceV && km && durSec) {
+    paceV = Math.round(durSec / km);
+    pace = `${Math.floor(paceV / 60)}:${String(paceV % 60).padStart(2, '0')}`;
+  }
+  const fmtDurSec = s => {
+    if (s == null) return null;
+    const h = Math.floor(s / 3600),
+      m = Math.floor((s % 3600) / 60),
+      sec = s % 60;
+    return h > 0
+      ? `${h}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`
+      : `${m}:${String(sec).padStart(2, '0')}`;
+  };
+  const id = input.id || `man-${input.date}-${durSec || ''}-${km || ''}`;
+  return {
+    id,
+    manual: true,
+    date: input.date || null,
+    startTime: '',
+    name: (input.name || '').trim() || (input.type || '러닝'),
+    type: input.type || inferType(input.name),
+    activityKind: '러닝',
+    favorite: false,
+    km,
+    dur: fmtDurSec(durSec),
+    durSec,
+    pace,
+    paceV,
+    bpm: num(input.bpm),
+    spm: num(input.spm),
+    ground: num(input.ground),
+    stride: num(input.stride),
+  };
+}
+
 /* ── 캐시된 Promise ── */
 let _activitiesPromise = null;
 
@@ -156,6 +200,11 @@ function loadActivities() {
     .catch(err => {
       console.error('[activities] load error', err);
       return [];
+    })
+    .then(csvList => {
+      // 수동 추가 활동 병합 (store.js 가 로드된 경우)
+      const manual = typeof getManualActivities === 'function' ? getManualActivities() : [];
+      return csvList.concat(manual.filter(a => a && a.date)).sort((a, b) => (a.date < b.date ? 1 : -1));
     });
   return _activitiesPromise;
 }

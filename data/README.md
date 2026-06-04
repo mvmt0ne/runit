@@ -55,6 +55,18 @@ activities.csv ──parseCSV──▶ normalizeRow ──▶ loadActivities() �
 - **강도분포**: 평균 심박 → Zone(`ZONE_CONFIG`) → 저/중/고 비율
 - 데이터 없는 달/주는 빈 막대, 이번 달에 데이터 없으면 상세는 최근 데이터 달로 폴백
 
+## 수동 활동 추가 (CSV 없이)
+
+`input.html`(편집 페이지) → **"활동 본체 (CSV 없이 직접 추가)"** 섹션에서 거리·시간·페이스·심박·케이던스·접지·보폭 입력 → 저장.
+
+- localStorage(`runit:activities`)에 정규화 활동으로 저장 (`buildManualActivity`)
+- 페이스를 비우면 `시간/거리`로 자동 계산
+- 보폭은 **미터**로 입력(예: 0.95) — CSV와 동일 단위
+- `loadActivities()`가 **CSV + 수동 활동을 병합**해 반환하므로 마일리지·리스트·상세에 모두 반영
+
+> ⚠️ **필수 스크립트 순서**: 수동 활동을 쓰는 페이지는 `loadActivities` 호출 전에 `store.js`를 먼저 로드해야 한다 (`getManualActivities` 의존). 누락 시 CSV만 표시되고 수동 활동은 조용히 빠진다.
+> 적용된 페이지: `stats.html`, `detail.html`. (※ `list.html`·`runit-home.html`은 현재 `activities.js` 자체를 포함하지 않음 — 별도 작업 필요)
+
 ## 새 CSV 반영 방법
 
 1. 가민에서 Activities.csv 내보내기 → `data/activities.csv` 교체 (헤더 동일 유지)

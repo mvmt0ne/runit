@@ -9,9 +9,10 @@
 ═══════════════════════════════════════════════════════════ */
 
 const STORE_KEYS = {
-  splits: 'runit:splits',
-  zones:  'runit:zones',
-  meta:   'runit:meta',
+  splits:     'runit:splits',
+  zones:      'runit:zones',
+  meta:       'runit:meta',
+  activities: 'runit:activities', // 수동 추가 활동 (CSV 외) — { [id]: activity }
 };
 
 function _load(key) {
@@ -98,4 +99,31 @@ function clearAllSaved() {
   localStorage.removeItem(STORE_KEYS.splits);
   localStorage.removeItem(STORE_KEYS.zones);
   localStorage.removeItem(STORE_KEYS.meta);
+  localStorage.removeItem(STORE_KEYS.activities);
+}
+
+/* ── 수동 활동 (CSV 외 직접 추가) ── */
+function getManualActivities() {
+  return Object.values(_load(STORE_KEYS.activities));
+}
+
+function getManualActivity(id) {
+  return _load(STORE_KEYS.activities)[id] || null;
+}
+
+function saveManualActivity(act) {
+  if (!act || !act.id) return;
+  const all = _load(STORE_KEYS.activities);
+  all[act.id] = act;
+  _save(STORE_KEYS.activities, all);
+}
+
+function removeManualActivity(id) {
+  const all = _load(STORE_KEYS.activities);
+  delete all[id];
+  _save(STORE_KEYS.activities, all);
+}
+
+function listManualActivities() {
+  return getManualActivities().sort((a, b) => (a.date < b.date ? 1 : -1));
 }
