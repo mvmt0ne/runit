@@ -582,6 +582,14 @@
               transition: opacity 0.3s;
             }
 
+            .trend-row[data-ym] {
+              cursor: pointer;
+            }
+
+            .trend-row[data-ym]:active {
+              opacity: 0.55;
+            }
+
             .trend-mlabel {
               font-size: 13px;
               width: 54px;
@@ -1613,7 +1621,8 @@
                         }
                         const v = x.agg[metric.key];
                         const w = Math.round(20 + ((v - min) / span) * 80);
-                        return `<div class="trend-row${x.isCurrent ? ' current' : ''}">
+                        const ym = `${x.year}-${String(x.month).padStart(2, '0')}`;
+                        return `<div class="trend-row${x.isCurrent ? ' current' : ''}" data-ym="${ym}">
             <span class="trend-mlabel">${mLabel}</span>
             <span class="trend-bar-wrap"><span class="trend-bar" style="width:${w}%"></span></span>
             <span class="trend-val">${metric.fmt(v)}<i>${metric.unit}</i></span>
@@ -1646,6 +1655,13 @@
                 if (!chip) return;
                 trendMetric = chip.dataset.metric;
                 renderTrend();
+            });
+
+            // 추이 행 클릭 → 리스트에서 해당 월로 이동
+            document.getElementById('trend-rows').addEventListener('click', e => {
+                const row = e.target.closest('[data-ym]');
+                if (!row) return;
+                goTo(`list.html?month=${row.dataset.ym}`);
             });
 
             // ══════════════════════════════════════

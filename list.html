@@ -827,11 +827,30 @@
             renderFilterPanel();
             updateCtrlSheet();
 
+            // ?month=YYYY-MM 로 들어오면 해당 월 섹션으로 스크롤
+            function scrollToMonthFromQuery() {
+                const ym = new URLSearchParams(location.search).get('month');
+                if (!ym) return;
+                const scrollEl = document.getElementById('list-scroll');
+                const sec = document.querySelector(`.lp-month-section[data-month="${ym}"]`);
+                if (!scrollEl || !sec) return;
+                requestAnimationFrame(() => {
+                    const top =
+                        sec.getBoundingClientRect().top -
+                        scrollEl.getBoundingClientRect().top +
+                        scrollEl.scrollTop;
+                    const bar = document.getElementById('month-top-bar');
+                    const offset = bar ? bar.offsetHeight : 0;
+                    scrollEl.scrollTo({ top: Math.max(0, top - offset), behavior: 'smooth' });
+                });
+            }
+
             if (typeof loadActivities === 'function') {
                 loadActivities().then(list => {
                     RUNS = list.map(activityToRun);
                     renderList();
                     setupMonthTracking();
+                    scrollToMonthFromQuery();
                 });
             } else {
                 console.error('[list] activities.js not loaded');
