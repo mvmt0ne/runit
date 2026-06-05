@@ -1,4 +1,4 @@
-const CACHE = 'runit-v6';
+const CACHE = 'runit-v7';
 const CORE = [
   './app.html',
   './runit-home.html',
@@ -16,10 +16,18 @@ const CORE = [
   './data/splits.js',
   './data/zones.js',
   './data/store.js',
+  './data/activities.js',
+  './data/stats-agg.js',
+  './data/activities.csv',
 ];
 
 self.addEventListener('install', e => {
-  e.waitUntil(self.skipWaiting());
+  // 앱 셸 + 데이터 스크립트 프리캐시 (일부 실패해도 install 진행)
+  e.waitUntil(
+    caches.open(CACHE)
+      .then(c => Promise.allSettled(CORE.map(u => c.add(u))))
+      .then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener('activate', e => {
