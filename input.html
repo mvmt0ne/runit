@@ -309,6 +309,52 @@
       display: none;
     }
 
+    /* 내 신발장 목록 */
+    .shoe-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .shoe-list-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 8px;
+    }
+
+    .shoe-list-thumb {
+      width: 56px;
+      height: 40px;
+      object-fit: contain;
+      flex-shrink: 0;
+      filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.4));
+    }
+
+    .shoe-list-name {
+      flex: 1;
+      min-width: 0;
+      font-size: 14px;
+      color: var(--bone);
+      font-family: 'Pretendard Variable', sans-serif;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .shoe-list-empty {
+      font-size: 12px;
+      color: var(--text-2);
+      opacity: 0.5;
+      font-family: 'Pretendard Variable', sans-serif;
+      padding: 4px 2px;
+    }
+
     /* 입력 검증 표시 */
     .check {
       font-size: 12px;
@@ -372,18 +418,25 @@
             <textarea id="input-note" class="input-field" placeholder="메모 (자유 텍스트)"
               style="min-height:80px;font-family:'Pretendard Variable',sans-serif;font-size:14px;margin-bottom:12px"></textarea>
 
-            <label class="input-label" style="margin-top:4px">러닝화 이미지</label>
+            <div class="input-helper">이름·타입·메모는 CSV에 없는 값. 입력하면 detail에 표시됩니다.</div>
+          </div>
+
+          <!-- 내 신발장 (재사용 신발 등록) -->
+          <div class="input-section">
+            <label class="input-label">내 신발장 (러닝화 등록)</label>
+            <input type="text" id="shoe-name" class="input-field" placeholder="신발 이름 (예: 베이퍼플라이 3)" style="margin-bottom:8px">
             <div class="shoe-preview-wrap">
-              <img id="shoe-preview" class="shoe-preview" alt="러닝화 미리보기">
+              <img id="shoe-preview" class="shoe-preview" alt="신발 미리보기">
               <div id="shoe-placeholder" class="shoe-placeholder">이미지 선택 안 됨</div>
             </div>
             <div class="field-row" style="margin-top:8px">
               <label class="ghost-btn" for="input-shoe" style="flex:1;text-align:center">이미지 선택</label>
               <button type="button" class="ghost-btn" onclick="clearShoe()">비우기</button>
+              <button type="button" class="ghost-btn" onclick="onAddShoe()" style="color:var(--accent)">등록</button>
             </div>
-            <input type="file" id="input-shoe" accept="image/*" style="display:none">
-
-            <div class="input-helper">이름·타입·메모·이미지는 CSV에 없는 값. 입력하면 detail에서 표시.</div>
+            <input type="file" id="input-shoe" accept="image/png,image/*" style="display:none">
+            <div class="input-helper">배경 없는 누끼 PNG를 올리면 상세 화면에 예쁘게 표시됩니다. 등록한 신발은 상세에서 선택해 사용합니다.</div>
+            <ul class="shoe-list" id="shoe-list" style="margin-top:14px"></ul>
           </div>
 
           <!-- 활동 본체 (CSV 없이 직접 추가) -->
@@ -539,7 +592,8 @@
             const c = document.createElement('canvas');
             c.width = w; c.height = h;
             c.getContext('2d').drawImage(img, 0, 0, w, h);
-            res(c.toDataURL('image/jpeg', 0.85));
+            // PNG로 출력 — 누끼(투명 배경) 보존
+            res(c.toDataURL('image/png'));
           };
           img.onerror = rej;
           img.src = e.target.result;
@@ -569,12 +623,54 @@
       const f = shoeInput.files && shoeInput.files[0];
       if (!f) return;
       try {
-        const b64 = await imageToBase64(f);
+        const b64 = await imageToBase64(f, 600);
         setShoePreview(b64);
       } catch (e) {
         showToast('이미지 처리 실패', true);
       }
     });
+
+    /* ── 내 신발장: 등록 / 목록 / 삭제 ── */
+    const shoeNameInput = document.getElementById('shoe-name');
+
+    function onAddShoe() {
+      const name = shoeNameInput.value.trim();
+      if (!_shoeDataURL) { showToast('신발 이미지를 선택하세요', true); return; }
+      if (!name) { showToast('신발 이름을 입력하세요', true); return; }
+      const id = 'shoe-' + name.replace(/\s+/g, '-') + '-' + (_shoeDataURL.length % 100000);
+      try {
+        saveShoe({ id, name, image: _shoeDataURL });
+      } catch (e) {
+        if (e && e.name === 'QuotaExceededError') { showToast('저장 공간 부족(이미지 큼)', true); return; }
+        throw e;
+      }
+      shoeNameInput.value = '';
+      clearShoe();
+      showToast(`'${name}' 등록됨`);
+      renderShoeList();
+    }
+
+    function onRemoveShoe(id) {
+      removeShoe(id);
+      showToast('신발 삭제됨');
+      renderShoeList();
+    }
+
+    function renderShoeList() {
+      const list = document.getElementById('shoe-list');
+      const shoes = listShoes();
+      if (!shoes.length) {
+        list.innerHTML = '<li class="shoe-list-empty">등록된 신발 없음</li>';
+        return;
+      }
+      list.innerHTML = shoes.map(s => `
+        <li class="shoe-list-item">
+          <img class="shoe-list-thumb" src="${s.image}" alt="${s.name}">
+          <span class="shoe-list-name">${s.name}</span>
+          <button class="delete-btn" onclick="onRemoveShoe('${s.id}')">삭제</button>
+        </li>
+      `).join('');
+    }
 
     // ?date= 우선, 없으면 오늘
     const _qs = new URLSearchParams(location.search);
@@ -717,7 +813,6 @@
       nameInput.value = meta.name || '';
       typeInput.value = meta.type || '';
       noteInput.value = meta.note || '';
-      setShoePreview(meta.shoe || null);
       clearActFields(); // 본체는 저장목록의 '불러오기'로만 편집
       // CSV 활동 힌트 표시
       try {
@@ -741,8 +836,7 @@
       const name = nameInput.value.trim();
       const type = typeInput.value;
       const note = noteInput.value.trim();
-      const shoe = _shoeDataURL;
-      const hasMeta = name || type || note || shoe;
+      const hasMeta = name || type || note;
 
       const kmStr = document.getElementById('act-km').value.trim();
       const hasBody = kmStr !== '';
@@ -790,7 +884,9 @@
 
       if (hasMeta) {
         try {
-          setMeta(date, { name: name || null, type: type || null, note: note || null, shoe: shoe || null });
+          // 기존 메타(shoeId 등) 보존하며 병합
+          const prevMeta = getMeta(date) || {};
+          setMeta(date, { ...prevMeta, name: name || null, type: type || null, note: note || null });
           saved.push('메타');
         } catch (e) {
           if (e && e.name === 'QuotaExceededError') {
@@ -879,6 +975,7 @@
 
     /* ── 초기 렌더 ── */
     renderSavedList();
+    renderShoeList();
   </script>
 
   <script>

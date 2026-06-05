@@ -13,6 +13,7 @@ const STORE_KEYS = {
   zones:      'runit:zones',
   meta:       'runit:meta',
   activities: 'runit:activities', // 수동 추가 활동 (CSV 외) — { [id]: activity }
+  shoes:      'runit:shoes',      // 내 신발장 — { [id]: {id, name, image} }
 };
 
 function _load(key) {
@@ -100,6 +101,33 @@ function clearAllSaved() {
   localStorage.removeItem(STORE_KEYS.zones);
   localStorage.removeItem(STORE_KEYS.meta);
   localStorage.removeItem(STORE_KEYS.activities);
+  // 신발장(runit:shoes)은 자산이라 전체삭제에서 제외 — 명시적으로만 삭제
+}
+
+/* ── 내 신발장 (재사용 신발 — 날짜와 무관) ── */
+function getShoes() {
+  return Object.values(_load(STORE_KEYS.shoes));
+}
+
+function getShoe(id) {
+  return _load(STORE_KEYS.shoes)[id] || null;
+}
+
+function saveShoe(shoe) {
+  if (!shoe || !shoe.id) return;
+  const all = _load(STORE_KEYS.shoes);
+  all[shoe.id] = shoe;
+  _save(STORE_KEYS.shoes, all);
+}
+
+function removeShoe(id) {
+  const all = _load(STORE_KEYS.shoes);
+  delete all[id];
+  _save(STORE_KEYS.shoes, all);
+}
+
+function listShoes() {
+  return getShoes().sort((a, b) => (a.name || '').localeCompare(b.name || ''));
 }
 
 /* ── 수동 활동 (CSV 외 직접 추가) ── */

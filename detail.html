@@ -201,36 +201,166 @@
       font-family: 'Space Grotesk', sans-serif;
     }
 
-    /* ─── 러닝화 이미지 ─── */
-    .d-shoe-img {
-      width: 100%;
-      max-height: 280px;
-      object-fit: contain;
-      background: rgba(34, 34, 34, 0.06);
-      display: block;
+    /* ─── Hero 신발 (누끼컷) ─── */
+    .d-hero-shoe {
+      position: relative;
+      margin-top: 22px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
     }
 
-    .d-shoe-empty {
-      margin: 12px 20px 20px;
-      aspect-ratio: 16 / 9;
-      border: 1.5px dashed rgba(34, 34, 34, 0.25);
-      border-radius: 6px;
+    /* 받침대 글로우 */
+    .d-hero-shoe::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      bottom: -6px;
+      width: 150px;
+      height: 30px;
+      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.45) 0%, transparent 70%);
+      filter: blur(2px);
+      z-index: 0;
+    }
+
+    .d-hero-shoe-img {
+      position: relative;
+      z-index: 1;
+      width: 160px;
+      max-height: 100px;
+      object-fit: contain;
+      transform: rotate(-7deg);
+      filter: drop-shadow(0 12px 16px rgba(0, 0, 0, 0.55));
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .d-hero-shoe:active .d-hero-shoe-img {
+      transform: rotate(-7deg) scale(0.96);
+    }
+
+    .d-hero-shoe-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      z-index: 1;
+    }
+
+    .d-hero-shoe-label {
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--cloudy-gray);
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
+    .d-hero-shoe-name {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--bone);
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
+    .d-hero-shoe-add {
+      margin-top: 22px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 18px;
+      border-radius: 100px;
+      border: 1px dashed rgba(255, 255, 255, 0.25);
+      background: transparent;
+      color: var(--cloudy-gray);
+      font-size: 14px;
+      font-family: 'Pretendard Variable', sans-serif;
+      cursor: pointer;
+    }
+
+    .d-hero-shoe-add:active { background: rgba(255, 255, 255, 0.05); }
+
+    /* ─── 신발 선택 시트 (롤링) ─── */
+    .shoe-sheet-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+      z-index: 60;
+    }
+    .shoe-sheet-backdrop.open { opacity: 1; pointer-events: auto; }
+
+    .shoe-sheet {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      z-index: 61;
+      background: var(--dark-gray);
+      border-radius: 22px 22px 0 0;
+      padding: 18px 0 calc(24px + env(safe-area-inset-bottom, 0px));
+      transform: translateY(100%);
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .shoe-sheet.open { transform: translateY(0); }
+
+    .shoe-sheet-title {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--bone);
+      text-align: center;
+      font-family: 'Pretendard Variable', sans-serif;
+      margin-bottom: 16px;
+    }
+
+    .shoe-carousel {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 0 32px 8px;
+      scrollbar-width: none;
+    }
+    .shoe-carousel::-webkit-scrollbar { display: none; }
+
+    .shoe-card {
+      flex: 0 0 62%;
+      scroll-snap-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
-      color: var(--cloudy-gray);
+      gap: 12px;
+      padding: 20px 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1.5px solid transparent;
       cursor: pointer;
-      font-size: 13px;
-      font-family: 'Pretendard Variable', sans-serif;
-      transition: background 0.15s, border-color 0.15s;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .shoe-card.selected {
+      border-color: var(--accent);
+      background: rgba(255, 76, 49, 0.08);
     }
 
-    .d-shoe-empty:active {
-      background: rgba(34, 34, 34, 0.04);
-      border-color: var(--asphalt-black);
+    .shoe-card-img {
+      width: 100%;
+      height: 110px;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.5));
     }
+    .shoe-card-name {
+      font-size: 14px;
+      color: var(--bone);
+      font-family: 'Pretendard Variable', sans-serif;
+      text-align: center;
+    }
+
+    .shoe-sheet-empty {
+      text-align: center;
+      color: var(--cloudy-gray);
+      font-size: 13px;
+      font-family: 'Pretendard Variable', sans-serif;
+      padding: 20px;
+    }
+    .shoe-sheet-empty a { color: var(--accent); cursor: pointer; }
 
     /* ─── Empty / error ─── */
     .d-empty {
@@ -284,6 +414,13 @@
     </div>
   </div>
 
+  <!-- 신발 선택 시트 (롤링) -->
+  <div class="shoe-sheet-backdrop" id="shoe-backdrop" onclick="closeShoePicker()"></div>
+  <div class="shoe-sheet" id="shoe-sheet">
+    <div class="shoe-sheet-title">신발 선택</div>
+    <div id="shoe-carousel-wrap"></div>
+  </div>
+
   <script src="./data/store.js"></script>
   <script src="./data/activities.js"></script>
   <script>
@@ -317,6 +454,21 @@
     function renderHTML(act, meta) {
       const displayName = (meta.name && meta.name.trim()) || act.name || '러닝';
       const typeText = act.type.toUpperCase();
+
+      // 신발 — meta.shoeId 로 신발장 조회 (레거시 meta.shoe dataURL 호환)
+      const shoeObj = (meta.shoeId && typeof getShoe === 'function') ? getShoe(meta.shoeId) : null;
+      const shoeImg = shoeObj ? shoeObj.image : (meta.shoe || null);
+      const shoeName = shoeObj ? shoeObj.name : '';
+      const heroShoe = shoeImg
+        ? `<div class="d-hero-shoe" onclick="openShoePicker()">
+             <img class="d-hero-shoe-img" src="${shoeImg}" alt="러닝화">
+             <div class="d-hero-shoe-meta">
+               <span class="d-hero-shoe-label">러닝화</span>
+               <span class="d-hero-shoe-name">${shoeName ? escapeHTML(shoeName) : '탭하여 변경'} ›</span>
+             </div>
+           </div>`
+        : `<button class="d-hero-shoe-add" onclick="openShoePicker()">+ 신발 선택하기</button>`;
+
       const hero = `
         <div class="d-hero">
           <div class="d-meta-line">
@@ -331,6 +483,7 @@
               <div class="d-km-side-row"><span class="d-km-side-val">${act.pace || '--'}</span><span class="d-km-side-label">평균 페이스</span></div>
             </div>
           </div>
+          ${heroShoe}
         </div>`;
 
       const statsCells = [
@@ -371,22 +524,39 @@
           </div>
         </div>` : '';
 
-      const shoe = `
-        <div class="d-card" style="padding: 0;">
-          <div class="d-card-title" style="padding: 18px 20px 0;">러닝화</div>
-          ${meta.shoe
-            ? `<img class="d-shoe-img" src="${meta.shoe}" alt="러닝화">`
-            : `<div class="d-shoe-empty" onclick="goEdit()">
-                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                   <rect x="3" y="3" width="18" height="18" rx="2"/>
-                   <circle cx="9" cy="9" r="2"/>
-                   <path d="m21 15-5-5L5 21"/>
-                 </svg>
-                 <span>이미지 없음 · 탭하여 추가</span>
-               </div>`}
-        </div>`;
+      return hero + stats + te;
+    }
 
-      return hero + stats + te + shoe;
+    /* ── 신발 선택 시트 (롤링) ── */
+    function openShoePicker() {
+      const shoes = (typeof listShoes === 'function') ? listShoes() : [];
+      const meta = getMeta(_date) || {};
+      const wrap = document.getElementById('shoe-carousel-wrap');
+      if (!shoes.length) {
+        wrap.innerHTML = `<div class="shoe-sheet-empty">등록된 신발이 없습니다.<br><a onclick="goEdit()">입력 화면에서 신발 등록하기 ›</a></div>`;
+      } else {
+        wrap.innerHTML = `<div class="shoe-carousel">${shoes.map(s => `
+          <div class="shoe-card${meta.shoeId === s.id ? ' selected' : ''}" onclick="selectShoe('${s.id}')">
+            <img class="shoe-card-img" src="${s.image}" alt="${escapeHTML(s.name)}">
+            <span class="shoe-card-name">${escapeHTML(s.name)}</span>
+          </div>`).join('')}</div>`;
+      }
+      document.getElementById('shoe-backdrop').classList.add('open');
+      document.getElementById('shoe-sheet').classList.add('open');
+    }
+
+    function closeShoePicker() {
+      document.getElementById('shoe-backdrop').classList.remove('open');
+      document.getElementById('shoe-sheet').classList.remove('open');
+    }
+
+    function selectShoe(id) {
+      const meta = getMeta(_date) || {};
+      // 같은 신발 다시 선택 → 해제
+      meta.shoeId = (meta.shoeId === id) ? null : id;
+      setMeta(_date, meta);
+      closeShoePicker();
+      render();
     }
 
     function fmtNum(n, d) {
