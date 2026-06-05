@@ -33,6 +33,7 @@
     .input-scroll {
       flex: 1;
       overflow-y: auto;
+      overflow-x: hidden;
       scrollbar-width: none;
       padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
     }
@@ -76,6 +77,8 @@
 
     .input-field {
       width: 100%;
+      box-sizing: border-box;
+      max-width: 100%;
       padding: 14px 16px;
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.08);
@@ -130,6 +133,7 @@
 
     .save-btn {
       width: 100%;
+      box-sizing: border-box;
       padding: 18px;
       background: var(--accent);
       border: none;
