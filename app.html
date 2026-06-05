@@ -231,6 +231,25 @@
           slide.classList.remove('loading');
           slide.innerHTML = phoneInner ? phoneInner.innerHTML : `<div style="padding:20px;color:#888">${url} 로드 실패</div>`;
 
+          // 2.5) 페이지의 외부 데이터 스크립트(./data/*.js)를 전역 로드.
+          //      (loadActivities/buildStatsData 등 데이터 의존성 — 인라인 부트스트랩 전에 필요)
+          //      중복 방지(같은 src 재선언 에러 방지) + 문서 순서 보존.
+          window.__appLoadedSrc = window.__appLoadedSrc || new Set();
+          const extSrcs = [...doc.querySelectorAll('script[src]')]
+            .map(s => s.getAttribute('src'))
+            .filter(src => src && /\.\/data\//.test(src));
+          for (const src of extSrcs) {
+            if (window.__appLoadedSrc.has(src)) continue;
+            window.__appLoadedSrc.add(src);
+            await new Promise(res => {
+              const sc = document.createElement('script');
+              sc.src = src;
+              sc.onload = res;
+              sc.onerror = () => { console.error('[loadSlide] 외부 스크립트 로드 실패', src); res(); };
+              document.head.appendChild(sc);
+            });
+          }
+
           // 3) 페이지의 inline script 들을 하나의 IIFE 로 묶어 실행 (전역 격리)
           //    + IIFE 안 top-level 함수 선언들은 window 에 expose
           //      (onclick="fn()" 같은 인라인 핸들러가 작동하려면 전역 노출 필요)
