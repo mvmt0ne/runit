@@ -1754,17 +1754,17 @@
                     { key: 'tt', label: 'TT', color: 'var(--type-dark-bg)' },
                     { key: 'tempo', label: 'Tempo', color: 'var(--type-dark-bg)' },
                     { key: 'interval', label: 'Interval', color: 'var(--type-dark-bg)' },
-                    { key: 'steady', label: 'Steady', color: 'var(--type-steady-bg)' },
                     { key: 'easy', label: 'Easy', color: 'var(--type-easy-bg)' },
                     { key: 'jogging', label: 'Jogging', color: 'var(--type-jog-bg)' },
-                    { key: 'long', label: 'LSD', color: 'var(--type-long-bg)' },
+                    { key: 'long', label: 'Long', color: 'var(--type-long-bg)' },
                 ];
                 const el = document.getElementById(containerId);
                 if (!el) return;
                 const counts = {};
                 RUN_TYPES.forEach(t => (counts[t.key] = 0));
                 runs.forEach(r => {
-                    if (r.type in counts) counts[r.type]++;
+                    const t = (typeof normRunType === 'function') ? normRunType(r.type) : r.type; // steady→tempo
+                    if (t in counts) counts[t]++;
                 });
                 const maxCount = Math.max(...RUN_TYPES.map(t => counts[t.key]), 1);
                 el.innerHTML = RUN_TYPES.map(t => {

@@ -36,7 +36,7 @@ function parseCSV(text) {
 function inferType(title) {
   const t = String(title || '').trim();
   if (t === 'E' || t === '러닝') return 'easy';
-  if (t === 'S') return 'steady';
+  if (t === 'S') return 'tempo'; // steady → tempo 로 병합
   if (t === 'T') return 'tempo';
   if (t === 'J') return 'jogging';
   if (t === 'TT') return 'tt';
@@ -45,6 +45,11 @@ function inferType(title) {
   if (t === 'R') return 'race';
   if (/[가-힣]/.test(t)) return 'race';
   return 'easy';
+}
+
+/* ── 런타입 정규화 — steady 는 tempo 로 병합 (레거시 저장값 호환) ── */
+function normRunType(t) {
+  return t === 'steady' ? 'tempo' : t;
 }
 
 /* ── 안전한 숫자 변환 (쉼표/따옴표 제거) ── */

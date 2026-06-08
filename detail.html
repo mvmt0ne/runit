@@ -453,7 +453,8 @@
 
     function renderHTML(act, meta) {
       const displayName = (meta.name && meta.name.trim()) || act.name || '러닝';
-      const effType = meta.type || act.type;   // 타입 오버라이드 반영 (list 와 일치)
+      let effType = meta.type || act.type;   // 타입 오버라이드 반영 (list 와 일치)
+      if (typeof normRunType === 'function') effType = normRunType(effType); // steady→tempo
       const typeText = effType.toUpperCase();
 
       // 신발 — meta.shoeId 로 신발장 조회 (레거시 meta.shoe dataURL 호환)

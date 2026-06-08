@@ -340,7 +340,8 @@
                 const [, mm, dd] = (a.date || '').split('-');
                 // 사용자 오버라이드 메타(이름/타입) 반영 — detail 과 일치
                 const meta = (typeof getMeta === 'function') ? (getMeta(a.date) || {}) : {};
-                const type = meta.type || a.type;
+                let type = meta.type || a.type;
+                if (typeof normRunType === 'function') type = normRunType(type); // steady→tempo
                 return {
                     id: idx + 1,
                     date: a.date,
