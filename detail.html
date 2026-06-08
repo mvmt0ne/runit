@@ -453,7 +453,8 @@
 
     function renderHTML(act, meta) {
       const displayName = (meta.name && meta.name.trim()) || act.name || '러닝';
-      const typeText = act.type.toUpperCase();
+      const effType = meta.type || act.type;   // 타입 오버라이드 반영 (list 와 일치)
+      const typeText = effType.toUpperCase();
 
       // 신발 — meta.shoeId 로 신발장 조회 (레거시 meta.shoe dataURL 호환)
       const shoeObj = (meta.shoeId && typeof getShoe === 'function') ? getShoe(meta.shoeId) : null;
@@ -473,7 +474,7 @@
         <div class="d-hero">
           <div class="d-meta-line">
             <span class="d-date">${act.date}${act.startTime ? ' · ' + act.startTime : ''}</span>
-            <span class="d-type-badge type-${act.type}">${typeText}</span>
+            <span class="d-type-badge type-${effType}">${typeText}</span>
           </div>
           <h1 class="d-name">${escapeHTML(displayName)}</h1>
           <div class="d-km-row">

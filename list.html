@@ -338,14 +338,17 @@
 
             function activityToRun(a, idx) {
                 const [, mm, dd] = (a.date || '').split('-');
+                // 사용자 오버라이드 메타(이름/타입) 반영 — detail 과 일치
+                const meta = (typeof getMeta === 'function') ? (getMeta(a.date) || {}) : {};
+                const type = meta.type || a.type;
                 return {
                     id: idx + 1,
                     date: a.date,
                     label: `${parseInt(mm)}/${parseInt(dd)}`,
                     month: parseInt(mm),
-                    type: a.type,
-                    group: TYPE_TO_GROUP[a.type] || 'easy',
-                    name: a.name || '러닝',
+                    type: type,
+                    group: TYPE_TO_GROUP[type] || 'easy',
+                    name: (meta.name && meta.name.trim()) || a.name || '러닝',
                     time: a.startTime || '',
                     dur: a.dur,
                     km: a.km,
