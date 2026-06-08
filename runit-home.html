@@ -930,12 +930,13 @@
         const acts = dayMap.get(d) || [];
         const isToday = today && today.y === y && today.m === m && today.d === d;
         const todayCls = isToday ? ' today' : '';
+        const dateStr = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
         if (!acts.length) {
-          html += `<div class="cal-day type-none${todayCls}"><span class="day-num">${d}</span></div>`;
+          // 빈 날짜 → 그 날짜로 기록 추가(입력 화면)
+          html += `<div class="cal-day type-none${todayCls}" onclick="goTo('input.html?date=${dateStr}')"><span class="day-num">${d}</span></div>`;
         } else {
           // 같은 날 여러 활동 있으면 거리가 가장 긴 것 선택
           const main = acts.reduce((a, b) => (b.km || 0) > (a.km || 0) ? b : a);
-          const dateStr = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
           const note = main.km != null ? Math.round(main.km) : '';
           html += `<div class="cal-day type-${main.type}${todayCls}" onclick="goTo('detail.html?date=${dateStr}')"><span class="day-note">${note}</span></div>`;
         }
