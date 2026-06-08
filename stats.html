@@ -1748,15 +1748,24 @@
             }
 
             // ── 러닝 종류 차트 ──
+            // 러닝 강도 색 (도넛과 동일): 저=bone, 중=dark-gray, 고=accent
+            const INTENSITY_COLOR = { low: 'var(--bone)', mid: 'var(--dark-gray)', high: 'var(--accent)' };
+            // 런타입 → 강도 등급 (도넛 범례와 일치)
+            const TYPE_INTENSITY = {
+                race: 'high', tt: 'high', tempo: 'high', interval: 'high',
+                long: 'mid',
+                easy: 'low', jogging: 'low',
+            };
+
             function renderTypeChart(containerId, runs) {
                 const RUN_TYPES = [
-                    { key: 'race', label: 'Race', color: 'var(--type-race-text)' },
-                    { key: 'tt', label: 'TT', color: 'var(--type-dark-bg)' },
-                    { key: 'tempo', label: 'Tempo', color: 'var(--type-dark-bg)' },
-                    { key: 'interval', label: 'Interval', color: 'var(--type-dark-bg)' },
-                    { key: 'easy', label: 'Easy', color: 'var(--type-easy-bg)' },
-                    { key: 'jogging', label: 'Jogging', color: 'var(--type-jog-bg)' },
-                    { key: 'long', label: 'Long', color: 'var(--type-long-bg)' },
+                    { key: 'race', label: 'Race' },
+                    { key: 'tt', label: 'TT' },
+                    { key: 'tempo', label: 'Tempo' },
+                    { key: 'interval', label: 'Interval' },
+                    { key: 'easy', label: 'Easy' },
+                    { key: 'jogging', label: 'Jogging' },
+                    { key: 'long', label: 'Long' },
                 ];
                 const el = document.getElementById(containerId);
                 if (!el) return;
@@ -1771,10 +1780,11 @@
                     const count = counts[t.key];
                     const pct = Math.round((count / maxCount) * 100);
                     const dimStyle = count === 0 ? ' style="opacity:0.5"' : '';
+                    const fill = INTENSITY_COLOR[TYPE_INTENSITY[t.key]] || 'var(--bone)';
                     return `<div class="type-chart-row"${dimStyle}>
           <span class="type-chart-label">${t.label}</span>
           <div class="type-chart-track">
-            <div class="type-chart-fill" data-pct="${pct}" ></div>
+            <div class="type-chart-fill" data-pct="${pct}" style="background:${fill}"></div>
           </div>
           <span class="type-chart-count">${count}</span>
         </div>`;
@@ -1809,7 +1819,7 @@
                         r: 77.5,
                         sw: 17,
                         label: '중',
-                        sub: 'Steady, LSD',
+                        sub: 'Long',
                         pct: mid,
                         color: 'var(--dark-gray)',
                         cls: 'mid',
