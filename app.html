@@ -349,6 +349,23 @@
         if (idx >= 0 && idx !== swiper.activeIndex) swiper.slideTo(idx);
       });
 
+      // goTo 가로채기 — 탭 페이지로의 이동은 SPA 밖으로 나가지 않고 탭 전환
+      const TAB_PAGES = { 'runit-home.html': 'home', 'list.html': 'list', 'stats.html': 'stats', 'pb.html': 'pb' };
+      const _origGoTo = window.goTo;
+      window.goTo = function (url) {
+        const base = String(url).split(/[?#]/)[0].replace(/^\.\//, '');
+        const tab = TAB_PAGES[base];
+        if (tab != null) {
+          const idx = TABS.indexOf(tab);
+          if (idx >= 0) {
+            loadSlide(slides[idx]);
+            swiper.slideTo(idx);
+            return;
+          }
+        }
+        return _origGoTo ? _origGoTo(url) : (location.href = url);
+      };
+
       // 백그라운드에서 나머지 슬라이드 lazy 로드
       setTimeout(() => {
         slides.forEach((s, i) => { if (i !== initialIdx) loadSlide(s); });
