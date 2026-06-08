@@ -399,7 +399,7 @@
 
       <div class="input-page">
         <div class="back-header back-header--dark">
-          <button class="back-btn" onclick="goBack('detail.html')">
+          <button class="back-btn" onclick="goBackToDetail()">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round">
               <path d="m12 19-7-7 7-7" />
@@ -694,6 +694,12 @@
     // ?date= 우선, 없으면 오늘
     const _qs = new URLSearchParams(location.search);
     dateInput.value = _qs.get('date') || new Date().toISOString().slice(0, 10);
+
+    // 뒤로 — 편집 중이던 날짜의 상세로 복귀 (가장 최근으로 튀지 않게)
+    function goBackToDetail() {
+      const d = dateInput.value || _qs.get('date') || '';
+      goBack(d ? `detail.html?date=${d}` : 'detail.html');
+    }
 
     /* ── 토스트 ── */
     function showToast(msg, isError) {
