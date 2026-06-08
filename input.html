@@ -95,6 +95,25 @@
       background: rgba(255, 255, 255, 0.06);
     }
 
+    /* iOS Safari의 날짜 입력 정규화 — 기본 높이/정렬/아이콘이 다른 입력과 어긋나 깨져 보이는 문제 */
+    input[type="date"].input-field {
+      -webkit-appearance: none;
+      appearance: none;
+      min-height: 52px;
+      line-height: 1.2;
+    }
+
+    input[type="date"].input-field::-webkit-date-and-time-value {
+      text-align: left;
+      margin: 0;
+    }
+
+    input[type="date"].input-field::-webkit-calendar-picker-indicator {
+      filter: invert(0.75);
+      opacity: 0.8;
+      cursor: pointer;
+    }
+
     textarea.input-field {
       min-height: 140px;
       resize: vertical;
