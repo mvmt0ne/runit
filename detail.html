@@ -562,7 +562,16 @@
       if (cache[date]) { el.textContent = cache[date]; return; }
       let coords;
       try { coords = JSON.parse(localStorage.getItem('runit-coords')); } catch (e) {}
-      if (!coords || coords.lat == null) return; // 위치 없으면 표시 안 함
+      // 저장된 좌표 없으면 직접 위치 요청 (허용 시 저장)
+      if (!coords || coords.lat == null) {
+        if (!navigator.geolocation) return;
+        try {
+          const pos = await new Promise((res, rej) =>
+            navigator.geolocation.getCurrentPosition(res, rej, { timeout: 8000, maximumAge: 6e5 }));
+          coords = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+          localStorage.setItem('runit-coords', JSON.stringify(coords));
+        } catch (e) { return; } // 거부/실패 시 온도 미표시
+      }
       const today = new Date(); today.setHours(0, 0, 0, 0);
       const daysAgo = Math.round((today - new Date(date + 'T00:00:00')) / 86400000);
       // 최근(아카이브 지연 고려)은 forecast, 과거는 archive
