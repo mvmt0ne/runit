@@ -96,19 +96,22 @@
     }
 
     /* iOS Safari의 날짜 입력 정규화 — 기본 높이/정렬/아이콘이 다른 입력과 어긋나 깨져 보이는 문제 */
-    input[type="date"].input-field {
+    input[type="date"].input-field,
+    input[type="time"].input-field {
       -webkit-appearance: none;
       appearance: none;
       min-height: 52px;
       line-height: 1.2;
     }
 
-    input[type="date"].input-field::-webkit-date-and-time-value {
+    input[type="date"].input-field::-webkit-date-and-time-value,
+    input[type="time"].input-field::-webkit-date-and-time-value {
       text-align: left;
       margin: 0;
     }
 
-    input[type="date"].input-field::-webkit-calendar-picker-indicator {
+    input[type="date"].input-field::-webkit-calendar-picker-indicator,
+    input[type="time"].input-field::-webkit-calendar-picker-indicator {
       filter: invert(0.75);
       opacity: 0.8;
       cursor: pointer;
@@ -411,10 +414,13 @@
 
         <div class="input-scroll">
 
-          <!-- 활동 날짜 -->
+          <!-- 활동 날짜 · 시작 시간 -->
           <div class="input-section">
-            <label class="input-label">활동 날짜</label>
-            <input type="date" id="input-date" class="input-field">
+            <label class="input-label">활동 날짜 · 시작 시간</label>
+            <div class="field-row" style="gap:8px">
+              <input type="date" id="input-date" class="input-field" style="flex:2">
+              <input type="time" id="act-time" class="input-field" style="flex:1">
+            </div>
             <div class="input-helper" id="date-helper">가민 활동 날짜 (YYYY-MM-DD). 같은 날짜면 덮어씀.</div>
           </div>
 
@@ -496,7 +502,7 @@
     let _editingManualId = null; // 편집 중인 수동 활동 id (없으면 새로 추가)
 
     /* ── 활동 본체 입력칸 채우기/비우기 ── */
-    const ACT_FIELDS = ['act-km', 'act-dur', 'act-pace', 'act-bpm', 'act-spm', 'act-ground', 'act-stride'];
+    const ACT_FIELDS = ['act-time', 'act-km', 'act-dur', 'act-pace', 'act-bpm', 'act-spm', 'act-ground', 'act-stride'];
     function clearActFields() {
       _editingManualId = null;
       ACT_FIELDS.forEach(id => (document.getElementById(id).value = ''));
@@ -598,6 +604,7 @@
           name,
           type,
           km: kmStr,
+          startTime: document.getElementById('act-time').value.trim(),
           dur: document.getElementById('act-dur').value.trim(),
           pace: document.getElementById('act-pace').value.trim(),
           bpm: document.getElementById('act-bpm').value.trim(),

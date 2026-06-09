@@ -167,7 +167,7 @@ function buildManualActivity(input) {
     id,
     manual: true,
     date: input.date || null,
-    startTime: '',
+    startTime: (input.startTime || '').slice(0, 5),
     name: (input.name || '').trim() || (input.type || '러닝'),
     type: input.type || inferType(input.name),
     activityKind: '러닝',
