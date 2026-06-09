@@ -457,7 +457,7 @@
     <div class="phone-inner bg-dark" style="background: var(--asphalt-black);">
       <div class="detail-page">
         <div class="back-header back-header--dark">
-          <button class="back-btn" onclick="goBack('app.html#list')">
+          <button class="back-btn" onclick="goBackSmart()">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round">
               <path d="m12 19-7-7 7-7" />
@@ -498,6 +498,12 @@
 
     function goEdit() {
       goTo(`input.html?date=${_date || ''}`);
+    }
+
+    // 뒤로 — 들어온 화면(홈/리스트 등)으로 복귀
+    function goBackSmart() {
+      if (window.history.length > 1) { history.back(); return; }
+      goBack('app.html#list');
     }
 
     async function render() {
