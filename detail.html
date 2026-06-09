@@ -275,27 +275,6 @@
       font-family: 'Pretendard Variable', sans-serif;
     }
 
-    /* ─── TE ─── */
-    .d-te-row {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-    }
-
-    .d-te-val {
-      font-size: 32px;
-      font-weight: 400;
-      color: var(--asphalt-black);
-      font-family: 'Space Grotesk', sans-serif;
-      line-height: 1;
-    }
-
-    .d-te-scale {
-      font-size: 14px;
-      color: var(--cloudy-gray);
-      font-family: 'Space Grotesk', sans-serif;
-    }
-
     /* ─── Hero 신발 (누끼컷) ─── */
     .d-hero-shoe {
       position: relative;
@@ -678,15 +657,6 @@
           </div>
         </div>` : '';
 
-      const te = (act.teAerobic != null) ? `
-        <div class="d-card">
-          <div class="d-card-title">유산소 훈련 효과</div>
-          <div class="d-te-row">
-            <span class="d-te-val">${act.teAerobic}</span>
-            <span class="d-te-scale">/ 5.0</span>
-          </div>
-        </div>` : '';
-
       // 메모 (input 메타)
       const note = (meta.note && meta.note.trim()) ? `
         <div class="d-card">
@@ -715,7 +685,7 @@
           </div>
         </div>` : '';
 
-      return hero + note + compare + form + stats + te + recent;
+      return hero + note + compare + form + stats + recent;
     }
 
     /* ── 신발 선택 시트 (롤링) ── */
