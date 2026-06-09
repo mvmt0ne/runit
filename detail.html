@@ -524,6 +524,7 @@
 
       const meta = (typeof getMeta === 'function') ? (getMeta(_date) || {}) : {};
       document.getElementById('detail-body').innerHTML = renderHTML(act, meta, list);
+      fetchRealTemp(_date);
     }
 
     // 초→"M:SS"
@@ -552,12 +553,31 @@
         <span class="d-compare-delta ${cls}">${arrow} ${diffStr}</span>
       </div>`;
     }
-    // 러닝한 날 온도 표시 (최저~최고)
-    function tempText(act) {
-      const lo = act.tempMin, hi = act.tempMax;
-      if (lo == null && hi == null) return '';
-      if (lo != null && hi != null) return (lo === hi) ? `${Math.round(lo)}°` : `${Math.round(lo)}–${Math.round(hi)}°`;
-      return `${Math.round(lo != null ? lo : hi)}°`;
+    // 러닝한 날 실제 기온 — open-meteo로 비동기 조회 (홈 저장 좌표, 날짜별 캐시)
+    async function fetchRealTemp(date) {
+      const el = document.getElementById('d-temp');
+      if (!el || !date) return;
+      let cache = {};
+      try { cache = JSON.parse(localStorage.getItem('runit-wxtemp') || '{}'); } catch (e) {}
+      if (cache[date]) { el.textContent = cache[date]; return; }
+      let coords;
+      try { coords = JSON.parse(localStorage.getItem('runit-coords')); } catch (e) {}
+      if (!coords || coords.lat == null) return; // 위치 없으면 표시 안 함
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      const daysAgo = Math.round((today - new Date(date + 'T00:00:00')) / 86400000);
+      // 최근(아카이브 지연 고려)은 forecast, 과거는 archive
+      const base = daysAgo <= 10 ? 'https://api.open-meteo.com/v1/forecast' : 'https://archive-api.open-meteo.com/v1/archive';
+      const url = `${base}?latitude=${coords.lat}&longitude=${coords.lon}&start_date=${date}&end_date=${date}&daily=temperature_2m_max,temperature_2m_min&timezone=auto`;
+      try {
+        const j = await fetch(url).then(r => r.json());
+        const mx = j.daily && j.daily.temperature_2m_max && j.daily.temperature_2m_max[0];
+        const mn = j.daily && j.daily.temperature_2m_min && j.daily.temperature_2m_min[0];
+        if (mx == null && mn == null) return;
+        const txt = (mn != null && mx != null) ? `🌡 ${Math.round(mn)}–${Math.round(mx)}°` : `🌡 ${Math.round(mx != null ? mx : mn)}°`;
+        el.textContent = txt;
+        cache[date] = txt;
+        try { localStorage.setItem('runit-wxtemp', JSON.stringify(cache)); } catch (e) {}
+      } catch (e) { /* ignore */ }
     }
 
     function renderHTML(act, meta, list) {
@@ -581,9 +601,8 @@
            </div>`
         : `<button class="d-hero-shoe-add" onclick="openShoePicker()">+ 신발 선택하기</button>`;
 
-      // 온도 (러닝한 날)
-      const tmp = tempText(act);
-      const tempEl = tmp ? `<span class="d-temp">🌡 ${tmp}</span>` : '';
+      // 온도 (러닝한 날 실제 기온 — 렌더 후 비동기로 채움)
+      const tempEl = '<span class="d-temp" id="d-temp"></span>';
 
       const hero = `
         <div class="d-hero">
