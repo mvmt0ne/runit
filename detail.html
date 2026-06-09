@@ -144,6 +144,48 @@
       font-family: 'Pretendard Variable', sans-serif;
     }
 
+    /* ─── 강도 배지 (hero) ─── */
+    .d-intensity {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 100px;
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+    .int-low { background: var(--bone); color: #202020; }
+    .int-mid { background: var(--dark-gray); color: var(--bone); }
+    .int-high { background: var(--accent); color: #202020; }
+
+    /* ─── 평균 대비 비교 카드 ─── */
+    .d-compare-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 9px 0;
+    }
+    .d-compare-row + .d-compare-row { border-top: 1px solid rgba(0, 0, 0, 0.06); }
+    .d-compare-label {
+      flex: 1;
+      font-size: 14px;
+      color: var(--asphalt-gray);
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+    .d-compare-val {
+      font-size: 18px;
+      color: var(--asphalt-black);
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .d-compare-val i { font-style: normal; font-size: 11px; color: var(--cloudy-gray); margin-left: 2px; }
+    .d-compare-delta {
+      min-width: 70px;
+      text-align: right;
+      font-size: 13px;
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--cloudy-gray);
+    }
+    .d-compare-delta.cmp-good { color: var(--accent); }
+    .d-compare-delta.cmp-bad { color: var(--cloudy-gray); }
+
     /* ─── Stats grid ─── */
     .d-stats-grid {
       display: grid;
@@ -448,10 +490,45 @@
       }
 
       const meta = (typeof getMeta === 'function') ? (getMeta(_date) || {}) : {};
-      document.getElementById('detail-body').innerHTML = renderHTML(act, meta);
+      document.getElementById('detail-body').innerHTML = renderHTML(act, meta, list);
     }
 
-    function renderHTML(act, meta) {
+    // 초→"M:SS"
+    function secToPace(sec) {
+      const t = Math.round(sec);
+      return `${Math.floor(t / 60)}:${String(Math.abs(t) % 60).padStart(2, '0')}`;
+    }
+    function avgOf(list, key) {
+      const vals = list.map(a => a[key]).filter(v => v != null && !isNaN(v));
+      return vals.length ? vals.reduce((s, v) => s + v, 0) / vals.length : null;
+    }
+    // 평균 대비 비교 행
+    function compareRow(label, val, unit, avg, opts) {
+      if (val == null || avg == null) return '';
+      const lowerBetter = opts && opts.lowerBetter;
+      const isPace = opts && opts.pace;
+      const diff = val - avg;
+      const better = lowerBetter ? diff < 0 : diff > 0;
+      const arrow = diff === 0 ? '·' : diff < 0 ? '▼' : '▲';
+      const diffStr = isPace ? secToPace(Math.abs(diff)) : Math.abs(Math.round(diff * 10) / 10);
+      const valStr = isPace ? secToPace(val) : (Math.round(val * 10) / 10);
+      const cls = diff === 0 ? '' : (better ? 'cmp-good' : 'cmp-bad');
+      return `<div class="d-compare-row">
+        <span class="d-compare-label">${label}</span>
+        <span class="d-compare-val">${valStr}<i>${unit}</i></span>
+        <span class="d-compare-delta ${cls}">${arrow} ${diffStr}</span>
+      </div>`;
+    }
+    // 강도(심박 기준)
+    function intensityOf(bpm) {
+      if (bpm == null) return null;
+      if (bpm <= 140) return { key: 'low', label: '저' };
+      if (bpm <= 160) return { key: 'mid', label: '중' };
+      return { key: 'high', label: '고' };
+    }
+
+    function renderHTML(act, meta, list) {
+      list = list || [];
       const displayName = (meta.name && meta.name.trim()) || act.name || '러닝';
       let effType = meta.type || act.type;   // 타입 오버라이드 반영 (list 와 일치)
       if (typeof normRunType === 'function') effType = normRunType(effType); // steady→tempo
@@ -471,11 +548,16 @@
            </div>`
         : `<button class="d-hero-shoe-add" onclick="openShoePicker()">+ 신발 선택하기</button>`;
 
+      // B. 강도 배지 (심박 기준)
+      const intn = intensityOf(act.bpm);
+      const intBadge = intn ? `<span class="d-intensity int-${intn.key}">강도 ${intn.label}</span>` : '';
+
       const hero = `
         <div class="d-hero">
           <div class="d-meta-line">
             <span class="d-date">${act.date}${act.startTime ? ' · ' + act.startTime : ''}</span>
             <span class="d-type-badge type-${effType}">${typeText}</span>
+            ${intBadge}
           </div>
           <h1 class="d-name">${escapeHTML(displayName)}</h1>
           <div class="d-km-row">
@@ -488,17 +570,43 @@
           ${heroShoe}
         </div>`;
 
-      const statsCells = [
-        ['심박',       act.bpm,       'BPM'],
-        ['최대 심박',  act.maxBpm,    'BPM'],
-        ['케이던스',   act.spm,       'SPM'],
+      // A. 나의 평균 대비 (전체 활동 평균)
+      const cmpRows = [
+        compareRow('페이스', act.paceV, '/km', avgOf(list, 'paceV'), { pace: true, lowerBetter: true }),
+        compareRow('심박', act.bpm, 'bpm', avgOf(list, 'bpm'), { lowerBetter: true }),
+        compareRow('거리', act.km, 'km', avgOf(list, 'km'), { lowerBetter: false }),
+      ].filter(Boolean).join('');
+      const compare = cmpRows ? `
+        <div class="d-card">
+          <div class="d-card-title">나의 평균 대비</div>
+          ${cmpRows}
+        </div>` : '';
+
+      // C. 러닝 폼 카드
+      const formCells = [
+        ['케이던스',  act.spm,       'SPM'],
+        ['보폭',      act.stride,    'M'],
+        ['접지시간',  act.ground,    'MS'],
+        ['수직 진동', act.vertOsc,   'CM'],
+        ['수직 비율', act.vertRatio, '%'],
         ['최대 케이던스', act.maxSpm, 'SPM'],
+      ].filter(([, v]) => v != null && v !== '');
+      const form = formCells.length ? `
+        <div class="d-card">
+          <div class="d-card-title">러닝 폼</div>
+          <div class="d-stats-grid">
+            ${formCells.map(([label, val, unit]) => `
+              <div class="d-stat">
+                <div class="d-stat-value">${val}${unit ? `<sup>${unit}</sup>` : ''}</div>
+                <div class="d-stat-label">${label}</div>
+              </div>`).join('')}
+          </div>
+        </div>` : '';
+
+      const statsCells = [
+        ['최대 심박',  act.maxBpm,    'BPM'],
         ['최대 페이스', act.maxPace,  '/K'],
         ['GAP',        act.avgGAP,    '/K'],
-        ['보폭',       act.stride,    'M'],
-        ['접지시간',   act.ground,    'MS'],
-        ['수직 진동',  act.vertOsc,   'CM'],
-        ['수직 비율',  act.vertRatio, '%'],
         ['칼로리',     act.calories,  'KCAL'],
         ['걸음',       act.steps,     ''],
         ['상승',       act.ascent,    'M'],
@@ -526,7 +634,7 @@
           </div>
         </div>` : '';
 
-      return hero + stats + te;
+      return hero + compare + form + stats + te;
     }
 
     /* ── 신발 선택 시트 (롤링) ── */
