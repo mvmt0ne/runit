@@ -170,11 +170,6 @@
       color: var(--text-1);
     }
 
-    .weather-desc {
-      font-size: 13px;
-      font-weight: 400;
-      color: var(--text-2);
-    }
 
     .weather-bottom {
       display: flex;
@@ -730,7 +725,6 @@
                 <div class="weather-top">
                   <span class="weather-icon" id="w-icon"></span>
                   <span class="weather-temp" id="w-temp">--°</span>
-                  <span class="weather-desc" id="w-desc">--</span>
                 </div>
                 <div class="weather-bottom">
                   <span class="weather-hum" id="w-hum">--%</span>
@@ -909,16 +903,8 @@
         const code = wData.current.weather_code;
         const pm25 = aData.current.pm2_5;
 
-        const codes = {
-          0: '맑음', 1: '대체로 맑음', 2: '부분 구름', 3: '흐림',
-          45: '안개', 48: '서리 안개', 51: '가벼운 이슬비', 61: '비',
-          71: '눈', 95: '뇌우'
-        };
-        const desc = codes[code] || '맑음';
-
         document.getElementById('w-icon').innerHTML = weatherIconSVG(code);
         document.getElementById('w-temp').textContent = temp + '°';
-        document.getElementById('w-desc').textContent = desc;
         document.getElementById('w-hum').textContent = '습도 ' + hum + '%';
 
         let pmClass = 'pm-good';
