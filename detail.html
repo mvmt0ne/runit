@@ -186,6 +186,42 @@
     .d-compare-delta.cmp-good { color: var(--accent); }
     .d-compare-delta.cmp-bad { color: var(--cloudy-gray); }
 
+    /* ─── 최근 러닝 목록 ─── */
+    .d-recent-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 0;
+      cursor: pointer;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+    .d-recent-row:first-child { border-top: none; }
+    .d-recent-row:active { opacity: 0.55; }
+    .d-recent-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+      background: var(--cloudy-gray);
+    }
+    .d-recent-dot.type-race { background: var(--type-race-text); }
+    .d-recent-dot.type-tempo, .d-recent-dot.type-interval, .d-recent-dot.type-tt { background: var(--type-dark-bg); }
+    .d-recent-dot.type-easy { background: var(--type-easy-bg); }
+    .d-recent-dot.type-jogging { background: var(--type-jog-bg); }
+    .d-recent-dot.type-long { background: var(--type-long-bg); }
+    .d-recent-date {
+      width: 38px; flex-shrink: 0; font-size: 13px;
+      color: var(--cloudy-gray); font-family: 'Space Grotesk', sans-serif;
+    }
+    .d-recent-name {
+      flex: 1; min-width: 0; font-size: 14px; color: var(--asphalt-black);
+      font-family: 'Pretendard Variable', sans-serif;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .d-recent-km, .d-recent-pace {
+      flex-shrink: 0; font-size: 13px; font-family: 'Space Grotesk', sans-serif;
+      color: var(--asphalt-gray);
+    }
+    .d-recent-km { width: 48px; text-align: right; }
+    .d-recent-pace { width: 48px; text-align: right; color: var(--cloudy-gray); }
+
     /* ─── 메모 ─── */
     .d-note {
       font-size: 15px;
@@ -651,7 +687,28 @@
           <div class="d-note">${escapeHTML(meta.note)}</div>
         </div>` : '';
 
-      return hero + note + compare + form + stats + te;
+      // 최근 러닝 — 다른 활동 상세로 바로 이동 (현재 제외, 최신 8개)
+      const recents = list.filter(a => a.date !== act.date).slice(0, 8);
+      const recent = recents.length ? `
+        <div class="d-card">
+          <div class="d-card-title">최근 러닝</div>
+          <div class="d-recent-list">
+            ${recents.map(a => {
+              const t = (typeof normRunType === 'function') ? normRunType(a.type) : a.type;
+              const nm = ((getMeta(a.date) || {}).name) || a.name || '러닝';
+              const [, mm, dd] = a.date.split('-');
+              return `<div class="d-recent-row" onclick="goTo('detail.html?date=${a.date}')">
+                <span class="d-recent-dot type-${t}"></span>
+                <span class="d-recent-date">${parseInt(mm)}.${parseInt(dd)}</span>
+                <span class="d-recent-name">${escapeHTML(nm)}</span>
+                <span class="d-recent-km">${fmtNum(a.km, 1)}K</span>
+                <span class="d-recent-pace">${a.pace || '--'}</span>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>` : '';
+
+      return hero + note + compare + form + stats + te + recent;
     }
 
     /* ── 신발 선택 시트 (롤링) ── */
