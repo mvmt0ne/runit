@@ -601,7 +601,7 @@
       const hero = `
         <div class="d-hero">
           <div class="d-meta-line">
-            <span class="d-date">${act.date}${act.startTime ? ' · ' + act.startTime : ''}</span>
+            <span class="d-date">${act.date}${(meta.startTime || act.startTime) ? ' · ' + (meta.startTime || act.startTime) : ''}</span>
             <span class="d-type-badge type-${effType}">${typeText}</span>
             ${intBadge}
           </div>
@@ -688,7 +688,7 @@
         </div>` : '';
 
       // 최근 러닝 — 다른 활동 상세로 바로 이동 (현재 제외, 최신 8개)
-      const recents = list.filter(a => a.date !== act.date).slice(0, 8);
+      const recents = list.filter(a => a.date !== act.date).slice(0, 5);
       const recent = recents.length ? `
         <div class="d-card">
           <div class="d-card-title">최근 러닝</div>

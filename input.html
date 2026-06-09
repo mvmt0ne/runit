@@ -153,6 +153,14 @@
       background: rgba(255, 255, 255, 0.06);
     }
 
+    /* 하단 스티키 저장 푸터 */
+    .input-footer {
+      flex-shrink: 0;
+      padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 0px));
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--asphalt-black);
+    }
+
     .save-btn {
       width: 100%;
       box-sizing: border-box;
@@ -165,18 +173,17 @@
       font-weight: 600;
       font-family: 'Pretendard Variable', sans-serif;
       cursor: pointer;
-      transition: opacity 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-      margin: 24px 20px 8px;
-      width: calc(100% - 40px);
+      transition: opacity 0.15s, background 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .save-btn:active {
-      opacity: 0.85;
       transform: scale(0.98);
     }
 
     .save-btn:disabled {
-      opacity: 0.4;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-2);
+      opacity: 0.6;
       cursor: not-allowed;
     }
 
@@ -467,8 +474,6 @@
             <div class="input-helper">거리만 채워도 추가됨. 이름·타입은 위 메타값 사용. 마일리지·리스트에 즉시 반영(새로고침).</div>
           </div>
 
-          <button class="save-btn" id="save-btn" onclick="onSave()">저장</button>
-
           <!-- 다른 화면 링크 -->
           <div class="input-section">
             <div class="field-row" style="gap:8px">
@@ -480,6 +485,11 @@
             </div>
           </div>
 
+        </div>
+        <!-- /input-scroll -->
+
+        <div class="input-footer">
+          <button class="save-btn" id="save-btn" onclick="onSave()" disabled>저장</button>
         </div>
       </div>
 
@@ -557,6 +567,16 @@
 
     dateInput.addEventListener('change', loadForDate);
 
+    /* ── 저장 버튼 활성/비활성 (입력 내용 있을 때만) ── */
+    function updateSaveBtn() {
+      const has = nameInput.value.trim() || typeInput.value || noteInput.value.trim()
+        || ACT_FIELDS.some(id => document.getElementById(id).value.trim());
+      document.getElementById('save-btn').disabled = !has;
+    }
+    const _scroll = document.querySelector('.input-scroll');
+    _scroll.addEventListener('input', updateSaveBtn);
+    _scroll.addEventListener('change', updateSaveBtn);
+
     /* ── 날짜 변경 시 CSV + 저장 데이터 자동 로드 ── */
     async function loadForDate() {
       const date = dateInput.value;
@@ -565,7 +585,9 @@
       nameInput.value = meta.name || '';
       typeInput.value = meta.type || '';
       noteInput.value = meta.note || '';
-      clearActFields(); // 본체는 저장목록의 '불러오기'로만 편집
+      clearActFields();
+      document.getElementById('act-time').value = meta.startTime || '';
+      updateSaveBtn();
       // CSV 활동 힌트 표시
       try {
         const act = await getActivity(date);
@@ -586,7 +608,8 @@
       const name = nameInput.value.trim();
       const type = typeInput.value;
       const note = noteInput.value.trim();
-      const hasMeta = name || type || note;
+      const startTime = document.getElementById('act-time').value.trim();
+      const hasMeta = name || type || note || startTime;
 
       const kmStr = document.getElementById('act-km').value.trim();
       const hasBody = kmStr !== '';
@@ -604,7 +627,7 @@
           name,
           type,
           km: kmStr,
-          startTime: document.getElementById('act-time').value.trim(),
+          startTime,
           dur: document.getElementById('act-dur').value.trim(),
           pace: document.getElementById('act-pace').value.trim(),
           bpm: document.getElementById('act-bpm').value.trim(),
@@ -620,7 +643,7 @@
       if (hasMeta) {
         // 기존 메타(shoeId 등) 보존하며 병합
         const prevMeta = getMeta(date) || {};
-        setMeta(date, { ...prevMeta, name: name || null, type: type || null, note: note || null });
+        setMeta(date, { ...prevMeta, name: name || null, type: type || null, note: note || null, startTime: startTime || null });
         saved.push('메타');
       }
 
