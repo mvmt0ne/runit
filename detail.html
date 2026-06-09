@@ -151,17 +151,12 @@
       font-family: 'Pretendard Variable', sans-serif;
     }
 
-    /* ─── 강도 배지 (hero) ─── */
-    .d-intensity {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 9px;
-      border-radius: 100px;
-      font-family: 'Pretendard Variable', sans-serif;
+    /* ─── 온도 (hero) ─── */
+    .d-temp {
+      font-size: 13px;
+      color: var(--cloudy-gray);
+      font-family: 'Space Grotesk', sans-serif;
     }
-    .int-low { background: var(--bone); color: #202020; }
-    .int-mid { background: var(--dark-gray); color: var(--bone); }
-    .int-high { background: var(--accent); color: #202020; }
 
     /* ─── 평균 대비 비교 카드 ─── */
     .d-compare-row {
@@ -551,12 +546,12 @@
         <span class="d-compare-delta ${cls}">${arrow} ${diffStr}</span>
       </div>`;
     }
-    // 강도(심박 기준)
-    function intensityOf(bpm) {
-      if (bpm == null) return null;
-      if (bpm <= 140) return { key: 'low', label: '저' };
-      if (bpm <= 160) return { key: 'mid', label: '중' };
-      return { key: 'high', label: '고' };
+    // 러닝한 날 온도 표시 (최저~최고)
+    function tempText(act) {
+      const lo = act.tempMin, hi = act.tempMax;
+      if (lo == null && hi == null) return '';
+      if (lo != null && hi != null) return (lo === hi) ? `${Math.round(lo)}°` : `${Math.round(lo)}–${Math.round(hi)}°`;
+      return `${Math.round(lo != null ? lo : hi)}°`;
     }
 
     function renderHTML(act, meta, list) {
@@ -580,16 +575,16 @@
            </div>`
         : `<button class="d-hero-shoe-add" onclick="openShoePicker()">+ 신발 선택하기</button>`;
 
-      // B. 강도 배지 (심박 기준)
-      const intn = intensityOf(act.bpm);
-      const intBadge = intn ? `<span class="d-intensity int-${intn.key}">강도 ${intn.label}</span>` : '';
+      // 온도 (러닝한 날)
+      const tmp = tempText(act);
+      const tempEl = tmp ? `<span class="d-temp">🌡 ${tmp}</span>` : '';
 
       const hero = `
         <div class="d-hero">
           <div class="d-meta-line">
             <span class="d-date">${act.date}${(meta.startTime || act.startTime) ? ' · ' + (meta.startTime || act.startTime) : ''}</span>
             <span class="d-type-badge type-${effType}">${typeText}</span>
-            ${intBadge}
+            ${tempEl}
           </div>
           <h1 class="d-name">${escapeHTML(displayName)}</h1>
           <div class="d-km-row">
