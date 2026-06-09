@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>runit — 저장 데이터 관리</title>
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#202020">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="./icon.svg">
+  <link rel="icon" type="image/svg+xml" href="./icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable.min.css"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./transitions.js"></script>
+  <style>
+    .input-page { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .input-scroll {
+      flex: 1; overflow-y: auto; overflow-x: hidden; scrollbar-width: none;
+      padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+    }
+    .input-scroll::-webkit-scrollbar { display: none; }
+    .input-section { padding: 24px 20px 8px; }
+    .input-section + .input-section { border-top: 1px solid rgba(255, 255, 255, 0.06); margin-top: 8px; }
+    .input-label {
+      font-size: 13px; font-weight: 400; color: var(--text-2);
+      font-family: 'Pretendard Variable', sans-serif; margin-bottom: 8px; display: block;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .field-row { display: flex; gap: 8px; align-items: stretch; margin-bottom: 8px; }
+    .ghost-btn {
+      padding: 10px 14px; background: transparent; border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px; color: var(--slate-gray); font-size: 13px;
+      font-family: 'Pretendard Variable', sans-serif; cursor: pointer;
+      transition: background 0.15s, border-color 0.15s; white-space: nowrap;
+    }
+    .ghost-btn:active { background: rgba(255, 255, 255, 0.06); }
+    .saved-list { list-style: none; padding: 0; margin: 0; }
+    .saved-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .saved-item:last-child { border-bottom: none; }
+    .saved-date { font-size: 16px; font-family: 'Space Grotesk', sans-serif; color: var(--bone); }
+    .saved-tags { display: flex; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+    .saved-tag {
+      font-size: 11px; padding: 2px 8px; border-radius: 100px;
+      background: rgba(255, 255, 255, 0.08); color: var(--slate-gray); font-family: 'Pretendard Variable', sans-serif;
+    }
+    .delete-btn {
+      padding: 8px 12px; background: transparent; border: none; color: var(--text-2);
+      font-size: 13px; font-family: 'Pretendard Variable', sans-serif; cursor: pointer;
+    }
+    .delete-btn:active { color: var(--accent); }
+    .saved-empty {
+      color: var(--text-2); font-size: 13px; padding: 12px 0; opacity: 0.5;
+      text-align: center; font-family: 'Pretendard Variable', sans-serif;
+    }
+    .toast {
+      position: fixed; bottom: calc(40px + env(safe-area-inset-bottom, 0px)); left: 50%;
+      transform: translateX(-50%) translateY(80px); padding: 14px 22px;
+      background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 100px; color: var(--bone);
+      font-size: 14px; font-family: 'Pretendard Variable', sans-serif; z-index: 100; opacity: 0;
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.32s; pointer-events: none; white-space: nowrap;
+    }
+    .toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+
+<body>
+  <div class="phone">
+    <div class="phone-inner bg-dark" style="background: var(--asphalt-black);">
+      <div class="input-page">
+        <div class="back-header back-header--dark">
+          <button class="back-btn" onclick="goBackSmart()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="m12 19-7-7 7-7" />
+              <path d="M19 12H5" />
+            </svg>
+          </button>
+          <span class="back-title">저장 데이터 관리</span>
+        </div>
+
+        <div class="input-scroll">
+          <!-- 수동 추가 활동 -->
+          <div class="input-section">
+            <label class="input-label">직접 추가한 활동</label>
+            <ul class="saved-list" id="acts-list"></ul>
+          </div>
+
+          <!-- 메타 오버라이드 -->
+          <div class="input-section">
+            <label class="input-label">메타 오버라이드 (이름·타입·신발)</label>
+            <ul class="saved-list" id="meta-list"></ul>
+          </div>
+
+          <!-- 신발장 요약 -->
+          <div class="input-section">
+            <label class="input-label">내 신발장</label>
+            <div class="saved-item">
+              <span class="saved-date" id="shoe-count">0개</span>
+              <button class="ghost-btn" onclick="goTo('shoes.html')">신발 관리 ›</button>
+            </div>
+          </div>
+
+          <!-- 전체 삭제 -->
+          <div class="input-section">
+            <div class="field-row">
+              <button class="ghost-btn" onclick="onClearAll()"
+                style="flex:1;color:var(--accent);border-color:rgba(255,76,49,0.3)">활동·메타 전체 삭제</button>
+            </div>
+            <div style="font-size:12px;color:var(--text-2);opacity:0.6;margin-top:6px;font-family:'Pretendard Variable',sans-serif">
+              신발장은 전체 삭제에서 제외됩니다(자산). CSV 마스터(data/activities.csv)는 영향 없습니다.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="./data/store.js"></script>
+  <script>
+    function goBackSmart() {
+      if (window.history.length > 1) { history.back(); return; }
+      goBack('input.html');
+    }
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('visible');
+      clearTimeout(t._timer);
+      t._timer = setTimeout(() => t.classList.remove('visible'), 2000);
+    }
+
+    function render() {
+      // 직접 추가 활동
+      const actsEl = document.getElementById('acts-list');
+      const acts = listManualActivities();
+      actsEl.innerHTML = acts.length ? acts.map(a => `
+        <li class="saved-item">
+          <div>
+            <div class="saved-date">${a.date} · ${a.km ?? '?'}km</div>
+            <div class="saved-tags">
+              <span class="saved-tag">${a.name || a.type || '활동'}</span>
+              ${a.id && a.id.startsWith('csv-') ? '<span class="saved-tag">CSV</span>' : '<span class="saved-tag">수동</span>'}
+            </div>
+          </div>
+          <button class="delete-btn" onclick="onRemoveManual('${a.id}')">삭제</button>
+        </li>`).join('') : '<div class="saved-empty">없음</div>';
+
+      // 메타 오버라이드
+      const metaEl = document.getElementById('meta-list');
+      const items = listSavedDates();
+      metaEl.innerHTML = items.length ? items.map(item => {
+        const m = getMeta(item.date) || {};
+        const tags = [];
+        if (m.name) tags.push(`<span class="saved-tag">${m.name}</span>`);
+        if (m.type) tags.push(`<span class="saved-tag">${m.type}</span>`);
+        if (m.shoeId) tags.push('<span class="saved-tag">신발</span>');
+        if (m.note) tags.push('<span class="saved-tag">메모</span>');
+        return `
+        <li class="saved-item">
+          <div>
+            <div class="saved-date">${item.date}</div>
+            <div class="saved-tags">${tags.join('') || '<span class="saved-tag">메타</span>'}</div>
+          </div>
+          <button class="delete-btn" onclick="onRemove('${item.date}')">삭제</button>
+        </li>`;
+      }).join('') : '<div class="saved-empty">없음</div>';
+
+      document.getElementById('shoe-count').textContent = (typeof listShoes === 'function' ? listShoes().length : 0) + '개';
+    }
+
+    function onRemoveManual(id) { removeManualActivity(id); showToast('활동 삭제됨'); render(); }
+    function onRemove(date) { removeSaved(date); showToast(`${date} 메타 삭제됨`); render(); }
+    function onClearAll() {
+      if (!confirm('직접 추가한 활동·메타를 모두 삭제할까요? (신발장 제외)')) return;
+      clearAllSaved();
+      showToast('전체 삭제 완료');
+      render();
+    }
+
+    render();
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js'); }
+  </script>
+</body>
+
+</html>

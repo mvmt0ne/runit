@@ -1,4 +1,4 @@
-const CACHE = 'runit-v8';
+const CACHE = 'runit-v9';
 const CORE = [
   './app.html',
   './runit-home.html',
@@ -9,14 +9,13 @@ const CORE = [
   './input.html',
   './shoes.html',
   './import.html',
+  './manage.html',
   './styles.css',
   './transitions.js',
   './ptr.js',
   './grained.js',
   './manifest.json',
   './icon.svg',
-  './data/splits.js',
-  './data/zones.js',
   './data/store.js',
   './data/activities.js',
   './data/stats-agg.js',

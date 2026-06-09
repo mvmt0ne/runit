@@ -461,63 +461,16 @@
             <div class="input-helper">거리만 채워도 추가됨. 이름·타입은 위 메타값 사용. 마일리지·리스트에 즉시 반영(새로고침).</div>
           </div>
 
-          <!-- 다른 입력 화면 링크 -->
+          <button class="save-btn" id="save-btn" onclick="onSave()">저장</button>
+
+          <!-- 다른 화면 링크 -->
           <div class="input-section">
             <div class="field-row" style="gap:8px">
               <button type="button" class="ghost-btn" style="flex:1;text-align:center" onclick="goTo('shoes.html')">👟 신발 등록</button>
               <button type="button" class="ghost-btn" style="flex:1;text-align:center" onclick="goTo('import.html')">⬆ CSV 가져오기</button>
             </div>
-          </div>
-
-          <!-- 스플릿 -->
-          <div class="input-section">
-            <label class="input-label">스플릿 (km별 랩)</label>
-            <textarea id="input-splits" class="input-field"
-              placeholder='[{ "km": 1, "lap": "5:06", "pace": "5:06", "bpm": 161 }, ...]'></textarea>
-            <div class="check" id="splits-check"></div>
-            <div class="field-row" style="margin-top:8px">
-              <button class="ghost-btn" onclick="toggleExample('splits-example')">예시 형식</button>
-              <button class="ghost-btn" onclick="loadSample('splits')">샘플 채우기</button>
-            </div>
-            <pre class="example-block" id="splits-example">[
-  { "km": 1, "lap": "5:06", "pace": "5:06", "bpm": 161 },
-  { "km": 2, "lap": "5:00", "pace": "5:00", "bpm": 172 },
-  // ...
-  { "km": 21.19, "lap": "0:47", "pace": "4:06", "bpm": 185, "partial": true }
-]</pre>
-          </div>
-
-          <!-- 심박존 -->
-          <div class="input-section">
-            <label class="input-label">심박존</label>
-            <textarea id="input-zones" class="input-field"
-              placeholder='{ "z1": { "range": [124,134], "pct": 0 }, ... }'></textarea>
-            <div class="check" id="zones-check"></div>
-            <div class="field-row" style="margin-top:8px">
-              <button class="ghost-btn" onclick="toggleExample('zones-example')">예시 형식</button>
-              <button class="ghost-btn" onclick="loadSample('zones')">샘플 채우기</button>
-            </div>
-            <pre class="example-block" id="zones-example">{
-  "z1": { "range": [124,134], "pct": 0  },
-  "z2": { "range": [135,148], "pct": 1  },
-  "z3": { "range": [149,164], "pct": 7  },
-  "z4": { "range": [165,177], "pct": 62 },
-  "z5": { "range": [178,190], "pct": 30 },
-  "avgBpm": 174,
-  "te": { "aerobic": 5.0, "anaerobic": 2.7 }
-}</pre>
-          </div>
-
-          <button class="save-btn" id="save-btn" onclick="onSave()">저장</button>
-
-          <!-- 저장된 활동 -->
-          <div class="input-section">
-            <label class="input-label">저장된 활동 (localStorage)</label>
-            <ul class="saved-list" id="saved-list"></ul>
-            <div class="field-row" style="margin-top:14px">
-              <button class="ghost-btn" onclick="onClearAll()" style="flex:1;color:var(--accent);border-color:rgba(255,76,49,0.3)">
-                전체 삭제
-              </button>
+            <div class="field-row" style="gap:8px;margin-top:8px">
+              <button type="button" class="ghost-btn" style="flex:1;text-align:center" onclick="goTo('manage.html')">🗂 저장 데이터 관리</button>
             </div>
           </div>
 
@@ -529,18 +482,12 @@
 
   <div class="toast" id="toast"></div>
 
-  <script src="./data/splits.js"></script>
-  <script src="./data/zones.js"></script>
   <script src="./data/store.js"></script>
   <script src="./data/activities.js"></script>
 
   <script>
     /* ── 초기화 ── */
     const dateInput = document.getElementById('input-date');
-    const splitsInput = document.getElementById('input-splits');
-    const zonesInput = document.getElementById('input-zones');
-    const splitsCheck = document.getElementById('splits-check');
-    const zonesCheck = document.getElementById('zones-check');
     const nameInput = document.getElementById('input-name');
     const typeInput = document.getElementById('input-type');
     const noteInput = document.getElementById('input-note');
@@ -554,18 +501,8 @@
       _editingManualId = null;
       ACT_FIELDS.forEach(id => (document.getElementById(id).value = ''));
     }
-    function fillActFields(act) {
-      _editingManualId = act.id;
-      document.getElementById('act-km').value = act.km != null ? act.km : '';
-      document.getElementById('act-dur').value = act.dur || '';
-      document.getElementById('act-pace').value = act.pace || '';
-      document.getElementById('act-bpm').value = act.bpm != null ? act.bpm : '';
-      document.getElementById('act-spm').value = act.spm != null ? act.spm : '';
-      document.getElementById('act-ground').value = act.ground != null ? act.ground : '';
-      document.getElementById('act-stride').value = act.stride != null ? act.stride : '';
-    }
 
-    /* 신발 등록은 shoes.html, CSV 가져오기는 import.html 로 분리됨 */
+    /* 신발 등록은 shoes.html, CSV 가져오기는 import.html, 저장 데이터 관리는 manage.html 로 분리됨 */
 
     // ?date= 우선, 없으면 오늘
     const _qs = new URLSearchParams(location.search);
@@ -593,71 +530,6 @@
       t._timer = setTimeout(() => t.classList.remove('visible'), 2200);
     }
 
-    /* ── 예시 토글 ── */
-    function toggleExample(id) {
-      document.getElementById(id).classList.toggle('open');
-    }
-
-
-    /* ── 샘플 채우기 (4/26 데이터) ── */
-    function loadSample(type) {
-      if (type === 'splits') {
-        splitsInput.value = JSON.stringify(SPLITS_DEFAULT['2026-04-26'], null, 2);
-        validate('splits');
-      } else {
-        zonesInput.value = JSON.stringify(ZONES_DEFAULT['2026-04-26'], null, 2);
-        validate('zones');
-      }
-    }
-
-    /* ── 검증 ── */
-    function parseJSON(str) {
-      if (!str.trim()) return { ok: true, data: null, msg: '' };
-      try {
-        return { ok: true, data: JSON.parse(str), msg: '' };
-      } catch (e) {
-        return { ok: false, data: null, msg: 'JSON 파싱 실패: ' + e.message };
-      }
-    }
-
-    function validate(which) {
-      if (which === 'splits') {
-        const r = parseJSON(splitsInput.value);
-        if (!splitsInput.value.trim()) {
-          splitsCheck.textContent = '';
-          splitsCheck.className = 'check';
-        } else if (!r.ok) {
-          splitsCheck.textContent = '✗ ' + r.msg;
-          splitsCheck.className = 'check err';
-        } else if (!Array.isArray(r.data)) {
-          splitsCheck.textContent = '✗ 배열이어야 함';
-          splitsCheck.className = 'check err';
-        } else {
-          splitsCheck.textContent = `✓ ${r.data.length}개 랩`;
-          splitsCheck.className = 'check ok';
-        }
-      } else {
-        const r = parseJSON(zonesInput.value);
-        if (!zonesInput.value.trim()) {
-          zonesCheck.textContent = '';
-          zonesCheck.className = 'check';
-        } else if (!r.ok) {
-          zonesCheck.textContent = '✗ ' + r.msg;
-          zonesCheck.className = 'check err';
-        } else if (!r.data.z1 || !r.data.z5) {
-          zonesCheck.textContent = '✗ z1~z5 필요';
-          zonesCheck.className = 'check err';
-        } else {
-          const sum = ['z1', 'z2', 'z3', 'z4', 'z5']
-            .map(k => r.data[k]?.pct || 0).reduce((a, b) => a + b, 0);
-          zonesCheck.textContent = `✓ 합계 ${sum}%`;
-          zonesCheck.className = sum === 100 ? 'check ok' : 'check err';
-        }
-      }
-    }
-
-    splitsInput.addEventListener('input', () => validate('splits'));
-    zonesInput.addEventListener('input', () => validate('zones'));
     dateInput.addEventListener('change', loadForDate);
 
     /* ── 날짜 변경 시 CSV + 저장 데이터 자동 로드 ── */
@@ -686,8 +558,6 @@
       const date = dateInput.value;
       if (!date) { showToast('날짜를 선택하세요', true); return; }
 
-      const sStr = splitsInput.value.trim();
-      const zStr = zonesInput.value.trim();
       const name = nameInput.value.trim();
       const type = typeInput.value;
       const note = noteInput.value.trim();
@@ -696,7 +566,7 @@
       const kmStr = document.getElementById('act-km').value.trim();
       const hasBody = kmStr !== '';
 
-      if (!sStr && !zStr && !hasMeta && !hasBody) { showToast('저장할 데이터가 없습니다', true); return; }
+      if (!hasMeta && !hasBody) { showToast('저장할 데이터가 없습니다', true); return; }
 
       let saved = [];
 
@@ -721,115 +591,15 @@
         saved.push('활동');
       }
 
-      if (sStr) {
-        const r = parseJSON(sStr);
-        if (!r.ok || !Array.isArray(r.data)) {
-          showToast('스플릿 JSON 오류', true); return;
-        }
-        setSplits(date, r.data);
-        saved.push('스플릿');
-      }
-
-      if (zStr) {
-        const r = parseJSON(zStr);
-        if (!r.ok) { showToast('심박존 JSON 오류', true); return; }
-        setZones(date, r.data);
-        saved.push('심박존');
-      }
-
       if (hasMeta) {
-        try {
-          // 기존 메타(shoeId 등) 보존하며 병합
-          const prevMeta = getMeta(date) || {};
-          setMeta(date, { ...prevMeta, name: name || null, type: type || null, note: note || null });
-          saved.push('메타');
-        } catch (e) {
-          if (e && e.name === 'QuotaExceededError') {
-            showToast('저장 공간 부족(이미지 너무 큼)', true);
-            return;
-          }
-          throw e;
-        }
+        // 기존 메타(shoeId 등) 보존하며 병합
+        const prevMeta = getMeta(date) || {};
+        setMeta(date, { ...prevMeta, name: name || null, type: type || null, note: note || null });
+        saved.push('메타');
       }
 
       showToast(`${date}: ${saved.join(' + ')} 저장됨`);
-      renderSavedList();
     }
-
-    /* ── 저장된 목록 렌더 ── */
-    function renderSavedList() {
-      const list = document.getElementById('saved-list');
-      const items = listSavedDates();
-      const acts = listManualActivities();
-      if (!items.length && !acts.length) {
-        list.innerHTML = '<div class="saved-empty">저장된 활동 없음</div>';
-        return;
-      }
-      const manualHTML = acts.map(a => `
-        <li class="saved-item">
-          <div>
-            <div class="saved-date">${a.date} · ${a.km ?? '?'}km</div>
-            <div class="saved-tags">
-              <span class="saved-tag">활동</span>
-              <span class="saved-tag">${a.name || a.type || ''}</span>
-            </div>
-          </div>
-          <div class="field-row" style="gap:6px">
-            <button class="ghost-btn" onclick="onLoadManual('${a.id}')">불러오기</button>
-            <button class="delete-btn" onclick="onRemoveManual('${a.id}')">삭제</button>
-          </div>
-        </li>
-      `).join('');
-      const metaHTML = items.map(item => `
-        <li class="saved-item">
-          <div>
-            <div class="saved-date">${item.date}</div>
-            <div class="saved-tags">
-              ${item.hasSplits ? '<span class="saved-tag">스플릿</span>' : ''}
-              ${item.hasZones ? '<span class="saved-tag">심박존</span>' : ''}
-              ${item.hasMeta ? '<span class="saved-tag">메타</span>' : ''}
-            </div>
-          </div>
-          <button class="delete-btn" onclick="onRemove('${item.date}')">삭제</button>
-        </li>
-      `).join('');
-      list.innerHTML = manualHTML + metaHTML;
-    }
-
-    function onLoadManual(id) {
-      const a = getManualActivity(id);
-      if (!a) return;
-      dateInput.value = a.date;
-      loadForDate().then(() => {
-        nameInput.value = a.name || '';
-        typeInput.value = a.type || '';
-        fillActFields(a);
-        showToast('불러옴 — 수정 후 저장하면 덮어씁니다');
-      });
-    }
-
-    function onRemoveManual(id) {
-      removeManualActivity(id);
-      if (_editingManualId === id) clearActFields();
-      showToast('활동 삭제됨');
-      renderSavedList();
-    }
-
-    function onRemove(date) {
-      removeSaved(date);
-      showToast(`${date} 삭제됨`);
-      renderSavedList();
-    }
-
-    function onClearAll() {
-      if (!confirm('localStorage에 저장된 모든 데이터를 삭제할까요?')) return;
-      clearAllSaved();
-      showToast('전체 삭제 완료');
-      renderSavedList();
-    }
-
-    /* ── 초기 렌더 ── */
-    renderSavedList();
   </script>
 
   <script>
