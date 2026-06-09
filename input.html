@@ -444,10 +444,10 @@
             <label class="input-label">활동 본체 (CSV 없이 직접 추가)</label>
             <div class="field-row" style="gap:8px;margin-bottom:8px">
               <input type="number" step="0.01" inputmode="decimal" id="act-km" class="input-field" placeholder="거리 (km)" style="flex:1">
-              <input type="text" id="act-dur" class="input-field" placeholder="시간 (44:00 / 1:46:42)" style="flex:1">
+              <input type="text" inputmode="numeric" id="act-dur" class="input-field" placeholder="시간 (44:00 / 1:46:42)" style="flex:1">
             </div>
             <div class="field-row" style="gap:8px;margin-bottom:8px">
-              <input type="text" id="act-pace" class="input-field" placeholder="페이스 (비우면 자동)" style="flex:1">
+              <input type="text" inputmode="numeric" id="act-pace" class="input-field" placeholder="페이스 (비우면 자동)" style="flex:1">
               <input type="number" inputmode="numeric" id="act-bpm" class="input-field" placeholder="평균 심박" style="flex:1">
             </div>
             <div class="field-row" style="gap:8px;margin-bottom:8px">
@@ -501,6 +501,25 @@
       _editingManualId = null;
       ACT_FIELDS.forEach(id => (document.getElementById(id).value = ''));
     }
+
+    /* ── 시간/페이스 숫자키패드 + 콜론 자동(마스킹) ── */
+    function maskTime(raw, mode) {
+      const d = (raw || '').replace(/\D/g, '').slice(0, 6);
+      if (!d) return '';
+      if (mode === 'pace') {           // M:SS (마지막 2자리 = 초)
+        if (d.length <= 2) return d;
+        return d.slice(0, -2) + ':' + d.slice(-2);
+      }
+      // 시간: ~4자리 → MM:SS, 5~6자리 → H:MM:SS
+      if (d.length <= 2) return d;
+      if (d.length <= 4) return d.slice(0, -2) + ':' + d.slice(-2);
+      return d.slice(0, -4) + ':' + d.slice(-4, -2) + ':' + d.slice(-2);
+    }
+    ['act-dur', 'act-pace'].forEach(id => {
+      const el = document.getElementById(id);
+      const mode = id === 'act-pace' ? 'pace' : 'dur';
+      el.addEventListener('input', () => { el.value = maskTime(el.value, mode); });
+    });
 
     /* 신발 등록은 shoes.html, CSV 가져오기는 import.html, 저장 데이터 관리는 manage.html 로 분리됨 */
 
