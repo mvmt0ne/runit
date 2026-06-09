@@ -524,7 +524,7 @@
 
       const meta = (typeof getMeta === 'function') ? (getMeta(_date) || {}) : {};
       document.getElementById('detail-body').innerHTML = renderHTML(act, meta, list);
-      fetchRealTemp(_date);
+      fetchRealTemp(_date, meta.startTime || act.startTime);
     }
 
     // 초→"M:SS"
@@ -553,13 +553,15 @@
         <span class="d-compare-delta ${cls}">${arrow} ${diffStr}</span>
       </div>`;
     }
-    // 러닝한 날 실제 기온 — open-meteo로 비동기 조회 (홈 저장 좌표, 날짜별 캐시)
-    async function fetchRealTemp(date) {
+    // 러닝한 시각의 실제 기온 — open-meteo 시간별 조회 (홈 저장 좌표, 시각별 캐시)
+    async function fetchRealTemp(date, startTime) {
       const el = document.getElementById('d-temp');
       if (!el || !date) return;
+      const hh = (startTime && /^\d{1,2}:/.test(startTime)) ? String(parseInt(startTime)).padStart(2, '0') : '12'; // 시각 없으면 정오
+      const cacheKey = `${date}T${hh}`;
       let cache = {};
       try { cache = JSON.parse(localStorage.getItem('runit-wxtemp') || '{}'); } catch (e) {}
-      if (cache[date]) { el.textContent = cache[date]; return; }
+      if (cache[cacheKey]) { el.textContent = cache[cacheKey]; return; }
       let coords;
       try { coords = JSON.parse(localStorage.getItem('runit-coords')); } catch (e) {}
       // 저장된 좌표 없으면 직접 위치 요청 (허용 시 저장)
@@ -576,15 +578,19 @@
       const daysAgo = Math.round((today - new Date(date + 'T00:00:00')) / 86400000);
       // 최근(아카이브 지연 고려)은 forecast, 과거는 archive
       const base = daysAgo <= 10 ? 'https://api.open-meteo.com/v1/forecast' : 'https://archive-api.open-meteo.com/v1/archive';
-      const url = `${base}?latitude=${coords.lat}&longitude=${coords.lon}&start_date=${date}&end_date=${date}&daily=temperature_2m_max,temperature_2m_min&timezone=auto`;
+      const url = `${base}?latitude=${coords.lat}&longitude=${coords.lon}&start_date=${date}&end_date=${date}&hourly=temperature_2m&timezone=auto`;
       try {
         const j = await fetch(url).then(r => r.json());
-        const mx = j.daily && j.daily.temperature_2m_max && j.daily.temperature_2m_max[0];
-        const mn = j.daily && j.daily.temperature_2m_min && j.daily.temperature_2m_min[0];
-        if (mx == null && mn == null) return;
-        const txt = (mn != null && mx != null) ? `🌡 ${Math.round(mn)}–${Math.round(mx)}°` : `🌡 ${Math.round(mx != null ? mx : mn)}°`;
+        const times = j.hourly && j.hourly.time;
+        const temps = j.hourly && j.hourly.temperature_2m;
+        if (!times || !temps) return;
+        let idx = times.indexOf(`${date}T${hh}:00`);
+        if (idx < 0) idx = times.indexOf(`${date}T12:00`);
+        const t = idx >= 0 ? temps[idx] : null;
+        if (t == null) return;
+        const txt = `🌡 ${Math.round(t)}°`;
         el.textContent = txt;
-        cache[date] = txt;
+        cache[cacheKey] = txt;
         try { localStorage.setItem('runit-wxtemp', JSON.stringify(cache)); } catch (e) {}
       } catch (e) { /* ignore */ }
     }
