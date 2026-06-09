@@ -186,6 +186,16 @@
     .d-compare-delta.cmp-good { color: var(--accent); }
     .d-compare-delta.cmp-bad { color: var(--cloudy-gray); }
 
+    /* ─── 메모 ─── */
+    .d-note {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--asphalt-black);
+      font-family: 'Pretendard Variable', sans-serif;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
     /* ─── Stats grid ─── */
     .d-stats-grid {
       display: grid;
@@ -634,7 +644,14 @@
           </div>
         </div>` : '';
 
-      return hero + compare + form + stats + te;
+      // 메모 (input 메타)
+      const note = (meta.note && meta.note.trim()) ? `
+        <div class="d-card">
+          <div class="d-card-title">메모</div>
+          <div class="d-note">${escapeHTML(meta.note)}</div>
+        </div>` : '';
+
+      return hero + note + compare + form + stats + te;
     }
 
     /* ── 신발 선택 시트 (롤링) ── */
