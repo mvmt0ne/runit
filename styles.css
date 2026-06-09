@@ -1235,6 +1235,7 @@ sup {
     align-items: center;
     font-size: 22px;
     user-select: none;
+    color: var(--text-1);
 }
 
 .wheel-col-year .wheel-item {
