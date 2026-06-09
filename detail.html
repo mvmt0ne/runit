@@ -35,6 +35,8 @@
       overflow-y: auto;
       scrollbar-width: none;
       padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+      /* 콘텐츠 끝난 뒤 여백도 카드색으로 통일 */
+      background: var(--slate-gray);
     }
 
     .detail-scroll::-webkit-scrollbar { display: none; }
@@ -42,6 +44,7 @@
     /* ─── Hero ─── */
     .d-hero {
       padding: 20px 20px 24px;
+      background: var(--asphalt-black);
     }
 
     .d-meta-line {
