@@ -535,7 +535,7 @@
       const meta = getMeta(_date) || {};
       const wrap = document.getElementById('shoe-carousel-wrap');
       if (!shoes.length) {
-        wrap.innerHTML = `<div class="shoe-sheet-empty">등록된 신발이 없습니다.<br><a onclick="goEdit()">입력 화면에서 신발 등록하기 ›</a></div>`;
+        wrap.innerHTML = `<div class="shoe-sheet-empty">등록된 신발이 없습니다.<br><a onclick="goTo('shoes.html')">신발 등록하러 가기 ›</a></div>`;
       } else {
         wrap.innerHTML = `<div class="shoe-carousel">${shoes.map(s => `
           <div class="shoe-card${meta.shoeId === s.id ? ' selected' : ''}" onclick="selectShoe('${s.id}')">

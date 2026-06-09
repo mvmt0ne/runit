@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>runit — 신발 등록</title>
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#202020">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="./icon.svg">
+  <link rel="icon" type="image/svg+xml" href="./icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable.min.css"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./transitions.js"></script>
+  <style>
+    .input-page { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .input-scroll {
+      flex: 1; overflow-y: auto; overflow-x: hidden; scrollbar-width: none;
+      padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+    }
+    .input-scroll::-webkit-scrollbar { display: none; }
+    .input-section { padding: 24px 20px 8px; }
+    .input-label {
+      font-size: 13px; font-weight: 400; color: var(--text-2);
+      font-family: 'Pretendard Variable', sans-serif; margin-bottom: 8px; display: block;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .input-helper {
+      font-size: 12px; color: var(--text-2); opacity: 0.6; margin-top: 6px;
+      line-height: 1.4; font-family: 'Pretendard Variable', sans-serif;
+    }
+    .input-field {
+      width: 100%; box-sizing: border-box; max-width: 100%; padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px; color: var(--bone); font-size: 16px;
+      font-family: 'Space Grotesk', sans-serif; outline: none;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .input-field:focus { border-color: var(--accent); background: rgba(255, 255, 255, 0.06); }
+    .field-row { display: flex; gap: 8px; align-items: stretch; margin-bottom: 8px; }
+    .ghost-btn {
+      padding: 10px 14px; background: transparent; border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px; color: var(--slate-gray); font-size: 13px;
+      font-family: 'Pretendard Variable', sans-serif; cursor: pointer;
+      transition: background 0.15s, border-color 0.15s; white-space: nowrap;
+    }
+    .ghost-btn:active { background: rgba(255, 255, 255, 0.06); }
+    .delete-btn {
+      padding: 8px 12px; background: transparent; border: none; color: var(--text-2);
+      font-size: 13px; font-family: 'Pretendard Variable', sans-serif; cursor: pointer;
+    }
+    .delete-btn:active { color: var(--accent); }
+
+    .shoe-preview-wrap {
+      position: relative; width: 100%; aspect-ratio: 16 / 10;
+      background: rgba(255, 255, 255, 0.04); border: 1px dashed rgba(255, 255, 255, 0.12);
+      border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center;
+    }
+    .shoe-preview { width: 100%; height: 100%; object-fit: contain; display: none; }
+    .shoe-preview.has-image { display: block; }
+    .shoe-placeholder {
+      font-size: 12px; color: var(--text-2); opacity: 0.5; font-family: 'Pretendard Variable', sans-serif;
+    }
+    .shoe-preview.has-image + .shoe-placeholder { display: none; }
+    .shoe-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+    .shoe-list-item {
+      display: flex; align-items: center; gap: 12px; padding: 8px 10px;
+      background: rgba(255, 255, 255, 0.04); border-radius: 8px;
+    }
+    .shoe-list-thumb {
+      width: 56px; height: 40px; object-fit: contain; flex-shrink: 0;
+      filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.4));
+    }
+    .shoe-list-name {
+      flex: 1; min-width: 0; font-size: 14px; color: var(--bone);
+      font-family: 'Pretendard Variable', sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .shoe-list-empty {
+      font-size: 12px; color: var(--text-2); opacity: 0.5;
+      font-family: 'Pretendard Variable', sans-serif; padding: 4px 2px;
+    }
+    .toast {
+      position: fixed; bottom: calc(40px + env(safe-area-inset-bottom, 0px)); left: 50%;
+      transform: translateX(-50%) translateY(80px); padding: 14px 22px;
+      background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 100px; color: var(--bone);
+      font-size: 14px; font-family: 'Pretendard Variable', sans-serif; z-index: 100; opacity: 0;
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.32s; pointer-events: none; white-space: nowrap;
+    }
+    .toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.error { border-color: var(--accent); color: var(--accent); }
+  </style>
+</head>
+
+<body>
+  <div class="phone">
+    <div class="phone-inner bg-dark" style="background: var(--asphalt-black);">
+      <div class="input-page">
+        <div class="back-header back-header--dark">
+          <button class="back-btn" onclick="goBackSmart()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="m12 19-7-7 7-7" />
+              <path d="M19 12H5" />
+            </svg>
+          </button>
+          <span class="back-title">신발 등록</span>
+        </div>
+
+        <div class="input-scroll">
+          <div class="input-section">
+            <label class="input-label">내 신발장 (러닝화 등록)</label>
+            <input type="text" id="shoe-name" class="input-field" placeholder="신발 이름 (예: 베이퍼플라이 3)" style="margin-bottom:8px">
+            <div class="shoe-preview-wrap">
+              <img id="shoe-preview" class="shoe-preview" alt="신발 미리보기">
+              <div id="shoe-placeholder" class="shoe-placeholder">이미지 선택 안 됨</div>
+            </div>
+            <div class="field-row" style="margin-top:8px">
+              <label class="ghost-btn" for="input-shoe" style="flex:1;text-align:center">이미지 선택</label>
+              <button type="button" class="ghost-btn" onclick="clearShoe()">비우기</button>
+              <button type="button" class="ghost-btn" onclick="onAddShoe()" style="color:var(--accent)">등록</button>
+            </div>
+            <input type="file" id="input-shoe" accept="image/png,image/*" style="display:none">
+            <div class="input-helper">배경 없는 누끼 PNG를 올리면 상세 화면에 예쁘게 표시됩니다. 등록한 신발은 상세에서 선택해 사용합니다.</div>
+            <ul class="shoe-list" id="shoe-list" style="margin-top:14px"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="./data/store.js"></script>
+  <script>
+    function goBackSmart() {
+      if (window.history.length > 1) { history.back(); return; }
+      goBack('input.html');
+    }
+
+    const shoeInput = document.getElementById('input-shoe');
+    const shoePreview = document.getElementById('shoe-preview');
+    const shoeNameInput = document.getElementById('shoe-name');
+    let _shoeDataURL = null;
+
+    function showToast(msg, isError) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.toggle('error', !!isError);
+      t.classList.add('visible');
+      clearTimeout(t._timer);
+      t._timer = setTimeout(() => t.classList.remove('visible'), 2200);
+    }
+
+    /* 이미지 리사이즈 → PNG(투명 보존) */
+    function imageToBase64(file, maxDim = 600) {
+      return new Promise((res, rej) => {
+        const fr = new FileReader();
+        fr.onload = e => {
+          const img = new Image();
+          img.onload = () => {
+            let { width: w, height: h } = img;
+            if (w > maxDim || h > maxDim) {
+              if (w > h) { h = h * maxDim / w; w = maxDim; }
+              else { w = w * maxDim / h; h = maxDim; }
+            }
+            const c = document.createElement('canvas');
+            c.width = w; c.height = h;
+            c.getContext('2d').drawImage(img, 0, 0, w, h);
+            res(c.toDataURL('image/png'));
+          };
+          img.onerror = rej;
+          img.src = e.target.result;
+        };
+        fr.onerror = rej;
+        fr.readAsDataURL(file);
+      });
+    }
+
+    function setShoePreview(dataURL) {
+      _shoeDataURL = dataURL || null;
+      if (dataURL) { shoePreview.src = dataURL; shoePreview.classList.add('has-image'); }
+      else { shoePreview.src = ''; shoePreview.classList.remove('has-image'); }
+    }
+    function clearShoe() { setShoePreview(null); shoeInput.value = ''; }
+
+    shoeInput.addEventListener('change', async () => {
+      const f = shoeInput.files && shoeInput.files[0];
+      if (!f) return;
+      try { setShoePreview(await imageToBase64(f, 600)); }
+      catch (e) { showToast('이미지 처리 실패', true); }
+    });
+
+    function onAddShoe() {
+      const name = shoeNameInput.value.trim();
+      if (!_shoeDataURL) { showToast('신발 이미지를 선택하세요', true); return; }
+      if (!name) { showToast('신발 이름을 입력하세요', true); return; }
+      const id = 'shoe-' + name.replace(/\s+/g, '-') + '-' + (_shoeDataURL.length % 100000);
+      try { saveShoe({ id, name, image: _shoeDataURL }); }
+      catch (e) {
+        if (e && e.name === 'QuotaExceededError') { showToast('저장 공간 부족(이미지 큼)', true); return; }
+        throw e;
+      }
+      shoeNameInput.value = '';
+      clearShoe();
+      showToast(`'${name}' 등록됨`);
+      renderShoeList();
+    }
+
+    function onRemoveShoe(id) {
+      removeShoe(id);
+      showToast('신발 삭제됨');
+      renderShoeList();
+    }
+
+    function renderShoeList() {
+      const list = document.getElementById('shoe-list');
+      const shoes = listShoes();
+      if (!shoes.length) { list.innerHTML = '<li class="shoe-list-empty">등록된 신발 없음</li>'; return; }
+      list.innerHTML = shoes.map(s => `
+        <li class="shoe-list-item">
+          <img class="shoe-list-thumb" src="${s.image}" alt="${s.name}">
+          <span class="shoe-list-name">${s.name}</span>
+          <button class="delete-btn" onclick="onRemoveShoe('${s.id}')">삭제</button>
+        </li>`).join('');
+    }
+
+    renderShoeList();
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js'); }
+  </script>
+</body>
+
+</html>

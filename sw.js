@@ -1,4 +1,4 @@
-const CACHE = 'runit-v7';
+const CACHE = 'runit-v8';
 const CORE = [
   './app.html',
   './runit-home.html',
@@ -7,6 +7,8 @@ const CORE = [
   './stats.html',
   './pb.html',
   './input.html',
+  './shoes.html',
+  './import.html',
   './styles.css',
   './transitions.js',
   './ptr.js',

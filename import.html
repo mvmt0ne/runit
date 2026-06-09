@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>runit — CSV 가져오기</title>
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#202020">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="./icon.svg">
+  <link rel="icon" type="image/svg+xml" href="./icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable.min.css"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./transitions.js"></script>
+  <style>
+    .input-page { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .input-scroll {
+      flex: 1; overflow-y: auto; overflow-x: hidden; scrollbar-width: none;
+      padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+    }
+    .input-scroll::-webkit-scrollbar { display: none; }
+    .input-section { padding: 24px 20px 8px; }
+    .input-label {
+      font-size: 13px; font-weight: 400; color: var(--text-2);
+      font-family: 'Pretendard Variable', sans-serif; margin-bottom: 8px; display: block;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .input-helper {
+      font-size: 12px; color: var(--text-2); opacity: 0.6; margin-top: 6px;
+      line-height: 1.4; font-family: 'Pretendard Variable', sans-serif;
+    }
+    .hidden-block { display: none; }
+    .input-field {
+      width: 100%; box-sizing: border-box; max-width: 100%; padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px; color: var(--bone); font-size: 16px;
+      font-family: 'Space Grotesk', sans-serif; outline: none;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .input-field:focus { border-color: var(--accent); background: rgba(255, 255, 255, 0.06); }
+    textarea.input-field {
+      min-height: 140px; resize: vertical; font-family: 'Space Mono', ui-monospace, monospace;
+      font-size: 12px; line-height: 1.5;
+    }
+    .field-row { display: flex; gap: 8px; align-items: stretch; margin-bottom: 8px; }
+    .ghost-btn {
+      padding: 10px 14px; background: transparent; border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px; color: var(--slate-gray); font-size: 13px;
+      font-family: 'Pretendard Variable', sans-serif; cursor: pointer;
+      transition: background 0.15s, border-color 0.15s; white-space: nowrap;
+    }
+    .ghost-btn:active { background: rgba(255, 255, 255, 0.06); }
+    .check {
+      font-size: 12px; color: var(--text-2); margin-top: 6px;
+      font-family: 'Pretendard Variable', sans-serif; min-height: 16px;
+    }
+    .check.ok { color: #4ade80; }
+    .check.err { color: var(--accent); }
+    .toast {
+      position: fixed; bottom: calc(40px + env(safe-area-inset-bottom, 0px)); left: 50%;
+      transform: translateX(-50%) translateY(80px); padding: 14px 22px;
+      background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 100px; color: var(--bone);
+      font-size: 14px; font-family: 'Pretendard Variable', sans-serif; z-index: 100; opacity: 0;
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.32s; pointer-events: none; white-space: nowrap;
+    }
+    .toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.error { border-color: var(--accent); color: var(--accent); }
+  </style>
+</head>
+
+<body>
+  <div class="phone">
+    <div class="phone-inner bg-dark" style="background: var(--asphalt-black);">
+      <div class="input-page">
+        <div class="back-header back-header--dark">
+          <button class="back-btn" onclick="goBackSmart()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="m12 19-7-7 7-7" />
+              <path d="M19 12H5" />
+            </svg>
+          </button>
+          <span class="back-title">CSV 가져오기</span>
+        </div>
+
+        <div class="input-scroll">
+          <div class="input-section">
+            <label class="input-label">CSV 추가 (덮어쓰기 대신 누적)</label>
+            <div class="field-row" style="gap:8px">
+              <label class="ghost-btn" for="csv-file" style="flex:1;text-align:center">CSV 파일 선택</label>
+              <button type="button" class="ghost-btn" onclick="document.getElementById('csv-paste').classList.toggle('hidden-block')">붙여넣기</button>
+            </div>
+            <input type="file" id="csv-file" accept=".csv,text/csv" style="display:none">
+            <textarea id="csv-paste" class="input-field hidden-block"
+              placeholder="가민 Activities.csv 내용을 붙여넣기 (헤더 포함)" style="margin-top:8px"></textarea>
+            <div class="field-row" style="margin-top:8px">
+              <button class="ghost-btn" id="csv-paste-btn" onclick="onAppendPastedCSV()" style="flex:1">붙여넣은 CSV 추가</button>
+            </div>
+            <div class="check" id="csv-check"></div>
+            <div class="input-helper">가민에서 받은 CSV를 그대로 추가하면 기존 데이터에 누적됩니다. 같은 활동(날짜·시간·거리)은 자동으로 건너뜀.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="./data/store.js"></script>
+  <script src="./data/activities.js"></script>
+  <script>
+    function goBackSmart() {
+      if (window.history.length > 1) { history.back(); return; }
+      goBack('input.html');
+    }
+
+    function showToast(msg, isError) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.toggle('error', !!isError);
+      t.classList.add('visible');
+      clearTimeout(t._timer);
+      t._timer = setTimeout(() => t.classList.remove('visible'), 2200);
+    }
+
+    async function importCSVText(text) {
+      const check = document.getElementById('csv-check');
+      const rows = (typeof parseCSV === 'function' ? parseCSV(text) : []).filter(r => r.length > 1);
+      if (rows.length < 2) { check.textContent = '✗ CSV 내용이 비어있습니다'; check.className = 'check err'; return; }
+      const headers = rows[0].map(h => h.trim());
+      const parsed = rows.slice(1)
+        .map(r => normalizeRow(headers, r))
+        .filter(a => a.date && a.activityKind === '러닝');
+      if (!parsed.length) {
+        check.textContent = '✗ 추가할 러닝 활동이 없습니다 (헤더/형식 확인)';
+        check.className = 'check err';
+        return;
+      }
+      const keyOf = a => `${a.date}|${a.startTime || ''}|${a.km}`;
+      let existing = [];
+      try { existing = await loadActivities(); } catch (e) { /* ignore */ }
+      const seen = new Set(existing.map(keyOf));
+      if (typeof getManualActivities === 'function') getManualActivities().forEach(a => seen.add(keyOf(a)));
+      let added = 0, dup = 0;
+      parsed.forEach(a => {
+        const key = keyOf(a);
+        if (seen.has(key)) { dup++; return; }
+        seen.add(key);
+        saveManualActivity({ ...a, id: `csv-${key}`, manual: true });
+        added++;
+      });
+      check.textContent = `✓ ${added}건 추가${dup ? ` · ${dup}건 중복 건너뜀` : ''}`;
+      check.className = added ? 'check ok' : 'check err';
+      showToast(`${added}건 추가${dup ? `, ${dup}건 중복` : ''}`);
+    }
+
+    document.getElementById('csv-file').addEventListener('change', e => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const fr = new FileReader();
+      fr.onload = () => importCSVText(String(fr.result || ''));
+      fr.onerror = () => showToast('파일 읽기 실패', true);
+      fr.readAsText(file, 'utf-8');
+      e.target.value = '';
+    });
+
+    function onAppendPastedCSV() {
+      const text = document.getElementById('csv-paste').value.trim();
+      if (!text) { showToast('붙여넣은 CSV가 없습니다', true); return; }
+      importCSVText(text);
+    }
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js'); }
+  </script>
+</body>
+
+</html>
