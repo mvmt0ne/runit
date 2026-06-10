@@ -122,6 +122,15 @@
               신발장은 전체 삭제에서 제외됩니다(자산). CSV 마스터(data/activities.csv)는 영향 없습니다.
             </div>
           </div>
+
+          <!-- 계정 -->
+          <div class="input-section">
+            <label class="input-label">계정</label>
+            <div class="saved-item">
+              <span class="saved-date" id="acct-email" style="font-size:14px">로그인 안 됨</span>
+              <button class="ghost-btn" id="logout-btn" onclick="onLogout()">로그아웃</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -129,6 +138,10 @@
 
   <div class="toast" id="toast"></div>
 
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore-compat.js"></script>
+  <script src="./data/cloud.js"></script>
   <script src="./data/store.js"></script>
   <script>
     function goBackSmart() {
@@ -189,6 +202,23 @@
       clearAllSaved();
       showToast('전체 삭제 완료');
       render();
+    }
+
+    function onLogout() {
+      if (window.RUNIT_CLOUD && window.RUNIT_CLOUD.enabled) {
+        window.RUNIT_CLOUD.signOut().then(() => location.replace('./login.html'));
+      }
+    }
+    // 계정 표시 + 클라우드 동기화 시 재렌더
+    if (window.RUNIT_CLOUD && window.RUNIT_CLOUD.enabled) {
+      window.RUNIT_CLOUD.ready.then(u => {
+        const el = document.getElementById('acct-email');
+        if (el) el.textContent = u ? u.email : '로그인 안 됨';
+        document.getElementById('logout-btn').style.display = u ? '' : 'none';
+      });
+      window.addEventListener('runit-cloud-sync', render);
+    } else {
+      document.getElementById('logout-btn').style.display = 'none';
     }
 
     render();

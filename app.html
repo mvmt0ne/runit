@@ -23,6 +23,17 @@
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
   <script src="./transitions.js"></script>
+  <!-- Firebase (클라우드 동기화) -->
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore-compat.js"></script>
+  <script src="./data/cloud.js"></script>
+  <!-- 미로그인 시 로그인 화면으로 (게이트) -->
+  <script>
+    if (window.RUNIT_CLOUD && window.RUNIT_CLOUD.enabled) {
+      window.RUNIT_CLOUD.ready.then(user => { if (!user) location.replace('./login.html'); });
+    }
+  </script>
   <!-- 홈 페이지가 인라인으로 grained() 호출 → 미리 로드 필요 -->
   <script src="./grained.js"></script>
   <!-- 활동 데이터(가민 CSV) -->

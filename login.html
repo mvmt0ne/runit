@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>runit — 로그인</title>
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#202020">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="./icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable.min.css"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <style>
+    .login-wrap {
+      flex: 1; display: flex; flex-direction: column; justify-content: center;
+      padding: 0 28px calc(40px + env(safe-area-inset-bottom, 0px));
+      background: var(--asphalt-black);
+    }
+    .login-brand {
+      font-size: 40px; font-weight: 700; color: var(--bone);
+      font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.02em; margin-bottom: 4px;
+    }
+    .login-sub { font-size: 14px; color: var(--text-2); font-family: 'Pretendard Variable', sans-serif; margin-bottom: 36px; }
+    .login-field {
+      width: 100%; box-sizing: border-box; padding: 16px; margin-bottom: 10px;
+      background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px; color: var(--bone); font-size: 16px; outline: none;
+      font-family: 'Space Grotesk', sans-serif; transition: border-color 0.15s;
+    }
+    .login-field:focus { border-color: var(--accent); }
+    .login-btn {
+      width: 100%; box-sizing: border-box; padding: 17px; margin-top: 10px;
+      background: var(--accent); border: none; border-radius: 100px; color: #202020;
+      font-size: 16px; font-weight: 600; font-family: 'Pretendard Variable', sans-serif; cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .login-btn:active { transform: scale(0.98); }
+    .login-btn:disabled { opacity: 0.5; cursor: default; }
+    .login-msg { min-height: 18px; margin-top: 14px; font-size: 13px; text-align: center;
+      color: var(--accent); font-family: 'Pretendard Variable', sans-serif; }
+  </style>
+</head>
+
+<body>
+  <div class="phone">
+    <div class="phone-inner" style="background: var(--asphalt-black);">
+      <div class="login-wrap">
+        <div class="login-brand">runit</div>
+        <div class="login-sub">로그인하면 모든 기기에서 기록이 동기화됩니다.</div>
+        <input type="email" id="email" class="login-field" placeholder="이메일" autocomplete="username" inputmode="email">
+        <input type="password" id="pw" class="login-field" placeholder="비밀번호" autocomplete="current-password">
+        <button class="login-btn" id="login-btn" onclick="doLogin()">로그인</button>
+        <div class="login-msg" id="msg"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore-compat.js"></script>
+  <script src="./data/cloud.js"></script>
+  <script>
+    const msg = document.getElementById('msg');
+    const btn = document.getElementById('login-btn');
+
+    // 이미 로그인돼 있으면 앱으로
+    if (window.RUNIT_CLOUD && window.RUNIT_CLOUD.enabled) {
+      window.RUNIT_CLOUD.ready.then(user => { if (user) location.replace('./app.html'); });
+    } else {
+      msg.textContent = 'Firebase 로드 실패 — 네트워크 확인';
+    }
+
+    async function doLogin() {
+      const email = document.getElementById('email').value.trim();
+      const pw = document.getElementById('pw').value;
+      if (!email || !pw) { msg.textContent = '이메일과 비밀번호를 입력하세요'; return; }
+      btn.disabled = true; msg.textContent = '로그인 중…';
+      try {
+        await window.RUNIT_CLOUD.signIn(email, pw);
+        location.replace('./app.html');
+      } catch (e) {
+        btn.disabled = false;
+        const map = {
+          'auth/invalid-credential': '이메일 또는 비밀번호가 올바르지 않습니다',
+          'auth/invalid-email': '이메일 형식이 올바르지 않습니다',
+          'auth/too-many-requests': '시도가 많습니다. 잠시 후 다시',
+        };
+        msg.textContent = map[e.code] || ('로그인 실패: ' + (e.code || e.message));
+      }
+    }
+    document.getElementById('pw').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  </script>
+</body>
+
+</html>

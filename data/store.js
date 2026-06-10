@@ -20,6 +20,8 @@ function _load(key) {
 
 function _save(key, obj) {
   localStorage.setItem(key, JSON.stringify(obj));
+  // 클라우드 동기화 (로그인 시) — 미로드/미로그인이면 무시
+  try { if (window.RUNIT_CLOUD && window.RUNIT_CLOUD.enabled) window.RUNIT_CLOUD.pushStore(key, obj); } catch (e) {}
 }
 
 /* ── 날짜별 메타 ── */
