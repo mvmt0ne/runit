@@ -105,7 +105,13 @@
         const rt = _parseYMD(r.date);
         return rt >= start && rt < end;
       });
-      const w = { label: _weekLabel(start), km: _round1(_sumKm(wRuns)), runs: wRuns };
+      const w = {
+        label: _weekLabel(start),
+        // 주 기간 라벨 (월~일): "6.1 — 6.7"
+        range: `${_weekLabel(start)} — ${_weekLabel(start + 6 * DAY)}`,
+        km: _round1(_sumKm(wRuns)),
+        runs: wRuns,
+      };
       if (t === curWeek) w.current = true;
       else w.past = true;
       allWeeks.push(w);
@@ -113,7 +119,7 @@
     const weekPages = _paginate(allWeeks, 12);
     const WEEK_PERIOD_DATA = weekPages.map(pg => ({
       label: `${pg[0].label} — ${pg[pg.length - 1].label}`,
-      weeks: pg.map(w => ({ label: w.label, km: w.km, current: w.current, past: w.past })),
+      weeks: pg.map(w => ({ label: w.label, range: w.range, km: w.km, current: w.current, past: w.past, runs: w.runs })),
       runs: pg.flatMap(w => w.runs),
       bpms: pg.flatMap(w => w.runs.map(r => r.bpm)).filter(b => b != null),
     }));

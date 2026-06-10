@@ -359,6 +359,19 @@
               font-family: 'Pretendard Variable', sans-serif;
             }
 
+            /* 주간: 선택 주 기간 라벨 */
+            .week-range-label {
+              padding: 0 20px;
+              margin-bottom: 10px;
+              min-height: 18px;
+              font-size: 14px;
+              font-family: 'Space Grotesk', sans-serif;
+              color: var(--cloudy-gray);
+            }
+            .week-range-label.selected {
+              color: var(--accent);
+            }
+
             .components-title.dark {
               font-size: 16px;
               font-weight: 400;
@@ -945,6 +958,7 @@
                                 </div>
                             </div>
                             <div class="month-detail">
+                                <div class="week-range-label" id="week-range-label"></div>
                                 <div class="intensity-breakdown">
                                     <div id="week-intensity"></div>
                                 </div>
@@ -1488,7 +1502,11 @@
                     }
                 });
             }
-            attachSimpleBarSelect('week-chart');
+            // 주간 차트: 막대 클릭 → 그 주로 드릴다운
+            document.getElementById('week-chart').addEventListener('click', e => {
+                const col = e.target.closest('[data-idx]');
+                if (col) selectWeek(parseInt(col.dataset.idx));
+            });
             attachSimpleBarSelect('year-chart');
 
             // 터치 스와이프
@@ -1927,16 +1945,49 @@
                     .classList.toggle('disabled', currentWeekPeriodIdx >= MAX_WEEK_PERIOD);
             }
 
+            let selectedWeekIdx = -1;
+
             function updateWeekChart(animate) {
                 const period = WEEK_PERIOD_DATA[currentWeekPeriodIdx];
                 if (!period) return;
+                selectedWeekIdx = -1;
                 const data = period.weeks;
                 const periodAvg = avg(data.filter(d => !d.future && d.km > 0));
                 renderChart('week-chart', 'week-avg-line', data, periodAvg, { barMaxPx: 115, labelOffset: 34 });
                 document.getElementById('week-avg-label').textContent = 'avg ' + periodAvg + 'K';
+                // 기본: 기간 전체 요약
                 renderIntensityBar('week-intensity', period.bpms, animate);
                 renderTypeChart('week-type-chart', period.runs);
+                const lbl = document.getElementById('week-range-label');
+                if (lbl) { lbl.textContent = period.label + ' 전체'; lbl.classList.remove('selected'); }
+                document.getElementById('week-chart').classList.remove('has-selection');
                 if (animate) animateChartIn('week-chart', 60);
+            }
+
+            // 주 막대 선택 → 그 주의 강도·종류로 연동 (다시 누르면 기간 전체)
+            function selectWeek(idx) {
+                const period = WEEK_PERIOD_DATA[currentWeekPeriodIdx];
+                if (!period) return;
+                const w = period.weeks[idx];
+                if (!w || !w.runs || !w.runs.length) return; // 데이터 없는 주 무시
+                const chart = document.getElementById('week-chart');
+                const lbl = document.getElementById('week-range-label');
+                if (selectedWeekIdx === idx) {
+                    selectedWeekIdx = -1;
+                    chart.classList.remove('has-selection');
+                    chart.querySelectorAll('.cmp-col').forEach(c => c.classList.remove('selected'));
+                    renderIntensityBar('week-intensity', period.bpms, false);
+                    renderTypeChart('week-type-chart', period.runs);
+                    if (lbl) { lbl.textContent = period.label + ' 전체'; lbl.classList.remove('selected'); }
+                    return;
+                }
+                selectedWeekIdx = idx;
+                chart.classList.add('has-selection');
+                chart.querySelectorAll('.cmp-col').forEach(c => c.classList.remove('selected'));
+                chart.querySelectorAll('.cmp-col')[idx].classList.add('selected');
+                renderIntensityBar('week-intensity', w.runs.map(r => r.bpm).filter(b => b != null), false);
+                renderTypeChart('week-type-chart', w.runs);
+                if (lbl) { lbl.textContent = w.range; lbl.classList.add('selected'); }
             }
 
             function changeWeekPeriod(dir) {
