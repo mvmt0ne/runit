@@ -352,10 +352,9 @@ sup {
 
 /* ─── Hero: 스크롤 콘텐츠 내 첫 번째 요소 ── */
 .stats-hero-bar {
-    padding: 52px 20px 8px;
-    margin: 40px 20px;
-    color: var(--asphalt-black);
-    background: var(--accent);
+    margin: 36px 20px 20px;
+    color: var(--accent);
+    text-align: right;
 }
 
 .stats-hero-label {
@@ -563,7 +562,7 @@ sup {
 }
 
 /* 탭 아이템들은 유리 레이어 위에 */
-.tab-bar > .tab-item {
+.tab-bar>.tab-item {
     position: relative;
     z-index: 1;
 }
@@ -739,8 +738,7 @@ sup {
 }
 
 /* ─── Zebra striping ── */
-.lp-row:nth-child(even) .lp-content-col {
-}
+.lp-row:nth-child(even) .lp-content-col {}
 
 /* ─── Compact mode: 이름 + 핵심 3개만 ── */
 .lp-row.compact .lp-date-col {
