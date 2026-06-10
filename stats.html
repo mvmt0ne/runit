@@ -1286,10 +1286,8 @@
                         }
                     }
                 }
+                // 도넛·종류 차트는 선택(기본=현재/최근 데이터) 월로 연동
                 showDetailContent(defaultIdx, /* isDefault */ true);
-
-                const monthRuns = RUNS.filter(r => +r.date.slice(0, 4) === currentYear);
-                renderTypeChart('month-type-chart', monthRuns);
 
                 if (animate) animateChartIn('month-chart', 60);
             }
@@ -1408,16 +1406,23 @@
                 const d = data[idx];
                 if (!d || d.future || d.km === 0) return;
 
-                const intensity = calcIntensity(currentYear, idx + 1);
-                if (!intensity) return;
-
-                renderIntensityDonut(
-                    'detail-intensity',
-                    intensity.low,
-                    intensity.mid,
-                    intensity.high,
-                    isDefault ? 300 : 60,
+                const month = idx + 1;
+                // 강도 도넛 — 선택 월
+                const intensity = calcIntensity(currentYear, month);
+                if (intensity) {
+                    renderIntensityDonut(
+                        'detail-intensity',
+                        intensity.low,
+                        intensity.mid,
+                        intensity.high,
+                        isDefault ? 300 : 60,
+                    );
+                }
+                // 러닝 종류 차트 — 선택 월로 연동
+                const monthRuns = RUNS.filter(
+                    r => +r.date.slice(0, 4) === currentYear && +r.date.slice(5, 7) === month,
                 );
+                renderTypeChart('month-type-chart', monthRuns);
             }
 
             function selectMonth(idx) {
