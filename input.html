@@ -667,6 +667,8 @@
       }
 
       showToast(`${date}: ${saved.join(' + ')} 저장됨`);
+      // 저장 완료 후 토스트를 잠깐 보여주고 진입 화면으로 복귀
+      setTimeout(goBackToDetail, 700);
     }
   </script>
 
