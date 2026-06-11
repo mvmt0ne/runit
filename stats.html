@@ -1435,14 +1435,7 @@
                 const d = data[idx];
                 if (!d || d.future || d.km === 0) return;
 
-                const currentIdx = data.findIndex(d => d.current);
-
-                // 현재 달 탭 → 디폴트 상태로 리셋
-                if (idx === currentIdx) {
-                    resetToCurrentMonth();
-                    return;
-                }
-                // 같은 비현재 달 다시 탭 → 디폴트 리셋
+                // 같은 달 다시 탭 → 디폴트(이번 달) 리셋
                 if (selectedIdx === idx) {
                     resetToCurrentMonth();
                     return;
