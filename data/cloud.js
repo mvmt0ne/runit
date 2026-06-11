@@ -27,6 +27,9 @@
   const auth = firebase.auth();
   const db = firebase.firestore();
   try { db.enablePersistence({ synchronizeTabs: true }).catch(() => {}); } catch (e) {}
+  // Storage는 신발 이미지 업로드 페이지(shoes.html)에서만 SDK 로드 → 없으면 null
+  let storage = null;
+  try { storage = firebase.storage ? firebase.storage() : null; } catch (e) {}
 
   const STORE_KEYS = ['runit:meta', 'runit:activities', 'runit:shoes'];
   const shortKey = k => k.split(':')[1];
@@ -43,6 +46,18 @@
     pushStore(key, obj) {
       if (!this.user || STORE_KEYS.indexOf(key) < 0) return;
       docFor(this.user.uid, key).set({ data: obj, updated: Date.now() }).catch(() => {});
+    },
+    // 신발 이미지 → Firebase Storage 업로드, 다운로드 URL 반환 (Firestore 1MB 한도 회피)
+    storageReady() { return !!(this.user && storage); },
+    async uploadShoeImage(shoeId, dataURL) {
+      if (!this.storageReady()) throw new Error('storage-unavailable');
+      const ref = storage.ref().child(`users/${this.user.uid}/shoes/${shoeId}.png`);
+      await ref.putString(dataURL, 'data_url');
+      return await ref.getDownloadURL();
+    },
+    async deleteShoeImage(shoeId) {
+      if (!this.storageReady()) return;
+      try { await storage.ref().child(`users/${this.user.uid}/shoes/${shoeId}.png`).delete(); } catch (e) {}
     },
   };
   window.RUNIT_CLOUD = cloud;

@@ -142,6 +142,7 @@
   <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-storage-compat.js"></script>
   <script src="./data/cloud.js"></script>
   <script src="./data/store.js"></script>
   <script>
@@ -203,12 +204,22 @@
       catch (e) { showToast('이미지 처리 실패', true); }
     });
 
-    function onAddShoe() {
+    async function onAddShoe() {
       const name = shoeNameInput.value.trim();
       if (!_shoeDataURL) { showToast('신발 이미지를 선택하세요', true); return; }
       if (!name) { showToast('신발 이름을 입력하세요', true); return; }
       const id = 'shoe-' + name.replace(/\s+/g, '-') + '-' + (_shoeDataURL.length % 100000);
-      try { saveShoe({ id, name, image: _shoeDataURL }); }
+
+      // 로그인 시: 이미지는 Storage에 올리고 URL만 저장 (용량 한도 회피)
+      let image = _shoeDataURL;
+      if (window.RUNIT_CLOUD && window.RUNIT_CLOUD.storageReady && window.RUNIT_CLOUD.storageReady()) {
+        try {
+          showToast('이미지 업로드 중…');
+          image = await window.RUNIT_CLOUD.uploadShoeImage(id, _shoeDataURL);
+        } catch (e) { showToast('이미지 업로드 실패', true); return; }
+      }
+
+      try { saveShoe({ id, name, image }); }
       catch (e) {
         if (e && e.name === 'QuotaExceededError') { showToast('저장 공간 부족(이미지 큼)', true); return; }
         throw e;
@@ -221,8 +232,28 @@
 
     function onRemoveShoe(id) {
       removeShoe(id);
+      if (window.RUNIT_CLOUD && window.RUNIT_CLOUD.deleteShoeImage) window.RUNIT_CLOUD.deleteShoeImage(id);
       showToast('신발 삭제됨');
       renderShoeList();
+    }
+
+    // 기존 base64 이미지를 Storage로 1회 이전 (Firestore 문서 1MB 한도로 동기화 실패하던 것 복구)
+    async function migrateLocalImages() {
+      if (!(window.RUNIT_CLOUD && window.RUNIT_CLOUD.storageReady && window.RUNIT_CLOUD.storageReady())) return;
+      let changed = false;
+      for (const s of listShoes()) {
+        if (s.image && s.image.indexOf('data:') === 0) {
+          try {
+            const url = await window.RUNIT_CLOUD.uploadShoeImage(s.id, s.image);
+            saveShoe({ ...s, image: url });
+            changed = true;
+          } catch (e) { /* 실패 시 다음 기회에 재시도 */ }
+        }
+      }
+      if (changed) renderShoeList();
+    }
+    if (window.RUNIT_CLOUD && window.RUNIT_CLOUD.ready) {
+      window.RUNIT_CLOUD.ready.then(u => { if (u) migrateLocalImages(); });
     }
 
     function renderShoeList() {

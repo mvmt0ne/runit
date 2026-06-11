@@ -1,0 +1,9 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // 본인 uid 경로만 읽기/쓰기 (다운로드 URL 토큰은 규칙과 무관하게 동작 → <img src> 표시 OK)
+    match /users/{uid}/{allPaths=**} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+  }
+}
