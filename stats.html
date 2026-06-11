@@ -1371,31 +1371,17 @@
             // ══════════════════════════════════════
 
             // 사용자 설정 (추후 settings에서 변경 가능)
-            const ZONE_CONFIG = {
-                z1Max: 120, // Z1: ~120
-                z2Max: 140, // Z2: 121~140
-                z3Max: 160, // Z3: 141~160
-                z4Max: 175, // Z4: 161~175
-                // Z5: 176+
-            };
-
             // 목표 비율
             const INTENSITY_TARGET = { low: 80, mid: 15, high: 5 };
 
-            function bpmToIntensity(bpm) {
-                if (bpm <= ZONE_CONFIG.z2Max) return 'low';
-                if (bpm <= ZONE_CONFIG.z3Max) return 'mid';
-                return 'high';
-            }
-
-            // 특정 연·월의 강도 분포 — RUNS의 평균 심박 기준. 데이터 없으면 null.
-            // 강도 분포 — 러닝 시간(durSec) 가중. 시간 없으면 1회로 가중.
+            // 강도 분포 — 러닝 종류(의도) 기준 · 시간(durSec) 가중. 시간 없으면 1회로 가중.
+            // 심박 존은 훈련 따라 드리프트하므로, 회원이 직접 태깅한 종류를 강도로 사용.
             function intensityFromRuns(runs) {
                 let low = 0, mid = 0, high = 0;
                 (runs || []).forEach(r => {
-                    if (r.bpm == null) return;
+                    const t = (typeof normRunType === 'function') ? normRunType(r.type) : r.type;
+                    const z = TYPE_INTENSITY[t] || 'low';
                     const w = (r.durSec && r.durSec > 0) ? r.durSec : 1;
-                    const z = bpmToIntensity(r.bpm);
                     if (z === 'low') low += w;
                     else if (z === 'mid') mid += w;
                     else high += w;
