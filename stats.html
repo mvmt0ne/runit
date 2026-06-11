@@ -74,11 +74,6 @@
               background: var(--slate-gray);
             }
 
-            .stats-bottom-section {
-              background: var(--slate-gray);
-              border-block: 1px solid var(--dark-gray);
-            }
-
             .month-runs {
               padding: 40px 0 20px 0;
             }
@@ -472,55 +467,6 @@
             }
 
             /* ════════════════════════════════════
-               DELTA CARDS
-            ════════════════════════════════════ */
-            .delta-row {
-              display: grid;
-              grid-template-columns: 1fr 1fr;
-              gap: 0;
-              margin: 0;
-              padding: 0 20px;
-            }
-
-            .delta-card {
-              padding: 40px 0;
-              transition: background 0.3s;
-            }
-
-            .delta-card+.delta-card {
-              padding: 40px 0 30px 20px;
-              border-left: 1px solid var(--dark-gray);
-            }
-
-            .delta-km {
-              font-size: 32px;
-              font-weight: 400;
-              transition: color 0.3s;
-              line-height: 1;
-            }
-
-            .delta-km span {
-              font-size: 14px;
-              font-weight: 400;
-              margin-left: 2px;
-            }
-
-            .delta-pct {
-              font-size: 14px;
-              margin-top: 6px;
-              font-weight: 400;
-              transition: color 0.3s;
-            }
-
-            .delta-pct.up {
-              color: var(--accent);
-            }
-
-            .delta-pct.down {
-              color: var(--cloudy-gray);
-            }
-
-            /* ════════════════════════════════════
                6개월 추이 (월간)
             ════════════════════════════════════ */
             .trend-block {
@@ -868,9 +814,6 @@
 
             /* ─── Shift5 Data Readout Override ── */
             .cmp-km,
-            .delta-km,
-            .delta-km span,
-            .delta-pct,
             .run-km,
             .isb-seg span {
               font-family: 'Space Mono', ui-monospace, monospace;
@@ -969,20 +912,6 @@
                             </div>
                         </div>
 
-                        <div class="stats-bottom-section">
-                            <div class="delta-row">
-                                <div class="delta-card">
-                                    <div class="components-title">지난주 대비</div>
-                                    <div class="delta-km down">−19.7<sup>K</sup></div>
-                                    <div class="delta-pct down">↓ 78%</div>
-                                </div>
-                                <div class="delta-card">
-                                    <div class="components-title">8주 평균 대비</div>
-                                    <div class="delta-km down">−16.2<span>K</span></div>
-                                    <div class="delta-pct down">↓ 74%</div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <!-- /view-week -->
 
@@ -1046,21 +975,6 @@
                         </div>
                         <!-- /stats-top-section -->
 
-                        <div class="stats-bottom-section">
-                            <div class="delta-row" id="month-delta-row">
-                                <div class="delta-card">
-                                    <div class="components-title">지난달 대비</div>
-                                    <div class="delta-km down">−27.9<sup> K</sup></div>
-                                    <div class="delta-pct down">↓ 32%</div>
-                                </div>
-                                <div class="delta-card">
-                                    <div class="components-title">12개월 평균 대비</div>
-                                    <div class="delta-km down">−9.4<sup> K</sup></div>
-                                    <div class="delta-pct down">↓ 14%</div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /stats-bottom-section -->
 
                         <!-- 6개월 추이 -->
                         <div class="trend-block" id="trend-block">
@@ -1141,20 +1055,6 @@
                             </div>
                         </div>
 
-                        <div class="stats-bottom-section">
-                            <div class="delta-row">
-                                <div class="delta-card">
-                                    <div class="components-title">작년 동기 대비</div>
-                                    <div class="delta-km up">+14.2<span>K</span></div>
-                                    <div class="delta-pct up">↑ 5%</div>
-                                </div>
-                                <div class="delta-card">
-                                    <div class="components-title">3년 평균 대비</div>
-                                    <div class="delta-km down">−12.6<span>K</span></div>
-                                    <div class="delta-pct down">↓ 4%</div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <!-- /view-year -->
 
