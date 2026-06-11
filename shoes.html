@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>runit — 신발 등록</title>
+  <title>runit — 러닝화 등록</title>
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#202020">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -58,6 +58,11 @@
       font-size: 13px; font-family: 'Pretendard Variable', sans-serif; cursor: pointer;
     }
     .delete-btn:active { color: var(--accent); }
+    .edit-btn {
+      padding: 8px 10px; background: transparent; border: none; color: var(--text-2);
+      font-size: 13px; font-family: 'Pretendard Variable', sans-serif; cursor: pointer;
+    }
+    .edit-btn:active { color: var(--accent); }
 
     .shoe-preview-wrap {
       position: relative; width: 100%; aspect-ratio: 16 / 10;
@@ -112,24 +117,25 @@
               <path d="M19 12H5" />
             </svg>
           </button>
-          <span class="back-title">신발 등록</span>
+          <span class="back-title">러닝화 등록</span>
         </div>
 
         <div class="input-scroll">
           <div class="input-section">
-            <label class="input-label">내 신발장 (러닝화 등록)</label>
-            <input type="text" id="shoe-name" class="input-field" placeholder="신발 이름 (예: 베이퍼플라이 3)" style="margin-bottom:8px">
+            <label class="input-label">내 러닝화</label>
+            <input type="text" id="shoe-name" class="input-field" placeholder="러닝화 이름 (예: 베이퍼플라이 3)" style="margin-bottom:8px">
             <div class="shoe-preview-wrap">
-              <img id="shoe-preview" class="shoe-preview" alt="신발 미리보기">
+              <img id="shoe-preview" class="shoe-preview" alt="러닝화 미리보기">
               <div id="shoe-placeholder" class="shoe-placeholder">이미지 선택 안 됨</div>
             </div>
             <div class="field-row" style="margin-top:8px">
               <label class="ghost-btn" for="input-shoe" style="flex:1;text-align:center">이미지 선택</label>
               <button type="button" class="ghost-btn" onclick="clearShoe()">비우기</button>
-              <button type="button" class="ghost-btn" onclick="onAddShoe()" style="color:var(--accent)">등록</button>
+              <button type="button" class="ghost-btn" id="shoe-cancel" onclick="cancelEdit()" style="display:none">취소</button>
+              <button type="button" class="ghost-btn" id="shoe-submit" onclick="onAddShoe()" style="color:var(--accent)">등록</button>
             </div>
             <input type="file" id="input-shoe" accept="image/png,image/*" style="display:none">
-            <div class="input-helper">배경 없는 누끼 PNG를 올리면 상세 화면에 예쁘게 표시됩니다. 등록한 신발은 상세에서 선택해 사용합니다.</div>
+            <div class="input-helper">배경 없는 누끼 PNG를 올리면 상세 화면에 예쁘게 표시됩니다. 등록한 러닝화는 상세에서 선택해 사용하고, 목록에서 수정할 수 있습니다.</div>
             <ul class="shoe-list" id="shoe-list" style="margin-top:14px"></ul>
           </div>
         </div>
@@ -204,36 +210,60 @@
       catch (e) { showToast('이미지 처리 실패', true); }
     });
 
+    // 수정 중인 러닝화 id (null = 신규 등록)
+    let _editingShoeId = null;
+
+    function editShoe(id) {
+      const s = getShoe(id);
+      if (!s) return;
+      _editingShoeId = id;
+      shoeNameInput.value = s.name || '';
+      setShoePreview(s.image || null);
+      document.getElementById('shoe-submit').textContent = '수정';
+      document.getElementById('shoe-cancel').style.display = '';
+      shoeNameInput.focus();
+    }
+
+    function cancelEdit() {
+      _editingShoeId = null;
+      shoeNameInput.value = '';
+      clearShoe();
+      document.getElementById('shoe-submit').textContent = '등록';
+      document.getElementById('shoe-cancel').style.display = 'none';
+    }
+
     async function onAddShoe() {
       const name = shoeNameInput.value.trim();
-      if (!_shoeDataURL) { showToast('신발 이미지를 선택하세요', true); return; }
-      if (!name) { showToast('신발 이름을 입력하세요', true); return; }
-      const id = 'shoe-' + name.replace(/\s+/g, '-') + '-' + (_shoeDataURL.length % 100000);
+      if (!_shoeDataURL) { showToast('러닝화 이미지를 선택하세요', true); return; }
+      if (!name) { showToast('러닝화 이름을 입력하세요', true); return; }
+      // 수정이면 기존 id 유지, 신규면 새 id 생성
+      const id = _editingShoeId || ('shoe-' + name.replace(/\s+/g, '-') + '-' + (_shoeDataURL.length % 100000));
 
-      // 로그인 시: 이미지는 Storage에 올리고 URL만 저장 (용량 한도 회피)
+      // 새로 고른 로컬 이미지(data:)만 Storage 업로드. 기존 URL은 그대로 유지(이름만 수정 시).
       let image = _shoeDataURL;
-      if (window.RUNIT_CLOUD && window.RUNIT_CLOUD.storageReady && window.RUNIT_CLOUD.storageReady()) {
+      if (image.indexOf('data:') === 0 && window.RUNIT_CLOUD && window.RUNIT_CLOUD.storageReady && window.RUNIT_CLOUD.storageReady()) {
         try {
           showToast('이미지 업로드 중…');
           image = await window.RUNIT_CLOUD.uploadShoeImage(id, _shoeDataURL);
         } catch (e) { showToast('이미지 업로드 실패', true); return; }
       }
 
+      const wasEdit = !!_editingShoeId;
       try { saveShoe({ id, name, image }); }
       catch (e) {
         if (e && e.name === 'QuotaExceededError') { showToast('저장 공간 부족(이미지 큼)', true); return; }
         throw e;
       }
-      shoeNameInput.value = '';
-      clearShoe();
-      showToast(`'${name}' 등록됨`);
+      cancelEdit();
+      showToast(wasEdit ? `'${name}' 수정됨` : `'${name}' 등록됨`);
       renderShoeList();
     }
 
     function onRemoveShoe(id) {
       removeShoe(id);
       if (window.RUNIT_CLOUD && window.RUNIT_CLOUD.deleteShoeImage) window.RUNIT_CLOUD.deleteShoeImage(id);
-      showToast('신발 삭제됨');
+      if (_editingShoeId === id) cancelEdit();
+      showToast('러닝화 삭제됨');
       renderShoeList();
     }
 
@@ -259,11 +289,12 @@
     function renderShoeList() {
       const list = document.getElementById('shoe-list');
       const shoes = listShoes();
-      if (!shoes.length) { list.innerHTML = '<li class="shoe-list-empty">등록된 신발 없음</li>'; return; }
+      if (!shoes.length) { list.innerHTML = '<li class="shoe-list-empty">등록된 러닝화 없음</li>'; return; }
       list.innerHTML = shoes.map(s => `
         <li class="shoe-list-item">
           <img class="shoe-list-thumb" src="${s.image}" alt="${s.name}">
           <span class="shoe-list-name">${s.name}</span>
+          <button class="edit-btn" onclick="editShoe('${s.id}')">수정</button>
           <button class="delete-btn" onclick="onRemoveShoe('${s.id}')">삭제</button>
         </li>`).join('');
     }

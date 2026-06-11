@@ -486,7 +486,7 @@
   <!-- 신발 선택 시트 (롤링) -->
   <div class="shoe-sheet-backdrop" id="shoe-backdrop" onclick="closeShoePicker()"></div>
   <div class="shoe-sheet" id="shoe-sheet">
-    <div class="shoe-sheet-title">신발 선택</div>
+    <div class="shoe-sheet-title">러닝화 선택</div>
     <div id="shoe-carousel-wrap"></div>
   </div>
 
@@ -618,7 +618,7 @@
                <span class="d-hero-shoe-name">${shoeName ? escapeHTML(shoeName) : '탭하여 변경'} ›</span>
              </div>
            </div>`
-        : `<button class="d-hero-shoe-add" onclick="openShoePicker()">+ 신발 선택하기</button>`;
+        : `<button class="d-hero-shoe-add" onclick="openShoePicker()">+ 러닝화 선택하기</button>`;
 
       // 온도 (러닝한 날 실제 기온 — 렌더 후 비동기로 채움)
       const tempEl = '<span class="d-temp" id="d-temp"></span>';

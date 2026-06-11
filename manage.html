@@ -99,16 +99,16 @@
 
           <!-- 메타 오버라이드 -->
           <div class="input-section">
-            <label class="input-label">메타 오버라이드 (이름·타입·신발)</label>
+            <label class="input-label">메타 오버라이드 (이름·타입·러닝화)</label>
             <ul class="saved-list" id="meta-list"></ul>
           </div>
 
           <!-- 신발장 요약 -->
           <div class="input-section">
-            <label class="input-label">내 신발장</label>
+            <label class="input-label">내 러닝화</label>
             <div class="saved-item">
               <span class="saved-date" id="shoe-count">0개</span>
-              <button class="ghost-btn" onclick="goTo('shoes.html')">신발 관리 ›</button>
+              <button class="ghost-btn" onclick="goTo('shoes.html')">러닝화 관리 ›</button>
             </div>
           </div>
 
@@ -119,7 +119,7 @@
                 style="flex:1;color:var(--accent);border-color:rgba(255,76,49,0.3)">활동·메타 전체 삭제</button>
             </div>
             <div style="font-size:12px;color:var(--text-2);opacity:0.6;margin-top:6px;font-family:'Pretendard Variable',sans-serif">
-              신발장은 전체 삭제에서 제외됩니다(자산). CSV 마스터(data/activities.csv)는 영향 없습니다.
+              러닝화는 전체 삭제에서 제외됩니다(자산). CSV 마스터(data/activities.csv)는 영향 없습니다.
             </div>
           </div>
 
@@ -198,7 +198,7 @@
     function onRemoveManual(id) { removeManualActivity(id); showToast('활동 삭제됨'); render(); }
     function onRemove(date) { removeSaved(date); showToast(`${date} 메타 삭제됨`); render(); }
     function onClearAll() {
-      if (!confirm('직접 추가한 활동·메타를 모두 삭제할까요? (신발장 제외)')) return;
+      if (!confirm('직접 추가한 활동·메타를 모두 삭제할까요? (러닝화 제외)')) return;
       clearAllSaved();
       showToast('전체 삭제 완료');
       render();
