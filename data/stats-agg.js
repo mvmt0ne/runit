@@ -38,6 +38,7 @@
       type: a.type,
       name: a.name || a.type,
       dur: a.dur,
+      durSec: a.durSec,
       km: a.km,
       pace: a.pace,
       paceV: a.paceV,

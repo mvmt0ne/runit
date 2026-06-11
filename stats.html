@@ -1389,24 +1389,29 @@
             }
 
             // 특정 연·월의 강도 분포 — RUNS의 평균 심박 기준. 데이터 없으면 null.
-            function calcIntensity(year, month) {
-                const bpms = RUNS.filter(
-                    r => +r.date.slice(0, 4) === year && +r.date.slice(5, 7) === month && r.bpm != null,
-                ).map(r => r.bpm);
-                if (!bpms.length) return null;
-                const total = bpms.length;
-                let low = 0,
-                    mid = 0,
-                    high = 0;
-                bpms.forEach(b => {
-                    const i = bpmToIntensity(b);
-                    if (i === 'low') low++;
-                    else if (i === 'mid') mid++;
-                    else high++;
+            // 강도 분포 — 러닝 시간(durSec) 가중. 시간 없으면 1회로 가중.
+            function intensityFromRuns(runs) {
+                let low = 0, mid = 0, high = 0;
+                (runs || []).forEach(r => {
+                    if (r.bpm == null) return;
+                    const w = (r.durSec && r.durSec > 0) ? r.durSec : 1;
+                    const z = bpmToIntensity(r.bpm);
+                    if (z === 'low') low += w;
+                    else if (z === 'mid') mid += w;
+                    else high += w;
                 });
+                const total = low + mid + high;
+                if (!total) return null;
                 const lp = Math.round((low / total) * 100);
                 const mp = Math.round((mid / total) * 100);
                 return { low: lp, mid: mp, high: 100 - lp - mp };
+            }
+
+            function calcIntensity(year, month) {
+                const runs = RUNS.filter(
+                    r => +r.date.slice(0, 4) === year && +r.date.slice(5, 7) === month,
+                );
+                return intensityFromRuns(runs);
             }
 
             // ══════════════════════════════════════
@@ -1914,22 +1919,11 @@
                 );
             }
 
-            function renderIntensityBar(containerId, bpms, animate) {
-                if (!bpms || !bpms.length) return;
-                const total = bpms.length;
-                let low = 0,
-                    mid = 0,
-                    high = 0;
-                bpms.forEach(b => {
-                    const z = bpmToIntensity(b);
-                    if (z === 'low') low++;
-                    else if (z === 'mid') mid++;
-                    else high++;
-                });
-                const lp = Math.round((low / total) * 100);
-                const mp = Math.round((mid / total) * 100);
-                const hp = 100 - lp - mp;
-                renderIntensityDonut(containerId, lp, mp, hp, animate ? 300 : 0);
+            // runs 배열을 받아 시간 가중 강도 도넛 렌더
+            function renderIntensityBar(containerId, runs, animate) {
+                const r = intensityFromRuns(runs);
+                if (!r) return;
+                renderIntensityDonut(containerId, r.low, r.mid, r.high, animate ? 300 : 0);
             }
 
             // ══════════════════════════════════════
@@ -1956,7 +1950,7 @@
                 renderChart('week-chart', 'week-avg-line', data, periodAvg, { barMaxPx: 115, labelOffset: 34 });
                 document.getElementById('week-avg-label').textContent = 'avg ' + periodAvg + 'K';
                 // 기본: 기간 전체 요약
-                renderIntensityBar('week-intensity', period.bpms, animate);
+                renderIntensityBar('week-intensity', period.runs, animate);
                 renderTypeChart('week-type-chart', period.runs);
                 const lbl = document.getElementById('week-range-label');
                 if (lbl) { lbl.textContent = period.label + ' 전체'; lbl.classList.remove('selected'); }
@@ -1976,7 +1970,7 @@
                     selectedWeekIdx = -1;
                     chart.classList.remove('has-selection');
                     chart.querySelectorAll('.cmp-col').forEach(c => c.classList.remove('selected'));
-                    renderIntensityBar('week-intensity', period.bpms, false);
+                    renderIntensityBar('week-intensity', period.runs, false);
                     renderTypeChart('week-type-chart', period.runs);
                     if (lbl) { lbl.textContent = period.label + ' 전체'; lbl.classList.remove('selected'); }
                     return;
@@ -1985,7 +1979,7 @@
                 chart.classList.add('has-selection');
                 chart.querySelectorAll('.cmp-col').forEach(c => c.classList.remove('selected'));
                 chart.querySelectorAll('.cmp-col')[idx].classList.add('selected');
-                renderIntensityBar('week-intensity', w.runs.map(r => r.bpm).filter(b => b != null), false);
+                renderIntensityBar('week-intensity', w.runs, false);
                 renderTypeChart('week-type-chart', w.runs);
                 if (lbl) { lbl.textContent = w.range; lbl.classList.add('selected'); }
             }
@@ -2038,7 +2032,7 @@
                 const periodAvg = avg(data.filter(d => !d.future && d.km > 0));
                 renderChart('year-chart', 'year-avg-line', data, periodAvg, { barMaxPx: 115, labelOffset: 34 });
                 document.getElementById('year-avg-label').textContent = 'avg ' + periodAvg + 'K';
-                renderIntensityBar('year-intensity', period.bpms, animate);
+                renderIntensityBar('year-intensity', period.runs, animate);
                 renderTypeChart('year-type-chart', period.runs);
                 if (animate) animateChartIn('year-chart', 60);
             }
