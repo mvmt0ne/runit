@@ -641,6 +641,10 @@
     /* ─── 탭 시 살짝 펄스 + 자이로 권한 요청 ─── */
     function onHeroTap() {
       const c = document.getElementById('pb-hero-card');
+      // 기록이 있으면 해당 상세로 이동
+      const date = c.dataset.date;
+      if (date) { goTo(`detail.html?date=${date}`); return; }
+      // 기록 없을 때는 펄스 + 자이로 권한 요청만
       c.classList.remove('tap');
       void c.offsetWidth; // reflow
       c.classList.add('tap');
