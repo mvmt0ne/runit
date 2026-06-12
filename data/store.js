@@ -9,6 +9,7 @@ const STORE_KEYS = {
   meta:       'runit:meta',       // 날짜별 오버라이드 — { [date]: {name,type,note,shoeId} }
   activities: 'runit:activities', // 수동 추가 활동 (CSV 외) — { [id]: activity }
   shoes:      'runit:shoes',      // 내 신발장 — { [id]: {id, name, image} }
+  pb:         'runit:pb',         // 거리별 공식 PB(가민 입력) — { [dist]: {time,pace,date,name} }
 };
 
 function _load(key) {
@@ -78,6 +79,27 @@ function removeShoe(id) {
 
 function listShoes() {
   return getShoes().sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+}
+
+/* ── 거리별 공식 PB (가민 기록 직접 입력) ── */
+function getAllPB() {
+  return _load(STORE_KEYS.pb);
+}
+
+function getPB(dist) {
+  return _load(STORE_KEYS.pb)[dist] || null;
+}
+
+function setPB(dist, pb) {
+  const all = _load(STORE_KEYS.pb);
+  all[dist] = pb;
+  _save(STORE_KEYS.pb, all);
+}
+
+function removePB(dist) {
+  const all = _load(STORE_KEYS.pb);
+  delete all[dist];
+  _save(STORE_KEYS.pb, all);
 }
 
 /* ── 수동 활동 (CSV 외 직접 추가) ── */

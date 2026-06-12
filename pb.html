@@ -319,6 +319,71 @@
       font-family: 'Pretendard Variable', sans-serif;
     }
 
+    /* ── 히어로 편집 버튼 ── */
+    .pb-hero-edit {
+      margin-top: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.22);
+      border: none;
+      border-radius: 100px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      font-family: 'Space Mono', monospace;
+      color: rgba(255, 255, 255, 0.95);
+      cursor: pointer;
+    }
+    .pb-hero-edit:active { background: rgba(255, 255, 255, 0.34); }
+
+    /* ── 공식 PB 입력 시트 ── */
+    .pb-sheet-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s; z-index: 60;
+    }
+    .pb-sheet-backdrop.open { opacity: 1; pointer-events: auto; }
+    .pb-sheet {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 61;
+      background: var(--dark-gray);
+      border-radius: 22px 22px 0 0;
+      padding: 22px 20px calc(24px + env(safe-area-inset-bottom, 0px));
+      transform: translateY(100%);
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .pb-sheet.open { transform: translateY(0); }
+    .pb-sheet-title {
+      font-size: 16px; font-weight: 600; color: var(--bone);
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+    .pb-sheet-hint {
+      font-size: 12px; color: var(--cloudy-gray);
+      margin: 4px 0 12px; font-family: 'Pretendard Variable', sans-serif;
+    }
+    .pb-field-label {
+      display: block; font-size: 12px; color: var(--cloudy-gray);
+      margin: 12px 0 6px; font-family: 'Pretendard Variable', sans-serif;
+    }
+    .pb-input {
+      width: 100%; box-sizing: border-box; padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px; color: var(--bone); font-size: 15px;
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+    .pb-input:focus { outline: none; border-color: var(--accent); }
+    .pb-sheet-actions { display: flex; gap: 10px; margin-top: 22px; }
+    .pb-sheet-btn {
+      flex: 1; padding: 13px 0; border-radius: 10px; border: none;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+    .pb-sheet-cancel { background: rgba(255, 255, 255, 0.08); color: var(--bone); }
+    .pb-sheet-save { background: var(--accent); color: #fff; }
+    .pb-sheet-del { background: transparent; color: var(--cloudy-gray); flex: 0 0 auto; padding: 13px 16px; }
+
     @media (prefers-reduced-motion: reduce) {
       .pb-hero-card,
       .pb-hero-foil,
@@ -365,7 +430,7 @@
               <div class="pb-hero-content">
                 <div class="pb-hero-top">
                   <span class="pb-hero-dist" id="pb-hero-dist">5K</span>
-                  <span class="pb-hero-rank">1ST · PB</span>
+                  <button class="pb-hero-edit" onclick="event.stopPropagation(); openPBEdit()">편집</button>
                 </div>
                 <div class="pb-hero-time" id="pb-hero-time">18:42</div>
                 <div class="pb-hero-pace" id="pb-hero-pace">3'44"/km</div>
@@ -377,9 +442,9 @@
             </div>
           </div>
 
-          <!-- 2~5위 -->
+          <!-- 활동 기준 기록 -->
           <div>
-            <div class="pb-section-label">기록 2 — 5</div>
+            <div class="pb-section-label">활동 기준 기록</div>
             <div class="pb-list" id="pb-list"></div>
           </div>
 
@@ -387,6 +452,24 @@
 
       </div>
 
+    </div>
+  </div>
+
+  <!-- 공식 PB 입력 시트 -->
+  <div class="pb-sheet-backdrop" id="pb-sheet-backdrop" onclick="closePBEdit()"></div>
+  <div class="pb-sheet" id="pb-sheet">
+    <div class="pb-sheet-title" id="pb-sheet-title">5K 공식 PB</div>
+    <div class="pb-sheet-hint">가민 커넥트의 개인 기록을 입력하세요.</div>
+    <label class="pb-field-label">기록</label>
+    <input type="text" id="pb-in-time" class="pb-input" placeholder="예: 18:42 또는 1:46:18" inputmode="numeric">
+    <label class="pb-field-label">날짜 (선택)</label>
+    <input type="date" id="pb-in-date" class="pb-input">
+    <label class="pb-field-label">대회·메모 (선택)</label>
+    <input type="text" id="pb-in-name" class="pb-input" placeholder="예: 서울마라톤">
+    <div class="pb-sheet-actions">
+      <button class="pb-sheet-btn pb-sheet-del" id="pb-del-btn" onclick="deletePBEntry()" style="display:none">삭제</button>
+      <button class="pb-sheet-btn pb-sheet-cancel" onclick="closePBEdit()">취소</button>
+      <button class="pb-sheet-btn pb-sheet-save" onclick="savePBEntry()">저장</button>
     </div>
   </div>
 
@@ -408,7 +491,26 @@
       'full': [41.0, 42.8],
     };
 
-    let PB_DATA = {};
+    // 활동 기준 기록(계산값). 공식 PB는 store(runit:pb)에 별도 저장.
+    let ACT_DATA = {};
+
+    // 거리별 정식 km (공식 PB 페이스 자동 계산용)
+    const DIST_KM = { '1k': 1, '3k': 3, '5k': 5, '10k': 10, 'half': 21.0975, 'full': 42.195 };
+
+    const _timeToSec = t => {
+      const p = String(t || '').trim().split(':').map(Number);
+      if (p.some(isNaN) || !p.length) return null;
+      if (p.length === 3) return p[0] * 3600 + p[1] * 60 + p[2];
+      if (p.length === 2) return p[0] * 60 + p[1];
+      if (p.length === 1) return p[0];
+      return null;
+    };
+    // 시간(초)+거리 → "m'ss"/km"
+    const _paceFromTime = (sec, km) => {
+      if (sec == null || !km) return '';
+      const ps = Math.round(sec / km);
+      return `${Math.floor(ps / 60)}'${String(ps % 60).padStart(2, '0')}"/km`;
+    };
 
     const _fmtPaceKm = p => {
       const m = String(p || '').match(/^(\d+):(\d+)$/);
@@ -457,37 +559,40 @@
     }
 
     function renderPB() {
-      const records = PB_DATA[currentDist] || [];
-
       document.getElementById('pb-hero-dist').textContent = DISTS[currentDist];
       document.getElementById('pb-hero-watermark').textContent = WATERMARKS[currentDist];
 
       const heroTime = document.getElementById('pb-hero-time');
       const heroCard = document.getElementById('pb-hero-card');
 
-      if (!records.length) {
+      // ── 히어로: 공식 PB(가민 입력) ──
+      const pb = (typeof getPB === 'function') ? getPB(currentDist) : null;
+      if (pb && pb.time) {
+        const sec = _timeToSec(pb.time);
+        document.getElementById('pb-hero-pace').textContent =
+          pb.pace || _paceFromTime(sec, DIST_KM[currentDist]);
+        document.getElementById('pb-hero-name').textContent = pb.name || '';
+        document.getElementById('pb-hero-date').textContent = _fmtDate(pb.date);
+        heroCard.dataset.date = pb.date || '';
+        slotAnimate(heroTime, pb.time);
+      } else {
         heroTime.textContent = '--';
-        document.getElementById('pb-hero-pace').textContent = '기록 없음';
+        document.getElementById('pb-hero-pace').textContent = '탭하여 PB 입력';
         document.getElementById('pb-hero-name').textContent = '';
         document.getElementById('pb-hero-date').textContent = '';
         heroCard.dataset.date = '';
-        document.getElementById('pb-list').innerHTML =
-          '<div class="pb-empty">이 거리의 기록이 아직 없습니다</div>';
-        return;
       }
 
-      const hero = records[0];
-      const rest = records.slice(1);
-
-      document.getElementById('pb-hero-pace').textContent = hero.pace;
-      document.getElementById('pb-hero-name').textContent = hero.name;
-      document.getElementById('pb-hero-date').textContent = hero.date;
-      heroCard.dataset.date = hero.dateKey || '';
-      slotAnimate(heroTime, hero.time);
-
-      document.getElementById('pb-list').innerHTML = rest.map((r, i) => `
-        <div class="pb-row" data-rank="${i + 2}" onclick="goTo('detail.html?date=${r.dateKey}')">
-          <span class="pb-rank">${i + 2}</span>
+      // ── 하단: 활동 기준 기록 (상세 링크) ──
+      const records = ACT_DATA[currentDist] || [];
+      if (!records.length) {
+        document.getElementById('pb-list').innerHTML =
+          '<div class="pb-empty">이 거리의 활동 기록이 아직 없습니다</div>';
+        return;
+      }
+      document.getElementById('pb-list').innerHTML = records.map((r, i) => `
+        <div class="pb-row" data-rank="${i + 1}" onclick="goTo('detail.html?date=${r.dateKey}')">
+          <span class="pb-rank">${i + 1}</span>
           <span class="pb-row-time">${r.time}</span>
           <div class="pb-row-meta">
             <span class="pb-row-name">${r.name}</span>
@@ -496,6 +601,41 @@
           <span class="pb-row-pace">${r.pace}</span>
         </div>
       `).join('');
+    }
+
+    /* ─── 공식 PB 입력 시트 ─── */
+    function openPBEdit() {
+      const pb = (typeof getPB === 'function') ? getPB(currentDist) : null;
+      document.getElementById('pb-sheet-title').textContent = `${DISTS[currentDist]} 공식 PB`;
+      document.getElementById('pb-in-time').value = pb ? (pb.time || '') : '';
+      document.getElementById('pb-in-date').value = pb ? (pb.date || '') : '';
+      document.getElementById('pb-in-name').value = pb ? (pb.name || '') : '';
+      document.getElementById('pb-del-btn').style.display = pb ? '' : 'none';
+      document.getElementById('pb-sheet-backdrop').classList.add('open');
+      document.getElementById('pb-sheet').classList.add('open');
+    }
+
+    function closePBEdit() {
+      document.getElementById('pb-sheet-backdrop').classList.remove('open');
+      document.getElementById('pb-sheet').classList.remove('open');
+    }
+
+    function savePBEntry() {
+      const time = document.getElementById('pb-in-time').value.trim();
+      const sec = _timeToSec(time);
+      if (!time || sec == null) { alert('기록 형식을 확인하세요 (예: 18:42 또는 1:46:18)'); return; }
+      const date = document.getElementById('pb-in-date').value || null;
+      const name = document.getElementById('pb-in-name').value.trim() || null;
+      const pace = _paceFromTime(sec, DIST_KM[currentDist]) || null;
+      setPB(currentDist, { time, pace, date, name });
+      closePBEdit();
+      renderPB();
+    }
+
+    function deletePBEntry() {
+      removePB(currentDist);
+      closePBEdit();
+      renderPB();
     }
 
     /* ─── 슬롯머신 카운터: 숫자 자리만 scramble 후 정착 ─── */
@@ -641,10 +781,11 @@
     /* ─── 탭 시 살짝 펄스 + 자이로 권한 요청 ─── */
     function onHeroTap() {
       const c = document.getElementById('pb-hero-card');
-      // 기록이 있으면 해당 상세로 이동
       const date = c.dataset.date;
+      // 공식 PB에 날짜가 있고 그 활동이 있으면 상세로, 아니면 PB 입력 시트
       if (date) { goTo(`detail.html?date=${date}`); return; }
-      // 기록 없을 때는 펄스 + 자이로 권한 요청만
+      openPBEdit();
+      // 펄스 + 자이로 권한 요청도 함께
       c.classList.remove('tap');
       void c.offsetWidth; // reflow
       c.classList.add('tap');
@@ -652,10 +793,12 @@
     }
 
     // 실제 활동 → 거리별 PB 계산 후 렌더
-    renderPB(); // 로딩 전 기본 상태(빈 카드) 표시
+    renderPB(); // 로딩 전 기본 상태(공식 PB는 즉시, 활동 목록은 로드 후)
     if (typeof loadActivities === 'function') {
-      loadActivities().then(acts => { PB_DATA = buildPBData(acts); renderPB(); });
+      loadActivities().then(acts => { ACT_DATA = buildPBData(acts); renderPB(); });
     }
+    // 클라우드 동기화(다른 기기에서 PB 변경) 반영
+    window.addEventListener('runit-cloud-sync', renderPB);
     // Android/데스크탑은 권한 없이 바로 등록 시도
     enableGyro();
 
