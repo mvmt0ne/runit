@@ -407,24 +407,24 @@
 
       </div>
 
-    </div>
-  </div>
+      <!-- 공식 PB 입력 시트 (phone-inner 안에 둬야 SPA 슬라이드 주입+portal 대상이 됨) -->
+      <div class="pb-sheet-backdrop" id="pb-sheet-backdrop" onclick="closePBEdit()"></div>
+      <div class="pb-sheet" id="pb-sheet">
+        <div class="pb-sheet-title" id="pb-sheet-title">5K 공식 PB</div>
+        <div class="pb-sheet-hint">가민 커넥트의 개인 기록을 입력하세요.</div>
+        <label class="pb-field-label">기록</label>
+        <input type="text" id="pb-in-time" class="pb-input" placeholder="예: 18:42 또는 1:46:18" inputmode="numeric">
+        <label class="pb-field-label">날짜 (선택)</label>
+        <input type="date" id="pb-in-date" class="pb-input">
+        <label class="pb-field-label">대회·메모 (선택)</label>
+        <input type="text" id="pb-in-name" class="pb-input" placeholder="예: 서울마라톤">
+        <div class="pb-sheet-actions">
+          <button class="pb-sheet-btn pb-sheet-del" id="pb-del-btn" onclick="deletePBEntry()" style="display:none">삭제</button>
+          <button class="pb-sheet-btn pb-sheet-cancel" onclick="closePBEdit()">취소</button>
+          <button class="pb-sheet-btn pb-sheet-save" onclick="savePBEntry()">저장</button>
+        </div>
+      </div>
 
-  <!-- 공식 PB 입력 시트 -->
-  <div class="pb-sheet-backdrop" id="pb-sheet-backdrop" onclick="closePBEdit()"></div>
-  <div class="pb-sheet" id="pb-sheet">
-    <div class="pb-sheet-title" id="pb-sheet-title">5K 공식 PB</div>
-    <div class="pb-sheet-hint">가민 커넥트의 개인 기록을 입력하세요.</div>
-    <label class="pb-field-label">기록</label>
-    <input type="text" id="pb-in-time" class="pb-input" placeholder="예: 18:42 또는 1:46:18" inputmode="numeric">
-    <label class="pb-field-label">날짜 (선택)</label>
-    <input type="date" id="pb-in-date" class="pb-input">
-    <label class="pb-field-label">대회·메모 (선택)</label>
-    <input type="text" id="pb-in-name" class="pb-input" placeholder="예: 서울마라톤">
-    <div class="pb-sheet-actions">
-      <button class="pb-sheet-btn pb-sheet-del" id="pb-del-btn" onclick="deletePBEntry()" style="display:none">삭제</button>
-      <button class="pb-sheet-btn pb-sheet-cancel" onclick="closePBEdit()">취소</button>
-      <button class="pb-sheet-btn pb-sheet-save" onclick="savePBEntry()">저장</button>
     </div>
   </div>
 
