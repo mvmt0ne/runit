@@ -311,6 +311,14 @@
       font-family: 'Space Mono', monospace;
     }
 
+    .pb-empty {
+      padding: 28px 4px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--cloudy-gray);
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       .pb-hero-card,
       .pb-hero-foil,
@@ -382,51 +390,58 @@
     </div>
   </div>
 
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore-compat.js"></script>
+  <script src="./data/cloud.js"></script>
+  <script src="./data/store.js"></script>
+  <script src="./data/activities.js"></script>
   <script>
-    const PB_DATA = {
-      '1k': [
-        { time: '3:18',   pace: "3'18\"/km", date: '2026.02.28', name: '트랙 1km TT' },
-        { time: '3:24',   pace: "3'24\"/km", date: '2025.11.15', name: '트랙 세션' },
-        { time: '3:29',   pace: "3'29\"/km", date: '2025.08.02', name: '인터벌 1km' },
-        { time: '3:35',   pace: "3'35\"/km", date: '2025.04.18', name: '스피드 워크' },
-        { time: '3:42',   pace: "3'42\"/km", date: '2024.11.30', name: '트랙 TT' },
-      ],
-      '3k': [
-        { time: '10:48',  pace: "3'36\"/km", date: '2026.01.18', name: '3km TT' },
-        { time: '11:05',  pace: "3'42\"/km", date: '2025.09.22', name: '트랙 3km' },
-        { time: '11:24',  pace: "3'48\"/km", date: '2025.05.05', name: '템포 3km' },
-        { time: '11:46',  pace: "3'55\"/km", date: '2025.02.11', name: '인터벌' },
-        { time: '12:02',  pace: "4'01\"/km", date: '2024.10.06', name: '3km 세션' },
-      ],
-      '5k': [
-        { time: '18:42',  pace: "3'44\"/km", date: '2026.03.22', name: '서울 10K' },
-        { time: '19:05',  pace: "3'49\"/km", date: '2025.11.08', name: '한강 5K 레이스' },
-        { time: '19:31',  pace: "3'54\"/km", date: '2025.08.14', name: '템포 런' },
-        { time: '19:58',  pace: "3'59\"/km", date: '2025.04.02', name: '트랙 세션' },
-        { time: '20:22',  pace: "4'04\"/km", date: '2024.10.19', name: '이지 런' },
-      ],
-      '10k': [
-        { time: '39:18',  pace: "3'56\"/km", date: '2026.02.07', name: '한강 10K' },
-        { time: '40:55',  pace: "4'05\"/km", date: '2025.12.14', name: '템포 인터벌' },
-        { time: '41:48',  pace: "4'10\"/km", date: '2025.06.20', name: '여름 10K' },
-        { time: '43:01',  pace: "4'18\"/km", date: '2025.01.11', name: '신년 레이스' },
-        { time: '44:22',  pace: "4'26\"/km", date: '2024.06.08', name: '템포 런' },
-      ],
-      'half': [
-        { time: '1:46:18', pace: "5'02\"/km", date: '2026.04.11', name: '2026 인천하프' },
-        { time: '1:48:44', pace: "5'09\"/km", date: '2025.10.19', name: '춘천 하프마라톤' },
-        { time: '1:51:02', pace: "5'16\"/km", date: '2025.03.30', name: '서울 하프' },
-        { time: '1:53:20', pace: "5'22\"/km", date: '2024.10.06', name: '부산 하프' },
-        { time: '1:56:08', pace: "5'31\"/km", date: '2024.04.14', name: '봄 하프' },
-      ],
-      'full': [
-        { time: '3:52:44', pace: "5'31\"/km", date: '2025.11.02', name: '서울마라톤' },
-        { time: '3:58:11', pace: "5'38\"/km", date: '2025.03.16', name: '동아마라톤' },
-        { time: '4:04:33', pace: "5'47\"/km", date: '2024.11.03', name: '춘천마라톤' },
-        { time: '4:11:22', pace: "5'57\"/km", date: '2024.04.21', name: '경주마라톤' },
-        { time: '4:18:05', pace: "6'06\"/km", date: '2023.10.29', name: '부산마라톤' },
-      ],
+    // 거리별 PB — 실제 활동에서 계산. 각 거리의 허용 범위(km) 안의 러닝을
+    // 기록(시간) 빠른 순으로 정렬해 상위 5개. (스플릿 데이터 없어 활동 거리 기준 근사)
+    const DIST_BANDS = {
+      '1k':   [0.9, 1.6],
+      '3k':   [2.7, 3.5],
+      '5k':   [4.6, 5.6],
+      '10k':  [9.3, 11.0],
+      'half': [20.5, 21.6],
+      'full': [41.0, 42.8],
     };
+
+    let PB_DATA = {};
+
+    const _fmtPaceKm = p => {
+      const m = String(p || '').match(/^(\d+):(\d+)$/);
+      return m ? `${m[1]}'${m[2]}"/km` : (p || '');
+    };
+    const _fmtDate = d => (d ? String(d).replace(/-/g, '.') : '');
+    const _fmtTime = a => {
+      if (a.dur) return a.dur;
+      const s = a.durSec;
+      if (s == null) return '--';
+      const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+      return h > 0
+        ? `${h}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`
+        : `${m}:${String(sec).padStart(2, '0')}`;
+    };
+
+    function buildPBData(activities) {
+      const out = {};
+      for (const [dist, [lo, hi]] of Object.entries(DIST_BANDS)) {
+        out[dist] = (activities || [])
+          .filter(a => a.km != null && a.km >= lo && a.km <= hi && a.durSec != null)
+          .sort((a, b) => a.durSec - b.durSec)
+          .slice(0, 5)
+          .map(a => ({
+            time: _fmtTime(a),
+            pace: _fmtPaceKm(a.pace),
+            date: _fmtDate(a.date),
+            name: a.name || a.type || '러닝',
+            dateKey: a.date,
+          }));
+      }
+      return out;
+    }
 
     const DISTS = { '1k': '1K', '3k': '3K', '5k': '5K', '10k': '10K', 'half': '하프', 'full': '풀' };
     const WATERMARKS = { '1k': '1', '3k': '3', '5k': '5', '10k': '10', 'half': '21', 'full': '42' };
@@ -442,19 +457,36 @@
     }
 
     function renderPB() {
-      const records = PB_DATA[currentDist];
-      const hero = records[0];
-      const rest = records.slice(1);
+      const records = PB_DATA[currentDist] || [];
 
       document.getElementById('pb-hero-dist').textContent = DISTS[currentDist];
       document.getElementById('pb-hero-watermark').textContent = WATERMARKS[currentDist];
+
+      const heroTime = document.getElementById('pb-hero-time');
+      const heroCard = document.getElementById('pb-hero-card');
+
+      if (!records.length) {
+        heroTime.textContent = '--';
+        document.getElementById('pb-hero-pace').textContent = '기록 없음';
+        document.getElementById('pb-hero-name').textContent = '';
+        document.getElementById('pb-hero-date').textContent = '';
+        heroCard.dataset.date = '';
+        document.getElementById('pb-list').innerHTML =
+          '<div class="pb-empty">이 거리의 기록이 아직 없습니다</div>';
+        return;
+      }
+
+      const hero = records[0];
+      const rest = records.slice(1);
+
       document.getElementById('pb-hero-pace').textContent = hero.pace;
       document.getElementById('pb-hero-name').textContent = hero.name;
       document.getElementById('pb-hero-date').textContent = hero.date;
-      slotAnimate(document.getElementById('pb-hero-time'), hero.time);
+      heroCard.dataset.date = hero.dateKey || '';
+      slotAnimate(heroTime, hero.time);
 
       document.getElementById('pb-list').innerHTML = rest.map((r, i) => `
-        <div class="pb-row" data-rank="${i + 2}">
+        <div class="pb-row" data-rank="${i + 2}" onclick="goTo('detail.html?date=${r.dateKey}')">
           <span class="pb-rank">${i + 2}</span>
           <span class="pb-row-time">${r.time}</span>
           <div class="pb-row-meta">
@@ -615,7 +647,11 @@
       enableGyro();
     }
 
-    renderPB();
+    // 실제 활동 → 거리별 PB 계산 후 렌더
+    renderPB(); // 로딩 전 기본 상태(빈 카드) 표시
+    if (typeof loadActivities === 'function') {
+      loadActivities().then(acts => { PB_DATA = buildPBData(acts); renderPB(); });
+    }
     // Android/데스크탑은 권한 없이 바로 등록 시도
     enableGyro();
 
