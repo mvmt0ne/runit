@@ -282,7 +282,7 @@
           // 4) 모달/백드롭/시트를 document.body 로 portal 이동.
           //    Swiper 슬라이드는 transform 이 걸려 있어 자식의 position:fixed 가
           //    슬라이드 박스에 갇힘 → 탭바를 못 덮음. body 직속으로 옮기면 viewport 기준 fixed 로 동작.
-          slide.querySelectorAll('.sf-backdrop, .month-modal, .sf-sheet').forEach(el => {
+          slide.querySelectorAll('.sf-backdrop, .month-modal, .sf-sheet, .pb-sheet-backdrop, .pb-sheet').forEach(el => {
             el.dataset.portalFrom = tab;
             document.body.appendChild(el);
           });
