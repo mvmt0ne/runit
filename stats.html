@@ -78,6 +78,41 @@
               padding: 40px 0 20px 0;
             }
 
+            /* 주간: 이 주의 러닝 — 컴팩트 행 (밝은 배경용) */
+            .wk-run {
+              display: flex; align-items: center; gap: 12px;
+              padding: 12px 2px; border-top: 1px solid rgba(0, 0, 0, 0.08); cursor: pointer;
+            }
+            .wk-run:first-child { border-top: none; }
+            .wk-run:active { opacity: 0.6; }
+            .wk-run-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+            .wk-run-dot.low { background: var(--asphalt-gray); }
+            .wk-run-dot.mid { background: var(--dark-gray); }
+            .wk-run-dot.high { background: var(--accent); }
+            .wk-run-main { flex: 1; min-width: 0; }
+            .wk-run-name {
+              font-size: 14px; font-weight: 500; color: var(--asphalt-black);
+              font-family: 'Pretendard Variable', sans-serif;
+              white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            }
+            .wk-run-sub {
+              font-size: 12px; color: var(--asphalt-gray);
+              font-family: 'Space Mono', monospace; margin-top: 2px;
+            }
+            .wk-run-right { text-align: right; flex-shrink: 0; }
+            .wk-run-km {
+              font-size: 15px; color: var(--asphalt-black);
+              font-family: 'Space Grotesk', sans-serif; font-feature-settings: "tnum";
+            }
+            .wk-run-pace {
+              font-size: 12px; color: var(--asphalt-gray);
+              font-family: 'Space Mono', monospace; margin-top: 2px;
+            }
+            .wk-run-empty {
+              padding: 16px 2px; font-size: 13px; color: var(--cloudy-gray);
+              font-family: 'Pretendard Variable', sans-serif;
+            }
+
             /* delta · pace 텍스트 — 어두운 배경 위 */
 
             .pace-name {
@@ -1644,40 +1679,23 @@
                     console.error('[stats] 데이터 로드 실패', err);
                 });
 
-            // ── 런 카드 HTML 공통 템플릿 ──
+            // ── 런 컴팩트 행 (밝은 배경) ──
             function runRowHTML(r) {
-                const dateStr = r.date
-                    .split('-')
-                    .map((p, i) => (i === 0 ? p : parseInt(p)))
-                    .join('.');
-                const strideM = (r.stride / 100).toFixed(2);
-                return `<div class="lp-row expanded" onclick="goTo('detail.html?date=${r.date}')">
-        <div class="lp-info">
-          <div class="lp-title-row">
-            <div class="lp-row-left-head">
-              <div class="lp-badge type-${r.type}"></div>
-              <div class="lp-run-name">${r.name}</div>
-            </div>
-            <div class="lp-right-content">
-              <span class="lp-compact-km">${r.km} K</span>
-              <span class="lp-expanded-date">${dateStr}</span>
-            </div>
+                const dateStr = r.date.split('-').map((p, i) => (i === 0 ? p : parseInt(p))).join('.');
+                const t = (typeof normRunType === 'function') ? normRunType(r.type) : r.type;
+                const z = TYPE_INTENSITY[t] || 'low';
+                const sub = [dateStr, r.dur, r.bpm != null ? `${r.bpm}bpm` : null].filter(Boolean).join(' · ');
+                return `<div class="wk-run" onclick="goTo('detail.html?date=${r.date}')">
+          <span class="wk-run-dot ${z}"></span>
+          <div class="wk-run-main">
+            <div class="wk-run-name">${r.name}</div>
+            <div class="wk-run-sub">${sub}</div>
           </div>
-          <div class="lp-stats">
-            <div class="lp-stats-left">
-              <div class="lp-stat"><span class="lp-stat-label">시간</span><strong class="lp-stat-value">${r.dur}</strong></div>
-              <div class="lp-stat"><span class="lp-stat-label">거리</span><strong class="lp-stat-value">${r.km} <span class="lp-stat-unit">K</span></strong></div>
-              <div class="lp-stat"><span class="lp-stat-label">케이던스</span><strong class="lp-stat-value">${r.spm} <span class="lp-stat-unit">spm</span></strong></div>
-            </div>
-            <div class="lp-stats-right">
-              <div class="lp-stat"><span class="lp-stat-label">심박수</span><strong class="lp-stat-value">${r.bpm} <span class="lp-stat-unit">bpm</span></strong></div>
-              <div class="lp-stat"><span class="lp-stat-label">접지시간</span><strong class="lp-stat-value">${r.ground} <span class="lp-stat-unit">ms</span></strong></div>
-              <div class="lp-stat"><span class="lp-stat-label">페이스</span><strong class="lp-stat-value">${r.pace} <span class="lp-stat-unit">/K</span></strong></div>
-              <div class="lp-stat"><span class="lp-stat-label">보행길이</span><strong class="lp-stat-value">${strideM} <span class="lp-stat-unit">M</span></strong></div>
-            </div>
+          <div class="wk-run-right">
+            <div class="wk-run-km">${r.km} K</div>
+            <div class="wk-run-pace">${r.pace || '-'}/km</div>
           </div>
-        </div>
-      </div>`;
+        </div>`;
             }
 
             function renderRunsList(containerId, runs) {
@@ -1685,8 +1703,8 @@
                 if (!el) return;
                 const sorted = [...runs].sort((a, b) => (a.date < b.date ? 1 : -1));
                 el.innerHTML = sorted.length
-                    ? `<div class="lp-list">${sorted.map(runRowHTML).join('')}</div>`
-                    : `<div class="lp-row expanded"><span class="lp-stat-label">데이터 없음</span></div>`;
+                    ? sorted.map(runRowHTML).join('')
+                    : `<div class="wk-run-empty">데이터 없음</div>`;
             }
 
             // ── 러닝 종류 차트 ──
