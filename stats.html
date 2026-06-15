@@ -1881,7 +1881,7 @@
                 renderIntensityBar('week-intensity', w.runs, false);
                 renderTypeChart('week-type-chart', w.runs);
                 renderRunsList('week-runs-list', w.runs);
-                if (lbl) { lbl.textContent = w.range; lbl.classList.add('selected'); }
+                if (lbl) { lbl.textContent = (w.mlabel ? w.mlabel + ' · ' : '') + w.range; lbl.classList.add('selected'); }
             }
 
             function changeWeekPeriod(dir) {

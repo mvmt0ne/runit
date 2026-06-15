@@ -30,6 +30,12 @@
     const d = new Date(t);
     return `${d.getUTCMonth() + 1}.${d.getUTCDate()}`;
   };
+  // 주 시작(월요일) 기준 "M월 N째주" — 그 달의 며칠인지로 주차 계산
+  const _monthWeekLabel = t => {
+    const d = new Date(t);
+    const wom = Math.ceil(d.getUTCDate() / 7);
+    return `${d.getUTCMonth() + 1}월 ${wom}째주`;
+  };
 
   // 활동 → stats 렌더러가 기대하는 run 형태 (보폭 m→cm)
   function _toRun(a) {
@@ -110,6 +116,8 @@
         label: _weekLabel(start),
         // 주 기간 라벨 (월~일): "6.1 — 6.7"
         range: `${_weekLabel(start)} — ${_weekLabel(start + 6 * DAY)}`,
+        // "M월 N째주"
+        mlabel: _monthWeekLabel(start),
         km: _round1(_sumKm(wRuns)),
         runs: wRuns,
       };
@@ -120,7 +128,7 @@
     const weekPages = _paginate(allWeeks, 12);
     const WEEK_PERIOD_DATA = weekPages.map(pg => ({
       label: `${pg[0].label} — ${pg[pg.length - 1].label}`,
-      weeks: pg.map(w => ({ label: w.label, range: w.range, km: w.km, current: w.current, past: w.past, runs: w.runs })),
+      weeks: pg.map(w => ({ label: w.label, range: w.range, mlabel: w.mlabel, km: w.km, current: w.current, past: w.past, runs: w.runs })),
       runs: pg.flatMap(w => w.runs),
       bpms: pg.flatMap(w => w.runs.map(r => r.bpm)).filter(b => b != null),
     }));
