@@ -1884,7 +1884,9 @@
                 // 기본: 기간 전체 요약
                 renderIntensityBar('week-intensity', period.runs, animate);
                 renderTypeChart('week-type-chart', period.runs);
-                renderRunsList('week-runs-list', period.runs);
+                // 러닝 리스트는 주를 선택했을 때만 표시
+                document.getElementById('week-runs-list').innerHTML =
+                    '<div class="wk-run-empty">위 그래프에서 주를 선택하면 해당 주 러닝이 표시됩니다</div>';
                 const lbl = document.getElementById('week-range-label');
                 if (lbl) { lbl.textContent = period.label + ' 전체'; lbl.classList.remove('selected'); }
                 document.getElementById('week-chart').classList.remove('has-selection');
@@ -1905,7 +1907,8 @@
                     chart.querySelectorAll('.cmp-col').forEach(c => c.classList.remove('selected'));
                     renderIntensityBar('week-intensity', period.runs, false);
                     renderTypeChart('week-type-chart', period.runs);
-                    renderRunsList('week-runs-list', period.runs);
+                    document.getElementById('week-runs-list').innerHTML =
+                        '<div class="wk-run-empty">위 그래프에서 주를 선택하면 해당 주 러닝이 표시됩니다</div>';
                     if (lbl) { lbl.textContent = period.label + ' 전체'; lbl.classList.remove('selected'); }
                     return;
                 }
