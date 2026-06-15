@@ -162,6 +162,9 @@ function buildManualActivity(input) {
       ? `${h}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`
       : `${m}:${String(sec).padStart(2, '0')}`;
   };
+  // 보폭 입력은 cm → 저장은 m (CSV '평균 보폭'과 동일 단위 유지)
+  const strideCm = num(input.stride);
+  const strideM = strideCm != null ? strideCm / 100 : null;
   const id = input.id || `man-${input.date}-${durSec || ''}-${km || ''}`;
   return {
     id,
@@ -180,7 +183,7 @@ function buildManualActivity(input) {
     bpm: num(input.bpm),
     spm: num(input.spm),
     ground: num(input.ground),
-    stride: num(input.stride),
+    stride: strideM,
   };
 }
 

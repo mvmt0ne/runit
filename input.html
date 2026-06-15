@@ -98,10 +98,10 @@
     /* iOS Safari의 날짜 입력 정규화 — 기본 높이/정렬/아이콘이 다른 입력과 어긋나 깨져 보이는 문제 */
     input[type="date"].input-field,
     input[type="time"].input-field {
-      -webkit-appearance: none;
-      appearance: none;
       min-height: 52px;
       line-height: 1.2;
+      /* 다크 입력에서 네이티브 달력/시계 아이콘이 밝게 보이도록 */
+      color-scheme: dark;
     }
 
     input[type="date"].input-field::-webkit-date-and-time-value,
@@ -112,8 +112,7 @@
 
     input[type="date"].input-field::-webkit-calendar-picker-indicator,
     input[type="time"].input-field::-webkit-calendar-picker-indicator {
-      filter: invert(0.75);
-      opacity: 0.8;
+      opacity: 1;
       cursor: pointer;
     }
 
@@ -134,6 +133,27 @@
 
     .field-row .input-field {
       flex: 1;
+    }
+
+    /* 단위 suffix — 입력칸 안 우측에 상시 노출 */
+    .iu {
+      position: relative;
+      flex: 1;
+      display: flex;
+    }
+    .iu .input-field {
+      flex: 1;
+      padding-right: 46px;
+    }
+    .iu-suf {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 13px;
+      color: var(--cloudy-gray);
+      font-family: 'Space Mono', ui-monospace, monospace;
+      pointer-events: none;
     }
 
     .ghost-btn {
@@ -456,19 +476,19 @@
           <div class="input-section">
             <label class="input-label">활동 본체 (CSV 없이 직접 추가)</label>
             <div class="field-row" style="gap:8px;margin-bottom:8px">
-              <input type="number" step="0.01" inputmode="decimal" id="act-km" class="input-field" placeholder="거리 (km)" style="flex:1">
+              <div class="iu"><input type="number" step="0.01" inputmode="decimal" id="act-km" class="input-field" placeholder="거리"><span class="iu-suf">km</span></div>
               <input type="text" inputmode="numeric" id="act-dur" class="input-field" placeholder="시간 (44:00 / 1:46:42)" style="flex:1">
             </div>
             <div class="field-row" style="gap:8px;margin-bottom:8px">
-              <input type="text" inputmode="numeric" id="act-pace" class="input-field" placeholder="페이스 (비우면 자동)" style="flex:1">
-              <input type="number" inputmode="numeric" id="act-bpm" class="input-field" placeholder="평균 심박" style="flex:1">
+              <div class="iu"><input type="text" inputmode="numeric" id="act-pace" class="input-field" placeholder="페이스 (비우면 자동)"><span class="iu-suf">/km</span></div>
+              <div class="iu"><input type="number" inputmode="numeric" id="act-bpm" class="input-field" placeholder="평균 심박"><span class="iu-suf">bpm</span></div>
             </div>
             <div class="field-row" style="gap:8px;margin-bottom:8px">
-              <input type="number" inputmode="numeric" id="act-spm" class="input-field" placeholder="케이던스 spm" style="flex:1">
-              <input type="number" step="0.01" inputmode="decimal" id="act-stride" class="input-field" placeholder="보폭 m (예: 0.95)" style="flex:1">
+              <div class="iu"><input type="number" inputmode="numeric" id="act-spm" class="input-field" placeholder="케이던스"><span class="iu-suf">spm</span></div>
+              <div class="iu"><input type="number" step="1" inputmode="numeric" id="act-stride" class="input-field" placeholder="보폭"><span class="iu-suf">cm</span></div>
             </div>
             <div class="field-row" style="gap:8px">
-              <input type="number" inputmode="numeric" id="act-ground" class="input-field" placeholder="접지 ms" style="flex:1">
+              <div class="iu"><input type="number" inputmode="numeric" id="act-ground" class="input-field" placeholder="접지"><span class="iu-suf">ms</span></div>
               <div style="flex:1"></div>
             </div>
             <div class="input-helper">거리만 채워도 추가됨. 이름·타입은 위 메타값 사용. 마일리지·리스트에 즉시 반영(새로고침).</div>
@@ -623,7 +643,7 @@
         setv('act-pace', src.pace);
         setv('act-bpm', src.bpm);
         setv('act-spm', src.spm);
-        setv('act-stride', src.stride); // 미터 단위 (입력 필드와 동일)
+        setv('act-stride', src.stride != null ? Math.round(src.stride * 100) : ''); // m → cm
         setv('act-ground', src.ground);
         if (src.startTime) document.getElementById('act-time').value = src.startTime;
         if (!nameInput.value && src.name) nameInput.value = src.name;
