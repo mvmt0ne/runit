@@ -606,6 +606,25 @@
       noteInput.value = meta.note || '';
       clearActFields();
       document.getElementById('act-time').value = meta.startTime || '';
+
+      // 기존 수동 활동이 있으면 폼에 채워 그 자리에서 '수정' 가능하게
+      // (없으면 _editingManualId=null → 신규 추가. CSV 활동은 마스터라 메타만 편집)
+      const manual = (typeof getManualActivities === 'function')
+        ? getManualActivities().find(a => a.date === date) : null;
+      if (manual) {
+        _editingManualId = manual.id;
+        const setv = (id, v) => { document.getElementById(id).value = (v != null ? v : ''); };
+        setv('act-km', manual.km);
+        setv('act-dur', manual.dur);
+        setv('act-pace', manual.pace);
+        setv('act-bpm', manual.bpm);
+        setv('act-spm', manual.spm);
+        setv('act-stride', manual.stride);
+        setv('act-ground', manual.ground);
+        if (manual.startTime) document.getElementById('act-time').value = manual.startTime;
+        if (!nameInput.value && manual.name) nameInput.value = manual.name;
+        if (!typeInput.value && manual.type) typeInput.value = manual.type;
+      }
       updateSaveBtn();
       // CSV 활동 힌트 표시
       try {
