@@ -543,11 +543,11 @@
               transition: opacity 0.3s;
             }
 
-            .trend-row[data-ym] {
+            .trend-row[data-nav] {
               cursor: pointer;
             }
 
-            .trend-row[data-ym]:active {
+            .trend-row[data-nav]:active {
               opacity: 0.55;
             }
 
@@ -916,6 +916,15 @@
                                     <div id="week-runs-list"></div>
                                 </div>
                             </div>
+                            <!-- 최근 12주 추이 -->
+                            <div class="trend-block" id="week-trend-block">
+                                <div class="trend-head">
+                                    <div class="components-title">최근 12주 추이</div>
+                                    <div class="trend-delta" id="week-trend-delta"></div>
+                                </div>
+                                <div class="trend-chips" id="week-trend-chips"></div>
+                                <div class="trend-rows" id="week-trend-rows"></div>
+                            </div>
                         </div>
 
                     </div>
@@ -982,10 +991,10 @@
                         <!-- /stats-top-section -->
 
 
-                        <!-- 6개월 추이 -->
+                        <!-- 1년 추이 -->
                         <div class="trend-block" id="trend-block">
                             <div class="trend-head">
-                                <div class="components-title">최근 6개월 추이</div>
+                                <div class="components-title">최근 1년 추이</div>
                                 <div class="trend-delta" id="trend-delta"></div>
                             </div>
                             <div class="trend-chips" id="trend-chips"></div>
@@ -1488,87 +1497,92 @@
             let TREND_REF_Y = new Date().getUTCFullYear(),
                 TREND_REF_M = new Date().getUTCMonth() + 1;
 
-            // 한 달 집계 — 데이터 없으면 null (거리가중 페이스)
-            function aggregateMonth(year, month) {
-                const runs = RUNS.filter(r => {
-                    const [y, m] = r.date.split('-').map(Number);
-                    return y === year && m === month;
-                });
-                if (!runs.length) return null;
-                const totalKm = runs.reduce((s, r) => s + r.km, 0);
-                const avg = f => runs.reduce((s, r) => s + r[f], 0) / runs.length;
+            // 러닝 집합 → 지표 평균 (거리가중 페이스). 없으면 null
+            function aggregateRuns(runs) {
+                if (!runs || !runs.length) return null;
+                const totalKm = runs.reduce((s, r) => s + (r.km || 0), 0) || 1;
+                const avg = f => runs.reduce((s, r) => s + (r[f] || 0), 0) / runs.length;
                 return {
-                    km: totalKm,
-                    pace: runs.reduce((s, r) => s + paceToSec(r.pace) * r.km, 0) / totalKm,
+                    km: runs.reduce((s, r) => s + (r.km || 0), 0),
+                    pace: runs.reduce((s, r) => s + paceToSec(r.pace) * (r.km || 0), 0) / totalKm,
                     bpm: avg('bpm'),
                     spm: avg('spm'),
                     ground: avg('ground'),
                     stride: avg('stride'),
                 };
             }
+            function aggregateMonth(year, month) {
+                return aggregateRuns(RUNS.filter(r => {
+                    const [y, m] = r.date.split('-').map(Number);
+                    return y === year && m === month;
+                }));
+            }
 
-            // 기준월 포함 직전 6개월 (오래된→최신)
-            function lastSixMonths() {
+            // 월 시리즈 — 기준월 포함 직전 12개월 (오래된→최신)
+            function monthSeries() {
                 const arr = [];
-                for (let off = 5; off >= 0; off--) {
-                    let m = TREND_REF_M - off,
-                        y = TREND_REF_Y;
-                    while (m <= 0) {
-                        m += 12;
-                        y--;
-                    }
-                    arr.push({ year: y, month: m, isCurrent: off === 0, agg: aggregateMonth(y, m) });
+                for (let off = 11; off >= 0; off--) {
+                    let m = TREND_REF_M - off, y = TREND_REF_Y;
+                    while (m <= 0) { m += 12; y--; }
+                    const ym = `${y}-${String(m).padStart(2, '0')}`;
+                    arr.push({ label: `${m}월`, isCurrent: off === 0, agg: aggregateMonth(y, m), nav: `list.html?month=${ym}` });
                 }
                 return arr;
             }
 
+            // 주 시리즈 — 최근 12주 (오래된→최신)
+            function weekSeries() {
+                const all = (typeof WEEK_PERIOD_DATA !== 'undefined' ? WEEK_PERIOD_DATA : []).flatMap(p => p.weeks || []);
+                return all.slice(-12).map(w => ({
+                    label: w.label,            // 주 시작일 "6.1"
+                    isCurrent: !!w.current,
+                    agg: aggregateRuns(w.runs),
+                    nav: null,
+                }));
+            }
+
             let trendMetric = 'pace';
 
-            function renderTrend() {
-                // 최신 달이 위로 오도록 역순 (이번 달 → 6개월 전)
-                const months = lastSixMonths().reverse();
+            // 공통 렌더 — series(오래된→최신)를 최신이 위로 오게 역순 표시
+            function renderTrendInto(ids, series) {
+                const rowsEl = document.getElementById(ids.rows);
+                if (!rowsEl) return;
+                const items = series.slice().reverse();
                 const metric = TREND_METRICS.find(m => m.key === trendMetric);
 
-                document.getElementById('trend-chips').innerHTML = TREND_METRICS.map(
-                    m =>
-                        `<button class="trend-chip${m.key === trendMetric ? ' active' : ''}" data-metric="${m.key}">${m.label}</button>`,
+                document.getElementById(ids.chips).innerHTML = TREND_METRICS.map(
+                    m => `<button class="trend-chip${m.key === trendMetric ? ' active' : ''}" data-metric="${m.key}">${m.label}</button>`,
                 ).join('');
 
-                // 막대 스케일 — 데이터 있는 달만 min/max
-                const vals = months.filter(x => x.agg).map(x => x.agg[metric.key]);
-                const min = Math.min(...vals),
-                    max = Math.max(...vals);
+                const vals = items.filter(x => x.agg).map(x => x.agg[metric.key]);
+                const min = Math.min(...vals), max = Math.max(...vals);
                 const span = max - min || 1;
 
-                document.getElementById('trend-rows').innerHTML = months
-                    .map(x => {
-                        const mLabel = `${x.month}월`;
-                        if (!x.agg) {
-                            return `<div class="trend-row empty"><span class="trend-mlabel">${mLabel}</span><span class="trend-bar-wrap"></span><span class="trend-val">—</span></div>`;
-                        }
-                        const v = x.agg[metric.key];
-                        const w = Math.round(20 + ((v - min) / span) * 80);
-                        const ym = `${x.year}-${String(x.month).padStart(2, '0')}`;
-                        return `<div class="trend-row${x.isCurrent ? ' current' : ''}" data-ym="${ym}">
-            <span class="trend-mlabel">${mLabel}</span>
+                rowsEl.innerHTML = items.map(x => {
+                    if (!x.agg) {
+                        return `<div class="trend-row empty"><span class="trend-mlabel">${x.label}</span><span class="trend-bar-wrap"></span><span class="trend-val">—</span></div>`;
+                    }
+                    const v = x.agg[metric.key];
+                    const w = Math.round(20 + ((v - min) / span) * 80);
+                    const navAttr = x.nav ? ` data-nav="${x.nav}"` : '';
+                    return `<div class="trend-row${x.isCurrent ? ' current' : ''}"${navAttr}>
+            <span class="trend-mlabel">${x.label}</span>
             <span class="trend-bar-wrap"><span class="trend-bar" style="width:${w}%"></span></span>
             <span class="trend-val">${metric.fmt(v)}<i>${metric.unit}</i></span>
           </div>`;
-                    })
-                    .join('');
+                }).join('');
 
-                // 델타 — 이번달 vs 이전 평균
-                const cur = months.find(x => x.isCurrent);
-                const others = months.filter(x => !x.isCurrent && x.agg).map(x => x.agg[metric.key]);
-                const dEl = document.getElementById('trend-delta');
+                // 델타 — 현재 vs 이전 평균
+                const cur = items.find(x => x.isCurrent);
+                const others = items.filter(x => !x.isCurrent && x.agg).map(x => x.agg[metric.key]);
+                const dEl = document.getElementById(ids.delta);
+                if (!dEl) return;
                 if (cur && cur.agg && others.length) {
                     const avgO = others.reduce((a, b) => a + b, 0) / others.length;
-                    const cv = cur.agg[metric.key];
-                    const diff = cv - avgO;
+                    const diff = cur.agg[metric.key] - avgO;
                     const better = metric.lowerBetter ? diff < 0 : diff > 0;
                     const pct = Math.round((Math.abs(diff) / avgO) * 100);
-                    const diffStr =
-                        metric.key === 'pace' ? secToPace(Math.abs(diff)) : metric.fmt(Math.abs(diff));
+                    const diffStr = metric.key === 'pace' ? secToPace(Math.abs(diff)) : metric.fmt(Math.abs(diff));
                     dEl.className = 'trend-delta ' + (better ? 'good' : 'bad');
                     dEl.innerHTML = `이전 평균 대비 ${diff < 0 ? '−' : '+'}${diffStr}${metric.unit} (${pct}%)`;
                 } else {
@@ -1577,18 +1591,19 @@
                 }
             }
 
-            document.getElementById('trend-chips').addEventListener('click', e => {
-                const chip = e.target.closest('[data-metric]');
-                if (!chip) return;
-                trendMetric = chip.dataset.metric;
-                renderTrend();
-            });
+            function renderTrend() {
+                renderTrendInto({ chips: 'trend-chips', rows: 'trend-rows', delta: 'trend-delta' }, monthSeries());
+                if (document.getElementById('week-trend-rows')) {
+                    renderTrendInto({ chips: 'week-trend-chips', rows: 'week-trend-rows', delta: 'week-trend-delta' }, weekSeries());
+                }
+            }
 
-            // 추이 행 클릭 → 리스트에서 해당 월로 이동
-            document.getElementById('trend-rows').addEventListener('click', e => {
-                const row = e.target.closest('[data-ym]');
-                if (!row) return;
-                goTo(`list.html?month=${row.dataset.ym}`);
+            // 지표 칩 선택 / 행 클릭 (월·주 공통, 위임)
+            document.addEventListener('click', e => {
+                const chip = e.target.closest('.trend-chip');
+                if (chip) { trendMetric = chip.dataset.metric; renderTrend(); return; }
+                const navRow = e.target.closest('.trend-row[data-nav]');
+                if (navRow) goTo(navRow.dataset.nav);
             });
 
             // ══════════════════════════════════════
