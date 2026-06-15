@@ -10,7 +10,11 @@ const STORE_KEYS = {
   activities: 'runit:activities', // 수동 추가 활동 (CSV 외) — { [id]: activity }
   shoes:      'runit:shoes',      // 내 신발장 — { [id]: {id, name, image} }
   pb:         'runit:pb',         // 거리별 공식 PB(가민 입력) — { [dist]: {time,pace,date,name} }
+  zones:      'runit:zones',      // 심박존 경계 이력 — [{from:'YYYY-MM-DD', z2Max, z3Max}]
 };
+
+// 심박존 기본값 (이력 없을 때 = 모든 과거 기록의 '지금 기준')
+const ZONE_DEFAULT = { z2Max: 150, z3Max: 160 };
 
 function _load(key) {
   try {
@@ -100,6 +104,37 @@ function removePB(dist) {
   const all = _load(STORE_KEYS.pb);
   delete all[dist];
   _save(STORE_KEYS.pb, all);
+}
+
+/* ── 심박존 경계 이력 (날짜별 적용) ──
+   존을 바꿔도 과거 기록은 그 당시 존으로 분류되도록, 적용 시작일(from)과 함께 보관.
+   각 항목: { from:'YYYY-MM-DD', z2Max, z3Max }  (저=≤z2Max / 중=≤z3Max / 고=초과) */
+function getZoneHistory() {
+  const r = _load(STORE_KEYS.zones);
+  return Array.isArray(r) ? r.slice().sort((a, b) => (a.from < b.from ? -1 : 1)) : [];
+}
+
+// 특정 날짜에 유효한 존 설정 — from <= date 중 가장 최근. 없으면 기본값.
+function getZoneConfigFor(date) {
+  const hist = getZoneHistory();
+  if (!hist.length) return ZONE_DEFAULT;
+  let cfg = hist[0]; // 가장 이른 설정을 그 이전 기록의 기준으로 사용
+  for (const h of hist) {
+    if (!date || h.from <= date) cfg = h;
+    else break;
+  }
+  return cfg;
+}
+
+// 새 존 설정 추가(= 변경). from(기본 오늘) 이후 기록부터 적용, 과거는 보존.
+// 이력이 비어있으면 현재 기본값을 baseline으로 먼저 심어 과거 데이터를 고정.
+function addZoneConfig(from, z2Max, z3Max) {
+  let hist = getZoneHistory();
+  if (!hist.length) hist = [{ from: '2000-01-01', z2Max: ZONE_DEFAULT.z2Max, z3Max: ZONE_DEFAULT.z3Max }];
+  hist = hist.filter(h => h.from !== from);
+  hist.push({ from, z2Max, z3Max });
+  hist.sort((a, b) => (a.from < b.from ? -1 : 1));
+  _save(STORE_KEYS.zones, hist);
 }
 
 /* ── 수동 활동 (CSV 외 직접 추가) ── */

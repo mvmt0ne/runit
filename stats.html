@@ -1275,12 +1275,16 @@
             const INTENSITY_TARGET = { low: 80, mid: 15, high: 5 };
 
             // 심박존 경계 (사용자 존): 존1 ~138 / 존2 139~150 / 존3 151~160 / 존4 161~173 / 존5 174+
-            // 강도 매핑: 존1~2 = 저(≤150), 존3 = 중(151~160), 존4+ = 고(161+)
-            const ZONE_BPM = { z2Max: 150, z3Max: 160 };
-            function bpmToIntensity(bpm) {
+            // 강도 매핑: 존1~2 = 저(≤z2Max), 존3 = 중(≤z3Max), 존4+ = 고(초과)
+            // 경계는 store(runit:zones)의 날짜별 이력에서 가져옴 → 존을 바꿔도 과거 기록은 그대로.
+            const ZONE_BPM_FALLBACK = { z2Max: 150, z3Max: 160 };
+            // bpm + 활동 날짜 → 그 날짜에 유효했던 존으로 분류
+            function bpmToIntensity(bpm, date) {
                 if (bpm == null) return null;
-                if (bpm <= ZONE_BPM.z2Max) return 'low';
-                if (bpm <= ZONE_BPM.z3Max) return 'mid';
+                const cfg = (typeof getZoneConfigFor === 'function')
+                    ? getZoneConfigFor(date) : ZONE_BPM_FALLBACK;
+                if (bpm <= cfg.z2Max) return 'low';
+                if (bpm <= cfg.z3Max) return 'mid';
                 return 'high';
             }
 
@@ -1289,7 +1293,7 @@
             function intensityFromRuns(runs) {
                 let low = 0, mid = 0, high = 0;
                 (runs || []).forEach(r => {
-                    const z = bpmToIntensity(r.bpm);
+                    const z = bpmToIntensity(r.bpm, r.date);
                     if (!z) return; // 심박 없는 활동 제외
                     const w = (r.durSec && r.durSec > 0) ? r.durSec : 1;
                     if (z === 'low') low += w;
