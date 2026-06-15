@@ -208,8 +208,11 @@ function loadActivities() {
     })
     .then(csvList => {
       // 수동 추가 활동 병합 (store.js 가 로드된 경우)
-      const manual = typeof getManualActivities === 'function' ? getManualActivities() : [];
-      return csvList.concat(manual.filter(a => a && a.date)).sort((a, b) => (a.date < b.date ? 1 : -1));
+      // 같은 날짜에 수동 활동(오버라이드)이 있으면 그 날짜의 CSV는 대체 → 수정이 상세/리스트에 반영
+      const manual = (typeof getManualActivities === 'function' ? getManualActivities() : []).filter(a => a && a.date);
+      const overridden = new Set(manual.map(a => a.date));
+      const csvKept = csvList.filter(a => !overridden.has(a.date));
+      return csvKept.concat(manual).sort((a, b) => (a.date < b.date ? 1 : -1));
     });
   return _activitiesPromise;
 }

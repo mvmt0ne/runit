@@ -607,34 +607,32 @@
       clearActFields();
       document.getElementById('act-time').value = meta.startTime || '';
 
-      // 기존 수동 활동이 있으면 폼에 채워 그 자리에서 '수정' 가능하게
-      // (없으면 _editingManualId=null → 신규 추가. CSV 활동은 마스터라 메타만 편집)
+      // 폼 채우기 — 수동 활동 우선, 없으면 CSV 활동(가민)으로 프리필.
+      //  · 수동이면 _editingManualId 설정 → 그 자리에서 수정
+      //  · CSV면 새 오버라이드(저장 시 수동 활동 생성, 같은 날짜 CSV를 대체)
       const manual = (typeof getManualActivities === 'function')
         ? getManualActivities().find(a => a.date === date) : null;
-      if (manual) {
-        _editingManualId = manual.id;
+      let act = null;
+      try { act = await getActivity(date); } catch (e) { /* ignore */ }
+      const src = manual || act;
+      if (src) {
+        if (manual) _editingManualId = manual.id;
         const setv = (id, v) => { document.getElementById(id).value = (v != null ? v : ''); };
-        setv('act-km', manual.km);
-        setv('act-dur', manual.dur);
-        setv('act-pace', manual.pace);
-        setv('act-bpm', manual.bpm);
-        setv('act-spm', manual.spm);
-        setv('act-stride', manual.stride);
-        setv('act-ground', manual.ground);
-        if (manual.startTime) document.getElementById('act-time').value = manual.startTime;
-        if (!nameInput.value && manual.name) nameInput.value = manual.name;
-        if (!typeInput.value && manual.type) typeInput.value = manual.type;
+        setv('act-km', src.km);
+        setv('act-dur', src.dur);
+        setv('act-pace', src.pace);
+        setv('act-bpm', src.bpm);
+        setv('act-spm', src.spm);
+        setv('act-stride', src.stride); // 미터 단위 (입력 필드와 동일)
+        setv('act-ground', src.ground);
+        if (src.startTime) document.getElementById('act-time').value = src.startTime;
+        if (!nameInput.value && src.name) nameInput.value = src.name;
+        if (!typeInput.value && src.type) typeInput.value = src.type;
       }
       updateSaveBtn();
-      // CSV 활동 힌트 표시
-      try {
-        const act = await getActivity(date);
-        if (act) {
-          dateHelper.textContent = `CSV: ${act.name} (${act.type}) · ${act.km}km · ${act.dur}`;
-        } else {
-          dateHelper.textContent = '가민 활동 날짜 (YYYY-MM-DD). 같은 날짜면 덮어씀.';
-        }
-      } catch (e) { /* ignore */ }
+      dateHelper.textContent = src
+        ? `${manual ? '수동' : 'CSV'}: ${src.name || src.type || '러닝'} · ${src.km ?? '?'}km · ${src.dur || '-'}`
+        : '가민 활동 날짜 (YYYY-MM-DD). 같은 날짜면 덮어씀.';
     }
     loadForDate();
 
