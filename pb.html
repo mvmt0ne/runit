@@ -523,17 +523,31 @@
 
       const heroTime = document.getElementById('pb-hero-time');
       const heroCard = document.getElementById('pb-hero-card');
+      const records = ACT_DATA[currentDist] || [];
 
-      // ── 히어로: 공식 PB(가민 입력) ──
+      // ── 히어로: 수동 공식 PB가 있으면 우선, 없으면 CSV 최고 기록 자동 ──
       const pb = (typeof getPB === 'function') ? getPB(currentDist) : null;
+      let hero = null, fromCsv = false;
       if (pb && pb.time) {
-        const sec = _timeToSec(pb.time);
-        document.getElementById('pb-hero-pace').textContent =
-          pb.pace || _paceFromTime(sec, DIST_KM[currentDist]);
-        document.getElementById('pb-hero-name').textContent = pb.name || '';
-        document.getElementById('pb-hero-date').textContent = _fmtDate(pb.date);
-        heroCard.dataset.date = pb.date || '';
-        slotAnimate(heroTime, pb.time);
+        hero = {
+          time: pb.time,
+          pace: pb.pace || _paceFromTime(_timeToSec(pb.time), DIST_KM[currentDist]),
+          name: pb.name || '',
+          dateDisp: _fmtDate(pb.date),
+          dateKey: pb.date || '',
+        };
+      } else if (records.length) {
+        const a = records[0]; // 가장 빠른 활동
+        hero = { time: a.time, pace: a.pace, name: a.name || '', dateDisp: a.date, dateKey: a.dateKey || '' };
+        fromCsv = true;
+      }
+
+      if (hero) {
+        document.getElementById('pb-hero-pace').textContent = hero.pace;
+        document.getElementById('pb-hero-name').textContent = hero.name;
+        document.getElementById('pb-hero-date').textContent = hero.dateDisp;
+        heroCard.dataset.date = hero.dateKey;
+        slotAnimate(heroTime, hero.time);
       } else {
         heroTime.textContent = '--';
         document.getElementById('pb-hero-pace').textContent = '탭하여 PB 입력';
@@ -542,16 +556,18 @@
         heroCard.dataset.date = '';
       }
 
-      // ── 하단: 활동 기준 기록 (상세 링크) ──
-      const records = ACT_DATA[currentDist] || [];
-      if (!records.length) {
-        document.getElementById('pb-list').innerHTML =
-          '<div class="pb-empty">이 거리의 활동 기록이 아직 없습니다</div>';
+      // ── 하단: 활동 기준 기록 (상세 링크). 히어로가 CSV 최고면 그 1건은 제외 ──
+      const listRecords = fromCsv ? records.slice(1) : records;
+      const startRank = fromCsv ? 2 : 1;
+      if (!listRecords.length) {
+        document.getElementById('pb-list').innerHTML = records.length
+          ? '<div class="pb-empty">추가 활동 기록 없음</div>'
+          : '<div class="pb-empty">이 거리의 활동 기록이 아직 없습니다</div>';
         return;
       }
-      document.getElementById('pb-list').innerHTML = records.map((r, i) => `
-        <div class="pb-row" data-rank="${i + 1}" onclick="goTo('detail.html?date=${r.dateKey}')">
-          <span class="pb-rank">${i + 1}</span>
+      document.getElementById('pb-list').innerHTML = listRecords.map((r, i) => `
+        <div class="pb-row" data-rank="${startRank + i}" onclick="goTo('detail.html?date=${r.dateKey}')">
+          <span class="pb-rank">${startRank + i}</span>
           <span class="pb-row-time">${r.time}</span>
           <div class="pb-row-meta">
             <span class="pb-row-name">${r.name}</span>
@@ -565,10 +581,13 @@
     /* ─── 공식 PB 입력 시트 ─── */
     function openPBEdit() {
       const pb = (typeof getPB === 'function') ? getPB(currentDist) : null;
+      // 수동값이 있으면 그걸로, 없으면 CSV 최고 기록을 시작점으로 채움
+      const best = (ACT_DATA[currentDist] && ACT_DATA[currentDist][0]) || null;
+      const seed = pb || (best ? { time: best.time, date: best.dateKey, name: best.name } : null);
       document.getElementById('pb-sheet-title').textContent = `${DISTS[currentDist]} 공식 PB`;
-      document.getElementById('pb-in-time').value = pb ? (pb.time || '') : '';
-      document.getElementById('pb-in-date').value = pb ? (pb.date || '') : '';
-      document.getElementById('pb-in-name').value = pb ? (pb.name || '') : '';
+      document.getElementById('pb-in-time').value = seed ? (seed.time || '') : '';
+      document.getElementById('pb-in-date').value = seed ? (seed.date || '') : '';
+      document.getElementById('pb-in-name').value = seed ? (seed.name || '') : '';
       document.getElementById('pb-del-btn').style.display = pb ? '' : 'none';
       document.getElementById('pb-sheet-backdrop').classList.add('open');
       document.getElementById('pb-sheet').classList.add('open');
