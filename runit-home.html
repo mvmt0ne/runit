@@ -263,6 +263,37 @@
       font-family: 'Space Grotesk', -apple-system, sans-serif;
     }
 
+    /* ─── 슬롯 롤 숫자 (textmotion.dev / slot-text 스타일) ─── */
+    .hero-km-value.slot-num {
+      display: inline-flex;
+      align-items: flex-start;
+    }
+    .slot-col {
+      display: inline-block;
+      height: 1em;
+      line-height: 1;
+      overflow: hidden;
+      vertical-align: top;
+    }
+    .slot-reel {
+      display: flex;
+      flex-direction: column;
+      will-change: transform;
+    }
+    .slot-digit {
+      height: 1em;
+      line-height: 1;
+      display: block;
+      text-align: center;
+    }
+    .slot-sep {
+      display: inline-block;
+      line-height: 1;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .slot-reel { transition: none !important; }
+    }
+
     /* ─── Bottom Nav ──────────────────────────── */
     .bottom-nav {
       height: 52px;
@@ -1014,11 +1045,49 @@
       }, 200);
     }
 
+    // 슬롯 롤 숫자 — 각 자리를 0~9 릴로 만들어 목표 숫자로 굴림 (이전값→새값)
+    function slotNumber(el, value) {
+      const val = String(value);
+      const prev = el.dataset.prev || '';
+      el.dataset.prev = val;
+      const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      el.classList.add('slot-num');
+      el.innerHTML = '';
+      [...val].forEach((ch, i) => {
+        if (!/\d/.test(ch)) {
+          const s = document.createElement('span');
+          s.className = 'slot-sep';
+          s.textContent = ch;
+          el.appendChild(s);
+          return;
+        }
+        const col = document.createElement('span');
+        col.className = 'slot-col';
+        const reel = document.createElement('span');
+        reel.className = 'slot-reel';
+        for (let d = 0; d <= 9; d++) {
+          const dg = document.createElement('span');
+          dg.className = 'slot-digit';
+          dg.textContent = d;
+          reel.appendChild(dg);
+        }
+        col.appendChild(reel);
+        el.appendChild(col);
+        const target = +ch;
+        if (reduce) { reel.style.transform = `translateY(-${target}em)`; return; }
+        const start = /\d/.test(prev[i] || '') ? +prev[i] : 0;
+        reel.style.transform = `translateY(-${start}em)`;
+        void reel.offsetHeight; // reflow
+        reel.style.transition = `transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) ${i * 55}ms`;
+        reel.style.transform = `translateY(-${target}em)`;
+      });
+    }
+
     function renderMonth() {
       const key = MONTHS_ORDER[currentMonthIdx];
       const d = MONTH_DATA[key];
       const kmEl = document.querySelector('.hero-km-value');
-      if (kmEl) kmEl.textContent = d.km;
+      if (kmEl) slotNumber(kmEl, d.km);
       const labelEl = document.getElementById('hero-month-label');
       if (labelEl) labelEl.textContent = d.monthName;
       const gridEl = document.getElementById('cal-grid-1');
