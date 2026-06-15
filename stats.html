@@ -909,6 +909,10 @@
                                     <div class="components-title">러닝 종류</div>
                                     <div id="week-type-chart"></div>
                                 </div>
+                                <div class="month-runs">
+                                    <div class="month-runs-title">이 주의 러닝</div>
+                                    <div id="week-runs-list"></div>
+                                </div>
                             </div>
                         </div>
 
@@ -1630,7 +1634,7 @@
                     .map((p, i) => (i === 0 ? p : parseInt(p)))
                     .join('.');
                 const strideM = (r.stride / 100).toFixed(2);
-                return `<div class="lp-row expanded" onclick="goTo('detail.html')">
+                return `<div class="lp-row expanded" onclick="goTo('detail.html?date=${r.date}')">
         <div class="lp-info">
           <div class="lp-title-row">
             <div class="lp-row-left-head">
@@ -1845,6 +1849,7 @@
                 // 기본: 기간 전체 요약
                 renderIntensityBar('week-intensity', period.runs, animate);
                 renderTypeChart('week-type-chart', period.runs);
+                renderRunsList('week-runs-list', period.runs);
                 const lbl = document.getElementById('week-range-label');
                 if (lbl) { lbl.textContent = period.label + ' 전체'; lbl.classList.remove('selected'); }
                 document.getElementById('week-chart').classList.remove('has-selection');
@@ -1865,6 +1870,7 @@
                     chart.querySelectorAll('.cmp-col').forEach(c => c.classList.remove('selected'));
                     renderIntensityBar('week-intensity', period.runs, false);
                     renderTypeChart('week-type-chart', period.runs);
+                    renderRunsList('week-runs-list', period.runs);
                     if (lbl) { lbl.textContent = period.label + ' 전체'; lbl.classList.remove('selected'); }
                     return;
                 }
@@ -1874,6 +1880,7 @@
                 chart.querySelectorAll('.cmp-col')[idx].classList.add('selected');
                 renderIntensityBar('week-intensity', w.runs, false);
                 renderTypeChart('week-type-chart', w.runs);
+                renderRunsList('week-runs-list', w.runs);
                 if (lbl) { lbl.textContent = w.range; lbl.classList.add('selected'); }
             }
 
