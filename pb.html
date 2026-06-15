@@ -365,10 +365,12 @@
         </div>
 
         <div class="tab-row dist-tabs">
+          <button class="tab"        data-dist="400"  onclick="switchDist('400')">400m</button>
           <button class="tab"        data-dist="1k"   onclick="switchDist('1k')">1K</button>
           <button class="tab"        data-dist="3k"   onclick="switchDist('3k')">3K</button>
           <button class="tab active" data-dist="5k"   onclick="switchDist('5k')">5K</button>
           <button class="tab"        data-dist="10k"  onclick="switchDist('10k')">10K</button>
+          <button class="tab"        data-dist="15k"  onclick="switchDist('15k')">15K</button>
           <button class="tab"        data-dist="half" onclick="switchDist('half')">하프</button>
           <button class="tab"        data-dist="full" onclick="switchDist('full')">풀</button>
         </div>
@@ -438,10 +440,12 @@
     // 거리별 PB — 실제 활동에서 계산. 각 거리의 허용 범위(km) 안의 러닝을
     // 기록(시간) 빠른 순으로 정렬해 상위 5개. (스플릿 데이터 없어 활동 거리 기준 근사)
     const DIST_BANDS = {
+      '400':  [0.35, 0.5],
       '1k':   [0.9, 1.6],
       '3k':   [2.7, 3.5],
       '5k':   [4.6, 5.6],
       '10k':  [9.3, 11.0],
+      '15k':  [14.0, 16.0],
       'half': [20.5, 21.6],
       'full': [41.0, 42.8],
     };
@@ -450,7 +454,7 @@
     let ACT_DATA = {};
 
     // 거리별 정식 km (공식 PB 페이스 자동 계산용)
-    const DIST_KM = { '1k': 1, '3k': 3, '5k': 5, '10k': 10, 'half': 21.0975, 'full': 42.195 };
+    const DIST_KM = { '400': 0.4, '1k': 1, '3k': 3, '5k': 5, '10k': 10, '15k': 15, 'half': 21.0975, 'full': 42.195 };
 
     const _timeToSec = t => {
       const p = String(t || '').trim().split(':').map(Number);
@@ -500,8 +504,8 @@
       return out;
     }
 
-    const DISTS = { '1k': '1K', '3k': '3K', '5k': '5K', '10k': '10K', 'half': '하프', 'full': '풀' };
-    const WATERMARKS = { '1k': '1', '3k': '3', '5k': '5', '10k': '10', 'half': '21', 'full': '42' };
+    const DISTS = { '400': '400m', '1k': '1K', '3k': '3K', '5k': '5K', '10k': '10K', '15k': '15K', 'half': '하프', 'full': '풀' };
+    const WATERMARKS = { '400': '400', '1k': '1', '3k': '3', '5k': '5', '10k': '10', '15k': '15', 'half': '21', 'full': '42' };
 
     let currentDist = '5k';
 
