@@ -628,17 +628,25 @@
             }
 
             /* 이번 달 강조 */
+            /* 현재 주/월 — 중립 볼드 (오렌지는 '최고 기록' 전용) */
             .trend-row.current .trend-mlabel,
             .trend-row.current .trend-val {
+              color: var(--asphalt-black);
+              font-weight: 600;
+            }
+
+            /* 가장 기록이 좋은 주/월 — 오렌지 강조 */
+            .trend-row.best .trend-mlabel,
+            .trend-row.best .trend-val {
               color: var(--accent);
               font-weight: 500;
             }
 
-            .trend-row.current .trend-val i {
+            .trend-row.best .trend-val i {
               color: var(--accent);
             }
 
-            .trend-row.current .trend-bar {
+            .trend-row.best .trend-bar {
               background: var(--accent);
             }
 
@@ -1593,6 +1601,8 @@
                 const vals = items.filter(x => x.agg).map(x => x.agg[metric.key]);
                 const min = Math.min(...vals), max = Math.max(...vals);
                 const span = max - min || 1;
+                // 가장 기록이 좋은 값 (지표 방향에 따라 최소/최대) → 막대 오렌지
+                const bestVal = vals.length ? (metric.lowerBetter ? min : max) : null;
 
                 rowsEl.innerHTML = items.map(x => {
                     if (!x.agg) {
@@ -1601,7 +1611,8 @@
                     const v = x.agg[metric.key];
                     const w = Math.round(20 + ((v - min) / span) * 80);
                     const navAttr = x.nav ? ` data-nav="${x.nav}"` : '';
-                    return `<div class="trend-row${x.isCurrent ? ' current' : ''}"${navAttr}>
+                    const cls = 'trend-row' + (x.isCurrent ? ' current' : '') + (bestVal != null && v === bestVal ? ' best' : '');
+                    return `<div class="${cls}"${navAttr}>
             <span class="trend-mlabel">${x.label}</span>
             <span class="trend-bar-wrap"><span class="trend-bar" style="width:${w}%"></span></span>
             <span class="trend-val">${metric.fmt(v)}<i>${metric.unit}</i></span>
