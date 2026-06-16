@@ -371,12 +371,14 @@
     /* 강도 분포 */
     .intensity-breakdown {
       padding: 40px 20px;
-      border-top: 1px solid var(--dark-gray);
+      border-top: 1px solid var(--asphalt-black);
+      background: var(--dark-gray);
     }
 
     /* 강도 카드: 제목 + 도넛 + 범례 */
     .intensity-title {
       font-size: 18px;
+      color: var(--slate-gray);
       font-weight: 400;
       letter-spacing: 0;
     }
@@ -406,10 +408,12 @@
       color: var(--accent);
     }
 
-    .intensity-legend-row.mid {}
+    .intensity-legend-row.mid {
+      color: var(--bone);
+    }
 
     .intensity-legend-row.low {
-      color: var(--bone);
+      color: var(--cloudy-gray);
     }
 
     .il-types {
@@ -490,7 +494,7 @@
     }
 
     .isb-low {
-      background: var(--slate-gray);
+      background: var(--cloudy-gray);
     }
 
     .isb-low span {
@@ -498,7 +502,7 @@
     }
 
     .isb-mid {
-      background: var(--asphalt-gray);
+      background: var(--slate-gray);
     }
 
     .isb-mid span {
@@ -510,7 +514,7 @@
     }
 
     .isb-high span {
-      color: #000;
+      color: var(--asphalt-black);
     }
 
     .isb-axis {
@@ -596,9 +600,9 @@
 
     .trend-chip {
       font-size: 15px;
-      font-weight: 500;
+      font-weight: 600;
       font-family: 'Pretendard Variable', sans-serif;
-      color: var(--slate-gray);
+      color: var(--cloudy-gray);
       background: transparent;
       padding: 10px 20px 10px 0;
       cursor: pointer;
@@ -642,7 +646,6 @@
     .trend-bar-wrap {
       flex: 1;
       height: 8px;
-      background: rgba(255, 255, 255, 0.1);
       overflow: hidden;
     }
 
@@ -1739,7 +1742,7 @@
         return `<div class="type-chart-row"${dimStyle}>
           <span class="type-chart-label">${t.label}</span>
           <div class="type-chart-track">
-            <div class="type-chart-fill" data-pct="${pct}" style="background:${fill}"></div>
+            <div class="type-chart-fill" data-pct="${pct}"></div>
           </div>
           <span class="type-chart-count">${count}</span>
         </div>`;
