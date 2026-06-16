@@ -253,7 +253,8 @@
       font-style: italic;
       color: var(--bone);
       letter-spacing: -2px;
-      line-height: 1;
+      /* iOS: line-height 1이면 큰 이탤릭 글리프가 라인박스를 넘쳐 상위 overflow에서 잘림 → 여유 */
+      line-height: 1.25;
       transition: color 0.3s;
       font-family: 'Urbanist', -apple-system, sans-serif;
     }
