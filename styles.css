@@ -1557,6 +1557,13 @@ input[type='range'].range-input::-moz-range-thumb {
     font-family: 'Pretendard Variable', sans-serif;
 }
 .pb-input:focus { outline: none; border-color: var(--accent); }
+/* 날짜 입력 — 다크 배경에서 네이티브 컨트롤/아이콘 정상 표시 */
+input[type="date"].pb-input {
+    color-scheme: dark;
+    min-height: 46px;
+    line-height: 1.2;
+}
+input[type="date"].pb-input::-webkit-date-and-time-value { text-align: left; }
 .pb-sheet-actions { display: flex; gap: 10px; margin-top: 22px; }
 .pb-sheet-btn {
     flex: 1;

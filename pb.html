@@ -603,6 +603,19 @@
       document.getElementById('pb-sheet').classList.remove('open');
     }
 
+    // 시간 입력 자동 콜론 — 숫자만 쳐도 18:42 / 1:46:18 로 포맷 (모바일 숫자 키패드 대응)
+    (function () {
+      const el = document.getElementById('pb-in-time');
+      if (!el) return;
+      el.addEventListener('input', () => {
+        const d = el.value.replace(/\D/g, '').slice(0, 6);
+        let v = d;
+        if (d.length > 4) v = d.slice(0, -4) + ':' + d.slice(-4, -2) + ':' + d.slice(-2);
+        else if (d.length > 2) v = d.slice(0, -2) + ':' + d.slice(-2);
+        el.value = v;
+      });
+    })();
+
     function savePBEntry() {
       const time = document.getElementById('pb-in-time').value.trim();
       const sec = _timeToSec(time);
