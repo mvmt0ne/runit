@@ -26,7 +26,9 @@
     /* ─── 러닝 종류 차트 ── */
     .type-chart {
       padding: 40px 20px;
-      border-top: 1px solid var(--dark-gray);
+      border-top: 1px solid var(--asphalt-black);
+      background: var(--dark-gray);
+      color: var(--slate-gray);
     }
 
     .type-chart-row {
@@ -557,7 +559,7 @@
             ════════════════════════════════════ */
     .trend-block {
       padding: 40px 20px;
-      border-top: 1px solid var(--slate-gray);
+      border-top: 1px solid var(--asphalt-black);
       background: var(--dark-gray);
     }
 
@@ -658,7 +660,7 @@
 
     .trend-val {
       font-size: 13px;
-      color: var(--asphalt-black);
+      color: var(--cloudy-gray);
       font-family: 'Urbanist', sans-serif;
       text-align: right;
       flex-shrink: 0;
@@ -672,13 +674,9 @@
       margin-left: 2px;
     }
 
-    /* 이번 달 강조 */
+
     /* 현재 주/월 — 중립 볼드 (오렌지는 '최고 기록' 전용) */
-    .trend-row.current .trend-mlabel,
-    .trend-row.current .trend-val {
-      color: var(--asphalt-black);
-      font-weight: 600;
-    }
+
 
     /* 가장 기록이 좋은 주/월 — 오렌지 강조 */
     .trend-row.best .trend-mlabel,
