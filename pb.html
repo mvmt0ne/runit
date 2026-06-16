@@ -602,8 +602,13 @@
     }
 
     function closePBEdit() {
+      // iOS: 입력 포커스가 남은 채 fixed 시트가 닫히면 뷰포트가 밀린 채 고정되는 문제 방지
+      if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
       document.getElementById('pb-sheet-backdrop').classList.remove('open');
       document.getElementById('pb-sheet').classList.remove('open');
+      // 포커스로 밀린 스크롤 복귀
+      window.scrollTo(0, 0);
+      if (document.scrollingElement) document.scrollingElement.scrollTop = 0;
     }
 
     // 시간 입력 자동 콜론 — 숫자만 쳐도 18:42 / 1:46:18 로 포맷 (모바일 숫자 키패드 대응)
