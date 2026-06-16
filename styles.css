@@ -1557,13 +1557,32 @@ input[type='range'].range-input::-moz-range-thumb {
     font-family: 'Pretendard Variable', sans-serif;
 }
 .pb-input:focus { outline: none; border-color: var(--accent); }
-/* 날짜 입력 — 다크 배경에서 네이티브 컨트롤/아이콘 정상 표시 */
+/* 날짜 입력 — 다크 배경 + 커스텀 달력 아이콘 (모바일에서 네이티브가 깨져 보이는 문제 해결) */
 input[type="date"].pb-input {
     color-scheme: dark;
     min-height: 46px;
     line-height: 1.2;
+    padding-right: 44px;
 }
 input[type="date"].pb-input::-webkit-date-and-time-value { text-align: left; }
+input[type="date"].pb-input::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 0;
+}
+.pb-dt { position: relative; display: flex; }
+.pb-dt .pb-input { width: 100%; }
+.pb-dt-ico {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 19px;
+    height: 19px;
+    color: var(--cloudy-gray);
+    pointer-events: none;
+}
 .pb-sheet-actions { display: flex; gap: 10px; margin-top: 22px; }
 .pb-sheet-btn {
     flex: 1;
