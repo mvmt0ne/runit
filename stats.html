@@ -35,7 +35,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 6px;
+      margin-bottom: 2px;
       transition: opacity 0.3s;
     }
 
@@ -47,7 +47,7 @@
 
     .type-chart-track {
       flex: 1;
-      height: 8px;
+      height: 16px;
       background: rgba(255, 255, 255, 0);
       overflow: hidden;
     }
@@ -626,9 +626,24 @@
     .trend-row {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 6px;
+      gap: 6px;
+      margin-bottom: 2px;
       transition: opacity 0.3s;
+    }
+
+    /* 단위 헤더 행 — 표 상단 1회 */
+    .trend-thead {
+      margin-bottom: 8px;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--cloudy-gray);
+      pointer-events: none;
+    }
+    .trend-thead .trend-mlabel,
+    .trend-thead .trend-val {
+      font-size: 11px;
+      color: var(--cloudy-gray);
     }
 
     .trend-row[data-nav] {
@@ -641,7 +656,7 @@
 
     .trend-mlabel {
       font-size: 13px;
-      width: 54px;
+      width: 36px;
       flex-shrink: 0;
       color: var(--slate-gray);
       font-family: 'Urbanist', sans-serif;
@@ -649,7 +664,7 @@
 
     .trend-bar-wrap {
       flex: 1;
-      height: 8px;
+      height: 16px;
       overflow: hidden;
     }
 
@@ -657,7 +672,7 @@
       display: block;
       height: 100%;
       width: 0;
-      background: var(--slate-gray);
+      background: var(--cloudy-gray);
       transition: width 0.55s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -1562,7 +1577,7 @@
         let m = TREND_REF_M - off, y = TREND_REF_Y;
         while (m <= 0) { m += 12; y--; }
         const ym = `${y}-${String(m).padStart(2, '0')}`;
-        arr.push({ label: `${m}월`, isCurrent: off === 0, agg: aggregateMonth(y, m), nav: `list.html?month=${ym}` });
+        arr.push({ label: `${m}`, isCurrent: off === 0, agg: aggregateMonth(y, m), nav: `list.html?month=${ym}` });
       }
       return arr;
     }
@@ -1581,7 +1596,7 @@
     let trendMetric = 'pace';
 
     // 공통 렌더 — series(오래된→최신)를 최신이 위로 오게 역순 표시
-    function renderTrendInto(ids, series) {
+    function renderTrendInto(ids, series, labelUnit) {
       const rowsEl = document.getElementById(ids.rows);
       if (!rowsEl) return;
       const items = series.slice().reverse();
@@ -1597,7 +1612,14 @@
       // 가장 기록이 좋은 값 (지표 방향에 따라 최소/최대) → 막대 오렌지
       const bestVal = vals.length ? (metric.lowerBetter ? min : max) : null;
 
-      rowsEl.innerHTML = items.map(x => {
+      // 단위 헤더 — 표 상단에 한 번만 (셀에는 숫자만)
+      const header = `<div class="trend-row trend-thead">
+            <span class="trend-mlabel">${labelUnit || ''}</span>
+            <span class="trend-bar-wrap"></span>
+            <span class="trend-val">${metric.unit}</span>
+          </div>`;
+
+      rowsEl.innerHTML = header + items.map(x => {
         if (!x.agg) {
           return `<div class="trend-row empty"><span class="trend-mlabel">${x.label}</span><span class="trend-bar-wrap"></span><span class="trend-val">—</span></div>`;
         }
@@ -1608,7 +1630,7 @@
         return `<div class="${cls}"${navAttr}>
             <span class="trend-mlabel">${x.label}</span>
             <span class="trend-bar-wrap"><span class="trend-bar" style="width:${w}%"></span></span>
-            <span class="trend-val">${metric.fmt(v)}<i>${metric.unit}</i></span>
+            <span class="trend-val">${metric.fmt(v)}</span>
           </div>`;
       }).join('');
 
@@ -1632,9 +1654,9 @@
     }
 
     function renderTrend() {
-      renderTrendInto({ chips: 'trend-chips', rows: 'trend-rows', delta: 'trend-delta' }, monthSeries());
+      renderTrendInto({ chips: 'trend-chips', rows: 'trend-rows', delta: 'trend-delta' }, monthSeries(), '월');
       if (document.getElementById('week-trend-rows')) {
-        renderTrendInto({ chips: 'week-trend-chips', rows: 'week-trend-rows', delta: 'week-trend-delta' }, weekSeries());
+        renderTrendInto({ chips: 'week-trend-chips', rows: 'week-trend-rows', delta: 'week-trend-delta' }, weekSeries(), '주');
       }
     }
 
