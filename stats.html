@@ -189,6 +189,7 @@
             ════════════════════════════════════ */
     .chart-block {
       padding: 20px 0;
+      background: var(--dark-gray);
     }
 
     .chart-top {
@@ -209,7 +210,7 @@
     .year-arrow {
       width: 26px;
       height: 26px;
-      border-radius: 0;
+      color: var(--slate-gray);
       background: transparent;
       border: none;
       cursor: pointer;
@@ -232,11 +233,12 @@
     .chart-period-label {
       font-size: 20px;
       font-weight: 400;
+      color: var(--slate-gray);
       transition: color 0.3s;
     }
 
     .chart-avg-line-label {
-      color: var(--cloudy-gray);
+      color: var(--slate-gray);
       font-family: 'Urbanist', monospace;
     }
 
@@ -282,7 +284,7 @@
 
     /* 슬림 바 */
     .cmp-bar {
-      width: 3px;
+      width: 8px;
       border-radius: 0;
       background: var(--cloudy-gray);
       transition: background 0.3s, height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -290,12 +292,12 @@
 
     /* 지나간 달 — 현재 달과 동일 컬러 */
     .cmp-col.past .cmp-bar {
-      background: var(--bone);
+      background: var(--slate-gray);
     }
 
     /* 이번 달 — 흰색 */
     .cmp-col.current .cmp-bar {
-      background: var(--bone);
+      background: var(--slate-gray);
     }
 
     /* 미래 달 — 스텁 (고정 높이, 매우 흐리게) */
@@ -306,7 +308,7 @@
 
     /* 비활성화 (0km) */
     .cmp-col.inactive .cmp-bar {
-      background: var(--cloudy-gray);
+      background: var(--dark-gray);
     }
 
     .cmp-col.inactive .cmp-label {
@@ -317,6 +319,7 @@
     .cmp-km {
       font-size: 14px;
       font-weight: 500;
+      color: var(--cloudy-gray);
       font-family: 'Urbanist', sans-serif;
       white-space: nowrap;
       transition: color 0.2s, opacity 0.2s;
@@ -354,7 +357,7 @@
     }
 
     .cmp-chart.vertical .cmp-label {
-      color: var(--dark-gray);
+      color: var(--slate-gray);
       font-weight: 300;
     }
 
@@ -409,7 +412,7 @@
     }
 
     .intensity-legend-row.mid {
-      color: var(--bone);
+      color: var(--slate-gray);
     }
 
     .intensity-legend-row.low {
@@ -494,7 +497,7 @@
     }
 
     .isb-low {
-      background: var(--cloudy-gray);
+      background: var(--slate-gray);
     }
 
     .isb-low span {
@@ -502,7 +505,7 @@
     }
 
     .isb-mid {
-      background: var(--slate-gray);
+      background: var(--asphalt-gray);
     }
 
     .isb-mid span {
@@ -514,7 +517,7 @@
     }
 
     .isb-high span {
-      color: var(--asphalt-black);
+      color: #000;
     }
 
     .isb-axis {
@@ -1772,14 +1775,14 @@
       const RAD = Math.PI / 180;
       // 링 간 viewBox 간격 절반으로 축소: 11 → 5.5 (sw=17 기준 r=100, 77.5, 55)
       const rings = [
-        { r: 100, sw: 17, label: '저', sub: '존1~2 · ~150bpm', pct: low, color: 'var(--bone)', cls: 'low' },
+        { r: 100, sw: 17, label: '저', sub: '존1~2 · ~150bpm', pct: low, color: 'var(--cloudy-gray)', cls: 'low' },
         {
           r: 77.5,
           sw: 17,
           label: '중',
           sub: '존3 · 151~160bpm',
           pct: mid,
-          color: 'var(--dark-gray)',
+          color: 'var(--slate-gray)',
           cls: 'mid',
         },
         {
@@ -1804,7 +1807,7 @@
 
           return `
           <circle cx="${cx}" cy="${cx}" r="${ring.r}" fill="none"
-            stroke="${ring.color}" stroke-opacity="0.05" stroke-width="${ring.sw}"/>
+            stroke="${ring.color}" stroke-opacity="0" stroke-width="${ring.sw}"/>
           <circle cx="${cx}" cy="${cx}" r="${ring.r}" fill="none"
             stroke="${ring.color}" stroke-width="${ring.sw}" stroke-linecap="round"
             stroke-dasharray="${circ.toFixed(1)} ${circ.toFixed(1)}"
