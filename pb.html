@@ -32,10 +32,15 @@
 
     .pb-scroll::-webkit-scrollbar { display: none; }
 
-    /* ── Distance tabs — stats 와 동일한 .tab 사용, 6개 균등 분배만 추가 ── */
+    /* ── Distance tabs — 8개 균등 분배. 개수가 많아 폰트를 줄여 여유 확보 ── */
+    .dist-tabs { padding: 0 6px; }
     .dist-tabs .tab {
       flex: 1;
       padding: 12px 0;
+      font-size: 16px;
+      letter-spacing: -0.3px;
+      text-align: center;
+      white-space: nowrap;
     }
 
     /* ── PB content ── */
