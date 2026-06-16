@@ -160,14 +160,17 @@
 
     .weather-icon {
       display: inline-flex;
-      color: var(--text-1);
+      color: var(--bone);
     }
-    .weather-icon svg { display: block; }
+
+    .weather-icon svg {
+      display: block;
+    }
 
     .weather-temp {
       font-size: 20px;
       font-weight: 500;
-      color: var(--text-1);
+      color: var(--bone);
     }
 
 
@@ -175,7 +178,7 @@
       display: flex;
       gap: 8px;
       font-size: 11px;
-      color: var(--text-3);
+      color: var(--slate-gray);
       font-weight: 500;
     }
 
@@ -226,9 +229,9 @@
     }
 
     .hero-title-line {
-      font-size: 24px;
+      font-size: 18px;
       font-weight: 300;
-      color: var(--text-1);
+      color: var(--slate-gray);
       letter-spacing: 0em;
       line-height: 1.5;
       transition: color 0.3s;
@@ -246,8 +249,7 @@
 
     .hero-km-big {
       font-size: 72px;
-      font-weight: 300;
-      color: var(--text-1);
+      color: var(--bone);
       letter-spacing: -2px;
       line-height: 1;
       transition: color 0.3s;
@@ -268,6 +270,7 @@
       display: inline-flex;
       align-items: flex-start;
     }
+
     .slot-col {
       display: inline-block;
       height: 1em;
@@ -275,23 +278,29 @@
       overflow: hidden;
       vertical-align: top;
     }
+
     .slot-reel {
       display: flex;
       flex-direction: column;
       will-change: transform;
     }
+
     .slot-digit {
       height: 1em;
       line-height: 1;
       display: block;
       text-align: center;
     }
+
     .slot-sep {
       display: inline-block;
       line-height: 1;
     }
+
     @media (prefers-reduced-motion: reduce) {
-      .slot-reel { transition: none !important; }
+      .slot-reel {
+        transition: none !important;
+      }
     }
 
     /* ─── Bottom Nav ──────────────────────────── */
@@ -770,10 +779,9 @@
 
             <!-- 가변 여백: 히어로↔캘린더 사이 + 월 드롭다운(좌) + 스와이프 인디케이터(우) -->
             <div class="cal-flex-spacer">
-              <span class="hero-month-tap" onclick="openMonthSheet()"><span
-                  id="hero-month-label">4월</span><svg class="hero-month-chevron" width="14" height="14"
-                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round">
+              <span class="hero-month-tap" onclick="openMonthSheet()"><span id="hero-month-label">4월</span><svg
+                  class="hero-month-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="m6 9 6 6 6-6" />
                 </svg></span>
               <div class="cal-swipe-arrows">
@@ -961,7 +969,7 @@
 
     /* ── Month navigation (CSV에서 동적 생성) ── */
     let MONTHS_ORDER = [];       // ['YYYY-MM', ...] 오름차순 (오래된 → 최신)
-    let MONTH_DATA   = {};       // { 'YYYY-MM': { monthName, km, runCount, calGrid } }
+    let MONTH_DATA = {};       // { 'YYYY-MM': { monthName, km, runCount, calGrid } }
     let currentMonthIdx = 0;
 
     function buildCalGrid(ym, dayMap, today) {
@@ -1004,7 +1012,7 @@
       MONTH_DATA = {};
       const now = new Date();
       const today = { y: now.getFullYear(), m: now.getMonth() + 1, d: now.getDate() };
-      const MONTH_NAMES = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+      const MONTH_NAMES = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
       MONTHS_ORDER.forEach(ym => {
         const acts = byMonth.get(ym);
         const totalKm = acts.reduce((s, a) => s + (a.km || 0), 0);
