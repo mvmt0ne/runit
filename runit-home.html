@@ -238,6 +238,13 @@
       font-family: 'Pretendard Variable', -apple-system, sans-serif;
     }
 
+    /* 마일리지 숫자 페이드인 (텍스트 재렌더 없이 합성만 → iOS 잔상 없음) */
+    .hero-km-value { display: inline-block; }
+    @keyframes kmFade {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: none; }
+    }
+
     .hero-km-row {
       padding: 4px 22px 0;
       display: flex;
@@ -1018,27 +1025,15 @@
       }, 200);
     }
 
-    // 마일리지 숫자 카운트업 (이전값→새값으로 증가). 일반 텍스트라 잘릴 요소 없음
-    let _slotRaf = 0;
+    // 마일리지 숫자 — 값은 바로 표시하고, 텍스트 재렌더 없는 페이드인만 적용.
+    // (매 프레임 텍스트를 다시 그리는 카운트업은 iOS에서 큰 글자 잔상을 유발해 제거)
     function slotNumber(el, value) {
-      const val = String(value);
-      const decimals = (val.split('.')[1] || '').length;
-      const target = parseFloat(val);
-      const prev = parseFloat(el.dataset.prev || '');
-      el.dataset.prev = val;
+      el.textContent = String(value);
       const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (reduce || !isFinite(target)) { el.textContent = val; return; }
-      const from = isFinite(prev) ? prev : 0;
-      const dur = 700, t0 = performance.now();
-      cancelAnimationFrame(_slotRaf);
-      function tick(now) {
-        const p = Math.min(1, (now - t0) / dur);
-        const eased = 1 - Math.pow(1 - p, 3);
-        el.textContent = (from + (target - from) * eased).toFixed(decimals);
-        if (p < 1) _slotRaf = requestAnimationFrame(tick);
-        else el.textContent = val;
-      }
-      _slotRaf = requestAnimationFrame(tick);
+      if (reduce) return;
+      el.style.animation = 'none';
+      void el.offsetWidth; // 리플로우로 애니메이션 재시작
+      el.style.animation = 'kmFade 0.45s cubic-bezier(0.16, 1, 0.3, 1)';
     }
 
     function renderMonth() {
