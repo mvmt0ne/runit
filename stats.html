@@ -75,6 +75,7 @@
     .month-runs {
       padding: 40px 0 20px 0;
       background: var(--dark-gray);
+      border-top: 1px solid var(--asphalt-black);
     }
 
     /* 주간: 이 주의 러닝 — 컴팩트 행 (밝은 배경용) */
@@ -763,13 +764,7 @@
                ACTIVITY LIST
             ════════════════════════════════════ */
 
-    .month-runs-title {
-      padding: 0 20px;
-      margin-bottom: 10px;
-      background: var(--dark-gray);
-      border-top: 1px solid var(--asphalt-black);
-      ;
-    }
+
 
     /* ─── Run type dot badge ── */
     .type-race {
@@ -839,11 +834,11 @@
     }
 
     .month-runs-title {
-      font-size: 14px;
+      font-size: 20px;
       font-weight: 500;
       letter-spacing: 0;
       text-transform: uppercase;
-      color: var(--text-2);
+      color: var(--slate-gray);
       transition: color 0.3s;
     }
 
@@ -1009,7 +1004,7 @@
               <div class="trend-rows" id="week-trend-rows"></div>
             </div>
             <!-- 이 주의 러닝 (맨 아래) -->
-            <div class="month-runs" style="padding-left:20px;padding-right:20px">
+            <div class="month-runs">
               <div class="month-runs-title">이 주의 러닝</div>
               <div id="week-runs-list"></div>
             </div>
