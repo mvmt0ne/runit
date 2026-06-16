@@ -267,46 +267,6 @@
       font-family: 'Urbanist', -apple-system, sans-serif;
     }
 
-    /* ─── 슬롯 롤 숫자 (textmotion.dev / slot-text 스타일) ─── */
-    .hero-km-value.slot-num {
-      display: inline-flex;
-      align-items: flex-start;
-    }
-
-    .slot-col {
-      display: inline-block;
-      /* 슬롯 칸 높이 = 자리 간격(1.18em). 글리프에 세로 여유를 줘 위/아래 안 잘림 */
-      height: 1.18em;
-      line-height: 1.18;
-      /* 가로만 넘치게(이탤릭 기울기 안 잘림). 세로는 칸(1.18em)에서 클립 */
-      clip-path: inset(0 -0.45em);
-      vertical-align: top;
-    }
-
-    .slot-reel {
-      display: flex;
-      flex-direction: column;
-      will-change: transform;
-    }
-
-    .slot-digit {
-      height: 1.18em;
-      line-height: 1.18;
-      display: block;
-      text-align: center;
-    }
-
-    .slot-sep {
-      display: inline-block;
-      line-height: 1;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .slot-reel {
-        transition: none !important;
-      }
-    }
-
     /* ─── Bottom Nav ──────────────────────────── */
     .bottom-nav {
       height: 52px;
@@ -1057,43 +1017,27 @@
       }, 200);
     }
 
-    // 슬롯 롤 숫자 — 각 자리를 0~9 릴로 만들어 목표 숫자로 굴림 (이전값→새값)
+    // 마일리지 숫자 카운트업 — 일반 텍스트라 잘릴 요소가 없음 (이전값→새값으로 증가)
+    let _slotRaf = 0;
     function slotNumber(el, value) {
       const val = String(value);
-      const prev = el.dataset.prev || '';
+      const decimals = (val.split('.')[1] || '').length;
+      const target = parseFloat(val);
+      const prev = parseFloat(el.dataset.prev || '');
       el.dataset.prev = val;
       const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-      el.classList.add('slot-num');
-      el.innerHTML = '';
-      [...val].forEach((ch, i) => {
-        if (!/\d/.test(ch)) {
-          const s = document.createElement('span');
-          s.className = 'slot-sep';
-          s.textContent = ch;
-          el.appendChild(s);
-          return;
-        }
-        const col = document.createElement('span');
-        col.className = 'slot-col';
-        const reel = document.createElement('span');
-        reel.className = 'slot-reel';
-        for (let d = 0; d <= 9; d++) {
-          const dg = document.createElement('span');
-          dg.className = 'slot-digit';
-          dg.textContent = d;
-          reel.appendChild(dg);
-        }
-        col.appendChild(reel);
-        el.appendChild(col);
-        const STEP = 1.18; // .slot-col / .slot-digit 높이(em)와 일치해야 함
-        const target = +ch;
-        if (reduce) { reel.style.transform = `translateY(-${target * STEP}em)`; return; }
-        const start = /\d/.test(prev[i] || '') ? +prev[i] : 0;
-        reel.style.transform = `translateY(-${start * STEP}em)`;
-        void reel.offsetHeight; // reflow
-        reel.style.transition = `transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) ${i * 55}ms`;
-        reel.style.transform = `translateY(-${target * STEP}em)`;
-      });
+      if (reduce || !isFinite(target)) { el.textContent = val; return; }
+      const from = isFinite(prev) ? prev : 0;
+      const dur = 700, t0 = performance.now();
+      cancelAnimationFrame(_slotRaf);
+      function tick(now) {
+        const p = Math.min(1, (now - t0) / dur);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = (from + (target - from) * eased).toFixed(decimals);
+        if (p < 1) _slotRaf = requestAnimationFrame(tick);
+        else el.textContent = val;
+      }
+      _slotRaf = requestAnimationFrame(tick);
     }
 
     function renderMonth() {
