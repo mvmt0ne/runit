@@ -277,7 +277,8 @@
       display: inline-block;
       height: 1em;
       line-height: 1;
-      overflow: hidden;
+      /* 세로(릴)만 클립하고 가로는 넘치게 → 이탤릭 기울기 안 잘림 */
+      clip-path: inset(0 -0.45em);
       vertical-align: top;
     }
 
