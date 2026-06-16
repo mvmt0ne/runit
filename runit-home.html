@@ -275,9 +275,10 @@
 
     .slot-col {
       display: inline-block;
-      height: 1em;
-      line-height: 1;
-      /* 세로(릴)만 클립하고 가로는 넘치게 → 이탤릭 기울기 안 잘림 */
+      /* 슬롯 칸 높이 = 자리 간격(1.18em). 글리프에 세로 여유를 줘 위/아래 안 잘림 */
+      height: 1.18em;
+      line-height: 1.18;
+      /* 가로만 넘치게(이탤릭 기울기 안 잘림). 세로는 칸(1.18em)에서 클립 */
       clip-path: inset(0 -0.45em);
       vertical-align: top;
     }
@@ -289,8 +290,8 @@
     }
 
     .slot-digit {
-      height: 1em;
-      line-height: 1;
+      height: 1.18em;
+      line-height: 1.18;
       display: block;
       text-align: center;
     }
@@ -1084,13 +1085,14 @@
         }
         col.appendChild(reel);
         el.appendChild(col);
+        const STEP = 1.18; // .slot-col / .slot-digit 높이(em)와 일치해야 함
         const target = +ch;
-        if (reduce) { reel.style.transform = `translateY(-${target}em)`; return; }
+        if (reduce) { reel.style.transform = `translateY(-${target * STEP}em)`; return; }
         const start = /\d/.test(prev[i] || '') ? +prev[i] : 0;
-        reel.style.transform = `translateY(-${start}em)`;
+        reel.style.transform = `translateY(-${start * STEP}em)`;
         void reel.offsetHeight; // reflow
         reel.style.transition = `transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) ${i * 55}ms`;
-        reel.style.transform = `translateY(-${target}em)`;
+        reel.style.transform = `translateY(-${target * STEP}em)`;
       });
     }
 
