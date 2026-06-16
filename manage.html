@@ -227,7 +227,7 @@
     function _today() { return new Date().toISOString().slice(0, 10); }
 
     function renderZones() {
-      const cur = (typeof getZoneConfigFor === 'function') ? getZoneConfigFor(_today()) : { z2Max: 150, z3Max: 160 };
+      const cur = (typeof getZoneConfigFor === 'function') ? getZoneConfigFor(_today()) : { z2Max: 151, z3Max: 163 };
       document.getElementById('zone-current').textContent =
         `저 ≤${cur.z2Max} / 중 ${cur.z2Max + 1}~${cur.z3Max} / 고 ${cur.z3Max + 1}+`;
       const z2 = document.getElementById('z2max'), z3 = document.getElementById('z3max'), zf = document.getElementById('zfrom');

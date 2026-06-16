@@ -14,7 +14,9 @@ const STORE_KEYS = {
 };
 
 // 심박존 기본값 (이력 없을 때 = 모든 과거 기록의 '지금 기준')
-const ZONE_DEFAULT = { z2Max: 150, z3Max: 160 };
+// 존: z1 112~ / z2 138~ / z3 152~ / z4 164~ / z5 173+
+// 강도 매핑: 저=z1~z2(≤151) / 중=z3(152~163) / 고=z4+(164+)
+const ZONE_DEFAULT = { z2Max: 151, z3Max: 163 };
 
 function _load(key) {
   try {

@@ -1345,7 +1345,7 @@
     // 심박존 경계 (사용자 존): 존1 ~138 / 존2 139~150 / 존3 151~160 / 존4 161~173 / 존5 174+
     // 강도 매핑: 존1~2 = 저(≤z2Max), 존3 = 중(≤z3Max), 존4+ = 고(초과)
     // 경계는 store(runit:zones)의 날짜별 이력에서 가져옴 → 존을 바꿔도 과거 기록은 그대로.
-    const ZONE_BPM_FALLBACK = { z2Max: 150, z3Max: 160 };
+    const ZONE_BPM_FALLBACK = { z2Max: 151, z3Max: 163 };
     // bpm + 활동 날짜 → 그 날짜에 유효했던 존으로 분류
     function bpmToIntensity(bpm, date) {
       if (bpm == null) return null;
@@ -1802,12 +1802,12 @@
       const RAD = Math.PI / 180;
       // 링 간 viewBox 간격 절반으로 축소: 11 → 5.5 (sw=17 기준 r=100, 77.5, 55)
       const rings = [
-        { r: 100, sw: 17, label: '저', sub: '존1~2 · ~150bpm', pct: low, color: 'var(--cloudy-gray)', cls: 'low' },
+        { r: 100, sw: 17, label: '저', sub: '존1~2 · ~151bpm', pct: low, color: 'var(--cloudy-gray)', cls: 'low' },
         {
           r: 77.5,
           sw: 17,
           label: '중',
-          sub: '존3 · 151~160bpm',
+          sub: '존3 · 152~163bpm',
           pct: mid,
           color: 'var(--slate-gray)',
           cls: 'mid',
@@ -1816,7 +1816,7 @@
           r: 55,
           sw: 17,
           label: '고',
-          sub: '존4+ · 161bpm~',
+          sub: '존4+ · 164bpm~',
           pct: high,
           color: 'var(--accent)',
           cls: 'high',
