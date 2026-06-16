@@ -368,7 +368,7 @@ sup {
     font-size: 48px;
     font-weight: 500;
     line-height: 1.2;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Urbanist', sans-serif;
 }
 
 /* ─── Tabs (stats - 월간탭) ── */
@@ -646,7 +646,7 @@ sup {
 .lp-date-day {
     font-size: 20px;
     font-weight: 500;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Urbanist', sans-serif;
     line-height: 1;
     color: var(--cloudy-gray);
     font-feature-settings: 'tnum';
@@ -701,7 +701,7 @@ sup {
 .lp-head-km {
     font-size: 28px;
     font-weight: 500;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Urbanist', sans-serif;
     font-feature-settings: 'tnum';
     color: var(--asphalt-black);
     flex-shrink: 0;
@@ -724,7 +724,7 @@ sup {
 .lp-stat-value {
     font-size: 18px;
     font-weight: 400;
-    font-family: 'Space Grotesk', ui-monospace, monospace;
+    font-family: 'Urbanist', ui-monospace, monospace;
     font-feature-settings: 'tnum';
     line-height: 1;
     color: var(--asphalt-black);
@@ -784,7 +784,7 @@ sup {
     font-size: 18px;
     font-weight: 100;
     color: var(--slate-gray);
-    font-family: 'Space Grotesk', monospace;
+    font-family: 'Urbanist', monospace;
 }
 
 .lp-month-km strong {
@@ -1311,7 +1311,7 @@ sup {
 .zone-chip .zone-label {
     font-size: 16px;
     font-weight: 600;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Urbanist', sans-serif;
     line-height: 1;
 }
 
@@ -1398,7 +1398,7 @@ input[type='range'].range-input::-moz-range-thumb {
 
 .range-val {
     font-size: 14px;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Urbanist', sans-serif;
     font-weight: 600;
 }
 
