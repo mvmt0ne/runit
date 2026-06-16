@@ -739,7 +739,7 @@
             </div>
 
             <div class="hero-km-row">
-              <span class="hero-km-big"><span class="hero-km-value">59.7</span><sup> K</sup></span>
+              <span class="hero-km-big"><span class="hero-km-value">59.7</span></span>
             </div>
 
             <!-- 가변 여백: 히어로↔캘린더 사이 + 월 드롭다운(좌) + 스와이프 인디케이터(우) -->
@@ -1018,7 +1018,7 @@
       }, 200);
     }
 
-    // 마일리지 숫자 카운트업 — 일반 텍스트라 잘릴 요소가 없음 (이전값→새값으로 증가)
+    // 마일리지 숫자 카운트업 (이전값→새값으로 증가). 일반 텍스트라 잘릴 요소 없음
     let _slotRaf = 0;
     function slotNumber(el, value) {
       const val = String(value);
