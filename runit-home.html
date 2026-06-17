@@ -1043,9 +1043,12 @@
       el.textContent = String(value);
       const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (reduce) return;
-      el.style.animation = 'none';
-      void el.offsetWidth; // 리플로우로 애니메이션 재시작
-      el.style.animation = 'kmFade 0.45s cubic-bezier(0.16, 1, 0.3, 1)';
+      // 페이드는 여백 있는 부모(.hero-km-big)에 적용 — value에 걸면 합성 레이어가
+      // 마지막 글자 이탤릭 오버슈트를 잠깐 자름
+      const box = el.closest('.hero-km-big') || el;
+      box.style.animation = 'none';
+      void box.offsetWidth; // 리플로우로 애니메이션 재시작
+      box.style.animation = 'kmFade 0.45s cubic-bezier(0.16, 1, 0.3, 1)';
     }
 
     function renderMonth() {
