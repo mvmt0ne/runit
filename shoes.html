@@ -80,6 +80,17 @@
       display: flex; align-items: center; gap: 12px; padding: 8px 10px;
       background: rgba(255, 255, 255, 0.04); border-radius: 8px;
     }
+    .shoe-list-item.dragging {
+      position: relative; z-index: 10; opacity: 0.92;
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    }
+    .shoe-drag {
+      flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      width: 24px; color: var(--cloudy-gray); cursor: grab;
+      touch-action: none; /* 핸들 드래그가 스크롤로 안 먹히게 */
+    }
+    .shoe-drag:active { cursor: grabbing; }
     .shoe-list-thumb {
       width: 56px; height: 40px; object-fit: contain; flex-shrink: 0;
       filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.4));
@@ -291,7 +302,10 @@
       const shoes = listShoes();
       if (!shoes.length) { list.innerHTML = '<li class="shoe-list-empty">등록된 러닝화 없음</li>'; return; }
       list.innerHTML = shoes.map(s => `
-        <li class="shoe-list-item">
+        <li class="shoe-list-item" data-id="${s.id}">
+          <span class="shoe-drag" aria-label="순서 변경">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01"/></svg>
+          </span>
           <img class="shoe-list-thumb" src="${s.image}" alt="${s.name}">
           <span class="shoe-list-name">${s.name}</span>
           <button class="edit-btn" onclick="editShoe('${s.id}')">수정</button>
@@ -300,6 +314,54 @@
     }
 
     renderShoeList();
+
+    /* ── 드래그로 순서 변경 (터치/마우스 공통, 포인터 이벤트) ── */
+    (function setupShoeReorder() {
+      const list = document.getElementById('shoe-list');
+      if (!list) return;
+      let drag = null, grabY = 0;
+
+      list.addEventListener('pointerdown', e => {
+        const handle = e.target.closest('.shoe-drag');
+        if (!handle) return;
+        drag = handle.closest('.shoe-list-item');
+        if (!drag) return;
+        e.preventDefault();
+        grabY = e.clientY;
+        drag.classList.add('dragging');
+        try { handle.setPointerCapture(e.pointerId); } catch (_) {}
+        document.addEventListener('pointermove', onMove);
+        document.addEventListener('pointerup', onUp);
+        document.addEventListener('pointercancel', onUp);
+      });
+
+      function onMove(e) {
+        if (!drag) return;
+        drag.style.transform = `translateY(${e.clientY - grabY}px)`;
+        const dragRect = drag.getBoundingClientRect();
+        const mid = dragRect.top + dragRect.height / 2;
+        const sibs = [...list.querySelectorAll('.shoe-list-item:not(.dragging)')];
+        for (const sib of sibs) {
+          const r = sib.getBoundingClientRect();
+          const sMid = r.top + r.height / 2;
+          const after = drag.compareDocumentPosition(sib) & Node.DOCUMENT_POSITION_FOLLOWING;
+          if (mid < sMid && after) { list.insertBefore(drag, sib); grabY = e.clientY; drag.style.transform = ''; break; }
+          if (mid > sMid && !after) { list.insertBefore(drag, sib.nextSibling); grabY = e.clientY; drag.style.transform = ''; break; }
+        }
+      }
+
+      function onUp() {
+        if (!drag) return;
+        drag.classList.remove('dragging');
+        drag.style.transform = '';
+        drag = null;
+        document.removeEventListener('pointermove', onMove);
+        document.removeEventListener('pointerup', onUp);
+        document.removeEventListener('pointercancel', onUp);
+        const ids = [...list.querySelectorAll('.shoe-list-item')].map(li => li.dataset.id).filter(Boolean);
+        if (ids.length && typeof reorderShoes === 'function') reorderShoes(ids);
+      }
+    })();
   </script>
 
   <script>

@@ -84,7 +84,20 @@ function removeShoe(id) {
 }
 
 function listShoes() {
-  return getShoes().sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+  return getShoes().sort((a, b) => {
+    const ao = a.order, bo = b.order;
+    if (ao != null && bo != null) return ao - bo;     // 둘 다 순서 있으면 순서대로
+    if (ao != null) return -1;                        // 순서 있는 것 먼저
+    if (bo != null) return 1;
+    return (a.name || '').localeCompare(b.name || ''); // 둘 다 없으면 이름순
+  });
+}
+
+// 드래그로 바뀐 순서 저장 — ids(새 순서)대로 order 인덱스 부여
+function reorderShoes(ids) {
+  const all = _load(STORE_KEYS.shoes);
+  ids.forEach((id, i) => { if (all[id]) all[id].order = i; });
+  _save(STORE_KEYS.shoes, all);
 }
 
 /* ── 거리별 공식 PB (가민 기록 직접 입력) ── */
