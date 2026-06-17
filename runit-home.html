@@ -536,7 +536,7 @@
       z-index: -1;
     }
 
-    /* 홈 배경 영상 — 흑백 필터, 루프, 콘텐츠 뒤 */
+    /* 홈 배경 영상 — 흑백 + 어둡게 + 대비 (거친 느낌) */
     .home-bg-video {
       position: absolute;
       inset: 0;
@@ -544,9 +544,30 @@
       height: 100%;
       object-fit: cover;
       z-index: -1;
-      filter: grayscale(1) brightness(0.5) contrast(1.05);
+      filter: grayscale(1) brightness(0.38) contrast(1.25);
       pointer-events: none;
       user-select: none;
+    }
+
+    /* 영상 위 노이즈(그레인) — 거친 질감 */
+    .home-bg-noise {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 170px 170px;
+      mix-blend-mode: overlay;
+      opacity: 0.6;
+    }
+
+    /* 어둡게 보강 + 하단 가독성 스크림 */
+    .home-bg-scrim {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.45) 100%);
     }
 
     /* 히어로↔캘린더 사이 가변 여백 + 스와이프 인디케이터 */
@@ -750,6 +771,8 @@
           <div class="cal-page" id="cal-page">
 
             <video class="home-bg-video" autoplay muted loop playsinline preload="auto" src="./home-bg.mp4"></video>
+            <div class="home-bg-noise"></div>
+            <div class="home-bg-scrim"></div>
 
             <div class="hero-section">
               <div class="hero-title">
