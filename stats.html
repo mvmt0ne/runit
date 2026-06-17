@@ -132,7 +132,7 @@
 
     .wk-run-sub {
       font-size: 13px;
-      color: var(--asphalt-gray);
+      color: var(--cloudy-gray);
       font-family: 'Space Mono', monospace;
       margin-top: 2px;
     }
@@ -144,14 +144,15 @@
 
     .wk-run-km {
       font-size: 15px;
+      font-weight: 700;
       color: var(--slate-gray);
       font-family: 'Urbanist', sans-serif;
       font-feature-settings: "tnum";
     }
 
     .wk-run-pace {
-      font-size: 12px;
-      color: var(--asphalt-gray);
+      font-size: 13px;
+      color: var(--cloudy-gray);
       font-family: 'Space Mono', monospace;
       margin-top: 2px;
     }
@@ -1709,7 +1710,7 @@
       const z = TYPE_INTENSITY[t] || 'low';
       const sub = [dateStr, r.dur, r.bpm != null ? `${r.bpm}bpm` : null].filter(Boolean).join(' · ');
       return `<div class="wk-run" onclick="goTo('detail.html?date=${r.date}')">
-          <span class="wk-run-dot ${z}"></span>
+          
           <div class="wk-run-main">
             <div class="wk-run-name">${r.name}</div>
             <div class="wk-run-sub">${sub}</div>
