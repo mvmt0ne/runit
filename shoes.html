@@ -160,6 +160,7 @@
   <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-storage-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
   <script src="./data/cloud.js"></script>
   <script src="./data/store.js"></script>
   <script>
@@ -315,52 +316,22 @@
 
     renderShoeList();
 
-    /* ── 드래그로 순서 변경 (터치/마우스 공통, 포인터 이벤트) ── */
+    /* ── 드래그로 순서 변경 — SortableJS (터치/마우스 지원) ── */
     (function setupShoeReorder() {
       const list = document.getElementById('shoe-list');
-      if (!list) return;
-      let drag = null, grabY = 0;
-
-      list.addEventListener('pointerdown', e => {
-        const handle = e.target.closest('.shoe-drag');
-        if (!handle) return;
-        drag = handle.closest('.shoe-list-item');
-        if (!drag) return;
-        e.preventDefault();
-        grabY = e.clientY;
-        drag.classList.add('dragging');
-        try { handle.setPointerCapture(e.pointerId); } catch (_) {}
-        document.addEventListener('pointermove', onMove);
-        document.addEventListener('pointerup', onUp);
-        document.addEventListener('pointercancel', onUp);
+      if (!list || typeof Sortable === 'undefined') return;
+      Sortable.create(list, {
+        handle: '.shoe-drag',
+        draggable: '.shoe-list-item',
+        animation: 150,
+        delay: 80,                 // 살짝 눌러야 시작 (탭/스크롤 오인 방지)
+        delayOnTouchOnly: true,
+        ghostClass: 'dragging',
+        onEnd: () => {
+          const ids = [...list.querySelectorAll('.shoe-list-item')].map(li => li.dataset.id).filter(Boolean);
+          if (ids.length && typeof reorderShoes === 'function') reorderShoes(ids);
+        },
       });
-
-      function onMove(e) {
-        if (!drag) return;
-        drag.style.transform = `translateY(${e.clientY - grabY}px)`;
-        const dragRect = drag.getBoundingClientRect();
-        const mid = dragRect.top + dragRect.height / 2;
-        const sibs = [...list.querySelectorAll('.shoe-list-item:not(.dragging)')];
-        for (const sib of sibs) {
-          const r = sib.getBoundingClientRect();
-          const sMid = r.top + r.height / 2;
-          const after = drag.compareDocumentPosition(sib) & Node.DOCUMENT_POSITION_FOLLOWING;
-          if (mid < sMid && after) { list.insertBefore(drag, sib); grabY = e.clientY; drag.style.transform = ''; break; }
-          if (mid > sMid && !after) { list.insertBefore(drag, sib.nextSibling); grabY = e.clientY; drag.style.transform = ''; break; }
-        }
-      }
-
-      function onUp() {
-        if (!drag) return;
-        drag.classList.remove('dragging');
-        drag.style.transform = '';
-        drag = null;
-        document.removeEventListener('pointermove', onMove);
-        document.removeEventListener('pointerup', onUp);
-        document.removeEventListener('pointercancel', onUp);
-        const ids = [...list.querySelectorAll('.shoe-list-item')].map(li => li.dataset.id).filter(Boolean);
-        if (ids.length && typeof reorderShoes === 'function') reorderShoes(ids);
-      }
     })();
   </script>
 
