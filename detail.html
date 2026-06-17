@@ -371,14 +371,31 @@
     }
     .shoe-sheet.open { transform: translateY(0); }
 
+    .shoe-sheet-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      margin-bottom: 16px;
+    }
     .shoe-sheet-title {
       font-size: 15px;
       font-weight: 500;
       color: var(--bone);
-      text-align: center;
       font-family: 'Pretendard Variable', sans-serif;
-      margin-bottom: 16px;
     }
+    .shoe-sheet-add {
+      border: none;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Pretendard Variable', sans-serif;
+      padding: 7px 14px;
+      border-radius: 100px;
+      cursor: pointer;
+    }
+    .shoe-sheet-add:active { background: rgba(255, 255, 255, 0.16); }
 
     .shoe-carousel {
       display: flex;
@@ -430,18 +447,6 @@
       padding: 20px;
     }
     .shoe-sheet-empty a { color: var(--accent); cursor: pointer; }
-
-    /* 캐러셀 끝의 '러닝화 등록' 카드 */
-    .shoe-card-add {
-      justify-content: center;
-      border: 1.5px dashed rgba(255, 255, 255, 0.18);
-      color: var(--cloudy-gray);
-    }
-    .shoe-card-add .shoe-card-add-icon {
-      font-size: 40px;
-      line-height: 110px;
-      color: var(--cloudy-gray);
-    }
 
     /* ─── Empty / error ─── */
     .d-empty {
@@ -498,7 +503,10 @@
   <!-- 신발 선택 시트 (롤링) -->
   <div class="shoe-sheet-backdrop" id="shoe-backdrop" onclick="closeShoePicker()"></div>
   <div class="shoe-sheet" id="shoe-sheet">
-    <div class="shoe-sheet-title">러닝화 선택</div>
+    <div class="shoe-sheet-head">
+      <span class="shoe-sheet-title">러닝화 선택</span>
+      <button class="shoe-sheet-add" onclick="goTo('shoes.html')">+ 등록</button>
+    </div>
     <div id="shoe-carousel-wrap"></div>
   </div>
 
@@ -747,16 +755,11 @@
       if (!shoes.length) {
         wrap.innerHTML = `<div class="shoe-sheet-empty">등록된 러닝화가 없습니다.<br><a onclick="goTo('shoes.html')">러닝화 등록하러 가기 ›</a></div>`;
       } else {
-        const addCard = `
-          <div class="shoe-card shoe-card-add" onclick="goTo('shoes.html')">
-            <span class="shoe-card-add-icon">+</span>
-            <span class="shoe-card-name">러닝화 등록</span>
-          </div>`;
         wrap.innerHTML = `<div class="shoe-carousel">${shoes.map(s => `
           <div class="shoe-card${meta.shoeId === s.id ? ' selected' : ''}" onclick="selectShoe('${s.id}')">
             <img class="shoe-card-img" src="${s.image}" alt="${escapeHTML(s.name)}">
             <span class="shoe-card-name">${escapeHTML(s.name)}</span>
-          </div>`).join('')}${addCard}</div>`;
+          </div>`).join('')}</div>`;
       }
       document.getElementById('shoe-backdrop').classList.add('open');
       document.getElementById('shoe-sheet').classList.add('open');
