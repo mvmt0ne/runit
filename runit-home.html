@@ -238,11 +238,10 @@
       font-family: 'Pretendard Variable', -apple-system, sans-serif;
     }
 
-    /* 마일리지 숫자 페이드인 (텍스트 재렌더 없이 합성만 → iOS 잔상 없음) */
-    .hero-km-value { display: inline-block; }
+    /* 마일리지 숫자 페이드인 — opacity만 (transform/inline-block은 iOS에서 글자 클리핑 유발) */
     @keyframes kmFade {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: none; }
+      from { opacity: 0; }
+      to   { opacity: 1; }
     }
 
     .hero-km-row {
