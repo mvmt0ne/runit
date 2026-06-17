@@ -177,6 +177,8 @@
       overflow-y: auto;
       overflow-x: hidden;
       scrollbar-width: none;
+      /* 상단에서 더 당겼을 때 브라우저 네이티브 새로고침(당겨서 새로고침) 차단 */
+      overscroll-behavior-y: contain;
       /* padding-top: calc(env(safe-area-inset-top, 0px) + 16px);  */
       padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
       /* 하단 여백까지 컨텐츠와 동일한 밝은 그레이로 통일 */
