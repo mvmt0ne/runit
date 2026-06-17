@@ -238,7 +238,9 @@
       font-family: 'Pretendard Variable', -apple-system, sans-serif;
     }
 
-    /* 마일리지 숫자 페이드인 — opacity만 (transform/inline-block은 iOS에서 글자 클리핑 유발) */
+    /* 마일리지 숫자 — 이탤릭 마지막 글자 오른쪽 오버슈트가 잘리지 않게 여백 */
+    .hero-km-value { padding-right: 0.16em; }
+    /* 페이드인 — opacity만 (transform/inline-block은 iOS에서 글자 클리핑 유발) */
     @keyframes kmFade {
       from { opacity: 0; }
       to   { opacity: 1; }
