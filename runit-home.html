@@ -241,11 +241,6 @@
     /* 마일리지 숫자 — 이탤릭 마지막 글자 오른쪽 오버슈트가 잘리지 않게 여백 */
     /* 이탤릭 마지막 글자(단위 K) 오른쪽 오버슈트 잘림 방지 */
     .hero-km-big { padding-right: 0.16em; }
-    /* 페이드인 — opacity만 (transform/inline-block은 iOS에서 글자 클리핑 유발) */
-    @keyframes kmFade {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
 
     .hero-km-row {
       padding: 4px 22px 0;
@@ -1040,15 +1035,9 @@
     // 마일리지 숫자 — 값은 바로 표시하고, 텍스트 재렌더 없는 페이드인만 적용.
     // (매 프레임 텍스트를 다시 그리는 카운트업은 iOS에서 큰 글자 잔상을 유발해 제거)
     function slotNumber(el, value) {
+      // 값만 즉시 표시. (opacity 페이드는 iOS에서 합성 레이어가 마지막 글자 이탤릭
+      //  오버슈트를 전환 동안 잘라내므로 애니메이션 없음)
       el.textContent = String(value);
-      const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (reduce) return;
-      // 페이드는 여백 있는 부모(.hero-km-big)에 적용 — value에 걸면 합성 레이어가
-      // 마지막 글자 이탤릭 오버슈트를 잠깐 자름
-      const box = el.closest('.hero-km-big') || el;
-      box.style.animation = 'none';
-      void box.offsetWidth; // 리플로우로 애니메이션 재시작
-      box.style.animation = 'kmFade 0.45s cubic-bezier(0.16, 1, 0.3, 1)';
     }
 
     function renderMonth() {
