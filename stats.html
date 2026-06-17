@@ -1448,28 +1448,16 @@
     });
 
     // 주간/년간 차트 — 탭 시 시각 선택만 (detail 콘텐츠 없음)
-    function attachSimpleBarSelect(chartId) {
-      const chart = document.getElementById(chartId);
-      if (!chart) return;
-      chart.addEventListener('click', e => {
-        const col = e.target.closest('[data-idx]');
-        if (!col) return;
-        const wasSelected = col.classList.contains('selected');
-        chart.querySelectorAll('.cmp-col').forEach(c => c.classList.remove('selected'));
-        if (wasSelected) {
-          chart.classList.remove('has-selection');
-        } else {
-          chart.classList.add('has-selection');
-          col.classList.add('selected');
-        }
-      });
-    }
     // 주간 차트: 막대 클릭 → 그 주로 드릴다운
     document.getElementById('week-chart').addEventListener('click', e => {
       const col = e.target.closest('[data-idx]');
       if (col) selectWeek(parseInt(col.dataset.idx));
     });
-    attachSimpleBarSelect('year-chart');
+    // 연간 차트: 막대 클릭 → 그 해로 강도·종류 연동
+    document.getElementById('year-chart').addEventListener('click', e => {
+      const col = e.target.closest('[data-idx]');
+      if (col) selectYear(parseInt(col.dataset.idx));
+    });
 
     // 터치 스와이프
     (function () {
@@ -1987,16 +1975,44 @@
         .classList.toggle('disabled', currentYearPeriodIdx >= MAX_YEAR_PERIOD);
     }
 
+    let selectedYearIdx = -1;
+
     function updateYearChart(animate) {
       const period = YEAR_PERIOD_DATA[currentYearPeriodIdx];
       if (!period) return;
+      selectedYearIdx = -1;
       const data = period.years;
       const periodAvg = avg(data.filter(d => !d.future && d.km > 0));
       renderChart('year-chart', 'year-avg-line', data, periodAvg, { barMaxPx: 115, labelOffset: 34 });
       document.getElementById('year-avg-label').textContent = 'avg ' + periodAvg + 'K';
+      // 기본: 기간 전체
       renderIntensityBar('year-intensity', period.runs, animate);
       renderTypeChart('year-type-chart', period.runs);
+      document.getElementById('year-chart').classList.remove('has-selection');
       if (animate) animateChartIn('year-chart', 60);
+    }
+
+    // 연도 막대 선택 → 그 해의 강도·종류로 연동 (다시 누르면 기간 전체)
+    function selectYear(idx) {
+      const period = YEAR_PERIOD_DATA[currentYearPeriodIdx];
+      if (!period) return;
+      const y = period.years[idx];
+      if (!y || !y.runs || !y.runs.length) return; // 데이터 없는 해 무시
+      const chart = document.getElementById('year-chart');
+      if (selectedYearIdx === idx) {
+        selectedYearIdx = -1;
+        chart.classList.remove('has-selection');
+        chart.querySelectorAll('.cmp-col').forEach(c => c.classList.remove('selected'));
+        renderIntensityBar('year-intensity', period.runs, false);
+        renderTypeChart('year-type-chart', period.runs);
+        return;
+      }
+      selectedYearIdx = idx;
+      chart.classList.add('has-selection');
+      chart.querySelectorAll('.cmp-col').forEach(c => c.classList.remove('selected'));
+      chart.querySelectorAll('.cmp-col')[idx].classList.add('selected');
+      renderIntensityBar('year-intensity', y.runs, false);
+      renderTypeChart('year-type-chart', y.runs);
     }
 
     function changeYearPeriod(dir) {

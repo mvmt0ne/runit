@@ -145,7 +145,7 @@
     const yearPages = _paginate(allYears, 12);
     const YEAR_PERIOD_DATA = yearPages.map(pg => ({
       label: `${String(pg[0].year).slice(2)} — ${String(pg[pg.length - 1].year).slice(2)}`,
-      years: pg.map(y => ({ label: y.label, km: y.km, current: y.current, past: y.past })),
+      years: pg.map(y => ({ label: y.label, km: y.km, current: y.current, past: y.past, runs: y.runs, year: y.year })),
       runs: pg.flatMap(y => y.runs),
       bpms: pg.flatMap(y => y.runs.map(r => r.bpm)).filter(b => b != null),
     }));
