@@ -26,7 +26,6 @@
     /* ─── 러닝 종류 차트 ── */
     .type-chart {
       padding: 40px 20px;
-      border-top: 1px solid var(--asphalt-black);
       background: var(--dark-gray);
       color: var(--slate-gray);
     }
@@ -35,7 +34,6 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 2px;
       transition: opacity 0.3s;
     }
 
@@ -75,14 +73,10 @@
 
 
     /* ─── Bottom section — delta + pace (dark) / runs (light) ── */
-    .stats-top-section {
-      background: var(--slate-gray);
-    }
 
     .month-runs {
       padding: 40px 20px 20px 20px;
       background: var(--dark-gray);
-      border-top: 1px solid var(--asphalt-black);
     }
 
     /* 주간: 이 주의 러닝 — 컴팩트 행 (밝은 배경용) */
@@ -189,7 +183,7 @@
       /* padding-top: calc(env(safe-area-inset-top, 0px) + 16px);  */
       padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
       /* 하단 여백까지 컨텐츠와 동일한 밝은 그레이로 통일 */
-      background: var(--dark-gray);
+      background: var(--bg);
     }
 
     .scroll-area::-webkit-scrollbar {
@@ -386,7 +380,6 @@
     /* 강도 분포 */
     .intensity-breakdown {
       padding: 40px 20px;
-      border-top: 1px solid var(--asphalt-black);
       background: var(--dark-gray);
     }
 
@@ -460,7 +453,7 @@
 
     /* 주간: 선택 주 기간 라벨 */
     .week-range-label {
-      padding: 0 20px 20px;
+      padding: 20px 0 0 20px;
       min-height: 18px;
       font-size: 14px;
       font-family: 'Urbanist', sans-serif;
@@ -576,7 +569,6 @@
             ════════════════════════════════════ */
     .trend-block {
       padding: 40px 20px;
-      border-top: 1px solid var(--asphalt-black);
       background: var(--dark-gray);
     }
 
@@ -967,7 +959,7 @@
     ══════════════════════════════ -->
         <div id="view-week" style="display: none">
           <div class="stats-top-section">
-            <div class="chart-block">
+            <div class="chart-block round-box">
               <div class="chart-top">
                 <div class="year-nav">
                   <span class="chart-period-label" id="week-period-label">3.9 — 5.25</span>
@@ -993,19 +985,16 @@
                   <div class="avg-line" id="week-avg-line"></div>
                 </div>
               </div>
+              <div class="week-range-label" id="week-range-label"></div>
             </div>
             <div class="month-detail">
-              <div class="week-range-label" id="week-range-label"></div>
-              <div class="intensity-breakdown">
-                <div id="week-intensity"></div>
-              </div>
-              <div class="type-chart">
+              <div class="type-chart round-box">
                 <div class="components-title">러닝 종류</div>
                 <div id="week-type-chart"></div>
               </div>
             </div>
             <!-- 최근 12주 추이 -->
-            <div class="trend-block" id="week-trend-block">
+            <div class="trend-block round-box" id="week-trend-block">
               <div class="trend-head">
                 <div class="components-title">최근 12주 추이</div>
                 <div class="trend-delta" id="week-trend-delta"></div>
@@ -1028,7 +1017,7 @@
     ══════════════════════════════ -->
         <div id="view-month">
           <div class="stats-top-section">
-            <div class="chart-block">
+            <div class="chart-block round-box">
               <div class="chart-top">
                 <div class="year-nav">
                   <span class="chart-period-label" id="month-year-label">2026년</span>
@@ -1056,10 +1045,10 @@
 
             <!-- 강도 분포 -->
             <div class="month-detail" id="month-detail">
-              <div class="intensity-breakdown">
+              <div class="intensity-breakdown round-box">
                 <div id="detail-intensity"></div>
               </div>
-              <div class="type-chart">
+              <div class="type-chart round-box">
                 <div class="components-title">러닝 종류</div>
                 <div id="month-type-chart" style="margin-top: 20px"></div>
               </div>
@@ -1069,7 +1058,7 @@
 
 
           <!-- 1년 추이 -->
-          <div class="trend-block" id="trend-block">
+          <div class="trend-block round-box" id="trend-block">
             <div class="trend-head">
               <div class="components-title">최근 1년 추이</div>
               <div class="trend-delta" id="trend-delta"></div>
@@ -1089,7 +1078,7 @@
             <div class="stats-hero-num">247.3<sup>K</sup></div>
           </div>
           <div class="stats-top-section">
-            <div class="chart-block">
+            <div class="chart-block round-box">
               <div class="chart-top">
                 <div class="year-nav">
                   <span class="chart-period-label" id="year-period-label">2022 — 2026</span>
@@ -1117,10 +1106,10 @@
               </div>
             </div>
             <div class="month-detail">
-              <div class="intensity-breakdown">
+              <div class="intensity-breakdown round-box">
                 <div id="year-intensity"></div>
               </div>
-              <div class="type-chart">
+              <div class="type-chart round-box">
                 <div class="components-title">러닝 종류</div>
                 <div id="year-type-chart"></div>
               </div>
