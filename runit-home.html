@@ -240,7 +240,9 @@
 
     /* 마일리지 숫자 — 이탤릭 마지막 글자 오른쪽 오버슈트가 잘리지 않게 여백 */
     /* 이탤릭 마지막 글자(단위 K) 오른쪽 오버슈트 잘림 방지 */
-    .hero-km-big { padding-right: 0.16em; }
+    .hero-km-big {
+      padding-right: 0.16em;
+    }
 
     .hero-km-row {
       padding: 4px 22px 0;
@@ -491,7 +493,7 @@
       cursor: default;
       box-shadow: inset 0 0 0 1.5px var(--type-none-border);
       border: #ffffff 1px solid;
-      opacity: 0.1;
+      opacity: 1;
     }
 
     /* Future */
@@ -563,7 +565,7 @@
       inset: 0;
       z-index: -1;
       pointer-events: none;
-      background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.45) 100%);
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.15) 35%, rgba(0, 0, 0, 0.45) 100%);
     }
 
     /* 히어로↔캘린더 사이 가변 여백 + 스와이프 인디케이터 */
