@@ -549,37 +549,12 @@
       user-select: none;
     }
 
-    /* 영상 위 노이즈(그레인) — 거친 질감 */
+    /* 영상 위 노이즈(그레인) — grained.js로 애니메이션 그레인 주입 (지지직) */
     .home-bg-noise {
       position: absolute;
       inset: 0;
       z-index: -1;
       pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-size: 130px 130px;
-      /* normal 블렌드 → 영상의 어두운 영역에도 그레인이 균일하게 보임 */
-      opacity: 0.22;
-      /* 지지직 — 그레인이 매 프레임 튀게 (TV 스태틱) */
-      animation: bgGrain 0.6s steps(1) infinite;
-      will-change: background-position;
-    }
-
-    @keyframes bgGrain {
-      0%   { background-position: 0 0; }
-      10%  { background-position: -13px 7px; }
-      20%  { background-position: 19px -11px; }
-      30%  { background-position: -7px 17px; }
-      40%  { background-position: 23px 13px; }
-      50%  { background-position: -17px -19px; }
-      60%  { background-position: 11px 23px; }
-      70%  { background-position: -23px 7px; }
-      80%  { background-position: 17px -13px; }
-      90%  { background-position: -11px 19px; }
-      100% { background-position: 7px -7px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .home-bg-noise { animation: none; }
     }
 
     /* 어둡게 보강 + 하단 가독성 스크림 */
@@ -792,8 +767,8 @@
           <div class="cal-page" id="cal-page">
 
             <video class="home-bg-video" autoplay muted loop playsinline preload="auto" src="./home-bg.mp4"></video>
-            <div class="home-bg-noise"></div>
             <div class="home-bg-scrim"></div>
+            <div class="home-bg-noise" id="home-noise" style="position:absolute"></div>
 
             <div class="hero-section">
               <div class="hero-title">
@@ -1345,6 +1320,18 @@
       grainHeight: 1,
       grainChaos: 0.6,
       grainSpeed: 5
+    });
+    /* 홈 배경 영상 위 지지직 그레인 — 같은 grained.js 사용 */
+    grained('#home-noise', {
+      animate: true,
+      patternWidth: 200,
+      patternHeight: 200,
+      grainOpacity: 0.16,
+      grainDensity: 1,
+      grainWidth: 1,
+      grainHeight: 1,
+      grainChaos: 0.5,
+      grainSpeed: 16
     });
   </script>
   <script>
