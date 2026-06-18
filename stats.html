@@ -39,6 +39,13 @@
       transition: opacity 0.3s;
     }
 
+    .type-chart-empty {
+      font-size: 13px;
+      color: var(--cloudy-gray);
+      padding: 4px 2px;
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
     .type-chart-label {
       font-size: 14px;
       width: 54px;
@@ -1750,12 +1757,17 @@
         if (t in counts) counts[t]++;
       });
       const maxCount = Math.max(...RUN_TYPES.map(t => counts[t.key]), 1);
-      el.innerHTML = RUN_TYPES.map(t => {
+      // 0건 종류는 제외하고 표시
+      const visibleTypes = RUN_TYPES.filter(t => counts[t.key] > 0);
+      if (!visibleTypes.length) {
+        el.innerHTML = '<div class="type-chart-empty">기록 없음</div>';
+        return;
+      }
+      el.innerHTML = visibleTypes.map(t => {
         const count = counts[t.key];
         const pct = Math.round((count / maxCount) * 100);
-        const dimStyle = count === 0 ? ' style="opacity:0.5"' : '';
         const fill = INTENSITY_COLOR[TYPE_INTENSITY[t.key]] || 'var(--bone)';
-        return `<div class="type-chart-row"${dimStyle}>
+        return `<div class="type-chart-row">
           <span class="type-chart-label">${t.label}</span>
           <div class="type-chart-track">
             <div class="type-chart-fill" data-pct="${pct}"></div>
