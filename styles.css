@@ -605,9 +605,10 @@ sup {
 ═══════════════════════════════════════════════════════════ */
 /* ─── Row: date-left + content-right layout ── */
 .lp-row {
+    background: var(--slate-gray);
     display: flex;
     flex-direction: row;
-    align-items: stretch;
+    align-items: flex-start;
     cursor: pointer;
     transition:
         opacity 0.15s,
@@ -620,15 +621,17 @@ sup {
 }
 
 .lp-date-col {
-    width: 56px;
+    width: 44px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding: 24px 0;
-    gap: 4px;
-    background: var(--asphalt-black);
+    padding: 10px 0;
+    gap: 2px;
+    background-color: var(--asphalt-black);
+    border-radius: 14px;
+    margin: 24px 0 0 14px;
 }
 
 .lp-date-month {
@@ -638,7 +641,7 @@ sup {
 }
 
 .lp-date-day {
-    font-size: 20px;
+    font-size: 14px;
     font-weight: 500;
     font-family: 'Urbanist', sans-serif;
     line-height: 1;
@@ -664,9 +667,6 @@ sup {
     flex-direction: column;
     gap: 14px;
     padding: 20px 20px 20px 10px;
-    background: var(--slate-gray);
-    border-radius: 4px;
-    margin-bottom: 2px;
 }
 
 .lp-row-head {
@@ -737,17 +737,14 @@ sup {
 
 /* ─── Compact mode: 이름 + 핵심 3개만 ── */
 .lp-row.compact .lp-date-col {
-    padding-top: 14px;
-    padding-bottom: 14px;
+    margin: auto 14px;
 }
 
 .lp-row.compact .lp-date-month {
     display: none;
 }
 
-.lp-row.compact .lp-date-day {
-    font-size: 20px;
-}
+
 
 .lp-row.compact .lp-content-col {
     padding-top: 14px;
