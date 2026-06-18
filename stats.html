@@ -1616,6 +1616,9 @@
       const span = max - min || 1;
       // 가장 기록이 좋은 값 (지표 방향에 따라 최소/최대) → 막대 오렌지
       const bestVal = vals.length ? (metric.lowerBetter ? min : max) : null;
+      // 순위(좋은 순) — 1위 오렌지, 2~4 slate, 5~8 cloudy, 9~12 asphalt
+      const ordered = vals.slice().sort((a, b) => (metric.lowerBetter ? a - b : b - a));
+      const rankOf = v => ordered.indexOf(v) + 1;
 
       // 단위 헤더 — 표 상단에 한 번만 (값은 막대 안에 표시)
       const header = `<div class="trend-row trend-thead">
@@ -1630,10 +1633,19 @@
         const v = x.agg[metric.key];
         const w = Math.round(20 + ((v - min) / span) * 80);
         const navAttr = x.nav ? ` data-nav="${x.nav}"` : '';
-        const cls = 'trend-row' + (x.isCurrent ? ' current' : '') + (bestVal != null && v === bestVal ? ' best' : '');
+        const isBest = bestVal != null && v === bestVal;
+        const cls = 'trend-row' + (x.isCurrent ? ' current' : '') + (isBest ? ' best' : '');
+        // 순위별 막대색 (1위는 .best의 accent). 어두운 막대는 수치 텍스트를 밝게.
+        const rank = rankOf(v);
+        let barStyle = `width:${w}%`, valStyle = '';
+        if (!isBest) {
+          if (rank <= 4) { barStyle += ';background:var(--slate-gray)'; }
+          else if (rank <= 8) { barStyle += ';background:var(--cloudy-gray)'; valStyle = 'color:var(--bone)'; }
+          else { barStyle += ';background:var(--asphalt-gray)'; valStyle = 'color:var(--bone)'; }
+        }
         return `<div class="${cls}"${navAttr}>
             <span class="trend-mlabel">${x.label}</span>
-            <span class="trend-bar-wrap"><span class="trend-bar" style="width:${w}%"><span class="trend-bar-val">${metric.fmt(v)}</span></span></span>
+            <span class="trend-bar-wrap"><span class="trend-bar" style="${barStyle}"><span class="trend-bar-val" style="${valStyle}">${metric.fmt(v)}</span></span></span>
           </div>`;
       }).join('');
 
