@@ -1,4 +1,4 @@
-const CACHE = 'runit-v74';
+const CACHE = 'runit-v75';
 const CORE = [
   './app.html',
   './login.html',
