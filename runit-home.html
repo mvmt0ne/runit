@@ -559,6 +559,27 @@
       background-size: 130px 130px;
       /* normal 블렌드 → 영상의 어두운 영역에도 그레인이 균일하게 보임 */
       opacity: 0.22;
+      /* 지지직 — 그레인이 매 프레임 튀게 (TV 스태틱) */
+      animation: bgGrain 0.6s steps(1) infinite;
+      will-change: background-position;
+    }
+
+    @keyframes bgGrain {
+      0%   { background-position: 0 0; }
+      10%  { background-position: -13px 7px; }
+      20%  { background-position: 19px -11px; }
+      30%  { background-position: -7px 17px; }
+      40%  { background-position: 23px 13px; }
+      50%  { background-position: -17px -19px; }
+      60%  { background-position: 11px 23px; }
+      70%  { background-position: -23px 7px; }
+      80%  { background-position: 17px -13px; }
+      90%  { background-position: -11px 19px; }
+      100% { background-position: 7px -7px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .home-bg-noise { animation: none; }
     }
 
     /* 어둡게 보강 + 하단 가독성 스크림 */
