@@ -673,11 +673,34 @@
     }
 
     .trend-bar {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
       height: 100%;
       width: 0;
+      min-width: fit-content;
       background: var(--cloudy-gray);
+      border-radius: 3px;
       transition: width 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* 막대 안 수치 */
+    .trend-bar-val {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--asphalt-black);
+      font-family: 'Urbanist', sans-serif;
+      padding: 0 7px;
+      white-space: nowrap;
+    }
+
+    /* 헤더 단위 / 빈 행 셀 — 막대 영역과 같은 폭으로 우측 정렬 */
+    .trend-unit-cell {
+      flex: 1;
+      text-align: right;
+      font-size: 11px;
+      color: var(--cloudy-gray);
+      font-family: 'Urbanist', sans-serif;
     }
 
     .trend-val {
@@ -1594,16 +1617,15 @@
       // 가장 기록이 좋은 값 (지표 방향에 따라 최소/최대) → 막대 오렌지
       const bestVal = vals.length ? (metric.lowerBetter ? min : max) : null;
 
-      // 단위 헤더 — 표 상단에 한 번만 (셀에는 숫자만)
+      // 단위 헤더 — 표 상단에 한 번만 (값은 막대 안에 표시)
       const header = `<div class="trend-row trend-thead">
             <span class="trend-mlabel">${labelUnit || ''}</span>
-            <span class="trend-bar-wrap"></span>
-            <span class="trend-val">${metric.unit}</span>
+            <span class="trend-unit-cell">${metric.unit}</span>
           </div>`;
 
       rowsEl.innerHTML = header + items.map(x => {
         if (!x.agg) {
-          return `<div class="trend-row empty"><span class="trend-mlabel">${x.label}</span><span class="trend-bar-wrap"></span><span class="trend-val">—</span></div>`;
+          return `<div class="trend-row empty"><span class="trend-mlabel">${x.label}</span><span class="trend-unit-cell">—</span></div>`;
         }
         const v = x.agg[metric.key];
         const w = Math.round(20 + ((v - min) / span) * 80);
@@ -1611,8 +1633,7 @@
         const cls = 'trend-row' + (x.isCurrent ? ' current' : '') + (bestVal != null && v === bestVal ? ' best' : '');
         return `<div class="${cls}"${navAttr}>
             <span class="trend-mlabel">${x.label}</span>
-            <span class="trend-bar-wrap"><span class="trend-bar" style="width:${w}%"></span></span>
-            <span class="trend-val">${metric.fmt(v)}</span>
+            <span class="trend-bar-wrap"><span class="trend-bar" style="width:${w}%"><span class="trend-bar-val">${metric.fmt(v)}</span></span></span>
           </div>`;
       }).join('');
 
