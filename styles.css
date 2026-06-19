@@ -68,7 +68,7 @@ button:active {
     --type-dark-text: #000000;
     --type-steady-bg: #515151;
     --type-steady-text: #ffffff;
-    --type-easy-bg: #c2c2c2;
+    --type-easy-bg: #efeeed;
     --type-easy-text: #202020;
     --type-jog-bg: #767676;
     --type-jog-text: #202020;
@@ -641,19 +641,18 @@ sup {
 }
 
 .lp-date-day {
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 13px;
+    font-weight: 400;
     font-family: 'Urbanist', sans-serif;
     line-height: 1;
-    color: var(--cloudy-gray);
+    color: var(--asphalt-gray);
     font-feature-settings: 'tnum';
 }
 
 .lp-date-weekday {
     font-size: 13px;
     font-weight: 400;
-    color: var(--cloudy-gray);
-    margin-top: 2px;
+    color: var(--asphalt-gray);
 }
 
 .lp-date-month--hidden {
@@ -684,7 +683,7 @@ sup {
 
 .lp-run-name {
     font-size: 18px;
-    font-weight: 300;
+    font-weight: 500;
     min-width: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -718,7 +717,7 @@ sup {
 
 .lp-stat-value {
     font-size: 18px;
-    font-weight: 400;
+    font-weight: 500;
     font-family: 'Urbanist', ui-monospace, monospace;
     font-feature-settings: 'tnum';
     line-height: 1;
