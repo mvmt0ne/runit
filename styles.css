@@ -1641,6 +1641,6 @@ input[type="date"].pb-input::-webkit-calendar-picker-indicator {
 }
 
 .round-box {
-    border-radius: 4px;
+    border-radius: 8px;
     margin-bottom: 2px;
 }
