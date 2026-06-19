@@ -426,7 +426,7 @@
             const topClass = flat || showMonth ? 'lp-date-month' : 'lp-date-month lp-date-month--hidden';
             return `<div class="lp-row ${viewMode} round-box">
         <div class="lp-date-col">          
-          <span class="lp-date-day">${month}${day}</span>
+          <span class="lp-date-day">${month}.${day}</span>
           <span class="lp-date-weekday">${weekday}</span>
         </div>
         <div class="lp-content-col" onclick="goTo('detail.html?date=${r.date}')">
