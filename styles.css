@@ -378,7 +378,7 @@ sup {
     width: 100%;
     background: var(--accent);
     border-radius: 0 0 8px 8px;
-    margin-bottom: 2px;
+    margin-bottom: 1px;
 }
 
 .tab {
@@ -627,11 +627,11 @@ sup {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding: 10px 0;
+    padding: 8px 0;
     gap: 2px;
     background-color: var(--asphalt-black);
     border-radius: 14px;
-    margin: 24px 0 0 14px;
+    margin: 14px 0 0 14px;
 }
 
 .lp-date-month {
@@ -1642,5 +1642,5 @@ input[type="date"].pb-input::-webkit-calendar-picker-indicator {
 
 .round-box {
     border-radius: 8px;
-    margin-bottom: 2px;
+    margin-bottom: 1px;
 }

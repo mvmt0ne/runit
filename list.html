@@ -425,14 +425,14 @@
             const topLabel = flat ? `${parts[0].slice(2)}.${parseInt(parts[1])}` : month;
             const topClass = flat || showMonth ? 'lp-date-month' : 'lp-date-month lp-date-month--hidden';
             return `<div class="lp-row ${viewMode} round-box">
-        <div class="lp-date-col">          
-          <span class="lp-date-day">${month}.${day}</span>
-          <span class="lp-date-weekday">${weekday}</span>
-        </div>
+       
         <div class="lp-content-col" onclick="goTo('detail.html?date=${r.date}')">
           <div class="lp-row-head">
             <div class="lp-badge type-${r.type}"></div>
+            <div class="lp-stat">
+            <span class="lp-date-day">${month} ${day} ${weekday}</span>
             <span class="lp-run-name">${r.name}</span>
+            </div>
             <span class="lp-head-km">${r.km}<sup>K</sup></span>
           </div>
           <div class="lp-stats-grid">
