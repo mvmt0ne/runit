@@ -504,7 +504,7 @@ sup {
     /* 액체 유리 셋업 */
     isolation: isolate;
     background: rgba(31, 31, 31, 0.5);
-    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.38);
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0);
     backdrop-filter: blur(8px) saturate(160%);
     -webkit-backdrop-filter: blur(8px) saturate(160%);
     /* auto-hide 트랜지션 */
