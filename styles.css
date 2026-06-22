@@ -65,15 +65,15 @@ button:active {
     --type-race-bg: #1d1d1d;
     --type-race-text: #ff4c31;
     --type-dark-bg: #ff4c31;
-    --type-dark-text: #1d1d1d;
+    --type-dark-text: #323232;
     --type-steady-bg: #515151;
-    --type-steady-text: #ffffff;
+    --type-steady-text: #efeeed;
     --type-easy-bg: #efeeed;
-    --type-easy-text: #202020;
-    --type-jog-bg: #767676;
-    --type-jog-text: #202020;
+    --type-easy-text: #323232;
+    --type-jog-bg: #b9b9b9;
+    --type-jog-text: #323232;
     --type-long-bg: #ff4c31;
-    --type-long-text: #202020;
+    --type-long-text: #323232;
     --type-none-border: #282828;
     --type-none-text: #555550;
 }
