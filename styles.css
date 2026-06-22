@@ -1276,10 +1276,10 @@ sup {
     font-size: 16px;
     font-weight: 400;
     font-family: 'Pretendard Variable', sans-serif;
-    color: var(--cloudy-gray);
+    color: var(--slate-gray);
     background: transparent;
     border-radius: 100px;
-    border: var(--cloudy-gray) 1px solid;
+    border: var(--slate-gray) 1px solid;
     cursor: pointer;
     transition: all 0.1s cubic-bezier(0.16, 1, 0.3, 1);
     white-space: nowrap;
