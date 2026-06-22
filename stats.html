@@ -1639,8 +1639,8 @@
         let barStyle = `width:${w}%`, valStyle = '';
         if (!isBest) {
           if (rank <= 4) { barStyle += ';background:var(--slate-gray)'; }
-          else if (rank <= 8) { barStyle += ';background:var(--cloudy-gray)'; valStyle = 'color:var(--bone)'; }
-          else { barStyle += ';background:var(--asphalt-gray)'; valStyle = 'color:var(--bone)'; }
+          else if (rank <= 8) { barStyle += ';background:var(--cloudy-gray)'; }
+          else { barStyle += ';background:var(--asphalt-gray)'; }
         }
         return `<div class="${cls}"${navAttr}>
             <span class="trend-mlabel">${x.label}</span>
