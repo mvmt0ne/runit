@@ -474,8 +474,14 @@
       color: var(--type-easy-text);
     }
 
-    /* Jogging */
+    /* Jogging — easy와 동일 */
     .type-jogging {
+      background: var(--type-easy-bg);
+      color: var(--type-easy-text);
+    }
+
+    /* Easy 10k 미만 — 기존 jogging 색상 */
+    .type-easy-short {
       background: var(--type-jog-bg);
       color: var(--type-jog-text);
     }
@@ -1005,7 +1011,8 @@
           // 같은 날 여러 활동 있으면 거리가 가장 긴 것 선택
           const main = acts.reduce((a, b) => (b.km || 0) > (a.km || 0) ? b : a);
           const note = main.km != null ? Math.round(main.km) : '';
-          html += `<div class="cal-day type-${main.type}${todayCls}" onclick="goTo('detail.html?date=${dateStr}')"><span class="day-note">${note}</span></div>`;
+          const typeClass = (main.type === 'easy' && (main.km || 0) < 10) ? 'easy-short' : main.type;
+          html += `<div class="cal-day type-${typeClass}${todayCls}" onclick="goTo('detail.html?date=${dateStr}')"><span class="day-note">${note}</span></div>`;
         }
       }
       const total = offset + lastDay;
