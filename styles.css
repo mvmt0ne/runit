@@ -41,6 +41,7 @@ button:active {
     /* Surfaces */
     --bg: #1d1d1d;
     --bone: #efeeed;
+    --bg-modal: #444444;
     /* Accent */
     --accent: #ff4c31;
     --accent-rgb: 255, 76, 49;
@@ -795,8 +796,8 @@ sup {
     left: 0;
     right: 0;
     bottom: calc(-1 * env(safe-area-inset-bottom, 0px));
-    background: rgba(34, 34, 34, 0.4);
-    backdrop-filter: blur(30px) saturate(100%);
+    background: rgba(9, 9, 9, 0.35);
+    backdrop-filter: blur(50px) saturate(100%);
     -webkit-backdrop-filter: blur(10px) saturate(100%);
     transition:
         opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
@@ -845,7 +846,7 @@ sup {
     left: 0;
     right: 0;
     bottom: 0;
-    background: var(--dark-gray);
+    background: var(--bg-modal);
     border-radius: 16px 16px 0 0;
     z-index: 999;
     display: flex;
@@ -976,6 +977,7 @@ sup {
     font-weight: 400;
     font-family: 'Pretendard Variable', sans-serif;
     transition: color 0.3s;
+    color: var(--slate-gray);
 }
 
 .sf-sheet-close {
