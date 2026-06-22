@@ -62,17 +62,17 @@ button:active {
     --asphalt-black: #222222;
 
     /* Run type palette (theme-independent) */
-    --type-race-bg: #000000;
-    --type-race-text: #ff543e;
-    --type-dark-bg: #ff543e;
-    --type-dark-text: #000000;
+    --type-race-bg: #1d1d1d;
+    --type-race-text: #ff4c31;
+    --type-dark-bg: #ff4c31;
+    --type-dark-text: #1d1d1d;
     --type-steady-bg: #515151;
     --type-steady-text: #ffffff;
     --type-easy-bg: #efeeed;
     --type-easy-text: #202020;
     --type-jog-bg: #767676;
     --type-jog-text: #202020;
-    --type-long-bg: #ff543e;
+    --type-long-bg: #ff4c31;
     --type-long-text: #202020;
     --type-none-border: #282828;
     --type-none-text: #555550;
