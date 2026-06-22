@@ -796,9 +796,9 @@ sup {
     left: 0;
     right: 0;
     bottom: calc(-1 * env(safe-area-inset-bottom, 0px));
-    background: rgba(9, 9, 9, 0.35);
+    background: rgba(9, 9, 9, 0.45);
     backdrop-filter: blur(50px) saturate(100%);
-    -webkit-backdrop-filter: blur(10px) saturate(100%);
+    -webkit-backdrop-filter: blur(50px) saturate(100%);
     transition:
         opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
         transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
