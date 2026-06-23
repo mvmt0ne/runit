@@ -35,6 +35,11 @@
   const shortKey = k => k.split(':')[1];
   const docFor = (uid, key) => db.collection('users').doc(uid).collection('store').doc(shortKey(key));
 
+  // 방금 로컬에서 push 한 키의 시각 — 직후 도착하는 에코/경합 스냅샷이
+  // 방금 저장한 로컬 최신값을 덮어써 지우는 것을 막기 위함.
+  const _lastPush = {};
+  const PUSH_GUARD_MS = 6000;
+
   let _resolveReady;
   const cloud = {
     enabled: true,
@@ -45,6 +50,7 @@
     // 로컬 저장 후 호출 → 클라우드 반영 (store.js가 사용)
     pushStore(key, obj) {
       if (!this.user || STORE_KEYS.indexOf(key) < 0) return;
+      _lastPush[key] = Date.now();
       docFor(this.user.uid, key).set({ data: obj, updated: Date.now() }).catch(() => {});
     },
     // 신발 이미지 → Firebase Storage 업로드, 다운로드 URL 반환 (Firestore 1MB 한도 회피)
@@ -71,8 +77,18 @@
         try {
           const snap = await ref.get();
           if (snap.exists) {
-            // 클라우드 → 로컬
-            localStorage.setItem(key, JSON.stringify(snap.data().data || {}));
+            // 클라우드 → 로컬. 단, 클라우드가 비었는데 로컬에 데이터가 있으면
+            // 덮어쓰지 않고 오히려 로컬을 클라우드로 올림 (사고성 삭제 방지)
+            const incoming = snap.data().data || {};
+            let localObj = {};
+            try { localObj = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) {}
+            const incomingEmpty = !incoming || Object.keys(incoming).length === 0;
+            const localHasData = localObj && Object.keys(localObj).length > 0;
+            if (incomingEmpty && localHasData) {
+              ref.set({ data: localObj, updated: Date.now() }).catch(() => {});
+            } else {
+              localStorage.setItem(key, JSON.stringify(incoming));
+            }
           } else {
             // 최초: 로컬 → 클라우드 (마이그레이션)
             const cur = localStorage.getItem(key);
@@ -81,10 +97,19 @@
         } catch (e) { /* offline 등 무시 */ }
         // 실시간 동기화 (다른 기기 변경 반영)
         ref.onSnapshot(s => {
-          if (s.exists && !s.metadata.hasPendingWrites) {
-            localStorage.setItem(key, JSON.stringify(s.data().data || {}));
-            window.dispatchEvent(new Event('runit-cloud-sync'));
-          }
+          if (!s.exists || s.metadata.hasPendingWrites) return;
+          // 방금 로컬에서 저장(push)한 키는 잠시 보호 — 에코/경합 스냅샷이
+          // 방금 저장한 값을 덮어쓰지 않도록 (저장 직후 데이터가 사라지는 문제 방지)
+          if (_lastPush[key] && Date.now() - _lastPush[key] < PUSH_GUARD_MS) return;
+          const incoming = s.data().data || {};
+          // 클라우드가 비어있는데 로컬에 데이터가 있으면 덮어쓰지 않음 (사고성 삭제 방지)
+          let localObj = {};
+          try { localObj = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) {}
+          const incomingEmpty = !incoming || Object.keys(incoming).length === 0;
+          const localHasData = localObj && Object.keys(localObj).length > 0;
+          if (incomingEmpty && localHasData) return;
+          localStorage.setItem(key, JSON.stringify(incoming));
+          window.dispatchEvent(new Event('runit-cloud-sync'));
         }, () => {});
       }
       window.dispatchEvent(new Event('runit-cloud-sync'));
