@@ -224,7 +224,7 @@
       padding: calc(env(safe-area-inset-top, 0px) + 20px) 20px 0;
       display: flex;
       align-items: flex-start;
-      justify-content: space-between;
+      justify-content: flex-end;
       flex-shrink: 0;
     }
 
@@ -236,6 +236,7 @@
       line-height: 1.5;
       transition: color 0.3s;
       font-family: 'Pretendard Variable', -apple-system, sans-serif;
+      margin-top: 0;
     }
 
     /* 마일리지 숫자 — 이탤릭 마지막 글자 오른쪽 오버슈트가 잘리지 않게 여백 */
@@ -245,7 +246,7 @@
     }
 
     .hero-km-row {
-      padding: 4px 22px 0;
+      padding: 0 22px 0;
       display: flex;
       align-items: baseline;
       gap: 4px;
@@ -607,6 +608,7 @@
     /* ─── Month Dropdown ──────────────────── */
     .hero-title {
       position: relative;
+      margin-bottom: -7px;
     }
 
     .month-dd-backdrop {
@@ -779,9 +781,6 @@
             <div class="home-bg-noise" id="home-noise" style="position:absolute"></div>
 
             <div class="hero-section">
-              <div class="hero-title">
-                <div class="hero-title-line">이번달 마일리지는</div>
-              </div>
               <div class="weather-widget" id="weather-widget">
                 <div class="weather-top">
                   <span class="weather-icon" id="w-icon"></span>
@@ -792,6 +791,10 @@
                   <span class="weather-pm" id="w-pm">--</span>
                 </div>
               </div>
+            </div>
+
+            <div class="hero-title" style="padding: 0 22px 2px;">
+              <div class="hero-title-line">이번달 마일리지는</div>
             </div>
 
             <div class="hero-km-row">
