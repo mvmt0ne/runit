@@ -676,6 +676,7 @@
     let _targetX = 0, _targetY = 0;
     let _currentX = 0, _currentY = 0;
     let _rafRunning = false;
+    let _cardVisible = true;   // PB 카드가 화면에 보이는지 (off-screen이면 렌더 루프 정지)
 
     const EASE_GYRO  = 0.12;   // 자이로 (느린 idle)
     const EASE_POINT = 0.28;   // 터치/마우스 (즉시 반응)
@@ -705,6 +706,18 @@
         _currentX += (_targetX - _currentX) * ease;
         _currentY += (_targetY - _currentY) * ease;
         applyTilt(_currentX, _currentY);
+        // 입력(터치/자이로)이 없고 목표에 수렴하면 루프 정지.
+        // 안 그러면 PB를 떠난 뒤에도 preserve-3d/will-change 카드를 매 프레임 갱신해
+        // iOS Safari에서 인접 슬라이드(마일리지) 합성이 깨져 화면이 비는 문제가 생김.
+        // 터치/자이로/포인터 이동 시 다시 startRenderLoop() 으로 재가동됨.
+        const settled = Math.abs(_targetX - _currentX) < 0.001 && Math.abs(_targetY - _currentY) < 0.001;
+        // 카드가 화면 밖이면(다른 탭으로 이동) 무조건 정지 — 자이로 켜져 있어도.
+        if (!_cardVisible || (settled && !_touchActive && !_gyroEnabled)) {
+          _currentX = _targetX; _currentY = _targetY;
+          applyTilt(_currentX, _currentY);
+          _rafRunning = false;
+          return;
+        }
         requestAnimationFrame(tick);
       }
       requestAnimationFrame(tick);
@@ -720,6 +733,7 @@
         const cy = rect.top + rect.height / 2;
         _targetX = clamp((clientX - cx) / (rect.width / 2), -1, 1);
         _targetY = clamp((clientY - cy) / (rect.height / 2), -1, 1);
+        startRenderLoop(); // 정지된 보간 루프 재가동
       }
 
       card.addEventListener('mousemove', e => fromPointer(e.clientX, e.clientY));
@@ -742,6 +756,17 @@
       };
       card.addEventListener('touchend', endTouch);
       card.addEventListener('touchcancel', endTouch);
+
+      // 카드가 화면에 보일 때만 렌더 루프 가동 — SPA에서 다른 탭(마일리지 등)으로
+      // 이동해 PB 슬라이드가 off-screen 되면 3D 틸트 애니메이션을 멈춰
+      // iOS Safari 합성이 깨져 인접 화면이 비는 문제 방지.
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(entries => {
+          _cardVisible = entries[0].isIntersecting;
+          if (_cardVisible) startRenderLoop();
+        }, { threshold: 0.01 });
+        io.observe(card);
+      }
 
       startRenderLoop();
     })();
