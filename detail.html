@@ -15,7 +15,8 @@
   <link rel="icon" type="image/svg+xml" href="./icon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+  <link
+    href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
     rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable.min.css"
     rel="stylesheet">
@@ -39,7 +40,9 @@
       background: var(--slate-gray);
     }
 
-    .detail-scroll::-webkit-scrollbar { display: none; }
+    .detail-scroll::-webkit-scrollbar {
+      display: none;
+    }
 
     /* ─── Hero ─── */
     .d-hero {
@@ -137,7 +140,7 @@
     }
 
     /* 카드 사이 구분선 (하단 여백은 통일, 카드끼리만 라인) */
-    .d-card + .d-card {
+    .d-card+.d-card {
       border-top: 1px solid var(--asphalt-black);
     }
 
@@ -165,19 +168,31 @@
       gap: 10px;
       padding: 9px 0;
     }
-    .d-compare-row + .d-compare-row { border-top: 1px solid rgba(0, 0, 0, 0.06); }
+
+    .d-compare-row+.d-compare-row {
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
     .d-compare-label {
       flex: 1;
       font-size: 14px;
       color: var(--asphalt-gray);
       font-family: 'Pretendard Variable', sans-serif;
     }
+
     .d-compare-val {
       font-size: 18px;
       color: var(--asphalt-black);
       font-family: 'Urbanist', sans-serif;
     }
-    .d-compare-val i { font-style: normal; font-size: 11px; color: var(--cloudy-gray); margin-left: 2px; }
+
+    .d-compare-val i {
+      font-style: normal;
+      font-size: 11px;
+      color: var(--cloudy-gray);
+      margin-left: 2px;
+    }
+
     .d-compare-delta {
       min-width: 70px;
       text-align: right;
@@ -185,8 +200,14 @@
       font-family: 'Urbanist', sans-serif;
       color: var(--cloudy-gray);
     }
-    .d-compare-delta.cmp-good { color: var(--accent); }
-    .d-compare-delta.cmp-bad { color: var(--cloudy-gray); }
+
+    .d-compare-delta.cmp-good {
+      color: var(--accent);
+    }
+
+    .d-compare-delta.cmp-bad {
+      color: var(--cloudy-gray);
+    }
 
     /* ─── 최근 러닝 목록 ─── */
     .d-recent-row {
@@ -197,32 +218,82 @@
       cursor: pointer;
       border-top: 1px solid rgba(0, 0, 0, 0.06);
     }
-    .d-recent-row:first-child { border-top: none; }
-    .d-recent-row:active { opacity: 0.55; }
+
+    .d-recent-row:first-child {
+      border-top: none;
+    }
+
+    .d-recent-row:active {
+      opacity: 0.55;
+    }
+
     .d-recent-dot {
-      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
       background: var(--cloudy-gray);
     }
-    .d-recent-dot.type-race { background: var(--type-race-text); }
-    .d-recent-dot.type-tempo, .d-recent-dot.type-interval, .d-recent-dot.type-tt { background: var(--type-dark-bg); }
-    .d-recent-dot.type-easy { background: var(--type-easy-bg); }
-    .d-recent-dot.type-jogging { background: var(--type-jog-bg); }
-    .d-recent-dot.type-long { background: var(--type-long-bg); }
+
+    .d-recent-dot.type-race {
+      background: var(--type-race-text);
+    }
+
+    .d-recent-dot.type-tempo,
+    .d-recent-dot.type-interval,
+    .d-recent-dot.type-tt {
+      background: var(--type-dark-bg);
+    }
+
+    .d-recent-dot.type-easy {
+      background: var(--type-easy-bg);
+    }
+
+    .d-recent-dot.type-jogging {
+      background: var(--type-jog-bg);
+    }
+
+    .d-recent-dot.type-long {
+      background: var(--type-long-bg);
+    }
+
     .d-recent-date {
-      width: 38px; flex-shrink: 0; font-size: 13px;
-      color: var(--cloudy-gray); font-family: 'Urbanist', sans-serif;
+      width: 38px;
+      flex-shrink: 0;
+      font-size: 13px;
+      color: var(--cloudy-gray);
+      font-family: 'Urbanist', sans-serif;
     }
+
     .d-recent-name {
-      flex: 1; min-width: 0; font-size: 14px; color: var(--asphalt-black);
+      flex: 1;
+      min-width: 0;
+      font-size: 14px;
+      color: var(--asphalt-black);
       font-family: 'Pretendard Variable', sans-serif;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .d-recent-km, .d-recent-pace {
-      flex-shrink: 0; font-size: 13px; font-family: 'Urbanist', sans-serif;
+
+    .d-recent-km,
+    .d-recent-pace {
+      flex-shrink: 0;
+      font-size: 13px;
+      font-family: 'Urbanist', sans-serif;
       color: var(--asphalt-gray);
     }
-    .d-recent-km { width: 48px; text-align: right; }
-    .d-recent-pace { width: 48px; text-align: right; color: var(--cloudy-gray); }
+
+    .d-recent-km {
+      width: 48px;
+      text-align: right;
+    }
+
+    .d-recent-pace {
+      width: 48px;
+      text-align: right;
+      color: var(--cloudy-gray);
+    }
 
     /* ─── 메모 ─── */
     .d-note {
@@ -345,7 +416,9 @@
       cursor: pointer;
     }
 
-    .d-hero-shoe-add:active { background: rgba(255, 255, 255, 0.05); }
+    .d-hero-shoe-add:active {
+      background: rgba(255, 255, 255, 0.05);
+    }
 
     /* ─── 신발 선택 시트 (롤링) ─── */
     .shoe-sheet-backdrop {
@@ -362,19 +435,28 @@
       transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1);
       z-index: 60;
     }
-    .shoe-sheet-backdrop.open { opacity: 1; pointer-events: auto; }
+
+    .shoe-sheet-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
 
     .shoe-sheet {
       position: fixed;
-      left: 0; right: 0; bottom: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       z-index: 61;
-      background: var(--dark-gray);
-      border-radius: 22px 22px 0 0;
+      background: var(--bg-modal);
+      border-radius: 16px 16px 0 0;
       padding: 18px 0 calc(24px + env(safe-area-inset-bottom, 0px));
       transform: translateY(100%);
       transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .shoe-sheet.open { transform: translateY(0); }
+
+    .shoe-sheet.open {
+      transform: translateY(0);
+    }
 
     .shoe-sheet-head {
       display: flex;
@@ -383,12 +465,14 @@
       padding: 0 32px;
       margin-bottom: 16px;
     }
+
     .shoe-sheet-title {
       font-size: 15px;
       font-weight: 500;
       color: var(--bone);
       font-family: 'Pretendard Variable', sans-serif;
     }
+
     .shoe-sheet-add {
       border: none;
       background: rgba(255, 255, 255, 0.08);
@@ -400,17 +484,23 @@
       border-radius: 100px;
       cursor: pointer;
     }
-    .shoe-sheet-add:active { background: rgba(255, 255, 255, 0.16); }
+
+    .shoe-sheet-add:active {
+      background: rgba(255, 255, 255, 0.16);
+    }
 
     .shoe-carousel {
       display: flex;
-      gap: 14px;
+      gap: 4px;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
       padding: 0 32px 8px;
       scrollbar-width: none;
     }
-    .shoe-carousel::-webkit-scrollbar { display: none; }
+
+    .shoe-carousel::-webkit-scrollbar {
+      display: none;
+    }
 
     .shoe-card {
       flex: 0 0 62%;
@@ -420,15 +510,14 @@
       align-items: center;
       gap: 12px;
       padding: 20px 12px;
-      border-radius: 16px;
+      border-radius: 8px;
       background: rgba(255, 255, 255, 0.04);
-      border: 1.5px solid transparent;
       cursor: pointer;
       transition: border-color 0.2s, background 0.2s;
     }
+
     .shoe-card.selected {
-      border-color: var(--accent);
-      background: rgba(255, 76, 49, 0.08);
+      background: var(--accent);
     }
 
     .shoe-card-img {
@@ -437,9 +526,10 @@
       object-fit: contain;
       filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.5));
     }
+
     .shoe-card-name {
-      font-size: 14px;
-      color: var(--bone);
+      font-size: 16px;
+      color: var(--slate-gray);
       font-family: 'Pretendard Variable', sans-serif;
       text-align: center;
     }
@@ -451,7 +541,11 @@
       font-family: 'Pretendard Variable', sans-serif;
       padding: 20px;
     }
-    .shoe-sheet-empty a { color: var(--accent); cursor: pointer; }
+
+    .shoe-sheet-empty a {
+      color: var(--accent);
+      cursor: pointer;
+    }
 
     /* ─── Empty / error ─── */
     .d-empty {
@@ -463,14 +557,37 @@
     }
 
     /* ─── Type badge colors (styles.css 의 type-* 변수 사용) ─── */
-    .d-type-badge.type-race { background: var(--type-race-bg); color: var(--type-race-text); }
+    .d-type-badge.type-race {
+      background: var(--type-race-bg);
+      color: var(--type-race-text);
+    }
+
     .d-type-badge.type-tempo,
     .d-type-badge.type-interval,
-    .d-type-badge.type-tt { background: var(--type-dark-bg); color: var(--type-dark-text); }
-    .d-type-badge.type-steady { background: var(--type-steady-bg); color: var(--type-steady-text); }
-    .d-type-badge.type-easy { background: var(--type-easy-bg); color: var(--type-easy-text); }
-    .d-type-badge.type-jogging { background: var(--type-jog-bg); color: var(--type-jog-text); }
-    .d-type-badge.type-long { background: var(--type-long-bg); color: var(--type-long-text); }
+    .d-type-badge.type-tt {
+      background: var(--type-dark-bg);
+      color: var(--type-dark-text);
+    }
+
+    .d-type-badge.type-steady {
+      background: var(--type-steady-bg);
+      color: var(--type-steady-text);
+    }
+
+    .d-type-badge.type-easy {
+      background: var(--type-easy-bg);
+      color: var(--type-easy-text);
+    }
+
+    .d-type-badge.type-jogging {
+      background: var(--type-jog-bg);
+      color: var(--type-jog-text);
+    }
+
+    .d-type-badge.type-long {
+      background: var(--type-long-bg);
+      color: var(--type-long-text);
+    }
   </style>
 </head>
 
@@ -589,10 +706,10 @@
       const hh = (startTime && /^\d{1,2}:/.test(startTime)) ? String(parseInt(startTime)).padStart(2, '0') : '12'; // 시각 없으면 정오
       const cacheKey = `${date}T${hh}`;
       let cache = {};
-      try { cache = JSON.parse(localStorage.getItem('runit-wxtemp') || '{}'); } catch (e) {}
+      try { cache = JSON.parse(localStorage.getItem('runit-wxtemp') || '{}'); } catch (e) { }
       if (cache[cacheKey]) { el.textContent = cache[cacheKey]; return; }
       let coords;
-      try { coords = JSON.parse(localStorage.getItem('runit-coords')); } catch (e) {}
+      try { coords = JSON.parse(localStorage.getItem('runit-coords')); } catch (e) { }
       // 저장된 좌표 없으면 직접 위치 요청 (허용 시 저장)
       if (!coords || coords.lat == null) {
         if (!navigator.geolocation) return;
@@ -620,7 +737,7 @@
         const txt = `🌡 ${Math.round(t)}°`;
         el.textContent = txt;
         cache[cacheKey] = txt;
-        try { localStorage.setItem('runit-wxtemp', JSON.stringify(cache)); } catch (e) {}
+        try { localStorage.setItem('runit-wxtemp', JSON.stringify(cache)); } catch (e) { }
       } catch (e) { /* ignore */ }
     }
 
@@ -680,10 +797,10 @@
 
       // C. 러닝 폼 카드
       const formCells = [
-        ['케이던스',  act.spm,       'SPM'],
-        ['보폭',      act.stride,    'M'],
-        ['접지시간',  act.ground,    'MS'],
-        ['수직 진동', act.vertOsc,   'CM'],
+        ['케이던스', act.spm, 'SPM'],
+        ['보폭', act.stride, 'M'],
+        ['접지시간', act.ground, 'MS'],
+        ['수직 진동', act.vertOsc, 'CM'],
         ['수직 비율', act.vertRatio, '%'],
         ['최대 케이던스', act.maxSpm, 'SPM'],
       ].filter(([, v]) => v != null && v !== '');
@@ -700,13 +817,13 @@
         </div>` : '';
 
       const statsCells = [
-        ['최대 심박',  act.maxBpm,    'BPM'],
-        ['최대 페이스', act.maxPace,  '/K'],
-        ['GAP',        act.avgGAP,    '/K'],
-        ['칼로리',     act.calories,  'KCAL'],
-        ['걸음',       act.steps,     ''],
-        ['상승',       act.ascent,    'M'],
-        ['하강',       act.descent,   'M'],
+        ['최대 심박', act.maxBpm, 'BPM'],
+        ['최대 페이스', act.maxPace, '/K'],
+        ['GAP', act.avgGAP, '/K'],
+        ['칼로리', act.calories, 'KCAL'],
+        ['걸음', act.steps, ''],
+        ['상승', act.ascent, 'M'],
+        ['하강', act.descent, 'M'],
       ].filter(([, v]) => v != null && v !== '');
 
       const stats = statsCells.length ? `
@@ -735,17 +852,17 @@
           <div class="d-card-title">최근 러닝</div>
           <div class="d-recent-list">
             ${recents.map(a => {
-              const t = (typeof normRunType === 'function') ? normRunType(a.type) : a.type;
-              const nm = ((getMeta(a.date) || {}).name) || a.name || '러닝';
-              const [, mm, dd] = a.date.split('-');
-              return `<div class="d-recent-row" onclick="goTo('detail.html?date=${a.date}')">
+        const t = (typeof normRunType === 'function') ? normRunType(a.type) : a.type;
+        const nm = ((getMeta(a.date) || {}).name) || a.name || '러닝';
+        const [, mm, dd] = a.date.split('-');
+        return `<div class="d-recent-row" onclick="goTo('detail.html?date=${a.date}')">
                 <span class="d-recent-dot type-${t}"></span>
                 <span class="d-recent-date">${parseInt(mm)}.${parseInt(dd)}</span>
                 <span class="d-recent-name">${escapeHTML(nm)}</span>
                 <span class="d-recent-km">${fmtNum(a.km, 1)}K</span>
                 <span class="d-recent-pace">${a.pace || '--'}</span>
               </div>`;
-            }).join('')}
+      }).join('')}
           </div>
         </div>` : '';
 
