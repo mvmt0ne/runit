@@ -424,18 +424,18 @@
       font-family: 'Urbanist', sans-serif;
     }
 
-    /* Today indicator dot */
+    /* Today indicator — 우측 상단 겹침 원 */
     .cal-day.today::after {
       content: '';
       position: absolute;
-      bottom: 4px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 3px;
-      height: 3px;
-      border-radius: 0;
-      background: currentColor;
-      opacity: 0.5;
+      top: -2px;
+      right: -2px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--asphalt-black);
+      box-sizing: border-box;
     }
 
     /* ── Type styles (fixed colors) ── */
