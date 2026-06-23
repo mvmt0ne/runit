@@ -503,6 +503,8 @@ sup {
     z-index: 30;
     display: flex;
     align-items: stretch;
+    justify-content: center;
+    gap: 6px;
     padding: 0 8px calc(env(safe-area-inset-bottom, 0px) + 4px);
     background: var(--tabbar-bg);
     /* auto-hide 트랜지션 */
@@ -551,13 +553,13 @@ sup {
 }
 
 .tab-item {
-    flex: 1 1 0;
+    flex: 0 0 auto;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     gap: 0;
-    padding: 14px 0;
+    padding: 14px 16px;
     margin: 8px 0;
     border-radius: 100px;
     color: var(--slate-gray);
@@ -575,7 +577,6 @@ sup {
 }
 
 .tab-item.active {
-    flex-grow: 2.4;
     gap: 8px;
     color: var(--bone);
     background: rgba(255, 255, 255, 0.1);
