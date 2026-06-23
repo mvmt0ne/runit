@@ -327,9 +327,25 @@
             document.querySelectorAll('.float-bar-wrap.chrome-hidden').forEach(el => {
               el.classList.remove('chrome-hidden');
             });
+            // iOS Safari 리페인트 강제 — 다른 슬라이드(특히 PB의 3D/GPU 레이어)에서 넘어오면
+            // 대상 슬라이드가 paint 안 되고 비어 보이는 합성 글리치가 있음(탭을 눌러야 보임).
+            // 활성 슬라이드를 한 프레임 살짝 흔들어 강제로 다시 그리게 함.
+            forceRepaint(this.slides[this.activeIndex]);
+          },
+          // 전환 완료 시점에도 한 번 더 (iOS는 transition 직후에야 paint가 필요한 경우가 있음)
+          slideChangeTransitionEnd() {
+            forceRepaint(this.slides[this.activeIndex]);
           }
         }
       });
+
+      // iOS 합성 글리치 대응 — 레이아웃에 영향 없이 paint만 강제 트리거
+      function forceRepaint(el) {
+        if (!el) return;
+        el.style.transform = 'translateZ(0)';
+        void el.offsetHeight; // reflow
+        requestAnimationFrame(() => { el.style.transform = ''; });
+      }
 
       function updateActiveTab(idx) {
         document.querySelectorAll('#app-tab-bar [data-idx]').forEach(el => {
