@@ -382,20 +382,7 @@
         slides.forEach((s, i) => { if (i !== initialIdx) loadSlide(s); });
       }, 600);
 
-      // 탭바에 액체 유리 효과 적용 (Swiper init 후 — 탭바 dimension 결정된 시점)
-      if (typeof applyLiquidGlass === 'function') {
-        applyLiquidGlass(document.getElementById('app-tab-bar'), {
-          borderRadius: 100,
-          bezelWidth: 14,
-          glassThickness: 10,
-          ior: 1.45,
-          scaleRatio: 1,
-          blurAmt: 0.4,
-          specOpacity: 0.5,
-          specSat: 1.0,
-          surface: 'lip',
-        });
-      }
+      // 탭바: 풀폭 솔리드 + concave 코너 디자인 (액체 유리 미적용)
     })();
   </script>
 

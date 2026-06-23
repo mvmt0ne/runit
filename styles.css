@@ -493,21 +493,18 @@ sup {
    TAB BAR — 전 페이지 공통 하단 탭바
 ═══════════════════════════════════════════════════════════ */
 .tab-bar {
+    --tabbar-bg: #161616;
+    --tabbar-r: 16px;
     position: absolute;
-    /* safe-area는 padding이 아니라 bottom 위치값으로 처리해야 pill 내부가 균형 잡힘 */
-    bottom: calc(0px + env(safe-area-inset-bottom, 0px));
-    left: 16px;
-    right: 16px;
+    /* 하단 전체 영역을 덮는 풀폭 바 */
+    bottom: 0;
+    left: 0;
+    right: 0;
     z-index: 30;
     display: flex;
     align-items: stretch;
-    border-radius: 40px;
-    /* 액체 유리 셋업 */
-    isolation: isolate;
-    background: rgba(31, 31, 31, 0);
-    box-shadow: 0 6px 30px rgba(0, 0, 0, 0);
-    backdrop-filter: blur(8px) saturate(160%);
-    -webkit-backdrop-filter: blur(8px) saturate(160%);
+    padding: 0 8px calc(env(safe-area-inset-bottom, 0px) + 4px);
+    background: var(--tabbar-bg);
     /* auto-hide 트랜지션 */
     transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -523,37 +520,28 @@ sup {
     bottom: calc(0px + env(safe-area-inset-bottom, 0px)) !important;
 }
 
-/* layer 1 (deepest): backdrop refraction (Chromium) / blur fallback (Safari) */
-.tab-bar::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -2;
-    border-radius: inherit;
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-}
-
-@supports (backdrop-filter: url(#x)) or (-webkit-backdrop-filter: url(#x)) {
-    .tab-bar::before {
-        backdrop-filter: url(#liquid-glass-filter);
-        -webkit-backdrop-filter: url(#liquid-glass-filter);
-    }
-}
-
-/* layer 2: tint + inner highlight (유리 표면 광택) */
+/* ─── 상단 양쪽 네거티브(concave) 코너 — 바 색이 벽으로 플레어되며 안쪽으로 파임 ─── */
+.tab-bar::before,
 .tab-bar::after {
     content: '';
     position: absolute;
-    inset: 0;
-    z-index: -1;
-    border-radius: inherit;
-    background: rgba(20, 20, 20, 0);
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.18),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.25),
-        inset 0 0 12px rgba(255, 255, 255, 0.05);
+    bottom: 100%;
+    width: var(--tabbar-r);
+    height: var(--tabbar-r);
+    background: var(--tabbar-bg);
     pointer-events: none;
+}
+
+.tab-bar::before {
+    left: 0;
+    -webkit-mask: radial-gradient(circle at top right, transparent var(--tabbar-r), #000 calc(var(--tabbar-r) + 0.5px));
+    mask: radial-gradient(circle at top right, transparent var(--tabbar-r), #000 calc(var(--tabbar-r) + 0.5px));
+}
+
+.tab-bar::after {
+    right: 0;
+    -webkit-mask: radial-gradient(circle at top left, transparent var(--tabbar-r), #000 calc(var(--tabbar-r) + 0.5px));
+    mask: radial-gradient(circle at top left, transparent var(--tabbar-r), #000 calc(var(--tabbar-r) + 0.5px));
 }
 
 /* 탭 아이템들은 유리 레이어 위에 */
@@ -563,19 +551,23 @@ sup {
 }
 
 .tab-item {
-    flex: 1;
+    flex: 1 1 0;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 4px;
-    padding: 16px 0;
+    gap: 0;
+    padding: 14px 0;
+    margin: 8px 0;
+    border-radius: 100px;
     color: var(--slate-gray);
     text-decoration: none;
     cursor: pointer;
     transition:
+        flex-grow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+        gap 0.35s cubic-bezier(0.16, 1, 0.3, 1),
         color 0.2s,
-        background 0.2s;
+        background 0.25s;
 }
 
 .tab-item:active {
@@ -583,7 +575,10 @@ sup {
 }
 
 .tab-item.active {
+    flex-grow: 2.4;
+    gap: 8px;
     color: var(--bone);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .tab-icon {
@@ -592,13 +587,26 @@ sup {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .tab-label {
-    font-size: 11px;
-    font-weight: 500;
+    font-size: 13px;
+    font-weight: 600;
     font-family: 'Pretendard Variable', sans-serif;
     letter-spacing: -0.01em;
+    white-space: nowrap;
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition:
+        max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.25s ease;
+}
+
+.tab-item.active .tab-label {
+    max-width: 120px;
+    opacity: 1;
 }
 
 /* ═══════════════════════════════════════════════════════════
