@@ -428,8 +428,10 @@
     .cal-day.today::after {
       content: '';
       position: absolute;
-      top: -2px;
-      right: -2px;
+      /* 큰 원의 45° 가장자리에 중심을 두어 절반씩 걸침 */
+      top: 14.6%;
+      right: 14.6%;
+      transform: translate(50%, -50%);
       width: 14px;
       height: 14px;
       border-radius: 50%;
