@@ -492,6 +492,19 @@ sup {
 /* ═══════════════════════════════════════════════════════════
    TAB BAR — 전 페이지 공통 하단 탭바
 ═══════════════════════════════════════════════════════════ */
+/* iOS standalone PWA: 비활성 슬라이드의 PB 3D 카드 GPU 레이어 해제.
+   off-screen 상태의 perspective/preserve-3d/will-change 레이어가 standalone 모드에서
+   인접(활성) 슬라이드의 paint를 막아 화면이 비는 문제(탭 눌러야 보임)를 방지. */
+.swiper-slide:not(.swiper-slide-active) .pb-hero {
+    perspective: none;
+}
+
+.swiper-slide:not(.swiper-slide-active) .pb-hero-card {
+    will-change: auto;
+    transform: none;
+    transform-style: flat;
+}
+
 .tab-bar {
     --tabbar-bg: #161616;
     --tabbar-r: 16px;
