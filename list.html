@@ -75,47 +75,14 @@
             display: flex;
             align-items: center;
             gap: 60px;
-            /* iOS 호환 글래스: 위가 밝은 사선 그라데이션 + 강한 블러 */
-            background:
-                linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.02) 40%),
-                rgba(30, 30, 30, 0.42);
-            backdrop-filter: blur(24px) saturate(190%);
-            -webkit-backdrop-filter: blur(24px) saturate(190%);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow:
-                inset 0 1.5px 0.5px rgba(255, 255, 255, 0.45),
-                inset 1px 0 1px rgba(255, 255, 255, 0.12),
-                inset 0 -2px 2px rgba(0, 0, 0, 0.35),
-                0 10px 30px -8px rgba(0, 0, 0, 0.55);
+            background: rgba(24, 24, 24, 0.95);
             border-radius: 100px;
             padding: 14px 24px;
-            isolation: isolate;
+            box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.5);
             pointer-events: none;
             opacity: 0;
             transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             white-space: nowrap;
-        }
-
-        /* 상단 광택(스페큘러) 스트릭 — 유리 표면 반사 */
-        .month-top-bar::after {
-            content: '';
-            position: absolute;
-            left: 6%;
-            right: 6%;
-            top: 2px;
-            height: 42%;
-            border-radius: 100px 100px 50% 50% / 100px 100px 100% 100%;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0));
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        /* archisvaze/liquid-glass SVG 굴절 적용 시 (Chromium) — JS가 .lg-on 부여.
-           배경을 더 투명하게 해서 굴절이 드러나게. Safari는 기본 blur 유지. */
-        .month-top-bar.lg-on {
-            background: rgba(28, 28, 28, 0.18);
-            backdrop-filter: url(#month-bar-glass);
-            -webkit-backdrop-filter: url(#month-bar-glass);
         }
 
         .month-top-bar.visible {
@@ -752,29 +719,6 @@
             const bar = document.getElementById('month-top-bar');
             const scrollEl = document.getElementById('list-scroll');
             if (!scrollEl || !bar) return;
-
-            // archisvaze/liquid-glass — SVG 굴절 글래스.
-            // backdrop-filter:url(#svg)은 Blink(데스크탑 크롬 등)에서만 동작하고
-            // iOS/Safari(WebKit)에선 지원 안 됨 → 그 경우 .lg-on 미부여, 기본 CSS blur 유지.
-            if (!bar._lgApplied && typeof applyLiquidGlass === 'function') {
-                bar._lgApplied = true;
-                const ua = navigator.userAgent;
-                const isIOS = /iP(hone|ad|od)/.test(ua) ||
-                    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-                const isBlink = /Chrome|Chromium|Edg|OPR/.test(ua) && !/Edge\//.test(ua);
-                if (isBlink && !isIOS) {
-                    applyLiquidGlass(bar, {
-                        filterId: 'month-bar-glass',
-                        borderRadius: 100,
-                        bezelWidth: 12,
-                        glassThickness: 9,
-                        ior: 1.45,
-                        blurAmt: 0.4,
-                        specOpacity: 0.6,
-                    });
-                    bar.classList.add('lg-on');
-                }
-            }
 
             const groupByMonth = sortState.key === 'date';
             if (!groupByMonth) {
