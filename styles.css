@@ -451,12 +451,12 @@ sup {
 .list-ctrl-btn {
     display: inline-flex;
     align-items: center;
-    gap: 2px;
+    gap: 6px;
     padding: 12px 0;
     background: transparent;
     border: none;
     color: var(--asphalt-black);
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 400;
     cursor: pointer;
     transition:
@@ -506,20 +506,21 @@ sup {
 }
 
 .tab-bar {
-    --tabbar-bg: #161616;
-    --tabbar-r: 16px;
+    --tabbar-r: 30px;
     position: absolute;
-    /* 하단 전체 영역을 덮는 풀폭 바 */
+    /* 하단 전체를 채우는 흰색 바 (상단 모서리만 라운드) */
     bottom: 0;
     left: 0;
     right: 0;
     z-index: 30;
     display: flex;
-    align-items: stretch;
+    align-items: center;
     justify-content: center;
     gap: 6px;
-    padding: 0 8px calc(env(safe-area-inset-bottom, 0px) + 4px);
-    background: var(--tabbar-bg);
+    padding: 12px 14px calc(env(safe-area-inset-bottom, 0px) + 12px);
+    background: #ffffff;
+    border-radius: var(--tabbar-r) var(--tabbar-r) 0 0;
+    box-shadow: 0 -8px 32px -12px rgba(0, 0, 0, 0.45);
     /* auto-hide 트랜지션 */
     transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -535,36 +536,6 @@ sup {
     bottom: calc(0px + env(safe-area-inset-bottom, 0px)) !important;
 }
 
-/* ─── 상단 양쪽 네거티브(concave) 코너 — 바 색이 벽으로 플레어되며 안쪽으로 파임 ─── */
-.tab-bar::before,
-.tab-bar::after {
-    content: '';
-    position: absolute;
-    bottom: 100%;
-    width: var(--tabbar-r);
-    height: var(--tabbar-r);
-    background: var(--tabbar-bg);
-    pointer-events: none;
-}
-
-.tab-bar::before {
-    left: 0;
-    -webkit-mask: radial-gradient(circle at top right, transparent var(--tabbar-r), #000 calc(var(--tabbar-r) + 0.5px));
-    mask: radial-gradient(circle at top right, transparent var(--tabbar-r), #000 calc(var(--tabbar-r) + 0.5px));
-}
-
-.tab-bar::after {
-    right: 0;
-    -webkit-mask: radial-gradient(circle at top left, transparent var(--tabbar-r), #000 calc(var(--tabbar-r) + 0.5px));
-    mask: radial-gradient(circle at top left, transparent var(--tabbar-r), #000 calc(var(--tabbar-r) + 0.5px));
-}
-
-/* 탭 아이템들은 유리 레이어 위에 */
-.tab-bar>.tab-item {
-    position: relative;
-    z-index: 1;
-}
-
 .tab-item {
     flex: 0 0 auto;
     display: flex;
@@ -572,27 +543,25 @@ sup {
     align-items: center;
     justify-content: center;
     gap: 0;
-    padding: 14px 16px;
-    margin: 8px 0;
+    padding: 10px 14px;
     border-radius: 100px;
-    color: var(--slate-gray);
+    color: #b3b3b3;
     text-decoration: none;
     cursor: pointer;
     transition:
-        flex-grow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
         gap 0.35s cubic-bezier(0.16, 1, 0.3, 1),
         color 0.2s,
         background 0.25s;
 }
 
 .tab-item:active {
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(0, 0, 0, 0.04);
 }
 
 .tab-item.active {
     gap: 8px;
-    color: var(--bone);
-    background: rgba(255, 255, 255, 0.1);
+    color: #2a2a2a;
+    background: #ececec;
 }
 
 .tab-icon {
