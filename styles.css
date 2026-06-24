@@ -565,12 +565,17 @@ sup {
 }
 
 .tab-icon {
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+}
+
+.tab-icon svg {
+    width: 28px;
+    height: 28px;
 }
 
 .tab-label {
