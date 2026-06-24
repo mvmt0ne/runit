@@ -397,7 +397,7 @@
       margin-top: -20px;
     }
 
-    /* 강도 도트 그리드 (50칸 · 칸당 2%) */
+    /* 강도 도트 그리드 (50칸 · 칸당 2%) — 완전 원형, 강도별 크기 차등 */
     .intensity-grid {
       display: grid;
       grid-template-columns: repeat(10, 1fr);
@@ -407,9 +407,36 @@
 
     .ig-cell {
       aspect-ratio: 1;
-      border-radius: 28%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ig-dot {
+      width: 52%;
+      height: 52%;
+      border-radius: 50%;
       background: var(--dark-gray);
-      transition: background 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      transition:
+        background 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+        width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+        height 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* 강도별 크기: 저 < 중 < 고(꽉 찬 원) */
+    .ig-dot.low {
+      width: 52%;
+      height: 52%;
+    }
+
+    .ig-dot.mid {
+      width: 76%;
+      height: 76%;
+    }
+
+    .ig-dot.high {
+      width: 100%;
+      height: 100%;
     }
 
     .intensity-legend {
@@ -1847,9 +1874,9 @@
 
       // 채우는 순서: 고 → 중 → 저 (범례 순서와 동일)
       const fill = [
-        { n: nHigh, color: meta.high.color },
-        { n: nMid, color: meta.mid.color },
-        { n: nLow, color: meta.low.color },
+        { n: nHigh, color: meta.high.color, cls: 'high' },
+        { n: nMid, color: meta.mid.color, cls: 'mid' },
+        { n: nLow, color: meta.low.color, cls: 'low' },
       ];
 
       let cells = '';
@@ -1857,10 +1884,10 @@
       fill.forEach(g => {
         for (let i = 0; i < g.n && idx < TOTAL; i++, idx++) {
           const delay = (animDelay || 0) + idx * 9;
-          cells += `<span class="ig-cell" data-bg="${g.color}" style="transition-delay:${delay}ms"></span>`;
+          cells += `<span class="ig-cell"><i class="ig-dot ${g.cls}" data-bg="${g.color}" style="transition-delay:${delay}ms"></i></span>`;
         }
       });
-      for (; idx < TOTAL; idx++) cells += `<span class="ig-cell"></span>`;
+      for (; idx < TOTAL; idx++) cells += `<span class="ig-cell"><i class="ig-dot"></i></span>`;
 
       // 범례는 고 → 중 → 저 순
       const legendRows = [meta.high, meta.mid, meta.low]
@@ -1884,7 +1911,7 @@
       // 칸 채우기 애니메이션 (빈칸 → 색)
       requestAnimationFrame(() =>
         requestAnimationFrame(() => {
-          el.querySelectorAll('.ig-cell[data-bg]').forEach(c => {
+          el.querySelectorAll('.ig-dot[data-bg]').forEach(c => {
             c.style.background = c.dataset.bg;
           });
         }),
