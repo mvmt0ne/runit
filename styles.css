@@ -1542,21 +1542,37 @@ input[type='range'].range-input::-moz-range-thumb {
     font-family: 'Pretendard Variable', sans-serif;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   공통 입력 필드 — 바텀라인 스타일 (전 화면 단일 소스)
+   각 화면의 .input-field / .login-field / .zone-input / .pb-input 외형은
+   여기서 한 번만 정의. 개별 파일은 레이아웃(width/padding/font 등)만 지정.
+═══════════════════════════════════════════════════════════ */
+.input-field,
+.login-field,
+.zone-input,
+.pb-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.input-field:focus,
+.login-field:focus,
+.zone-input:focus,
+.pb-input:focus {
+    border-bottom-color: var(--accent);
+}
+
 .pb-input {
     width: 100%;
     box-sizing: border-box;
-    padding: 12px 14px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 10px;
+    padding: 12px 2px;
     color: var(--bone);
     font-size: 15px;
     font-family: 'Pretendard Variable', sans-serif;
-}
-
-.pb-input:focus {
-    outline: none;
-    border-color: var(--accent);
 }
 
 /* 날짜 입력 — 다크 배경 + 커스텀 달력 아이콘 (모바일에서 네이티브가 깨져 보이는 문제 해결) */
