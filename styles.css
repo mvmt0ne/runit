@@ -384,16 +384,15 @@ sup {
 .tab {
     padding: 14px;
     font-size: 24px;
-    font-weight: 400;
-    color: var(--asphalt-black);
+    font-weight: 600;
+    color: var(--slate-gray);
     cursor: pointer;
     border: none;
     background: transparent;
 }
 
 .tab.active {
-    font-weight: 500;
-    color: var(--bone);
+    color: var(--asphalt-black);
 }
 
 /* tab-row 안의 뷰 모드 토글 */
