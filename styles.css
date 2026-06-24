@@ -520,7 +520,7 @@ sup {
     padding: 12px 14px calc(env(safe-area-inset-bottom, 0px) + 12px);
     background: #ffffff;
     border-radius: var(--tabbar-r) var(--tabbar-r) 0 0;
-    box-shadow: 0 -8px 32px -12px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 -8px 32px -12px rgba(0, 0, 0, 0);
     /* auto-hide 트랜지션 */
     transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
