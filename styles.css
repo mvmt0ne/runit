@@ -528,7 +528,7 @@ sup {
 /* ─── Auto-hide: 스크롤 다운 시 탭바 사라지고 플로팅 바도 그 자리로 내려옴 ─── */
 .tab-bar.chrome-hidden {
     /* 박스 그림자까지 가리도록 +30px */
-    transform: translateY(calc(100% + 30px));
+    transform: translateY(calc(100% + 0px));
 }
 
 .float-bar-wrap.chrome-hidden {
@@ -543,7 +543,7 @@ sup {
     align-items: center;
     justify-content: center;
     gap: 0;
-    padding: 10px 14px;
+    padding: 8px 18px;
     border-radius: 100px;
     color: #b3b3b3;
     text-decoration: none;
@@ -555,7 +555,7 @@ sup {
 }
 
 .tab-item:active {
-    background: rgba(0, 0, 0, 0.04);
+    background: rgba(0, 0, 0, 0.2);
 }
 
 .tab-item.active {
