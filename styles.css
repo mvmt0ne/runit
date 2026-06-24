@@ -506,7 +506,7 @@ sup {
 }
 
 .tab-bar {
-    --tabbar-r: 30px;
+    --tabbar-r: 8px;
     position: absolute;
     /* 하단 전체를 채우는 흰색 바 (상단 모서리만 라운드) */
     bottom: 0;
@@ -516,7 +516,7 @@ sup {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 12px;
     padding: 12px 14px calc(env(safe-area-inset-bottom, 0px) + 12px);
     background: #ffffff;
     border-radius: var(--tabbar-r) var(--tabbar-r) 0 0;
@@ -565,8 +565,8 @@ sup {
 }
 
 .tab-icon {
-    width: 22px;
-    height: 22px;
+    width: 28px;
+    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;

@@ -85,10 +85,19 @@
                 0 8px 28px -8px rgba(0, 0, 0, 0.5);
             border-radius: 100px;
             padding: 14px 24px;
+            isolation: isolate;
             pointer-events: none;
             opacity: 0;
             transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             white-space: nowrap;
+        }
+
+        /* archisvaze/liquid-glass SVG 굴절 적용 시 (Chromium) — JS가 .lg-on 부여.
+           배경을 더 투명하게 해서 굴절이 드러나게. Safari는 기본 blur 유지. */
+        .month-top-bar.lg-on {
+            background: rgba(28, 28, 28, 0.18);
+            backdrop-filter: url(#month-bar-glass);
+            -webkit-backdrop-filter: url(#month-bar-glass);
         }
 
         .month-top-bar.visible {
@@ -723,6 +732,29 @@
             const bar = document.getElementById('month-top-bar');
             const scrollEl = document.getElementById('list-scroll');
             if (!scrollEl || !bar) return;
+
+            // archisvaze/liquid-glass — SVG 굴절 글래스.
+            // backdrop-filter:url(#svg)은 Blink(데스크탑 크롬 등)에서만 동작하고
+            // iOS/Safari(WebKit)에선 지원 안 됨 → 그 경우 .lg-on 미부여, 기본 CSS blur 유지.
+            if (!bar._lgApplied && typeof applyLiquidGlass === 'function') {
+                bar._lgApplied = true;
+                const ua = navigator.userAgent;
+                const isIOS = /iP(hone|ad|od)/.test(ua) ||
+                    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+                const isBlink = /Chrome|Chromium|Edg|OPR/.test(ua) && !/Edge\//.test(ua);
+                if (isBlink && !isIOS) {
+                    applyLiquidGlass(bar, {
+                        filterId: 'month-bar-glass',
+                        borderRadius: 100,
+                        bezelWidth: 12,
+                        glassThickness: 9,
+                        ior: 1.45,
+                        blurAmt: 0.4,
+                        specOpacity: 0.6,
+                    });
+                    bar.classList.add('lg-on');
+                }
+            }
 
             const groupByMonth = sortState.key === 'date';
             if (!groupByMonth) {
