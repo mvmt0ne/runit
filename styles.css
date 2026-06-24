@@ -517,8 +517,6 @@ sup {
     justify-content: center;
     gap: 12px;
     padding: 12px 14px calc(env(safe-area-inset-bottom, 0px) + 12px);
-    background: var(--bone);
-    border-radius: var(--tabbar-r) var(--tabbar-r) 0 0;
     /* auto-hide 트랜지션 */
     transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -541,8 +539,9 @@ sup {
     align-items: center;
     justify-content: center;
     gap: 0;
-    padding: 8px 18px;
-    border-radius: 100px;
+    padding: 8px 14px;
+    background: var(--bone);
+    border-radius: 8px;
     color: var(--cloudy-gray);
     text-decoration: none;
     cursor: pointer;
@@ -555,7 +554,6 @@ sup {
 .tab-item.active {
     gap: 8px;
     color: var(--asphalt-black);
-    background: rgba(0, 0, 0, 0.1);
 }
 
 .tab-icon {
