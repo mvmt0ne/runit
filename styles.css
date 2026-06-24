@@ -516,9 +516,9 @@ sup {
     align-items: center;
     justify-content: center;
     gap: 12px;
-    padding: 12px 14px calc(env(safe-area-inset-bottom, 0px) + 12px);
+    padding: 12px 14px calc(env(safe-area-inset-bottom, 0px) + 0px);
     /* auto-hide 트랜지션 */
-    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.56s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ─── Auto-hide: 스크롤 다운 시 탭바 사라지고 플로팅 바도 그 자리로 내려옴 ─── */
