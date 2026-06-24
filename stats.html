@@ -288,11 +288,16 @@
       min-width: 0;
     }
 
-    /* 슬림 바 */
+    /* 슬림 바 — km 수치를 막대 안 상단에 표시 */
     .cmp-bar {
       width: 26px;
       border-radius: 0;
       background: var(--cloudy-gray);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      overflow: hidden;
       transition: background 0.3s, height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -321,14 +326,19 @@
       color: var(--cloudy-gray);
     }
 
-    /* km 수치 — 전체 표시, past/current 동일 스타일 */
+    /* km 수치 — 막대 안 상단, 어두운 색으로 대비 */
     .cmp-km {
       font-size: 14px;
-      font-weight: 500;
-      color: var(--cloudy-gray);
+      font-weight: 600;
+      color: var(--asphalt-black);
       font-family: 'Urbanist', sans-serif;
       white-space: nowrap;
       transition: color 0.2s, opacity 0.2s;
+    }
+
+    /* 막대 밖(짧은 막대 위)에 표시되는 km — 어두운 배경 위라 밝은 색 */
+    .cmp-km-out {
+      color: var(--cloudy-gray);
     }
 
     .cmp-col.future .cmp-km {
@@ -398,23 +408,59 @@
     }
 
     /* 강도 도트 그리드 (50칸 · 칸당 2%) — 완전 원형, 강도별 크기 차등 */
-    .intensity-grid {
-      display: grid;
-      grid-template-columns: repeat(10, 1fr);
-      gap: 7px;
-      margin: 8px 0 22px;
+    /* 좌(범례) · 우(도트) 5:5, 상단 정렬 */
+    .intensity-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      margin: 10px 0 18px;
     }
 
+    .intensity-row .intensity-legend {
+      flex: 1 1 0;
+      min-width: 0;
+      gap: 14px;
+    }
+
+    .intensity-row .intensity-legend-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+    }
+
+    .il-top {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .intensity-row .il-types {
+      font-size: 11px;
+      opacity: 0.7;
+    }
+
+    .intensity-grid {
+      flex: 1 1 0;
+      min-width: 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      gap: 0;
+    }
+
+    /* 모든 칸 영역 동일·여백 0. 칸 사이 간격은 '원이 작아져서' 생김 */
     .ig-cell {
-      aspect-ratio: 1;
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
     .ig-dot {
-      width: 52%;
-      height: 52%;
+      width: 40%;
+      height: 40%;
       border-radius: 50%;
       background: var(--dark-gray);
       transition:
@@ -425,13 +471,13 @@
 
     /* 강도별 크기: 저 < 중 < 고(꽉 찬 원) */
     .ig-dot.low {
-      width: 52%;
-      height: 52%;
+      width: 40%;
+      height: 40%;
     }
 
     .ig-dot.mid {
-      width: 76%;
-      height: 76%;
+      width: 68%;
+      height: 68%;
     }
 
     .ig-dot.high {
@@ -1051,13 +1097,7 @@
               </div>
               <div class="week-range-label" id="week-range-label"></div>
             </div>
-            <div class="month-detail">
-              <div class="type-chart round-box">
-                <div class="components-title">러닝 종류</div>
-                <div id="week-type-chart"></div>
-              </div>
-            </div>
-            <!-- 최근 12주 추이 -->
+            <!-- 최근 12주 추이 (종류 위로) -->
             <div class="trend-block round-box" id="week-trend-block">
               <div class="trend-head">
                 <div class="components-title">최근 12주 추이</div>
@@ -1065,6 +1105,12 @@
               </div>
               <div class="trend-chips" id="week-trend-chips"></div>
               <div class="trend-rows" id="week-trend-rows"></div>
+            </div>
+            <div class="month-detail">
+              <div class="type-chart round-box">
+                <div class="components-title">러닝 종류</div>
+                <div id="week-type-chart"></div>
+              </div>
             </div>
             <!-- 이 주의 러닝 (맨 아래) -->
             <div class="month-runs">
@@ -1107,6 +1153,16 @@
               </div>
             </div>
 
+            <!-- 1년 추이 (강도 위로) -->
+            <div class="trend-block round-box" id="trend-block">
+              <div class="trend-head">
+                <div class="components-title">최근 1년 추이</div>
+                <div class="trend-delta" id="trend-delta"></div>
+              </div>
+              <div class="trend-chips" id="trend-chips"></div>
+              <div class="trend-rows" id="trend-rows"></div>
+            </div>
+
             <!-- 강도 분포 -->
             <div class="month-detail" id="month-detail">
               <div class="intensity-breakdown round-box">
@@ -1119,17 +1175,6 @@
             </div>
           </div>
           <!-- /stats-top-section -->
-
-
-          <!-- 1년 추이 -->
-          <div class="trend-block round-box" id="trend-block">
-            <div class="trend-head">
-              <div class="components-title">최근 1년 추이</div>
-              <div class="trend-delta" id="trend-delta"></div>
-            </div>
-            <div class="trend-chips" id="trend-chips"></div>
-            <div class="trend-rows" id="trend-rows"></div>
-          </div>
         </div>
         <!-- /view-month -->
 
@@ -1283,10 +1328,14 @@
 
           const clickable = !d.future && d.km > 0;
           const kmDisplay = Math.floor(d.km);
+          // 막대가 회전 숫자(38px)를 담기 충분하면 안에, 짧으면 위에 표시
+          const kmInside = barPx >= 42;
+          const kmOut = d.km > 0 && !kmInside ? `<span class="cmp-km cmp-km-out">${kmDisplay}</span>` : '';
+          const kmIn = d.km > 0 && kmInside ? `<span class="cmp-km">${kmDisplay}</span>` : '';
 
           return `<div class="${cls}" data-idx="${i}" ${clickable ? 'style="cursor:pointer"' : ''}>
-        ${d.km > 0 ? `<span class="cmp-km">${kmDisplay}</span>` : ''}
-        <div class="cmp-bar" style="height:${barPx}px"></div>
+        ${kmOut}
+        <div class="cmp-bar" style="height:${barPx}px">${kmIn}</div>
         <span class="cmp-label">${d.label}</span>
       </div>`;
         })
@@ -1894,8 +1943,11 @@
         .map(
           m => `
         <div class="intensity-legend-row ${m.cls}">
-          <div class="il-label">${m.label}<span class="il-types">(${m.sub})</span></div>
-          <div class="il-pct">${m.pct}<span class="il-pct-unit">%</span></div>
+          <div class="il-top">
+            <span class="il-label">${m.label}</span>
+            <span class="il-pct">${m.pct}<span class="il-pct-unit">%</span></span>
+          </div>
+          <span class="il-types">${m.sub}</span>
         </div>
       `,
         )
@@ -1903,9 +1955,11 @@
 
       el.innerHTML = `
         <div class="intensity-title">러닝 강도</div>
-        <div class="intensity-grid">${cells}</div>
-        <div class="intensity-legend">
-          ${legendRows}
+        <div class="intensity-row">
+          <div class="intensity-legend">
+            ${legendRows}
+          </div>
+          <div class="intensity-grid">${cells}</div>
         </div>`;
 
       // 칸 채우기 애니메이션 (빈칸 → 색)
