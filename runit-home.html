@@ -495,14 +495,17 @@
       color: var(--type-long-text);
     }
 
-    /* No training (past) */
+    /* No training (past) — 글래스 (홈 배경 영상 위 프로스티드) */
     .type-none {
-      background: transparent;
-      color: var(--type-none-border);
+      color: rgba(255, 255, 255, 0.55);
       cursor: default;
-      box-shadow: inset 0 0 0 1.5px var(--type-none-border);
-      border: var(--cloudy-gray) 1px solid;
-      opacity: 0.6;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(6px) saturate(140%);
+      -webkit-backdrop-filter: blur(6px) saturate(140%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow:
+        inset 0 1px 0.5px rgba(255, 255, 255, 0.35),
+        inset 0 -1px 1px rgba(0, 0, 0, 0.25);
     }
 
     /* Future */
