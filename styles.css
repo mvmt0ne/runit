@@ -378,8 +378,7 @@ sup {
     z-index: 20;
     width: 100%;
     background: var(--bone);
-    border-radius: 0 0 8px 8px;
-    margin-bottom: 1px;
+    border-radius: 0 0 16px 16px;
 }
 
 .tab {
@@ -506,7 +505,7 @@ sup {
 }
 
 .tab-bar {
-    --tabbar-r: 8px;
+    --tabbar-r: 16px;
     position: absolute;
     /* 하단 전체를 채우는 흰색 바 (상단 모서리만 라운드) */
     bottom: 0;
@@ -518,9 +517,8 @@ sup {
     justify-content: center;
     gap: 12px;
     padding: 12px 14px calc(env(safe-area-inset-bottom, 0px) + 12px);
-    background: #ffffff;
+    background: var(--bone);
     border-radius: var(--tabbar-r) var(--tabbar-r) 0 0;
-    box-shadow: 0 -8px 32px -12px rgba(0, 0, 0, 0);
     /* auto-hide 트랜지션 */
     transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -545,7 +543,7 @@ sup {
     gap: 0;
     padding: 8px 18px;
     border-radius: 100px;
-    color: #b3b3b3;
+    color: var(--cloudy-gray);
     text-decoration: none;
     cursor: pointer;
     transition:
@@ -554,14 +552,10 @@ sup {
         background 0.25s;
 }
 
-.tab-item:active {
-    background: rgba(0, 0, 0, 0.2);
-}
-
 .tab-item.active {
     gap: 8px;
-    color: #2a2a2a;
-    background: #ececec;
+    color: var(--asphalt-black);
+    background: rgba(0, 0, 0, 0.1);
 }
 
 .tab-icon {
