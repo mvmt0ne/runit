@@ -37,7 +37,6 @@
       scrollbar-width: none;
       padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
       /* 콘텐츠 끝난 뒤 여백도 카드색으로 통일 */
-      background: var(--slate-gray);
     }
 
     .detail-scroll::-webkit-scrollbar {
@@ -135,7 +134,7 @@
 
     /* ─── Card ─── */
     .d-card {
-      background: var(--slate-gray);
+      background: var(--dark-gray);
       padding: 18px 20px;
     }
 
@@ -145,12 +144,10 @@
     }
 
     .d-card-title {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--cloudy-gray);
-      margin-bottom: 12px;
+      font-size: 20px;
+      font-weight: 300;
+      color: var(--slate-gray);
+      margin-bottom: 24px;
       font-family: 'Pretendard Variable', sans-serif;
     }
 
@@ -176,13 +173,13 @@
     .d-compare-label {
       flex: 1;
       font-size: 14px;
-      color: var(--asphalt-gray);
+      color: var(--slate-gray);
       font-family: 'Pretendard Variable', sans-serif;
     }
 
     .d-compare-val {
       font-size: 18px;
-      color: var(--asphalt-black);
+      color: var(--bone);
       font-family: 'Urbanist', sans-serif;
     }
 
@@ -269,7 +266,7 @@
       flex: 1;
       min-width: 0;
       font-size: 14px;
-      color: var(--asphalt-black);
+      color: var(--bone);
       font-family: 'Pretendard Variable', sans-serif;
       white-space: nowrap;
       overflow: hidden;
@@ -281,7 +278,7 @@
       flex-shrink: 0;
       font-size: 13px;
       font-family: 'Urbanist', sans-serif;
-      color: var(--asphalt-gray);
+      color: var(--slate-gray);
     }
 
     .d-recent-km {
@@ -293,6 +290,10 @@
       width: 48px;
       text-align: right;
       color: var(--cloudy-gray);
+    }
+
+    .d-recent-list {
+      gap: 12px;
     }
 
     /* ─── 메모 ─── */
@@ -322,7 +323,7 @@
     .d-stat-value {
       font-size: 18px;
       font-weight: 400;
-      color: var(--asphalt-black);
+      color: var(--bone);
       font-family: 'Urbanist', sans-serif;
       font-feature-settings: "tnum";
       line-height: 1;
@@ -790,7 +791,7 @@
         compareRow('거리', act.km, 'km', avgOf(list, 'km'), { lowerBetter: false }),
       ].filter(Boolean).join('');
       const compare = cmpRows ? `
-        <div class="d-card">
+        <div class="d-card round-box">
           <div class="d-card-title">나의 평균 대비</div>
           ${cmpRows}
         </div>` : '';
@@ -805,7 +806,7 @@
         ['최대 케이던스', act.maxSpm, 'SPM'],
       ].filter(([, v]) => v != null && v !== '');
       const form = formCells.length ? `
-        <div class="d-card">
+        <div class="d-card round-box">
           <div class="d-card-title">러닝 폼</div>
           <div class="d-stats-grid">
             ${formCells.map(([label, val, unit]) => `
@@ -827,7 +828,7 @@
       ].filter(([, v]) => v != null && v !== '');
 
       const stats = statsCells.length ? `
-        <div class="d-card">
+        <div class="d-card round-box">
           <div class="d-card-title">스탯</div>
           <div class="d-stats-grid">
             ${statsCells.map(([label, val, unit]) => `
@@ -840,7 +841,7 @@
 
       // 메모 (input 메타)
       const note = (meta.note && meta.note.trim()) ? `
-        <div class="d-card">
+        <div class="d-card round-box">
           <div class="d-card-title">메모</div>
           <div class="d-note">${escapeHTML(meta.note)}</div>
         </div>` : '';
@@ -848,7 +849,7 @@
       // 최근 러닝 — 다른 활동 상세로 바로 이동 (현재 제외, 최신 8개)
       const recents = list.filter(a => a.date !== act.date).slice(0, 5);
       const recent = recents.length ? `
-        <div class="d-card">
+        <div class="d-card round-box">
           <div class="d-card-title">최근 러닝</div>
           <div class="d-recent-list">
             ${recents.map(a => {
