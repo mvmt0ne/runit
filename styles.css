@@ -684,7 +684,7 @@ sup {
 
 .lp-run-name {
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 500;
     min-width: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -718,7 +718,7 @@ sup {
 
 .lp-stat-value {
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 400;
     font-family: 'Urbanist', ui-monospace, monospace;
     font-feature-settings: 'tnum';
     line-height: 1;
@@ -726,9 +726,9 @@ sup {
 }
 
 .lp-stat-label {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 400;
-    color: var(--cloudy-gray);
+    color: var(--asphalt-black);
     font-family: 'Pretendard Variable', sans-serif;
 }
 
