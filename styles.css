@@ -672,12 +672,12 @@ sup {
 .lp-row-head {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
 }
 
 .lp-badge {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     border-radius: 20px;
     flex-shrink: 0;
 }
@@ -707,7 +707,7 @@ sup {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px 40px;
-    padding-left: 18px;
+    padding-left: 20px;
 }
 
 .lp-stat {
