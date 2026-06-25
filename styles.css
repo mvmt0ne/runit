@@ -722,7 +722,7 @@ sup {
     font-family: 'Urbanist', ui-monospace, monospace;
     font-feature-settings: 'tnum';
     line-height: 1;
-    color: var(--slate-gray);
+    color: var(--cloudy-gray);
 }
 
 .lp-stat-label {
