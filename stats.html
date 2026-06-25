@@ -408,10 +408,10 @@
     }
 
     /* 강도 도트 그리드 (50칸 · 칸당 2%) — 완전 원형, 강도별 크기 차등 */
-    /* 좌(범례) · 우(도트) 5:5 — 높이 맞춤(stretch) */
+    /* 좌(범례) · 우(도트) 5:5 — 상단 정렬, 각자 자연 높이 */
     .intensity-row {
       display: flex;
-      align-items: stretch;
+      align-items: flex-start;
       gap: 18px;
       margin: 10px 0 18px;
     }
@@ -487,6 +487,7 @@
     }
 
     .intensity-legend {
+      display: flex;
       flex-direction: column;
       gap: 14px;
     }
