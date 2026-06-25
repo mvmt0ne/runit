@@ -351,6 +351,8 @@
         document.querySelectorAll('#app-tab-bar [data-idx]').forEach(el => {
           el.classList.toggle('active', parseInt(el.dataset.idx) === idx);
         });
+        // 홈(idx 0)에서만 어두운 탭바
+        document.getElementById('app-tab-bar').classList.toggle('tabbar-dark', idx === 0);
       }
 
       function preloadNeighbors(idx) {

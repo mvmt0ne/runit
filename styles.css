@@ -555,6 +555,19 @@ sup {
     color: var(--asphalt-black);
 }
 
+/* ─── 홈 화면 전용: 어두운 탭바 (밝은 bone 알약이 배경 영상 위에서 너무 도드라짐) ─── */
+.tab-bar.tabbar-dark .tab-item {
+    background: rgba(28, 28, 28, 0.55);
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    color: var(--slate-gray);
+}
+
+.tab-bar.tabbar-dark .tab-item.active {
+    background: rgba(70, 70, 70, 0.7);
+    color: var(--bone);
+}
+
 .tab-icon {
     width: 30px;
     height: 30px;
