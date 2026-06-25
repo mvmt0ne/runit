@@ -606,7 +606,7 @@ sup {
 ═══════════════════════════════════════════════════════════ */
 /* ─── Row: date-left + content-right layout ── */
 .lp-row {
-    background: var(--slate-gray);
+    background: var(--dark-gray);
     display: flex;
     flex-direction: row;
     align-items: flex-start;
@@ -646,7 +646,7 @@ sup {
     font-weight: 400;
     font-family: 'Urbanist', sans-serif;
     line-height: 1;
-    color: var(--asphalt-gray);
+    color: var(--slate-gray);
     font-feature-settings: 'tnum';
 }
 
@@ -689,7 +689,7 @@ sup {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: var(--asphalt-black);
+    color: var(--bone);
     flex: 1;
 }
 
@@ -698,7 +698,7 @@ sup {
     font-weight: 500;
     font-family: 'Urbanist', sans-serif;
     font-feature-settings: 'tnum';
-    color: var(--asphalt-black);
+    color: var(--bone);
     flex-shrink: 0;
     margin-left: auto;
 }
@@ -722,13 +722,13 @@ sup {
     font-family: 'Urbanist', ui-monospace, monospace;
     font-feature-settings: 'tnum';
     line-height: 1;
-    color: var(--asphalt-black);
+    color: var(--slate-gray);
 }
 
 .lp-stat-label {
     font-size: 12px;
     font-weight: 400;
-    color: var(--asphalt-black);
+    color: var(--cloudy-gray);
     font-family: 'Pretendard Variable', sans-serif;
 }
 
