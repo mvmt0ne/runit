@@ -689,7 +689,7 @@ sup {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: var(--bone);
+    color: var(--slate-gray);
     flex: 1;
 }
 
@@ -698,7 +698,7 @@ sup {
     font-weight: 500;
     font-family: 'Urbanist', sans-serif;
     font-feature-settings: 'tnum';
-    color: var(--bone);
+    color: var(--slate-gray);
     flex-shrink: 0;
     margin-left: auto;
 }
@@ -796,7 +796,7 @@ sup {
     left: 0;
     right: 0;
     bottom: calc(-1 * env(safe-area-inset-bottom, 0px));
-    background: rgba(9, 9, 9, 0.45);
+    background: rgba(176, 176, 176, 0.45);
     backdrop-filter: blur(50px) saturate(100%);
     -webkit-backdrop-filter: blur(50px) saturate(100%);
     transition:
