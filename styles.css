@@ -41,7 +41,7 @@ button:active {
     /* Surfaces */
     --bg: #1d1d1d;
     --bone: #efeeed;
-    --bg-modal: #444444;
+    --bg-modal: #efeeed;
     /* Accent */
     --accent: #ff4c31;
     --accent-rgb: 255, 76, 49;
@@ -977,7 +977,7 @@ sup {
     font-weight: 400;
     font-family: 'Pretendard Variable', sans-serif;
     transition: color 0.3s;
-    color: var(--slate-gray);
+    color: var(--asphalt-black);
 }
 
 .sf-sheet-close {
@@ -989,7 +989,7 @@ sup {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: var(--cloudy-gray);
+    color: var(--asphalt-black);
     transition: background 0.15s;
 }
 
@@ -1077,9 +1077,8 @@ sup {
 }
 
 .sf-apply-btn:disabled {
-    background: rgba(213, 213, 213, 0.1);
-    color: var(--bone);
-    opacity: 0.45;
+    background: rgba(213, 213, 213, 0.5);
+    color: var(--slate-gray);
     cursor: default;
 }
 
@@ -1101,7 +1100,7 @@ sup {
 }
 
 .month-list-item {
-    color: var(--cloudy-gray);
+    color: var(--asphalt-gray);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1153,7 +1152,7 @@ sup {
 }
 
 .month-list-item.ml-selected .month-list-label {
-    color: var(--bone);
+    color: var(--asphalt-black);
     font-weight: 500;
 }
 
@@ -1261,7 +1260,7 @@ sup {
 .filter-cat-label {
     font-size: 16px;
     font-weight: 300;
-    color: var(--slate-gray);
+    color: var(--asphalt-gray);
 }
 
 .filter-chips {
@@ -1276,10 +1275,10 @@ sup {
     font-size: 16px;
     font-weight: 400;
     font-family: 'Pretendard Variable', sans-serif;
-    color: var(--slate-gray);
+    color: none;
     background: transparent;
     border-radius: 100px;
-    border: var(--slate-gray) 1px solid;
+    border: var(--asphalt-gray) 1px solid;
     cursor: pointer;
     transition: all 0.1s cubic-bezier(0.16, 1, 0.3, 1);
     white-space: nowrap;
@@ -1364,7 +1363,6 @@ input[type='range'].range-input::-webkit-slider-thumb {
     background: var(--bone);
     pointer-events: auto;
     cursor: grab;
-    box-shadow: 0 0px 20px rgba(0, 0, 0, 0.5);
     transition: transform 0.1s;
 }
 
@@ -1391,7 +1389,7 @@ input[type='range'].range-input::-moz-range-thumb {
 
 .range-val {
     font-size: 14px;
-    color: var(--cloudy-gray);
+    color: var(--asphalt-black);
     font-family: 'Urbanist', sans-serif;
     font-weight: 600;
 }
