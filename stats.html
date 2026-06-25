@@ -444,15 +444,15 @@
       min-width: 0;
       display: flex;
       flex-wrap: wrap;
-      /* 도트 행을 세로로 고르게 분배해 좌측 범례와 같은 높이로 보이게 */
-      align-content: space-between;
+      align-content: flex-start;
       gap: 0;
     }
 
-    /* 모든 칸 영역 동일·여백 0. 칸 사이 간격은 '원이 작아져서' 생김 */
+    /* 모든 칸 영역 동일·여백 0. 칸 사이 간격은 '원이 작아져서' 생김.
+       고강도(100%)는 칸을 꽉 채워 상하좌우로 서로 붙음. */
     .ig-cell {
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
       flex: 0 0 auto;
       display: flex;
       align-items: center;
