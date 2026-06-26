@@ -808,13 +808,14 @@
             <div class="hero-section">
               <div class="home-profile" onclick="goTo('manage.html')">
                 <div class="profile-avatar">
-                  <span class="profile-avatar-fallback">
+                  <span class="profile-avatar-fallback" id="home-avatar-ph">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                       stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                       <circle cx="12" cy="8" r="4" />
                       <path d="M4 21c0-4 3.6-6 8-6s8 2 8 6" />
                     </svg>
                   </span>
+                  <img id="home-avatar-img" alt="" style="display:none;width:100%;height:100%;object-fit:cover">
                 </div>
               </div>
               <div class="weather-widget" id="weather-widget">
@@ -1315,7 +1316,24 @@
       }
       renderMonth();
       fetchWeather();
+      renderProfileAvatar();
     })();
+
+    // 프로필 아바타 (마이페이지에서 설정한 이미지 반영)
+    function renderProfileAvatar() {
+      try {
+        const p = (typeof getProfile === 'function') ? getProfile() : {};
+        const img = document.getElementById('home-avatar-img');
+        const ph = document.getElementById('home-avatar-ph');
+        if (!img || !ph) return;
+        if (p && p.avatar) {
+          img.src = p.avatar; img.style.display = 'block'; ph.style.display = 'none';
+        } else {
+          img.style.display = 'none'; ph.style.display = '';
+        }
+      } catch (e) {}
+    }
+    window.addEventListener('runit-cloud-sync', renderProfileAvatar);
   </script>
 
   <script>

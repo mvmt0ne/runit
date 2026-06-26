@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>runit — 저장 데이터 관리</title>
+  <title>runit — 마이페이지</title>
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#202020">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -77,6 +77,22 @@
       transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.32s; pointer-events: none; white-space: nowrap;
     }
     .toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* 프로필 */
+    .profile-section { display: flex; flex-direction: column; align-items: center; gap: 14px; padding-top: 28px; }
+    .mp-avatar {
+      position: relative; width: 96px; height: 96px; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.14);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      color: var(--slate-gray); cursor: pointer;
+    }
+    .mp-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .mp-avatar-edit {
+      position: absolute; left: 0; right: 0; bottom: 0; padding: 5px 0;
+      background: rgba(0, 0, 0, 0.55); color: var(--bone); font-size: 11px; text-align: center;
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+    .mp-actions { display: flex; gap: 8px; }
   </style>
 </head>
 
@@ -92,31 +108,29 @@
               <path d="M19 12H5" />
             </svg>
           </button>
-          <span class="back-title">저장 데이터 관리</span>
+          <span class="back-title">마이페이지</span>
         </div>
 
         <div class="input-scroll">
-          <!-- 수동 추가 활동 -->
-          <div class="input-section">
-            <label class="input-label">직접 추가한 활동</label>
-            <ul class="saved-list" id="acts-list"></ul>
-          </div>
-
-          <!-- 메타 오버라이드 -->
-          <div class="input-section">
-            <label class="input-label">메타 오버라이드 (이름·타입·러닝화)</label>
-            <ul class="saved-list" id="meta-list"></ul>
-          </div>
-
-          <!-- 신발장 요약 -->
-          <div class="input-section">
-            <label class="input-label">내 러닝화</label>
-            <div class="saved-item">
-              <span class="saved-date" id="shoe-count">0개</span>
-              <button class="ghost-btn" onclick="goTo('shoes.html')">러닝화 관리 ›</button>
+          <!-- ── 프로필 ── -->
+          <div class="input-section profile-section">
+            <div class="mp-avatar" id="mp-avatar" onclick="document.getElementById('avatar-file').click()">
+              <svg id="mp-avatar-ph" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 21c0-4 3.6-6 8-6s8 2 8 6" />
+              </svg>
+              <img id="mp-avatar-img" alt="" style="display:none">
+              <span class="mp-avatar-edit">변경</span>
             </div>
+            <div class="mp-actions">
+              <button class="ghost-btn" onclick="document.getElementById('avatar-file').click()">사진 변경</button>
+              <button class="ghost-btn" id="mp-avatar-remove" onclick="onRemoveAvatar()" style="display:none">삭제</button>
+            </div>
+            <input type="file" id="avatar-file" accept="image/*" style="display:none" onchange="onAvatarPick(event)">
           </div>
 
+          <!-- ── 설정 (상단) ── -->
           <!-- 심박존 경계 -->
           <div class="input-section">
             <label class="input-label">심박존 경계 (러닝강도 분류)</label>
@@ -137,6 +151,37 @@
             <ul class="saved-list" id="zone-hist" style="margin-top:8px"></ul>
           </div>
 
+          <!-- 계정 -->
+          <div class="input-section">
+            <label class="input-label">계정</label>
+            <div class="saved-item">
+              <span class="saved-date" id="acct-email" style="font-size:14px">로그인 안 됨</span>
+              <button class="ghost-btn" id="logout-btn" onclick="onLogout()">로그아웃</button>
+            </div>
+          </div>
+
+          <!-- ── 데이터 관리 (하단) ── -->
+          <!-- 신발장 요약 -->
+          <div class="input-section">
+            <label class="input-label">내 러닝화</label>
+            <div class="saved-item">
+              <span class="saved-date" id="shoe-count">0개</span>
+              <button class="ghost-btn" onclick="goTo('shoes.html')">러닝화 관리 ›</button>
+            </div>
+          </div>
+
+          <!-- 수동 추가 활동 -->
+          <div class="input-section">
+            <label class="input-label">직접 추가한 활동</label>
+            <ul class="saved-list" id="acts-list"></ul>
+          </div>
+
+          <!-- 메타 오버라이드 -->
+          <div class="input-section">
+            <label class="input-label">메타 오버라이드 (이름·타입·러닝화)</label>
+            <ul class="saved-list" id="meta-list"></ul>
+          </div>
+
           <!-- 전체 삭제 -->
           <div class="input-section">
             <div class="field-row">
@@ -145,15 +190,6 @@
             </div>
             <div style="font-size:12px;color:var(--text-2);opacity:0.6;margin-top:6px;font-family:'Pretendard Variable',sans-serif">
               러닝화는 전체 삭제에서 제외됩니다(자산). CSV 마스터(data/activities.csv)는 영향 없습니다.
-            </div>
-          </div>
-
-          <!-- 계정 -->
-          <div class="input-section">
-            <label class="input-label">계정</label>
-            <div class="saved-item">
-              <span class="saved-date" id="acct-email" style="font-size:14px">로그인 안 됨</span>
-              <button class="ghost-btn" id="logout-btn" onclick="onLogout()">로그아웃</button>
             </div>
           </div>
         </div>
@@ -220,6 +256,53 @@
       document.getElementById('shoe-count').textContent = (typeof listShoes === 'function' ? listShoes().length : 0) + '개';
 
       renderZones();
+      renderProfile();
+    }
+
+    /* ── 프로필 이미지 ── */
+    function renderProfile() {
+      const p = (typeof getProfile === 'function') ? getProfile() : {};
+      const img = document.getElementById('mp-avatar-img');
+      const ph = document.getElementById('mp-avatar-ph');
+      const rm = document.getElementById('mp-avatar-remove');
+      if (p && p.avatar) {
+        img.src = p.avatar; img.style.display = 'block'; ph.style.display = 'none'; rm.style.display = '';
+      } else {
+        img.removeAttribute('src'); img.style.display = 'none'; ph.style.display = ''; rm.style.display = 'none';
+      }
+    }
+
+    // 선택 이미지를 정사각형 240px로 리사이즈 → JPEG dataURL (Firestore 1MB 한도 내)
+    function onAvatarPick(e) {
+      const file = e.target.files && e.target.files[0];
+      e.target.value = '';
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const im = new Image();
+        im.onload = () => {
+          const S = 240;
+          const c = document.createElement('canvas');
+          c.width = S; c.height = S;
+          const ctx = c.getContext('2d');
+          const side = Math.min(im.width, im.height);
+          const sx = (im.width - side) / 2, sy = (im.height - side) / 2;
+          ctx.drawImage(im, sx, sy, side, side, 0, 0, S, S);
+          const dataURL = c.toDataURL('image/jpeg', 0.82);
+          setProfile({ avatar: dataURL });
+          renderProfile();
+          showToast('프로필 사진 변경됨');
+        };
+        im.onerror = () => showToast('이미지를 불러올 수 없습니다');
+        im.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function onRemoveAvatar() {
+      setProfile({});
+      renderProfile();
+      showToast('프로필 사진 삭제됨');
     }
 
     function _today() { return new Date().toISOString().slice(0, 10); }

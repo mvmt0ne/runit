@@ -11,7 +11,17 @@ const STORE_KEYS = {
   shoes:      'runit:shoes',      // 내 신발장 — { [id]: {id, name, image} }
   pb:         'runit:pb',         // 거리별 공식 PB(가민 입력) — { [dist]: {time,pace,date,name} }
   zones:      'runit:zones',      // 심박존 경계 이력 — [{from:'YYYY-MM-DD', z2Max, z3Max}]
+  profile:    'runit:profile',    // 프로필 — { avatar: dataURL }
 };
+
+/* ── 프로필 ── */
+function getProfile() {
+  return _load(STORE_KEYS.profile);
+}
+
+function setProfile(obj) {
+  _save(STORE_KEYS.profile, obj || {});
+}
 
 // 심박존 기본값 (이력 없을 때 = 모든 과거 기록의 '지금 기준')
 // 존: z1 112~ / z2 138~ / z3 152~ / z4 164~ / z5 173+
