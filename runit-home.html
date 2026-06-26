@@ -237,13 +237,13 @@
     }
 
     .home-profile .profile-avatar {
-      width: 38px;
-      height: 38px;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 12px;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(10px) saturate(140%);
       -webkit-backdrop-filter: blur(10px) saturate(140%);
-      border: 1px solid rgba(255, 255, 255, 0.2);
       color: var(--bone);
     }
 
@@ -809,8 +809,8 @@
               <div class="home-profile" onclick="goTo('manage.html')">
                 <div class="profile-avatar">
                   <span class="profile-avatar-fallback" id="home-avatar-ph">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                      stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                      stroke-linecap="round" stroke-linejoin="round">
                       <circle cx="12" cy="8" r="4" />
                       <path d="M4 21c0-4 3.6-6 8-6s8 2 8 6" />
                     </svg>
@@ -1331,7 +1331,7 @@
         } else {
           img.style.display = 'none'; ph.style.display = '';
         }
-      } catch (e) {}
+      } catch (e) { }
     }
     window.addEventListener('runit-cloud-sync', renderProfileAvatar);
   </script>
