@@ -348,9 +348,9 @@ sup {
 /* ─── Hero: 스크롤 콘텐츠 내 첫 번째 요소 ── */
 .stats-hero-bar {
     padding: 20px;
-    color: var(--accent);
+    color: var(--asphalt-black);
     text-align: right;
-    background: var(--asphalt-black);
+    background: var(--accent);
 }
 
 .stats-hero-label {
@@ -408,8 +408,7 @@ sup {
     background: none;
     color: var(--asphalt-black);
     cursor: pointer;
-    transition:
-        color 0.15s,
+    transition: color 0.15s,
         background 0.15s,
         transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -457,8 +456,7 @@ sup {
     font-size: 20px;
     font-weight: 400;
     cursor: pointer;
-    transition:
-        color 0.15s,
+    transition: color 0.15s,
         transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -544,8 +542,7 @@ sup {
     color: var(--slate-gray);
     text-decoration: none;
     cursor: pointer;
-    transition:
-        gap 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    transition: gap 0.35s cubic-bezier(0.16, 1, 0.3, 1),
         color 0.2s,
         background 0.25s;
 }
@@ -591,8 +588,7 @@ sup {
     max-width: 0;
     opacity: 0;
     overflow: hidden;
-    transition:
-        max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    transition: max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
         opacity 0.25s ease;
 }
 
@@ -611,8 +607,7 @@ sup {
     flex-direction: row;
     align-items: flex-start;
     cursor: pointer;
-    transition:
-        opacity 0.15s,
+    transition: opacity 0.15s,
         transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -799,8 +794,7 @@ sup {
     background: rgba(176, 176, 176, 0.45);
     backdrop-filter: blur(50px) saturate(100%);
     -webkit-backdrop-filter: blur(50px) saturate(100%);
-    transition:
-        opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
         transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: 80;
     opacity: 0;
@@ -855,8 +849,7 @@ sup {
     opacity: 0;
     pointer-events: none;
     transform: translateY(100%);
-    transition:
-        opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
         transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
     padding-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -885,8 +878,7 @@ sup {
     font-weight: 500;
     font-family: 'Pretendard Variable', sans-serif;
     text-decoration: none;
-    transition:
-        background 0.15s,
+    transition: background 0.15s,
         border-color 0.15s,
         transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -1057,8 +1049,7 @@ sup {
     font-family: 'Pretendard Variable', sans-serif;
     color: var(--cloudy-gray);
     cursor: pointer;
-    transition:
-        color 0.3s,
+    transition: color 0.3s,
         background 0.15s;
 }
 
@@ -1108,8 +1099,7 @@ sup {
     margin: 0 -12px;
     border-radius: 0;
     cursor: pointer;
-    transition:
-        background 0.15s,
+    transition: background 0.15s,
         transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
     gap: 12px;
 }
@@ -1417,8 +1407,7 @@ input[type='range'].range-input::-moz-range-thumb {
     z-index: 50;
     /* ─── opacity: 0;
   pointer-events: none;── */
-    transition:
-        opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
         transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
