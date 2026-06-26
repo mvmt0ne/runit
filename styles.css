@@ -351,6 +351,32 @@ sup {
     color: var(--asphalt-black);
     text-align: right;
     background: var(--accent);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+/* ─── 총 마일리지 모션: 가로 줄무늬 + 반원 (상·하·좌 꽉 참, 정사각) ─── */
+.hero-sun-art {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    aspect-ratio: 1;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.hero-sun-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.stats-hero-bar .stats-hero-label,
+.stats-hero-bar .stats-hero-num {
+    position: relative;
+    z-index: 1;
 }
 
 .stats-hero-label {
