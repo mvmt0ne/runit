@@ -304,9 +304,11 @@
         }
 
         let sortState = { key: 'date', asc: false };
-        const FILTER_DEFAULT = { type: null, bpm: null, distMin: 0, distMax: 42, paceMin: 240, paceMax: 600 };
-        let filterState = { ...FILTER_DEFAULT }; // 실제 적용된(commit) 필터
-        let draftFilter = { ...FILTER_DEFAULT }; // 시트에서 편집 중인 초안
+        // type/bpm 은 멀티선택(배열)
+        const FILTER_DEFAULT = { type: [], bpm: [], distMin: 0, distMax: 42, paceMin: 240, paceMax: 600 };
+        const cloneFilter = f => ({ ...f, type: [...f.type], bpm: [...f.bpm] });
+        let filterState = cloneFilter(FILTER_DEFAULT); // 실제 적용된(commit) 필터
+        let draftFilter = cloneFilter(FILTER_DEFAULT); // 시트에서 편집 중인 초안
 
         const SORT_OPTS = [
             { key: 'date', asc: false, label: '날짜 최신순' },
@@ -339,15 +341,17 @@
 
         /* ─── Sort/Filter ── */
         function applyFilters(runs) {
+            const ZMAP = { z1: [0, 119], z2: [120, 139], z3: [140, 159], z4: [160, 174], z5: [175, 999] };
             return runs.filter(r => {
-                if (filterState.type && r.group !== filterState.type) return false;
+                if (filterState.type.length && !filterState.type.includes(r.group)) return false;
                 if (r.km < filterState.distMin || r.km > filterState.distMax) return false;
                 if (r.paceV < filterState.paceMin || r.paceV > filterState.paceMax) return false;
-                if (filterState.bpm) {
-                    const z = { z1: [0, 119], z2: [120, 139], z3: [140, 159], z4: [160, 174], z5: [175, 999] }[
-                        filterState.bpm
-                    ];
-                    if (r.bpm < z[0] || r.bpm > z[1]) return false;
+                if (filterState.bpm.length) {
+                    const ok = filterState.bpm.some(zk => {
+                        const z = ZMAP[zk];
+                        return r.bpm >= z[0] && r.bpm <= z[1];
+                    });
+                    if (!ok) return false;
                 }
                 return true;
             });
@@ -488,8 +492,8 @@
         /* ─── Controls dispatch sheet ── */
         function updateCtrlSheet() {
             const hasActiveFilter =
-                filterState.type ||
-                filterState.bpm ||
+                filterState.type.length ||
+                filterState.bpm.length ||
                 filterState.distMin > 0 ||
                 filterState.distMax < 42 ||
                 filterState.paceMin > 240 ||
@@ -520,7 +524,7 @@
         }
 
         function openFilterSheet() {
-            draftFilter = { ...filterState }; // 현재 적용값을 초안으로 복사
+            draftFilter = cloneFilter(filterState); // 현재 적용값을 초안으로 복사
             renderFilterPanel();
             updateApplyState();
             document.getElementById('filter-sheet').classList.add('open');
@@ -535,7 +539,7 @@
 
         // 초안을 실제 필터에 반영 → 목록·월바 갱신 후 닫기
         function applyFilter() {
-            filterState = { ...draftFilter };
+            filterState = cloneFilter(draftFilter);
             renderList();
             setupMonthTracking();
             closeSFSheet();
@@ -575,21 +579,21 @@
         function renderFilterPanel() {
             const { distMin, distMax, paceMin, paceMax } = draftFilter;
             const typeChips = FILTER_TYPE_OPTS.map(o => {
-                const a = draftFilter.type === o.val;
-                return `<div class="filter-chip ${a ? 'active' : ''}" onclick="selectFilter('type','${o.val}')">${o.label}</div>`;
+                const a = draftFilter.type.includes(o.val);
+                return `<div class="fchk ${a ? 'active' : ''}" onclick="selectFilter('type','${o.val}')">
+          <span class="fchk-box"></span><span class="fchk-label">${o.label}</span></div>`;
             }).join('');
             const zoneChips = FILTER_ZONE_OPTS.map(o => {
-                const a = draftFilter.bpm === o.val;
-                return `<div class="filter-chip zone-chip ${a ? 'active' : ''}" onclick="selectFilter('bpm','${o.val}')">
-          <span class="zone-label">${o.label}</span>
-        </div>`;
+                const a = draftFilter.bpm.includes(o.val);
+                return `<div class="fchk ${a ? 'active' : ''}" onclick="selectFilter('bpm','${o.val}')">
+          <span class="fchk-box"></span><span class="fchk-label">${o.label} <em>${o.desc}</em></span></div>`;
             }).join('');
             const distLoV = distMin,
                 distHiV = distMax;
             const paceLoV = fmtPace(paceMin),
                 paceHiV = fmtPace(paceMax);
             document.getElementById('sf-filter-cats').innerHTML = `
-        <div class="filter-cat"><div class="filter-cat-label">타입</div><div class="filter-chips">${typeChips}</div></div>
+        <div class="filter-cat"><div class="filter-cat-label">타입</div><div class="filter-checks">${typeChips}</div></div>
         <div class="filter-cat"><div class="filter-cat-label">거리</div>
           <div class="range-val-row"><span class="range-val" id="dist-lo-val">${distLoV}K</span><span class="range-val" id="dist-hi-val">${distHiV}K</span></div>
           <div class="range-slider-wrap" style="height:20px">
@@ -606,14 +610,15 @@
             <input type="range" class="range-input" id="pace-hi" min="240" max="600" step="10" value="${paceMax}" oninput="onRangeInput('pace')">
           </div>
         </div>
-        <div class="filter-cat"><div class="filter-cat-label">심박 존</div><div class="filter-chips">${zoneChips}</div></div>`;
+        <div class="filter-cat"><div class="filter-cat-label">심박 존</div><div class="filter-checks">${zoneChips}</div></div>`;
             updateRangeFill('dist');
             updateRangeFill('pace');
         }
 
         function selectFilter(key, val) {
-            if (key === 'type') draftFilter.type = draftFilter.type === val ? null : val;
-            if (key === 'bpm') draftFilter.bpm = draftFilter.bpm === val ? null : val;
+            const arr = draftFilter[key];
+            const i = arr.indexOf(val);
+            if (i < 0) arr.push(val); else arr.splice(i, 1);
             renderFilterPanel();
             updateApplyState();
         }
@@ -657,7 +662,7 @@
         }
 
         function resetFilters() {
-            draftFilter = { ...FILTER_DEFAULT };
+            draftFilter = cloneFilter(FILTER_DEFAULT);
             renderFilterPanel();
             updateApplyState();
         }
