@@ -41,7 +41,7 @@ button:active {
     /* Surfaces */
     --bg: #1d1d1d;
     --bone: #efeeed;
-    --bg-modal: #efeeed;
+    --bg-modal: #d2d2d2;
     /* Accent */
     --accent: #ff4c31;
     --accent-rgb: 255, 76, 49;
@@ -817,9 +817,9 @@ sup {
     left: 0;
     right: 0;
     bottom: calc(-1 * env(safe-area-inset-bottom, 0px));
-    background: rgba(176, 176, 176, 0.45);
-    backdrop-filter: blur(10px) saturate(100%);
-    -webkit-backdrop-filter: blur(50px) saturate(100%);
+    background: rgba(77, 77, 77, 0.45);
+    backdrop-filter: blur(2px) saturate(100%);
+    -webkit-backdrop-filter: blur(2px) saturate(100%);
     transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
         transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: 80;
@@ -838,8 +838,8 @@ sup {
     right: 0;
     bottom: 0;
     background: rgba(54, 54, 54, 0.7);
-    backdrop-filter: blur(30px) saturate(160%);
-    -webkit-backdrop-filter: blur(30px) saturate(160%);
+    backdrop-filter: blur(2px) saturate(160%);
+    -webkit-backdrop-filter: blur(2px) saturate(160%);
     border-radius: 0;
     z-index: 90;
     display: flex;
@@ -1301,10 +1301,9 @@ sup {
 }
 
 .fchk-box {
-    width: 26px;
-    height: 26px;
+    width: 22px;
+    height: 22px;
     flex-shrink: 0;
-    border-radius: 6px;
     box-sizing: border-box;
     background: var(--cloudy-gray);
     border: 0 solid var(--accent);
@@ -1315,8 +1314,13 @@ sup {
 
 .fchk.active .fchk-box {
     background: transparent;
-    border-width: 7px;
+    border-width: 5px;
     animation: fchk-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 라디오(정렬) — 동그라미 */
+.fchk-radio .fchk-box {
+    border-radius: 50%;
 }
 
 @keyframes fchk-pop {

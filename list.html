@@ -228,7 +228,7 @@
                         </svg>
                     </button>
                 </div>
-                <div class="month-list" id="sf-sort-opts" style="padding: 0 20px 20px"></div>
+                <div class="month-list" id="sf-sort-opts" style="padding: 0 20px 20px; display:flex; flex-direction:column; gap:18px"></div>
             </div>
 
             <!-- Filter sheet -->
@@ -558,11 +558,8 @@
             const container = document.getElementById('sf-sort-opts');
             container.innerHTML = SORT_OPTS.map((opt, i) => {
                 const active = sortState.key === opt.key && sortState.asc === opt.asc;
-                return `<div class="month-list-item${active ? ' ml-selected' : ''}" onclick="selectSort(${i})">
-          <span class="month-list-label">${opt.label}</span>
-          <svg class="month-list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 6 9 17l-5-5"/>
-          </svg>
+                return `<div class="fchk fchk-radio${active ? ' active' : ''}" onclick="selectSort(${i})">
+          <span class="fchk-box"></span><span class="fchk-label">${opt.label}</span>
         </div>`;
             }).join('');
         }
