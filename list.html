@@ -580,12 +580,12 @@
             const { distMin, distMax, paceMin, paceMax } = draftFilter;
             const typeChips = FILTER_TYPE_OPTS.map(o => {
                 const a = draftFilter.type.includes(o.val);
-                return `<div class="fchk ${a ? 'active' : ''}" onclick="selectFilter('type','${o.val}')">
+                return `<div class="fchk ${a ? 'active' : ''}" onclick="selectFilter(this,'type','${o.val}')">
           <span class="fchk-box"></span><span class="fchk-label">${o.label}</span></div>`;
             }).join('');
             const zoneChips = FILTER_ZONE_OPTS.map(o => {
                 const a = draftFilter.bpm.includes(o.val);
-                return `<div class="fchk ${a ? 'active' : ''}" onclick="selectFilter('bpm','${o.val}')">
+                return `<div class="fchk ${a ? 'active' : ''}" onclick="selectFilter(this,'bpm','${o.val}')">
           <span class="fchk-box"></span><span class="fchk-label">${o.label} <em>${o.desc}</em></span></div>`;
             }).join('');
             const distLoV = distMin,
@@ -615,11 +615,12 @@
             updateRangeFill('pace');
         }
 
-        function selectFilter(key, val) {
+        function selectFilter(el, key, val) {
             const arr = draftFilter[key];
             const i = arr.indexOf(val);
             if (i < 0) arr.push(val); else arr.splice(i, 1);
-            renderFilterPanel();
+            // 전체 재렌더 없이 클릭한 항목만 토글 → CSS 트랜지션/팝 모션 재생
+            if (el && el.classList) el.classList.toggle('active', i < 0);
             updateApplyState();
         }
 
