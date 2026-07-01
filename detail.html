@@ -589,6 +589,244 @@
       background: var(--type-long-bg);
       color: var(--type-long-text);
     }
+
+    /* ══════════════════════════════════════
+       새 상세 디자인 (nd-)
+    ══════════════════════════════════════ */
+    .d-edit-btn {
+      font-size: 16px;
+      font-weight: 400;
+      font-family: 'Pretendard Variable', sans-serif;
+      color: var(--slate-gray);
+      width: auto;
+    }
+
+    .nd {
+      padding: 8px 20px 24px;
+      color: var(--bone);
+    }
+
+    .nd-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 24px;
+      color: var(--slate-gray);
+    }
+
+    .nd-brand-logo {
+      height: 22px;
+      width: auto;
+      max-width: 120px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .nd-weather {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 15px;
+      font-family: 'Urbanist', sans-serif;
+    }
+
+    /* 히어로 — 신발 모델명(고스트) + 신발 이미지 겹침 */
+    .nd-hero {
+      position: relative;
+      cursor: pointer;
+      padding-bottom: 8px;
+    }
+
+    .nd-title {
+      font-size: 56px;
+      line-height: 0.92;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #6a6a6a;
+      font-family: 'Urbanist', -apple-system, sans-serif;
+      text-transform: uppercase;
+      margin: 0;
+      word-break: break-word;
+      position: relative;
+      z-index: 0;
+    }
+
+    .nd-shoe {
+      display: block;
+      width: 82%;
+      margin: -44px auto -6px;
+      transform: rotate(-4deg);
+      filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.5));
+      position: relative;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .nd-mileage {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      text-align: right;
+      margin-top: -8px;
+    }
+
+    .nd-mileage-label {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: var(--slate-gray);
+      font-family: 'Urbanist', sans-serif;
+    }
+
+    .nd-mileage-val {
+      font-size: 26px;
+      font-weight: 700;
+      font-family: 'Urbanist', sans-serif;
+    }
+
+    .nd-mileage-val em,
+    .nd-stat-val em,
+    .nd-avg-val em {
+      font-style: normal;
+      font-size: 0.5em;
+      color: var(--slate-gray);
+      margin-left: 2px;
+    }
+
+    .nd-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+      margin: 18px 0 20px;
+    }
+
+    /* 요약 — 좌 활동명 / 우 스탯 스택 */
+    .nd-summary {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nd-actname {
+      flex: 1;
+      min-width: 0;
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.3;
+      color: var(--slate-gray);
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
+    .nd-stats {
+      flex: 0 0 46%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .nd-stat {
+      padding: 4px 0 14px;
+    }
+
+    .nd-stat+.nd-stat {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 14px;
+    }
+
+    .nd-stat-val {
+      display: block;
+      font-size: 30px;
+      font-weight: 500;
+      font-family: 'Urbanist', sans-serif;
+      line-height: 1.1;
+    }
+
+    .nd-stat-label {
+      font-size: 14px;
+      color: var(--slate-gray);
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
+    /* 평균 기록 카드 */
+    .nd-avg {
+      margin-top: 26px;
+      padding: 24px 22px 10px;
+      background: var(--dark-gray);
+    }
+
+    .nd-avg-title {
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--slate-gray);
+      font-family: 'Pretendard Variable', sans-serif;
+      margin-bottom: 8px;
+    }
+
+    .nd-avg-row {
+      display: flex;
+      align-items: baseline;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .nd-avg-row:last-child {
+      border-bottom: none;
+    }
+
+    .nd-avg-label {
+      flex: 1;
+      font-size: 17px;
+      color: var(--bone);
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
+    .nd-avg-val {
+      font-size: 22px;
+      font-weight: 600;
+      font-family: 'Urbanist', sans-serif;
+    }
+
+    .nd-avg-delta {
+      width: 64px;
+      text-align: right;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--accent);
+      font-family: 'Urbanist', sans-serif;
+    }
+
+    /* prev / next */
+    .nd-nav {
+      display: flex;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .nd-nav-btn {
+      flex: 1;
+      background: var(--dark-gray);
+      border: none;
+      border-radius: 14px;
+      color: var(--slate-gray);
+      padding: 26px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 20px;
+      font-family: 'Urbanist', sans-serif;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .nd-nav-next {
+      justify-content: space-between;
+    }
+
+    .nd-nav-btn:active {
+      transform: scale(0.98);
+      background: #3a3a3a;
+    }
+
+    .nd-nav-btn:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
   </style>
 </head>
 
@@ -604,14 +842,8 @@
               <path d="M19 12H5" />
             </svg>
           </button>
-          <span class="back-title">활동 상세</span>
-          <button class="header-action-btn" onclick="goEdit()" aria-label="수정">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-              stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 20h9" />
-              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z" />
-            </svg>
-          </button>
+          <span class="back-title" id="d-header-date">활동 상세</span>
+          <button class="header-action-btn d-edit-btn" onclick="goEdit()" aria-label="수정">Edit</button>
         </div>
 
         <div class="detail-scroll" id="detail-scroll">
@@ -742,131 +974,105 @@
       } catch (e) { /* ignore */ }
     }
 
+    // 평균 대비 행 (심박/케이던스/보폭/접지)
+    function ndAvgRow(label, val, unit, avg) {
+      if (val == null || val === '' || isNaN(val)) return '';
+      let delta = '';
+      if (avg != null && avg !== 0) {
+        const pct = ((val - avg) / avg) * 100;
+        const arrow = Math.abs(pct) < 0.05 ? '·' : (pct < 0 ? '▼' : '▲');
+        delta = `<span class="nd-avg-delta">${arrow} ${Math.abs(Math.round(pct * 10) / 10)}</span>`;
+      }
+      return `<div class="nd-avg-row">
+        <span class="nd-avg-label">${label}</span>
+        <span class="nd-avg-val">${Math.round(val)}<em>${unit}</em></span>
+        ${delta}
+      </div>`;
+    }
+
     function renderHTML(act, meta, list) {
       list = list || [];
       const displayName = (meta.name && meta.name.trim()) || act.name || '러닝';
-      let effType = meta.type || act.type;   // 타입 오버라이드 반영 (list 와 일치)
-      if (typeof normRunType === 'function') effType = normRunType(effType); // steady→tempo
-      const typeText = effType.toUpperCase();
 
-      // 신발 — meta.shoeId 로 신발장 조회 (레거시 meta.shoe dataURL 호환)
+      // 헤더 중앙: 날짜 · 시각
+      const timeStr = meta.startTime || act.startTime || '';
+      const headerDate = (act.date || '').replace(/-/g, '.') + (timeStr ? ' · ' + timeStr : '');
+      const hd = document.getElementById('d-header-date');
+      if (hd) hd.textContent = headerDate;
+
+      // 신발
       const shoeObj = (meta.shoeId && typeof getShoe === 'function') ? getShoe(meta.shoeId) : null;
       const shoeImg = shoeObj ? shoeObj.image : (meta.shoe || null);
       const shoeName = shoeObj ? shoeObj.name : '';
-      const heroShoe = shoeImg
-        ? `<div class="d-hero-shoe" onclick="openShoePicker()">
-             <img class="d-hero-shoe-img" src="${shoeImg}" alt="러닝화">
-             <div class="d-hero-shoe-meta">               
-               <span class="d-hero-shoe-name">${shoeName ? escapeHTML(shoeName) : '탭하여 변경'} ›</span>
-             </div>
-           </div>`
-        : `<button class="d-hero-shoe-add" onclick="openShoePicker()">+ 러닝화 선택하기</button>`;
 
-      // 온도 (러닝한 날 실제 기온 — 렌더 후 비동기로 채움)
-      const tempEl = '<span class="d-temp" id="d-temp"></span>';
+      // 신발 마일리지 — 기준 마일리지 + 시작일 이후 이 신발 활동 km 자동 합산
+      let shoeMileage = null;
+      if (shoeObj) {
+        const base = Number(shoeObj.baseMileage) || 0;
+        const from = shoeObj.mileageFrom || '';
+        let sum = 0;
+        list.forEach(a => {
+          const m = (typeof getMeta === 'function') ? (getMeta(a.date) || {}) : {};
+          if (m.shoeId === shoeObj.id && (!from || a.date >= from)) sum += (a.km || 0);
+        });
+        shoeMileage = Math.round(base + sum);
+      }
 
-      const hero = `
-        <div class="d-hero">
-          <div class="d-meta-line">
-            <span class="d-date">${act.date}${(meta.startTime || act.startTime) ? ' · ' + (meta.startTime || act.startTime) : ''}</span>
-            <span class="d-type-badge type-${effType}">${typeText}</span>
-            ${tempEl}
+      const titleText = shoeName ? escapeHTML(shoeName.toUpperCase()) : '러닝화 선택';
+
+      // 평균 기록 (전체 활동 평균 대비)
+      const avgRows = [
+        ndAvgRow('심박', act.bpm, 'bpm', avgOf(list, 'bpm')),
+        ndAvgRow('케이던스', act.spm, 'spm', avgOf(list, 'spm')),
+        ndAvgRow('보폭', act.stride != null ? Math.round(act.stride * 100) : null, 'cm',
+          avgOf(list, 'stride') != null ? avgOf(list, 'stride') * 100 : null),
+        ndAvgRow('접지시간', act.ground, 'ms', avgOf(list, 'ground')),
+      ].filter(Boolean).join('');
+      const avgCard = avgRows ? `
+        <div class="nd-avg round-box">
+          <div class="nd-avg-title">나의 평균 기록</div>
+          ${avgRows}
+        </div>` : '';
+
+      // 이전/다음 활동 (list: 최신순)
+      const idx = list.findIndex(a => a.date === act.date);
+      const older = idx >= 0 && idx < list.length - 1 ? list[idx + 1] : null;  // prev(과거)
+      const newer = idx > 0 ? list[idx - 1] : null;                            // next(최근)
+      const prevBtn = `<button class="nd-nav-btn" ${older ? `onclick="goTo('detail.html?date=${older.date}')"` : 'disabled'}>
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+          <span>prev</span></button>`;
+      const nextBtn = `<button class="nd-nav-btn nd-nav-next" ${newer ? `onclick="goTo('detail.html?date=${newer.date}')"` : 'disabled'}>
+          <span>next</span>
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>`;
+
+      return `
+        <div class="nd">
+          <div class="nd-top">
+            <span class="nd-brand">${shoeObj && shoeObj.logo ? `<img class="nd-brand-logo" src="${shoeObj.logo}" alt="brand">` : ''}</span>
+            <span class="nd-weather"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 0 0 0-9 6 6 0 0 0-11.6 2A4 4 0 0 0 6.5 19Z"/></svg><span id="d-temp"></span></span>
           </div>
-          <h1 class="d-name">${escapeHTML(displayName)}</h1>
-          <div class="d-km-row">
-            <div><span class="d-km">${fmtNum(act.km, 2)}</span><sup>K</sup></div>
-            <div class="d-km-side">
-              <div class="d-km-side-row"><span class="d-km-side-val">${act.dur || '--'}</span><span class="d-km-side-label">시간</span></div>
-              <div class="d-km-side-row"><span class="d-km-side-val">${act.pace || '--'}</span><span class="d-km-side-label">평균 페이스</span></div>
+
+          <div class="nd-hero" onclick="openShoePicker()">
+            <h1 class="nd-title">${titleText}</h1>
+            ${shoeImg ? `<img class="nd-shoe" src="${shoeImg}" alt="러닝화">` : ''}
+            <div class="nd-mileage"><span class="nd-mileage-label">MILEAGE</span><span class="nd-mileage-val">${shoeMileage != null ? shoeMileage : '--'}<em>K</em></span></div>
+          </div>
+
+          <div class="nd-divider"></div>
+
+          <div class="nd-summary">
+            <div class="nd-actname">${escapeHTML(displayName)}</div>
+            <div class="nd-stats">
+              <div class="nd-stat"><span class="nd-stat-val">${act.dur || '--'}</span><span class="nd-stat-label">시간</span></div>
+              <div class="nd-stat"><span class="nd-stat-val">${act.pace || '--'}</span><span class="nd-stat-label">페이스</span></div>
+              <div class="nd-stat"><span class="nd-stat-val">${fmtNum(act.km, 2)}<em>K</em></span><span class="nd-stat-label">거리</span></div>
             </div>
           </div>
-          ${heroShoe}
+
+          ${avgCard}
+
+          <div class="nd-nav">${prevBtn}${nextBtn}</div>
         </div>`;
-
-      // A. 나의 평균 대비 (전체 활동 평균)
-      const cmpRows = [
-        compareRow('페이스', act.paceV, '/km', avgOf(list, 'paceV'), { pace: true, lowerBetter: true }),
-        compareRow('심박', act.bpm, 'bpm', avgOf(list, 'bpm'), { lowerBetter: true }),
-        compareRow('거리', act.km, 'km', avgOf(list, 'km'), { lowerBetter: false }),
-      ].filter(Boolean).join('');
-      const compare = cmpRows ? `
-        <div class="d-card round-box">
-          <div class="d-card-title">나의 평균 대비</div>
-          ${cmpRows}
-        </div>` : '';
-
-      // C. 러닝 폼 카드
-      const formCells = [
-        ['케이던스', act.spm, 'SPM'],
-        ['보폭', act.stride, 'M'],
-        ['접지시간', act.ground, 'MS'],
-        ['수직 진동', act.vertOsc, 'CM'],
-        ['수직 비율', act.vertRatio, '%'],
-        ['최대 케이던스', act.maxSpm, 'SPM'],
-      ].filter(([, v]) => v != null && v !== '');
-      const form = formCells.length ? `
-        <div class="d-card round-box">
-          <div class="d-card-title">러닝 폼</div>
-          <div class="d-stats-grid">
-            ${formCells.map(([label, val, unit]) => `
-              <div class="d-stat">
-                <div class="d-stat-value">${val}${unit ? `<sup>${unit}</sup>` : ''}</div>
-                <div class="d-stat-label">${label}</div>
-              </div>`).join('')}
-          </div>
-        </div>` : '';
-
-      const statsCells = [
-        ['최대 심박', act.maxBpm, 'BPM'],
-        ['최대 페이스', act.maxPace, '/K'],
-        ['GAP', act.avgGAP, '/K'],
-        ['칼로리', act.calories, 'KCAL'],
-        ['걸음', act.steps, ''],
-        ['상승', act.ascent, 'M'],
-        ['하강', act.descent, 'M'],
-      ].filter(([, v]) => v != null && v !== '');
-
-      const stats = statsCells.length ? `
-        <div class="d-card round-box">
-          <div class="d-card-title">스탯</div>
-          <div class="d-stats-grid">
-            ${statsCells.map(([label, val, unit]) => `
-              <div class="d-stat">
-                <div class="d-stat-value">${val}${unit ? `<sup>${unit}</sup>` : ''}</div>
-                <div class="d-stat-label">${label}</div>
-              </div>`).join('')}
-          </div>
-        </div>` : '';
-
-      // 메모 (input 메타)
-      const note = (meta.note && meta.note.trim()) ? `
-        <div class="d-card round-box">
-          <div class="d-card-title">메모</div>
-          <div class="d-note">${escapeHTML(meta.note)}</div>
-        </div>` : '';
-
-      // 최근 러닝 — 다른 활동 상세로 바로 이동 (현재 제외, 최신 8개)
-      const recents = list.filter(a => a.date !== act.date).slice(0, 5);
-      const recent = recents.length ? `
-        <div class="d-card round-box">
-          <div class="d-card-title">최근 러닝</div>
-          <div class="d-recent-list">
-            ${recents.map(a => {
-        const t = (typeof normRunType === 'function') ? normRunType(a.type) : a.type;
-        const nm = ((getMeta(a.date) || {}).name) || a.name || '러닝';
-        const [, mm, dd] = a.date.split('-');
-        return `<div class="d-recent-row" onclick="goTo('detail.html?date=${a.date}')">
-                <span class="d-recent-dot type-${t}"></span>
-                <span class="d-recent-date">${parseInt(mm)}.${parseInt(dd)}</span>
-                <span class="d-recent-name">${escapeHTML(nm)}</span>
-                <span class="d-recent-km">${fmtNum(a.km, 1)}K</span>
-                <span class="d-recent-pace">${a.pace || '--'}</span>
-              </div>`;
-      }).join('')}
-          </div>
-        </div>` : '';
-
-      return hero + note + compare + form + stats + recent;
     }
 
     /* ── 신발 선택 시트 (롤링) ── */

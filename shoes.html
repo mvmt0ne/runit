@@ -72,6 +72,12 @@
       font-size: 12px; color: var(--text-2); opacity: 0.5; font-family: 'Pretendard Variable', sans-serif;
     }
     .shoe-preview.has-image + .shoe-placeholder { display: none; }
+    .logo-preview {
+      width: 72px; height: 34px; flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.12); border-radius: 6px;
+      background: rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    .logo-preview img { max-width: 90%; max-height: 80%; object-fit: contain; }
     .shoe-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
     .shoe-list-item {
       display: flex; align-items: center; gap: 12px; padding: 8px 10px;
@@ -143,8 +149,25 @@
               <button type="button" class="ghost-btn" id="shoe-submit" onclick="onAddShoe()" style="color:var(--accent)">등록</button>
             </div>
             <input type="file" id="input-shoe" accept="image/png,image/*" style="display:none">
-            <div class="input-helper">배경 없는 누끼 PNG를 올리면 상세 화면에 예쁘게 표시됩니다. 등록한 러닝화는 상세에서 선택해 사용하고, 목록에서 수정할 수 있습니다.</div>
-            <ul class="shoe-list" id="shoe-list" style="margin-top:14px"></ul>
+            <div class="input-helper">배경 없는 누끼 PNG를 올리면 상세 화면에 예쁘게 표시됩니다.</div>
+
+            <label class="input-label" style="margin-top:20px">브랜드 로고 (SVG)</label>
+            <div class="field-row" style="align-items:center">
+              <label class="ghost-btn" for="input-logo" style="flex:1;text-align:center">SVG 선택</label>
+              <button type="button" class="ghost-btn" onclick="clearLogo()">비우기</button>
+              <span id="logo-preview" class="logo-preview"></span>
+            </div>
+            <input type="file" id="input-logo" accept="image/svg+xml,.svg" style="display:none">
+            <div class="input-helper">모델명 위에 표시되는 브랜드 로고입니다. (어두운 배경용 밝은 SVG 권장)</div>
+
+            <label class="input-label" style="margin-top:20px">마일리지</label>
+            <div class="field-row">
+              <input type="number" id="shoe-base-km" class="input-field" inputmode="numeric" placeholder="기준 마일리지 (km)" style="flex:1;margin-bottom:0">
+              <input type="date" id="shoe-mileage-from" class="input-field" style="flex:1;margin-bottom:0">
+            </div>
+            <div class="input-helper">시작일 이후의 러닝 거리가 기준 마일리지에 자동 합산됩니다.</div>
+
+            <ul class="shoe-list" id="shoe-list" style="margin-top:18px"></ul>
           </div>
         </div>
       </div>
@@ -212,6 +235,25 @@
     }
     function clearShoe() { setShoePreview(null); shoeInput.value = ''; }
 
+    /* 브랜드 로고 (SVG) */
+    const logoInput = document.getElementById('input-logo');
+    let _shoeLogo = null;
+    function setLogoPreview(dataURL) {
+      _shoeLogo = dataURL || null;
+      const box = document.getElementById('logo-preview');
+      box.innerHTML = dataURL ? `<img src="${dataURL}" alt="로고">` : '';
+    }
+    function clearLogo() { setLogoPreview(null); logoInput.value = ''; }
+    logoInput.addEventListener('change', () => {
+      const f = logoInput.files && logoInput.files[0];
+      if (!f) return;
+      if (!/svg/.test(f.type) && !/\.svg$/i.test(f.name)) { showToast('SVG 파일을 선택하세요', true); return; }
+      const fr = new FileReader();
+      fr.onload = e => setLogoPreview(e.target.result);   // data:image/svg+xml;base64,...
+      fr.onerror = () => showToast('로고 처리 실패', true);
+      fr.readAsDataURL(f);
+    });
+
     shoeInput.addEventListener('change', async () => {
       const f = shoeInput.files && shoeInput.files[0];
       if (!f) return;
@@ -228,6 +270,9 @@
       _editingShoeId = id;
       shoeNameInput.value = s.name || '';
       setShoePreview(s.image || null);
+      setLogoPreview(s.logo || null);
+      document.getElementById('shoe-base-km').value = s.baseMileage != null ? s.baseMileage : '';
+      document.getElementById('shoe-mileage-from').value = s.mileageFrom || '';
       document.getElementById('shoe-submit').textContent = '수정';
       document.getElementById('shoe-cancel').style.display = '';
       shoeNameInput.focus();
@@ -237,6 +282,9 @@
       _editingShoeId = null;
       shoeNameInput.value = '';
       clearShoe();
+      clearLogo();
+      document.getElementById('shoe-base-km').value = '';
+      document.getElementById('shoe-mileage-from').value = '';
       document.getElementById('shoe-submit').textContent = '등록';
       document.getElementById('shoe-cancel').style.display = 'none';
     }
@@ -258,7 +306,12 @@
       }
 
       const wasEdit = !!_editingShoeId;
-      try { saveShoe({ id, name, image }); }
+      const baseKmRaw = document.getElementById('shoe-base-km').value.trim();
+      const baseMileage = baseKmRaw === '' ? null : Math.max(0, Math.round(+baseKmRaw) || 0);
+      const mileageFrom = document.getElementById('shoe-mileage-from').value || null;
+      // 기존 필드(order 등) 보존 위해 병합 저장
+      const prev = getShoe(id) || {};
+      try { saveShoe({ ...prev, id, name, image, logo: _shoeLogo || null, baseMileage, mileageFrom }); }
       catch (e) {
         if (e && e.name === 'QuotaExceededError') { showToast('저장 공간 부족(이미지 큼)', true); return; }
         throw e;
