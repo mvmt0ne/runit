@@ -1070,7 +1070,19 @@
         if (!byMonth.has(ym)) byMonth.set(ym, []);
         byMonth.get(ym).push(a);
       });
-      MONTHS_ORDER = [...byMonth.keys()].sort();   // 오름차순
+      // 최소 데이터 달 ~ 현재 달까지 연속 생성 (기록 없는 달도 빈 캘린더로 포함 → 현재 달로 이동 가능)
+      const _now0 = new Date();
+      const curY0 = _now0.getFullYear(), curM0 = _now0.getMonth() + 1;
+      const dataYMs = [...byMonth.keys()].sort();
+      let sy = curY0, sm = curM0;
+      if (dataYMs.length) { const p = dataYMs[0].split('-').map(n => parseInt(n, 10)); sy = p[0]; sm = p[1]; }
+      MONTHS_ORDER = [];
+      for (let y = sy, m = sm; (y < curY0 || (y === curY0 && m <= curM0)); m++) {
+        if (m > 12) { m = 1; y++; }
+        MONTHS_ORDER.push(`${y}-${String(m).padStart(2, '0')}`);
+        if (y === curY0 && m === curM0) break;
+      }
+      MONTHS_ORDER.forEach(ym => { if (!byMonth.has(ym)) byMonth.set(ym, []); });
       MONTH_DATA = {};
       const now = new Date();
       const today = { y: now.getFullYear(), m: now.getMonth() + 1, d: now.getDate() };
