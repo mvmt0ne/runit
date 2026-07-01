@@ -273,9 +273,12 @@
       setLogoPreview(s.logo || null);
       document.getElementById('shoe-base-km').value = s.baseMileage != null ? s.baseMileage : '';
       document.getElementById('shoe-mileage-from').value = s.mileageFrom || '';
-      document.getElementById('shoe-submit').textContent = '수정';
+      document.getElementById('shoe-submit').textContent = '저장';
       document.getElementById('shoe-cancel').style.display = '';
-      shoeNameInput.focus();
+      // 편집 폼이 보이도록 상단으로 스크롤
+      const sc = document.querySelector('.input-scroll');
+      if (sc) sc.scrollTo({ top: 0, behavior: 'smooth' });
+      shoeNameInput.focus({ preventScroll: true });
     }
 
     function cancelEdit() {
@@ -365,6 +368,12 @@
     }
 
     renderShoeList();
+
+    // 상세 등에서 ?edit=<shoeId> 로 들어오면 해당 신발 편집 모드로 시작
+    (function () {
+      const eid = new URLSearchParams(location.search).get('edit');
+      if (eid && getShoe(eid)) editShoe(eid);
+    })();
 
     /* ── 드래그로 순서 변경 — SortableJS (터치/마우스 지원) ── */
     (function setupShoeReorder() {

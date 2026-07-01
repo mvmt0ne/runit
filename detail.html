@@ -490,6 +490,11 @@
       background: rgba(255, 255, 255, 0.16);
     }
 
+    .shoe-sheet-actions {
+      display: flex;
+      gap: 8px;
+    }
+
     .shoe-carousel {
       display: flex;
       gap: 4px;
@@ -594,7 +599,7 @@
        새 상세 디자인 (nd-)
     ══════════════════════════════════════ */
     .d-edit-btn {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 400;
       font-family: 'Pretendard Variable', sans-serif;
       color: var(--slate-gray);
@@ -860,7 +865,10 @@
   <div class="shoe-sheet" id="shoe-sheet">
     <div class="shoe-sheet-head">
       <span class="shoe-sheet-title">러닝화 선택</span>
-      <button class="shoe-sheet-add" onclick="goTo('shoes.html')">+ 등록</button>
+      <div class="shoe-sheet-actions">
+        <button class="shoe-sheet-add" onclick="goEditShoe()">편집</button>
+        <button class="shoe-sheet-add" onclick="goTo('shoes.html')">+ 등록</button>
+      </div>
     </div>
     <div id="shoe-carousel-wrap"></div>
   </div>
@@ -874,9 +882,15 @@
   <script>
     const _qs = new URLSearchParams(location.search);
     let _date = _qs.get('date');
+    let _curShoeId = null;
 
     function goEdit() {
       goTo(`input.html?date=${_date || ''}`);
+    }
+
+    // 현재 신발 편집 화면으로 (없으면 러닝화 관리로)
+    function goEditShoe() {
+      goTo(_curShoeId ? `shoes.html?edit=${_curShoeId}` : 'shoes.html');
     }
 
     // 뒤로 — 들어온 화면(홈/리스트 등)으로 복귀
@@ -1002,6 +1016,7 @@
 
       // 신발
       const shoeObj = (meta.shoeId && typeof getShoe === 'function') ? getShoe(meta.shoeId) : null;
+      _curShoeId = shoeObj ? shoeObj.id : null;
       const shoeImg = shoeObj ? shoeObj.image : (meta.shoe || null);
       const shoeName = shoeObj ? shoeObj.name : '';
 
