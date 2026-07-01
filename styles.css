@@ -41,7 +41,7 @@ button:active {
     /* Surfaces */
     --bg: #1d1d1d;
     --bone: #efeeed;
-    --bg-modal: #d2d2d2;
+    --bg-modal: #313131;
     /* Accent */
     --accent: #ff4c31;
     --accent-rgb: 255, 76, 49;
@@ -817,7 +817,7 @@ sup {
     left: 0;
     right: 0;
     bottom: calc(-1 * env(safe-area-inset-bottom, 0px));
-    background: rgba(77, 77, 77, 0.45);
+    background: rgba(6, 6, 6, 0.65);
     backdrop-filter: blur(2px) saturate(100%);
     -webkit-backdrop-filter: blur(2px) saturate(100%);
     transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
@@ -991,11 +991,11 @@ sup {
 }
 
 .sf-sheet-title {
-    font-size: 18px;
-    font-weight: 400;
+    font-size: 20px;
+    font-weight: 500;
     font-family: 'Pretendard Variable', sans-serif;
     transition: color 0.3s;
-    color: var(--asphalt-black);
+    color: var(--cloudy-gray);
 }
 
 .sf-sheet-close {
@@ -1007,7 +1007,7 @@ sup {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: var(--asphalt-black);
+    color: var(--cloudy-gray);
     transition: background 0.15s;
 }
 
@@ -1061,7 +1061,7 @@ sup {
 .sf-sheet-footer {
     display: flex;
     gap: 10px;
-    padding: 10px 20px 28px;
+    padding: 10px 20px 10px;
     flex-shrink: 0;
     border-top: 1px solid rgba(128, 128, 128, 0.1);
 }
@@ -1094,8 +1094,8 @@ sup {
 }
 
 .sf-apply-btn:disabled {
-    background: rgba(213, 213, 213, 0.5);
-    color: var(--slate-gray);
+    background: rgba(255, 76, 49, 0.3);
+    color: rgba(34, 34, 34, 0.3);
     cursor: default;
 }
 
@@ -1301,11 +1301,11 @@ sup {
 }
 
 .fchk-box {
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     flex-shrink: 0;
     box-sizing: border-box;
-    background: var(--slate-gray);
+    background: rgb(180 180 180 / 20%);
     border: 0 solid var(--accent);
     transition:
         background 0.18s ease,
@@ -1341,7 +1341,7 @@ sup {
     font-size: 16px;
     font-weight: 400;
     font-family: 'Pretendard Variable', sans-serif;
-    color: var(--asphalt-black);
+    color: var(--cloudy-gray);
 }
 
 .fchk-label em {
@@ -1438,8 +1438,8 @@ input[type='range'].range-input {
 
 input[type='range'].range-input::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 30px;
-    height: 30px;
+    width: 36px;
+    height: 36px;
     border: none;
     border-radius: 50%;
     background-color: var(--asphalt-gray);
