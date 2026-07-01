@@ -1276,7 +1276,7 @@ sup {
 .filter-cat-label {
     font-size: 16px;
     font-weight: 300;
-    color: var(--asphalt-gray);
+    color: var(--slate-gray);
 }
 
 .filter-chips {
@@ -1476,7 +1476,7 @@ input[type='range'].range-input::-moz-range-thumb {
 
 .range-val {
     font-size: 14px;
-    color: var(--asphalt-black);
+    color: var(--bone);
     font-family: 'Urbanist', sans-serif;
     font-weight: 600;
 }
