@@ -671,7 +671,8 @@
       z-index: 0;
     }
 
-    .nd-shoe {
+    /* 래퍼가 크기·회전·그림자 담당 (mask 가 그림자를 잘라내지 않도록 분리) */
+    .nd-shoe-wrap {
       display: block;
       width: 75%;
       margin: -14px auto -40px;
@@ -680,6 +681,11 @@
       position: relative;
       z-index: 1;
       pointer-events: none;
+    }
+
+    .nd-shoe {
+      display: block;
+      width: 100%;
     }
 
     /* 인터레이스 리빌 — 가로 스캔라인이 촘촘히 채워지며 나타남 */
@@ -1204,7 +1210,7 @@
 
           <div class="nd-hero" onclick="openShoePicker()">
             <h1 class="nd-title">${titleText}</h1>
-            ${shoeImg ? `<img class="nd-shoe" src="${shoeImg}" alt="러닝화">` : ''}
+            ${shoeImg ? `<span class="nd-shoe-wrap"><img class="nd-shoe" src="${shoeImg}" alt="러닝화"></span>` : ''}
             <div class="nd-mileage"><span class="nd-mileage-label">MILEAGE</span><span class="nd-mileage-val">${shoeMileage != null ? shoeMileage : '--'}<em>K</em></span></div>
           </div>
 
