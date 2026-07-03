@@ -808,41 +808,68 @@
       font-family: 'Urbanist', sans-serif;
     }
 
-    /* prev / next */
-    .nd-nav {
-      display: flex;
-      gap: 4px;
-      margin-top: 4px;
+    /* 콘텐츠 전환 애니메이션 (이전/다음 시) */
+    .d-body-in {
+      animation: d-body-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .nd-nav-btn {
-      flex: 1;
+    @keyframes d-body-in {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* ─── 하단 고정 탭바: 이전 · 목록 · 다음 ─── */
+    .d-tabbar {
+      flex-shrink: 0;
+      display: flex;
+      align-items: stretch;
       background: var(--dark-gray);
-      border: none;
-      border-radius: 0;
-      color: var(--slate-gray);
-      padding: 26px 22px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    .d-tab {
+      flex: 1;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      font-size: 20px;
+      justify-content: center;
+      gap: 8px;
+      padding: 18px 10px;
+      background: transparent;
+      border: none;
+      color: var(--slate-gray);
+      font-size: 16px;
       font-family: 'Urbanist', sans-serif;
       cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
+      transition: background 0.15s;
     }
 
-    .nd-nav-next {
-      justify-content: space-between;
+    .d-tab:active {
+      background: rgba(255, 255, 255, 0.05);
     }
 
-    .nd-nav-btn:active {
-      transform: scale(0.98);
-      background: #3a3a3a;
-    }
-
-    .nd-nav-btn:disabled {
-      opacity: 0.35;
+    .d-tab:disabled {
+      opacity: 0.3;
       cursor: default;
+    }
+
+    /* 가운데 목록 버튼 — 아이콘+라벨 세로, 좌우 구분선 */
+    .d-tab-list {
+      flex: 0 0 33%;
+      flex-direction: column;
+      gap: 3px;
+      font-size: 11px;
+      color: var(--cloudy-gray);
+      border-left: 1px solid rgba(255, 255, 255, 0.06);
+      border-right: 1px solid rgba(255, 255, 255, 0.06);
+      font-family: 'Pretendard Variable', sans-serif;
     }
   </style>
 </head>
@@ -867,6 +894,22 @@
           <div id="detail-body">
             <div class="d-empty">불러오는 중…</div>
           </div>
+        </div>
+
+        <!-- 하단 고정 탭바: 이전 · 목록 · 다음 -->
+        <div class="d-tabbar">
+          <button class="d-tab" id="d-prev" onclick="navDetail(_prevDate)">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+            <span>이전</span>
+          </button>
+          <button class="d-tab d-tab-list" onclick="goTo('list.html')">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>
+            <span>목록</span>
+          </button>
+          <button class="d-tab" id="d-next" onclick="navDetail(_nextDate)">
+            <span>다음</span>
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
         </div>
       </div>
     </div>
@@ -895,9 +938,28 @@
     const _qs = new URLSearchParams(location.search);
     let _date = _qs.get('date');
     let _curShoeId = null;
+    let _prevDate = null, _nextDate = null;
 
     function goEdit() {
       goTo(`input.html?date=${_date || ''}`);
+    }
+
+    // 이전/다음 활동으로 — 제자리 전환(history 미적립). 탭바 고정.
+    function navDetail(date) {
+      if (!date) return;
+      _date = date;
+      history.replaceState(null, '', 'detail.html?date=' + date);
+      const sc = document.getElementById('detail-scroll');
+      if (sc) sc.scrollTop = 0;
+      render();
+    }
+
+    // 하단 탭바 이전/다음 버튼 활성 상태 갱신
+    function updateDetailTabbar() {
+      const p = document.getElementById('d-prev');
+      const n = document.getElementById('d-next');
+      if (p) p.disabled = !_prevDate;
+      if (n) n.disabled = !_nextDate;
     }
 
     // 현재 신발 편집 화면으로 (없으면 러닝화 관리로)
@@ -928,7 +990,13 @@
       }
 
       const meta = (typeof getMeta === 'function') ? (getMeta(_date) || {}) : {};
-      document.getElementById('detail-body').innerHTML = renderHTML(act, meta, list);
+      const body = document.getElementById('detail-body');
+      body.innerHTML = renderHTML(act, meta, list);
+      updateDetailTabbar();
+      // 전환 애니메이션 (팝업 느낌)
+      body.classList.remove('d-body-in');
+      void body.offsetWidth;
+      body.classList.add('d-body-in');
       fetchRealTemp(_date, meta.startTime || act.startTime);
     }
 
@@ -1061,16 +1129,10 @@
           ${avgRows}
         </div>` : '';
 
-      // 이전/다음 활동 (list: 최신순)
+      // 이전/다음 활동 날짜 저장 (list: 최신순) — 하단 고정 탭바가 사용
       const idx = list.findIndex(a => a.date === act.date);
-      const older = idx >= 0 && idx < list.length - 1 ? list[idx + 1] : null;  // prev(과거)
-      const newer = idx > 0 ? list[idx - 1] : null;                            // next(최근)
-      const prevBtn = `<button class="nd-nav-btn" ${older ? `onclick="goTo('detail.html?date=${older.date}')"` : 'disabled'}>
-          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
-          <span>prev</span></button>`;
-      const nextBtn = `<button class="nd-nav-btn nd-nav-next" ${newer ? `onclick="goTo('detail.html?date=${newer.date}')"` : 'disabled'}>
-          <span>next</span>
-          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>`;
+      _prevDate = (idx >= 0 && idx < list.length - 1) ? list[idx + 1].date : null;  // prev(과거)
+      _nextDate = idx > 0 ? list[idx - 1].date : null;                              // next(최근)
 
       return `
         <div class="nd">
@@ -1097,8 +1159,6 @@
           </div>
 
           ${avgCard}
-
-          <div class="nd-nav">${prevBtn}${nextBtn}</div>
         </div>`;
     }
 
