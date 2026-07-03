@@ -629,12 +629,18 @@
       color: var(--slate-gray);
     }
 
+    /* 브랜드 로고 — 등록 색상 무시하고 cloudy-gray 단색으로 마스킹 */
     .nd-brand-logo {
-      height: 16px;
-      width: auto;
-      max-width: 120px;
-      object-fit: contain;
       display: block;
+      height: 16px;
+      width: 120px;
+      background: var(--cloudy-gray);
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: left center;
+      mask-position: left center;
+      -webkit-mask-size: contain;
+      mask-size: contain;
     }
 
     .nd-weather {
@@ -674,6 +680,39 @@
       position: relative;
       z-index: 1;
       pointer-events: none;
+    }
+
+    /* 인터레이스 리빌 — 가로 스캔라인이 촘촘히 채워지며 나타남 */
+    @property --iv {
+      syntax: '<length>';
+      inherits: false;
+      initial-value: 5px;
+    }
+
+    .nd-shoe {
+      --iv: 5px;
+      -webkit-mask: repeating-linear-gradient(to bottom, #000 0, #000 var(--iv), transparent var(--iv), transparent 5px);
+      mask: repeating-linear-gradient(to bottom, #000 0, #000 var(--iv), transparent var(--iv), transparent 5px);
+      animation: shoe-interlace 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes shoe-interlace {
+      from {
+        --iv: 0px;
+        opacity: 0.4;
+      }
+
+      to {
+        --iv: 5px;
+        opacity: 1;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .nd-shoe {
+        --iv: 5px;
+        animation: none;
+      }
     }
 
     .nd-mileage {
@@ -1159,7 +1198,7 @@
       return `
         <div class="nd">
           <div class="nd-top">
-            <span class="nd-brand">${shoeObj && shoeObj.logo ? `<img class="nd-brand-logo" src="${shoeObj.logo}" alt="brand">` : ''}</span>
+            <span class="nd-brand">${shoeObj && shoeObj.logo ? `<span class="nd-brand-logo" role="img" aria-label="brand" style="-webkit-mask-image:url('${shoeObj.logo}');mask-image:url('${shoeObj.logo}')"></span>` : ''}</span>
             <span class="nd-weather"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 0 0 0-9 6 6 0 0 0-11.6 2A4 4 0 0 0 6.5 19Z"/></svg><span id="d-temp"></span></span>
           </div>
 
