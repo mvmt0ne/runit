@@ -758,36 +758,49 @@
       width: 100%;
     }
 
-    /* 인터레이스 리빌 — 가로 스캔라인이 촘촘히 채워지며 나타남 */
+    /* 인터레이스 리빌 — 굵은 가로 스캔라인이 위→아래로 채워지며,
+       흐릿·확대 상태에서 선명·정위치로 현상되듯 드러남 */
     @property --iv {
       syntax: '<length>';
       inherits: false;
-      initial-value: 5px;
+      initial-value: 9px;
     }
 
     .nd-shoe {
-      --iv: 5px;
-      -webkit-mask: repeating-linear-gradient(to bottom, #000 0, #000 var(--iv), transparent var(--iv), transparent 5px);
-      mask: repeating-linear-gradient(to bottom, #000 0, #000 var(--iv), transparent var(--iv), transparent 5px);
-      animation: shoe-interlace 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+      --iv: 9px;
+      -webkit-mask: repeating-linear-gradient(to bottom, #000 0, #000 var(--iv), transparent var(--iv), transparent 9px);
+      mask: repeating-linear-gradient(to bottom, #000 0, #000 var(--iv), transparent var(--iv), transparent 9px);
+      animation: shoe-interlace 1.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+      transform-origin: center 60%;
     }
 
     @keyframes shoe-interlace {
-      from {
-        --iv: 0px;
-        opacity: 0.4;
+      0% {
+        --iv: 0.5px;
+        opacity: 0;
+        filter: blur(22px) contrast(1.4);
+        transform: scale(1.08);
       }
 
-      to {
-        --iv: 5px;
+      35% {
         opacity: 1;
+        filter: blur(10px) contrast(1.2);
+      }
+
+      100% {
+        --iv: 9px;
+        opacity: 1;
+        filter: blur(0) contrast(1);
+        transform: scale(1);
       }
     }
 
     @media (prefers-reduced-motion: reduce) {
       .nd-shoe {
-        --iv: 5px;
+        --iv: 9px;
         animation: none;
+        filter: none;
+        transform: none;
       }
     }
 
@@ -1145,7 +1158,7 @@
       if (shoeEl) {
         const clearMask = () => { shoeEl.style.webkitMask = 'none'; shoeEl.style.mask = 'none'; };
         shoeEl.addEventListener('animationend', clearMask, { once: true });
-        setTimeout(clearMask, 900); // 폴백 (reduced-motion 등 animationend 미발생 대비)
+        setTimeout(clearMask, 1600); // 폴백 (reduced-motion 등 animationend 미발생 대비)
       }
       fetchRealTemp(_date, meta.startTime || act.startTime);
     }
