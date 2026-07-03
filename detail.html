@@ -1114,6 +1114,13 @@
       body.classList.remove('d-body-in');
       void body.offsetWidth;
       body.classList.add('d-body-in');
+      // 인터레이스 리빌 후 mask 제거 — mask 가 남아 있으면 drop-shadow 가 박스로 잘림
+      const shoeEl = body.querySelector('.nd-shoe');
+      if (shoeEl) {
+        const clearMask = () => { shoeEl.style.webkitMask = 'none'; shoeEl.style.mask = 'none'; };
+        shoeEl.addEventListener('animationend', clearMask, { once: true });
+        setTimeout(clearMask, 900); // 폴백 (reduced-motion 등 animationend 미발생 대비)
+      }
       fetchRealTemp(_date, meta.startTime || act.startTime);
     }
 
