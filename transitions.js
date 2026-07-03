@@ -13,8 +13,23 @@
     document.documentElement.classList.add('nav-' + _nav);
   }
 
+  /* 상세(detail)는 시트처럼 아래↔위 전환. from/to URL로 판별 */
+  function _sheetKind(fromUrl, toUrl) {
+    var f = /detail\.html/.test(fromUrl || '');
+    var t = /detail\.html/.test(toUrl || '');
+    if (t && !f) return 'sheet-open';   // 상세 진입 → 아래에서 위로
+    if (f && !t) return 'sheet-close';  // 상세 이탈 → 위에서 아래로
+    return null;                        // detail↔detail(제자리 전환)엔 해당 없음
+  }
+
   /* ── 2) pagereveal: VT types 주입 + bfcache 복원 대응 ── */
   window.addEventListener('pagereveal', function (e) {
+    if (!e.viewTransition || !e.viewTransition.types) return;
+    // 상세 시트 전환이면 방향(forward/back) 대신 sheet 타입 사용
+    var act = (self.navigation && navigation.activation) || null;
+    var kind = act ? _sheetKind(act.from && act.from.url, act.entry && act.entry.url) : null;
+    if (kind) { e.viewTransition.types.add(kind); return; }
+
     var nav = _nav;
     if (!nav) {
       nav = sessionStorage.getItem('runit-nav');
@@ -23,9 +38,17 @@
         document.documentElement.classList.add('nav-' + nav);
       }
     }
-    if (nav && e.viewTransition && e.viewTransition.types) {
-      e.viewTransition.types.add(nav);
-    }
+    if (nav) e.viewTransition.types.add(nav);
+  });
+
+  /* ── 2.5) pageswap: 떠나는 페이지에서도 sheet 타입 주입 ── */
+  window.addEventListener('pageswap', function (e) {
+    if (!e.viewTransition || !e.viewTransition.types || !e.activation) return;
+    var kind = _sheetKind(
+      e.activation.from && e.activation.from.url,
+      e.activation.entry && e.activation.entry.url
+    );
+    if (kind) e.viewTransition.types.add(kind);
   });
 
   /* ── Forward ── */

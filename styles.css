@@ -142,6 +142,41 @@ html.nav-back ::view-transition-old(root) {
     z-index: 1;
 }
 
+/* ── 상세(팝업) — 아래에서 위로 열리고, 위에서 아래로 닫힘 ── */
+@keyframes vt-sheet-in {
+    from {
+        transform: translateY(100%);
+    }
+}
+
+@keyframes vt-sheet-out {
+    to {
+        transform: translateY(100%);
+    }
+}
+
+/* 열림: 상세가 아래→위로. 아래 화면은 제자리 유지 */
+:active-view-transition-type(sheet-open)::view-transition-new(root) {
+    animation: vt-sheet-in 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+    z-index: 2;
+}
+
+:active-view-transition-type(sheet-open)::view-transition-old(root) {
+    animation: none;
+    z-index: 1;
+}
+
+/* 닫힘: 상세가 위→아래로. 아래 화면은 제자리 유지 */
+:active-view-transition-type(sheet-close)::view-transition-old(root) {
+    animation: vt-sheet-out 0.34s cubic-bezier(0.4, 0, 1, 1) both;
+    z-index: 2;
+}
+
+:active-view-transition-type(sheet-close)::view-transition-new(root) {
+    animation: none;
+    z-index: 1;
+}
+
 /* ─── Body / Phone ──────────────────────── */
 /* html 까지 배경 상속시켜야 iOS 일부 상태에서 하단 safe-area가 흰색으로 비치는 일 없음 */
 html {
