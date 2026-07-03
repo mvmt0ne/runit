@@ -953,16 +953,17 @@
       pointer-events: auto;
     }
 
+    /* 홈 화면 탭바(.tab-bar.tabbar-dark .tab-item)와 동일한 다크 글래스 알약 */
     .d-tab {
       flex: 0 0 auto;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 12px;
+      padding: 8px 18px;
       border: none;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      background: rgba(28, 28, 28, 0.55);
       backdrop-filter: blur(12px) saturate(140%);
       -webkit-backdrop-filter: blur(12px) saturate(140%);
       color: var(--slate-gray);
@@ -970,11 +971,11 @@
       font-weight: 600;
       font-family: 'Pretendard Variable', sans-serif;
       cursor: pointer;
-      transition: background 0.2s, opacity 0.2s;
+      transition: background 0.25s, opacity 0.2s;
     }
 
     .d-tab:active {
-      background: rgba(255, 255, 255, 0.16);
+      background: rgba(70, 70, 70, 0.7);
     }
 
     .d-tab:disabled {
@@ -982,10 +983,10 @@
       cursor: default;
     }
 
-    /* 가운데 목록 버튼 — 강조 */
+    /* 가운데 목록 버튼 — 홈 탭바 활성 알약과 동일 */
     .d-tab-list {
       color: var(--bone);
-      background: rgba(70, 70, 70, 0.55);
+      background: rgba(70, 70, 70, 0.7);
     }
   </style>
 </head>
