@@ -670,7 +670,7 @@
       width: 75%;
       margin: -14px auto -40px;
       transform: rotate(-35deg);
-      filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.5));
+      filter: drop-shadow(0 22px 22px rgba(0, 0, 0, 0.75));
       position: relative;
       z-index: 1;
       pointer-events: none;
@@ -1083,7 +1083,7 @@
         if (idx < 0) idx = times.indexOf(`${date}T12:00`);
         const t = idx >= 0 ? temps[idx] : null;
         if (t == null) return;
-        const txt = `🌡 ${Math.round(t)}°`;
+        const txt = `${Math.round(t)}°`;
         el.textContent = txt;
         cache[cacheKey] = txt;
         try { localStorage.setItem('runit-wxtemp', JSON.stringify(cache)); } catch (e) { }
