@@ -671,6 +671,56 @@
       z-index: 0;
     }
 
+    /* ─── 러닝화 미선택 상태 ─── */
+    .nd-hero-empty {
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      padding: 28px 20px 20px;
+    }
+
+    .nd-shoe-ghost {
+      width: 62%;
+      max-width: 280px;
+      height: auto;
+      color: rgba(218, 218, 218, 0.22);
+    }
+
+    .nd-add-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1.5px solid var(--accent);
+      background: transparent;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.18s;
+    }
+
+    .nd-add-btn svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .nd-hero-empty:active .nd-add-btn {
+      background: rgba(255, 90, 54, 0.12);
+      transform: scale(0.94);
+    }
+
+    .nd-empty-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--slate-gray);
+      letter-spacing: 0.02em;
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
     /* 래퍼가 크기·회전·그림자 담당 (mask 가 그림자를 잘라내지 않도록 분리) */
     .nd-shoe-wrap {
       display: block;
@@ -1166,6 +1216,7 @@
       _curShoeId = shoeObj ? shoeObj.id : null;
       const shoeImg = shoeObj ? shoeObj.image : (meta.shoe || null);
       const shoeName = shoeObj ? shoeObj.name : '';
+      const noShoe = !shoeObj && !shoeImg;
 
       // 신발 마일리지 — 기준 마일리지 + 시작일 이후 이 신발 활동 km 자동 합산
       let shoeMileage = null;
@@ -1208,11 +1259,21 @@
             <span class="nd-weather"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 0 0 0-9 6 6 0 0 0-11.6 2A4 4 0 0 0 6.5 19Z"/></svg><span id="d-temp"></span></span>
           </div>
 
+          ${noShoe ? `
+          <div class="nd-hero nd-hero-empty" onclick="openShoePicker()">
+            <svg class="nd-shoe-ghost" viewBox="0 0 200 92" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+              <path d="M12 46 C12 38 18 34 28 34 L52 34 C60 34 66 31 74 25 C82 19 90 14 100 15 C106 15.6 110 19 112 24 L118 39 C120 44 124 46 130 47 L168 52 C180 53.6 190 58 190 66 C190 72 186 76 176 76 L30 76 C18 76 12 70 12 62 Z"/>
+              <path d="M12 62 L190 66" opacity="0.5"/>
+              <path d="M78 27 L86 37 M90 22 L99 33 M103 18 L112 30" opacity="0.5"/>
+            </svg>
+            <button class="nd-add-btn" type="button" aria-label="러닝화 추가"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+            <span class="nd-empty-label">러닝화 선택</span>
+          </div>` : `
           <div class="nd-hero" onclick="openShoePicker()">
             <h1 class="nd-title">${titleText}</h1>
             ${shoeImg ? `<span class="nd-shoe-wrap"><img class="nd-shoe" src="${shoeImg}" alt="러닝화"></span>` : ''}
             <div class="nd-mileage"><span class="nd-mileage-label">MILEAGE</span><span class="nd-mileage-val">${shoeMileage != null ? shoeMileage : '--'}<em>K</em></span></div>
-          </div>
+          </div>`}
 
           <div class="nd-divider"></div>
 
