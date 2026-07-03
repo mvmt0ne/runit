@@ -1094,12 +1094,11 @@ sup {
     flex: 1;
     padding: 18px;
     border-radius: 100px;
-    border: none;
-    background: var(--accent);
+    border: 1px solid var(--bone);
     font-size: 18px;
     font-weight: 500;
     font-family: 'Pretendard Variable', sans-serif;
-    color: var(--asphalt-black);
+    color: var(--bone);
     cursor: pointer;
     transition: background 0.2s, color 0.2s, opacity 0.2s;
 }
@@ -1252,7 +1251,7 @@ sup {
     align-items: center;
     font-size: 22px;
     user-select: none;
-    color: var(--asphalt-black);
+    color: var(--bone);
 }
 
 .wheel-col-year .wheel-item {
