@@ -1095,7 +1095,7 @@
       const cacheKey = `${date}T${hh}`;
       let cache = {};
       try { cache = JSON.parse(localStorage.getItem('runit-wxtemp') || '{}'); } catch (e) { }
-      if (cache[cacheKey]) { el.textContent = cache[cacheKey]; return; }
+      if (cache[cacheKey]) { el.textContent = String(cache[cacheKey]).replace(/[^\d.\-°]/g, '').trim(); return; }
       let coords;
       try { coords = JSON.parse(localStorage.getItem('runit-coords')); } catch (e) { }
       // 저장된 좌표 없으면 직접 위치 요청 (허용 시 저장)
