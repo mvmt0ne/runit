@@ -899,8 +899,13 @@
       text-align: right;
       font-size: 12px;
       font-weight: 500;
-      color: var(--accent);
+      color: var(--cloudy-gray);
       font-family: 'Urbanist', sans-serif;
+    }
+
+    /* 평균보다 높을 때만 포인트 컬러 */
+    .nd-avg-delta.is-higher {
+      color: var(--accent);
     }
 
     /* 콘텐츠 전환 애니메이션 (이전/다음 시) */
@@ -1199,7 +1204,8 @@
       if (avg != null && avg !== 0) {
         const pct = ((val - avg) / avg) * 100;
         const arrow = Math.abs(pct) < 0.05 ? '·' : (pct < 0 ? '▼' : '▲');
-        delta = `<span class="nd-avg-delta">${arrow} ${Math.abs(Math.round(pct * 10) / 10)}</span>`;
+        const higher = pct >= 0.05;
+        delta = `<span class="nd-avg-delta${higher ? ' is-higher' : ''}">${arrow} ${Math.abs(Math.round(pct * 10) / 10)}</span>`;
       }
       return `<div class="nd-avg-row">
         <span class="nd-avg-label">${label}</span>
