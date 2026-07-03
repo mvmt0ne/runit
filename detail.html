@@ -607,8 +607,17 @@
     }
 
     .nd {
-      padding: 20px;
+      padding: 20px 0;
       color: var(--cloudy-gray);
+    }
+
+    /* 좌우 여백은 상단/히어로/요약에만 (평균기록·prev/next는 꽉 채움) */
+    .nd-top,
+    .nd-hero,
+    .nd-divider,
+    .nd-summary {
+      padding-left: 20px;
+      padding-right: 20px;
     }
 
     .nd-top {
@@ -702,7 +711,8 @@
     .nd-divider {
       height: 1px;
       background: rgba(255, 255, 255, 0.1);
-      margin: 18px 0 20px;
+      margin: 18px 20px 20px;
+      padding: 0 !important;
     }
 
     /* 요약 — 좌 활동명 / 우 스탯 스택 */
@@ -754,6 +764,7 @@
       margin-top: 26px;
       padding: 24px 22px 10px;
       background: var(--dark-gray);
+      border-radius: 0;
     }
 
     .nd-avg-title {
@@ -809,7 +820,7 @@
       flex: 1;
       background: var(--dark-gray);
       border: none;
-      border-radius: 14px;
+      border-radius: 0;
       color: var(--slate-gray);
       padding: 26px 22px;
       display: flex;
