@@ -1104,8 +1104,8 @@ sup {
 }
 
 .sf-apply-btn:disabled {
-    background: rgba(190, 190, 190, 0.1);
-    color: rgba(34, 34, 34, 0.7);
+    color: rgba(239, 238, 237, 0.4);
+    border: 1px solid rgba(239, 238, 237, 0.4);
     cursor: default;
 }
 
@@ -1752,6 +1752,6 @@ input[type="date"].pb-input::-webkit-calendar-picker-indicator {
 }
 
 .round-box {
-    border-radius: 8px;
-    margin: 3px;
+    border-radius: 12px;
+    margin: 3px 0;
 }
