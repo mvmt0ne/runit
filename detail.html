@@ -741,31 +741,31 @@
       font-family: 'Pretendard Variable', sans-serif;
     }
 
-    /* 래퍼: 크기·회전만. 그림자는 이미지 자체 filter 로 (마스킹 안 함 → 안 잘림) */
+    /* 래퍼: 크기/위치만 (transform·filter 없음 → 자식 그림자를 자르지 않음) */
     .nd-shoe-wrap {
       display: block;
       width: 75%;
       margin: -14px auto -40px;
-      transform: rotate(-35deg);
       position: relative;
       z-index: 1;
       pointer-events: none;
     }
 
+    /* 회전과 그림자를 같은 요소(img)에 → iOS 에서 부모 transform 이 자식 filter 를 클립하는 문제 회피 */
     .nd-shoe {
       display: block;
       width: 100%;
+      transform: rotate(-35deg);
       filter: drop-shadow(0 22px 22px rgba(0, 0, 0, 0.75));
       animation: shoe-develop 1.35s cubic-bezier(0.22, 1, 0.36, 1) both;
-      transform-origin: center 60%;
     }
 
-    /* 현상 리빌 — 흐릿·확대에서 선명·정위치로 (이미지에만 적용, 그림자 유지) */
+    /* 현상 리빌 — 흐릿·확대에서 선명·정위치로 (회전은 유지) */
     @keyframes shoe-develop {
       0% {
         opacity: 0;
         filter: drop-shadow(0 22px 22px rgba(0, 0, 0, 0.75)) blur(22px) contrast(1.4);
-        transform: scale(1.08);
+        transform: rotate(-35deg) scale(1.08);
       }
 
       35% {
@@ -775,12 +775,11 @@
       100% {
         opacity: 1;
         filter: drop-shadow(0 22px 22px rgba(0, 0, 0, 0.75)) blur(0) contrast(1);
-        transform: scale(1);
+        transform: rotate(-35deg) scale(1);
       }
     }
 
-    /* 인터레이스 스캔라인 — 이미지를 마스킹하지 않고 위에 덮는 오버레이로 처리.
-       배경색 스트라이프가 촘촘히 채워졌다가 사라지며 신발이 드러남. */
+    /* 인터레이스 스캔라인 — 이미지 위 오버레이(마스킹 아님). 이미지와 동일하게 회전시켜 정렬 */
     @property --sv {
       syntax: '<length>';
       inherits: false;
@@ -792,6 +791,7 @@
       inset: 0;
       z-index: 2;
       pointer-events: none;
+      transform: rotate(-35deg);
       --sv: 9px;
       background: repeating-linear-gradient(to bottom, var(--asphalt-black) 0, var(--asphalt-black) var(--sv), transparent var(--sv), transparent 9px);
       animation: shoe-scan 1.05s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -811,7 +811,7 @@
       .nd-shoe {
         animation: none;
         filter: drop-shadow(0 22px 22px rgba(0, 0, 0, 0.75));
-        transform: none;
+        transform: rotate(-35deg);
       }
 
       .nd-shoe-scan {
