@@ -46,7 +46,7 @@
       padding: 24px 20px 8px;
     }
 
-    .input-section + .input-section {
+    .input-section+.input-section {
       border-top: 1px solid rgba(255, 255, 255, 0.06);
       margin-top: 8px;
     }
@@ -109,8 +109,16 @@
       width: 0;
     }
 
-    .dt { position: relative; display: flex; }
-    .dt .input-field { width: 100%; padding-right: 42px; }
+    .dt {
+      position: relative;
+      display: flex;
+    }
+
+    .dt .input-field {
+      width: 100%;
+      padding-right: 42px;
+    }
+
     .dt-ico {
       position: absolute;
       right: 14px;
@@ -147,10 +155,12 @@
       flex: 1;
       display: flex;
     }
+
     .iu .input-field {
       flex: 1;
       padding-right: 46px;
     }
+
     .iu-suf {
       position: absolute;
       right: 14px;
@@ -360,7 +370,7 @@
       font-family: 'Pretendard Variable', sans-serif;
     }
 
-    .shoe-preview.has-image + .shoe-placeholder {
+    .shoe-preview.has-image+.shoe-placeholder {
       display: none;
     }
 
@@ -453,11 +463,19 @@
             <div class="field-row" style="gap:8px">
               <div class="dt" style="flex:2">
                 <input type="date" id="input-date" class="input-field" onclick="try{this.showPicker()}catch(e){}">
-                <svg class="dt-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                <svg class="dt-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <path d="M16 2v4M8 2v4M3 10h18" />
+                </svg>
               </div>
               <div class="dt" style="flex:1">
                 <input type="time" id="act-time" class="input-field" onclick="try{this.showPicker()}catch(e){}">
-                <svg class="dt-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                <svg class="dt-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M12 7v5l3 2" />
+                </svg>
               </div>
             </div>
             <div class="input-helper" id="date-helper">가민 활동 날짜 (YYYY-MM-DD). 같은 날짜면 덮어씀.</div>
@@ -470,14 +488,14 @@
               style="margin-bottom:8px">
             <select id="input-type" class="input-field" style="margin-bottom:8px">
               <option value="">-- type (비우면 CSV 자동 추정) --</option>
-              <option value="race">레이스</option>
-              <option value="tempo">템포</option>
-              <option value="interval">인터벌</option>
-              <option value="tt">타임 트라이얼</option>
-              <option value="steady">스테디런</option>
-              <option value="long">롱</option>
-              <option value="easy">이지</option>
               <option value="jogging">조깅</option>
+              <option value="easy">이지런</option>
+              <option value="steady">스테디런</option>
+              <option value="long">롱런</option>
+              <option value="tt">타임 트라이얼</option>
+              <option value="interval">인터벌</option>
+              <option value="tempo">템포런</option>
+              <option value="race">레이스</option>
             </select>
             <textarea id="input-note" class="input-field" placeholder="메모 (자유 텍스트)"
               style="min-height:80px;font-family:'Pretendard Variable',sans-serif;font-size:14px;margin-bottom:12px"></textarea>
@@ -489,19 +507,26 @@
           <div class="input-section">
             <label class="input-label">활동 본체 (CSV 없이 직접 추가)</label>
             <div class="field-row" style="gap:8px;margin-bottom:8px">
-              <div class="iu"><input type="number" step="0.01" inputmode="decimal" id="act-km" class="input-field" placeholder="거리"><span class="iu-suf">km</span></div>
-              <input type="text" inputmode="numeric" id="act-dur" class="input-field" placeholder="시간 (44:00 / 1:46:42)" style="flex:1">
+              <div class="iu"><input type="number" step="0.01" inputmode="decimal" id="act-km" class="input-field"
+                  placeholder="거리"><span class="iu-suf">km</span></div>
+              <input type="text" inputmode="numeric" id="act-dur" class="input-field" placeholder="시간 (44:00 / 1:46:42)"
+                style="flex:1">
             </div>
             <div class="field-row" style="gap:8px;margin-bottom:8px">
-              <div class="iu"><input type="text" inputmode="numeric" id="act-pace" class="input-field" placeholder="페이스 (비우면 자동)"><span class="iu-suf">/km</span></div>
-              <div class="iu"><input type="number" inputmode="numeric" id="act-bpm" class="input-field" placeholder="평균 심박"><span class="iu-suf">bpm</span></div>
+              <div class="iu"><input type="text" inputmode="numeric" id="act-pace" class="input-field"
+                  placeholder="페이스 (비우면 자동)"><span class="iu-suf">/km</span></div>
+              <div class="iu"><input type="number" inputmode="numeric" id="act-bpm" class="input-field"
+                  placeholder="평균 심박"><span class="iu-suf">bpm</span></div>
             </div>
             <div class="field-row" style="gap:8px;margin-bottom:8px">
-              <div class="iu"><input type="number" inputmode="numeric" id="act-spm" class="input-field" placeholder="케이던스"><span class="iu-suf">spm</span></div>
-              <div class="iu"><input type="number" step="1" inputmode="numeric" id="act-stride" class="input-field" placeholder="보폭"><span class="iu-suf">cm</span></div>
+              <div class="iu"><input type="number" inputmode="numeric" id="act-spm" class="input-field"
+                  placeholder="케이던스"><span class="iu-suf">spm</span></div>
+              <div class="iu"><input type="number" step="1" inputmode="numeric" id="act-stride" class="input-field"
+                  placeholder="보폭"><span class="iu-suf">cm</span></div>
             </div>
             <div class="field-row" style="gap:8px">
-              <div class="iu"><input type="number" inputmode="numeric" id="act-ground" class="input-field" placeholder="접지"><span class="iu-suf">ms</span></div>
+              <div class="iu"><input type="number" inputmode="numeric" id="act-ground" class="input-field"
+                  placeholder="접지"><span class="iu-suf">ms</span></div>
               <div style="flex:1"></div>
             </div>
             <div class="input-helper">거리만 채워도 추가됨. 이름·타입은 위 메타값 사용. 마일리지·리스트에 즉시 반영(새로고침).</div>
@@ -510,11 +535,14 @@
           <!-- 다른 화면 링크 -->
           <div class="input-section">
             <div class="field-row" style="gap:8px">
-              <button type="button" class="ghost-btn" style="flex:1;text-align:center" onclick="goTo('shoes.html')">👟 러닝화 등록</button>
-              <button type="button" class="ghost-btn" style="flex:1;text-align:center" onclick="goTo('import.html')">⬆ CSV 가져오기</button>
+              <button type="button" class="ghost-btn" style="flex:1;text-align:center" onclick="goTo('shoes.html')">👟
+                러닝화 등록</button>
+              <button type="button" class="ghost-btn" style="flex:1;text-align:center" onclick="goTo('import.html')">⬆
+                CSV 가져오기</button>
             </div>
             <div class="field-row" style="gap:8px;margin-top:8px">
-              <button type="button" class="ghost-btn" style="flex:1;text-align:center" onclick="goTo('manage.html')">🗂 저장 데이터 관리</button>
+              <button type="button" class="ghost-btn" style="flex:1;text-align:center" onclick="goTo('manage.html')">🗂
+                저장 데이터 관리</button>
             </div>
           </div>
 
