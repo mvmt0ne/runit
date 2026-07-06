@@ -741,8 +741,8 @@
       font-family: 'Pretendard Variable', sans-serif;
     }
 
-    /* 래퍼: 리빌 모션(세틀 인) 담당 — 화면 수직 기준 살짝 크게+위에서 부드럽게 안착.
-       transform·filter 없는 자식 구조라 그림자 클립 없음. */
+    /* 래퍼: 그림자(filter)만 담당. transform 없음(애니메이션도 없음)
+       → filter 의 조상에 transform 이 없어야 iOS 클립 버그가 안 남. */
     .nd-shoe-wrap {
       display: block;
       width: 75%;
@@ -750,6 +750,14 @@
       position: relative;
       z-index: 1;
       pointer-events: none;
+      filter: drop-shadow(0 22px 22px rgba(0, 0, 0, 0.75));
+    }
+
+    /* 회전 + 세틀 인 모션은 자식 img 에만 (translateY 를 맨 앞에 둬 화면 수직 기준 이동) */
+    .nd-shoe {
+      display: block;
+      width: 100%;
+      transform: translateY(0) rotate(-35deg) scale(1);
       animation: shoe-settle 0.7s cubic-bezier(0.22, 1, 0.3, 1) both;
     }
 
@@ -757,7 +765,7 @@
     @keyframes shoe-settle {
       0% {
         opacity: 0;
-        transform: translateY(-16px) scale(1.06);
+        transform: translateY(-16px) rotate(-35deg) scale(1.06);
       }
 
       60% {
@@ -766,26 +774,14 @@
 
       100% {
         opacity: 1;
-        transform: translateY(0) scale(1);
+        transform: translateY(0) rotate(-35deg) scale(1);
       }
     }
 
-    /* 그림자 — filter(drop-shadow)를 transform 없는 요소에 적용.
-       회전은 자식 img 에만 → iOS 의 "transform+filter 동일요소 박스 클립" 버그 회피. */
-    .nd-shoe-inner {
-      display: block;
-      filter: drop-shadow(0 22px 22px rgba(0, 0, 0, 0.75));
-    }
-
-    .nd-shoe {
-      display: block;
-      width: 100%;
-      transform: rotate(-35deg);
-    }
-
     @media (prefers-reduced-motion: reduce) {
-      .nd-shoe-wrap {
+      .nd-shoe {
         animation: none;
+        transform: rotate(-35deg);
       }
     }
 
@@ -1295,7 +1291,7 @@
           </div>` : `
           <div class="nd-hero" onclick="openShoePicker()">
             <h1 class="nd-title">${titleText}</h1>
-            ${shoeImg ? `<span class="nd-shoe-wrap"><span class="nd-shoe-inner"><img class="nd-shoe" src="${shoeImg}" alt="러닝화"></span></span>` : ''}
+            ${shoeImg ? `<span class="nd-shoe-wrap"><img class="nd-shoe" src="${shoeImg}" alt="러닝화"></span>` : ''}
             <div class="nd-mileage"><span class="nd-mileage-label">MILEAGE</span><span class="nd-mileage-val">${shoeMileage != null ? shoeMileage : '--'}<em>K</em></span></div>
           </div>`}
 
