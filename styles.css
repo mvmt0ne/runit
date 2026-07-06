@@ -740,12 +740,12 @@ sup {
 
 .lp-run-name {
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 700;
     min-width: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: var(--slate-gray);
+    color: var(--bone);
     flex: 1;
 }
 
@@ -778,7 +778,7 @@ sup {
     font-family: 'Urbanist', ui-monospace, monospace;
     font-feature-settings: 'tnum';
     line-height: 1;
-    color: var(--slate-gray);
+    color: var(--cloudy-gray);
 }
 
 .lp-stat-label {
@@ -1702,17 +1702,6 @@ input[type='range'].range-input::-moz-range-thumb {
 .zone-input:focus,
 .pb-input:focus {
     border-bottom-color: var(--accent);
-}
-
-/* select 펼침 아이콘 — 네이티브 어두운 화살표 대신 밝은 커스텀 셰브론 */
-select.input-field {
-    -webkit-appearance: none;
-    appearance: none;
-    padding-right: 26px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23c9c9c9' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 6.2 8 3.2 11 6.2'/%3E%3Cpath d='M5 9.8 8 12.8 11 9.8'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 2px center;
-    background-size: 16px 16px;
 }
 
 .pb-input {
