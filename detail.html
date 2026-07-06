@@ -471,9 +471,24 @@
       z-index: 61;
       background: var(--bg-modal);
       border-radius: 16px 16px 0 0;
-      padding: 18px 0 calc(24px + env(safe-area-inset-bottom, 0px));
+      padding: 10px 0 calc(24px + env(safe-area-inset-bottom, 0px));
       transform: translateY(100%);
       transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* 드래그 핸들 (다른 바텀시트와 동일) */
+    .shoe-grabber {
+      width: 40px;
+      height: 5px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.28);
+      margin: 6px auto 14px;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    .shoe-grabber:active {
+      cursor: grabbing;
     }
 
     .shoe-sheet.open {
@@ -1053,6 +1068,7 @@
   <!-- 신발 선택 시트 (롤링) -->
   <div class="shoe-sheet-backdrop" id="shoe-backdrop" onclick="closeShoePicker()"></div>
   <div class="shoe-sheet" id="shoe-sheet">
+    <div class="shoe-grabber" id="shoe-grabber"></div>
     <div class="shoe-sheet-head">
       <span class="shoe-sheet-title">러닝화 선택</span>
       <div class="shoe-sheet-actions">
@@ -1324,14 +1340,53 @@
             <span class="shoe-card-name">${escapeHTML(s.name)}</span>
           </div>`).join('')}</div>`;
       }
+      const sheet = document.getElementById('shoe-sheet');
+      sheet.style.transition = '';
+      sheet.style.transform = '';   // 드래그 override 리셋
       document.getElementById('shoe-backdrop').classList.add('open');
-      document.getElementById('shoe-sheet').classList.add('open');
+      sheet.classList.add('open');
     }
 
     function closeShoePicker() {
+      const sheet = document.getElementById('shoe-sheet');
+      sheet.style.transition = '';
+      sheet.style.transform = '';   // 인라인 override 제거 → CSS translateY(100%) 로 닫힘
       document.getElementById('shoe-backdrop').classList.remove('open');
-      document.getElementById('shoe-sheet').classList.remove('open');
+      sheet.classList.remove('open');
     }
+
+    // 핸들 드래그로 아래로 내려 닫기 (일정 이상 내리면 닫힘, 아니면 스냅백)
+    (function () {
+      const grab = document.getElementById('shoe-grabber');
+      const sheet = document.getElementById('shoe-sheet');
+      if (!grab || !sheet) return;
+      let startY = 0, dy = 0, dragging = false;
+      function down(e) {
+        dragging = true; dy = 0;
+        startY = e.touches ? e.touches[0].clientY : e.clientY;
+        sheet.style.transition = 'none';
+        if (e.cancelable) e.preventDefault();
+      }
+      function move(e) {
+        if (!dragging) return;
+        const y = e.touches ? e.touches[0].clientY : e.clientY;
+        dy = Math.max(0, y - startY);   // 아래로만
+        sheet.style.transform = `translateY(${dy}px)`;
+      }
+      function up() {
+        if (!dragging) return;
+        dragging = false;
+        sheet.style.transition = '';
+        if (dy > 100) closeShoePicker();
+        else sheet.style.transform = '';   // 스냅백
+      }
+      grab.addEventListener('touchstart', down, { passive: false });
+      window.addEventListener('touchmove', move, { passive: false });
+      window.addEventListener('touchend', up);
+      grab.addEventListener('mousedown', down);
+      window.addEventListener('mousemove', move);
+      window.addEventListener('mouseup', up);
+    })();
 
     function selectShoe(id) {
       const meta = getMeta(_date) || {};
