@@ -1013,25 +1013,31 @@
       pointer-events: auto;
     }
 
-    /* 홈 화면 탭바(.tab-bar.tabbar-dark .tab-item)와 동일한 다크 글래스 알약 */
+    /* 홈 화면 탭바(.tab-bar.tabbar-dark .tab-item)와 컬러·사이즈 동일한 다크 글래스 알약 */
     .d-tab {
       flex: 0 0 auto;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 8px 18px;
+      /* 홈 알약(tab-item 패딩8·14 + tab-icon 30px) 총 크기 58×46 과 동일하게 (아이콘 28px 기준) */
+      padding: 9px 15px;
       border: none;
       border-radius: 8px;
       background: rgba(28, 28, 28, 0.55);
       backdrop-filter: blur(12px) saturate(140%);
       -webkit-backdrop-filter: blur(12px) saturate(140%);
       color: var(--slate-gray);
-      font-size: 15px;
-      font-weight: 600;
       font-family: 'Pretendard Variable', sans-serif;
       cursor: pointer;
       transition: background 0.25s, opacity 0.2s;
+    }
+
+    /* 아이콘 — 홈 .tab-icon(30px 박스, svg 28px)과 동일 */
+    .d-tab svg {
+      width: 28px;
+      height: 28px;
+      display: block;
     }
 
     .d-tab:active {
