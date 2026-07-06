@@ -1130,11 +1130,11 @@ sup {
     flex: 1;
     padding: 18px;
     border-radius: 100px;
-    border: 1px solid var(--bone);
+    background: var(--bone);
     font-size: 18px;
     font-weight: 500;
     font-family: 'Pretendard Variable', sans-serif;
-    color: var(--bone);
+    color: var(--asphalt-black);
     cursor: pointer;
     transition: background 0.2s, color 0.2s, opacity 0.2s;
 }
@@ -1248,7 +1248,7 @@ sup {
     right: 20px;
     top: 50%;
     transform: translateY(-50%);
-    background: rgb(180 180 180 / 20%);
+    background: rgb(180 180 180 / 8%);
     border-radius: 4px;
     height: 52px;
     pointer-events: none;
@@ -1302,7 +1302,7 @@ sup {
 
 .wheel-sheet-footer {
     display: flex;
-    padding: 28px 20px 0px;
+    padding: 28px 140px 0px;
     flex-shrink: 0;
 }
 
