@@ -775,7 +775,7 @@ sup {
 .lp-stat-value {
     font-size: 18px;
     font-weight: 400;
-    font-family: 'Urbanist', ui-monospace, monospace;
+    font-family: 'Space Mono', monospace;
     font-feature-settings: 'tnum';
     line-height: 1;
     color: var(--cloudy-gray);
