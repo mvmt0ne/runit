@@ -1851,7 +1851,7 @@
     // 런타입 → 강도 등급 (도넛 범례와 일치)
     const TYPE_INTENSITY = {
       race: 'high', tt: 'high', tempo: 'high', interval: 'high',
-      long: 'mid',
+      steady: 'mid', long: 'mid',
       easy: 'low', jogging: 'low',
     };
 
@@ -1861,6 +1861,7 @@
         { key: 'tt', label: 'TT' },
         { key: 'tempo', label: 'Tempo' },
         { key: 'interval', label: 'Interval' },
+        { key: 'steady', label: 'Steady' },
         { key: 'easy', label: 'Easy' },
         { key: 'jogging', label: 'Jogging' },
         { key: 'long', label: 'Long' },
@@ -1870,7 +1871,7 @@
       const counts = {};
       RUN_TYPES.forEach(t => (counts[t.key] = 0));
       runs.forEach(r => {
-        const t = (typeof normRunType === 'function') ? normRunType(r.type) : r.type; // steady→tempo
+        const t = (typeof normRunType === 'function') ? normRunType(r.type) : r.type; // 런타입 정규화
         if (t in counts) counts[t]++;
       });
       const maxCount = Math.max(...RUN_TYPES.map(t => counts[t.key]), 1);

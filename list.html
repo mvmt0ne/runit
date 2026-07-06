@@ -267,7 +267,7 @@
             // 사용자 오버라이드 메타(이름/타입) 반영 — detail 과 일치
             const meta = (typeof getMeta === 'function') ? (getMeta(a.date) || {}) : {};
             let type = meta.type || a.type;
-            if (typeof normRunType === 'function') type = normRunType(type); // steady→tempo
+            if (typeof normRunType === 'function') type = normRunType(type); // 런타입 정규화
             return {
                 id: idx + 1,
                 date: a.date,

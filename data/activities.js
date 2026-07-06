@@ -47,9 +47,9 @@ function inferType(title) {
   return 'easy';
 }
 
-/* ── 런타입 정규화 — steady 는 tempo 로 병합 (레거시 저장값 호환) ── */
+/* ── 런타입 정규화 — 현재는 그대로 통과 (steady 를 독립 타입으로 유지) ── */
 function normRunType(t) {
-  return t === 'steady' ? 'tempo' : t;
+  return t;
 }
 
 /* ── 안전한 숫자 변환 (쉼표/따옴표 제거) ── */
