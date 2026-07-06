@@ -80,6 +80,15 @@
 
     /* 프로필 */
     .profile-section { display: flex; flex-direction: column; align-items: center; gap: 14px; padding-top: 28px; }
+    .app-version {
+      text-align: center;
+      padding: 20px 0 8px;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: var(--text-2);
+      opacity: 0.5;
+      font-family: 'Urbanist', sans-serif;
+    }
     .mp-avatar {
       position: relative; width: 96px; height: 96px; border-radius: 50%;
       background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.14);
@@ -192,6 +201,9 @@
               러닝화는 전체 삭제에서 제외됩니다(자산). CSV 마스터(data/activities.csv)는 영향 없습니다.
             </div>
           </div>
+
+          <!-- 버전 -->
+          <div class="app-version" id="app-version">runit</div>
         </div>
       </div>
     </div>
@@ -209,6 +221,18 @@
       if (window.history.length > 1) { history.back(); return; }
       goBack('input.html');
     }
+
+    // 실제 활성 서비스워커 캐시 이름(runit-vXXX)을 읽어 표시 — 기기에서 배포 버전 확인용
+    (async function showVersion() {
+      const el = document.getElementById('app-version');
+      if (!el || !('caches' in window)) return;
+      try {
+        const keys = await caches.keys();
+        const v = keys.map(k => (k.match(/runit-v(\d+)/) || [])[1])
+          .filter(Boolean).map(Number).sort((a, b) => b - a)[0];
+        if (v != null) el.textContent = 'runit · v' + v;
+      } catch (e) { /* ignore */ }
+    })();
     function showToast(msg) {
       const t = document.getElementById('toast');
       t.textContent = msg;
