@@ -153,6 +153,27 @@
             font-family: 'Pretendard Variable', sans-serif;
             opacity: 0.5;
         }
+
+        /* 정렬·필터 시트 — 핸들 드래그로 높이 조절 */
+        #sort-sheet,
+        #filter-sheet {
+            max-height: 90%;
+        }
+
+        /* 드래그로 커질 때 내용이 늘어나도록 (공유 .month-list max-height 해제) */
+        #sf-sort-opts {
+            flex: 1;
+            max-height: none;
+            min-height: 0;
+        }
+
+        #sort-sheet .sf-grabber,
+        #sort-sheet .sf-sheet-header,
+        #filter-sheet .sf-grabber,
+        #filter-sheet .sf-sheet-header {
+            cursor: grab;
+            touch-action: none;
+        }
     </style>
 </head>
 
@@ -508,7 +529,9 @@
         /* ─── Sort / Filter sheets ── */
         function openSortSheet() {
             renderSortPanel();
-            document.getElementById('sort-sheet').classList.add('open');
+            const s = document.getElementById('sort-sheet');
+            s.style.transition = ''; s.style.height = '';   // 드래그 override 리셋
+            s.classList.add('open');
             document.getElementById('sf-backdrop').classList.add('open');
         }
 
@@ -516,9 +539,44 @@
             draftFilter = cloneFilter(filterState); // 현재 적용값을 초안으로 복사
             renderFilterPanel();
             updateApplyState();
-            document.getElementById('filter-sheet').classList.add('open');
+            const s = document.getElementById('filter-sheet');
+            s.style.transition = ''; s.style.height = '';
+            s.classList.add('open');
             document.getElementById('sf-backdrop').classList.add('open');
         }
+
+        // 시트 핸들 드래그 — 위로 끌면 커지고, 아래로 많이 내리면 닫힘 (월 시트와 동일)
+        (function () {
+            let sheet = null, startY = 0, startH = 0;
+            function down(e) {
+                const s = e.currentTarget.closest('.month-modal');
+                if (!s) return;
+                sheet = s;
+                startY = e.touches ? e.touches[0].clientY : e.clientY;
+                startH = s.getBoundingClientRect().height;
+                s.style.transition = 'none';
+                if (e.cancelable) e.preventDefault();
+            }
+            function move(e) {
+                if (!sheet) return;
+                const y = e.touches ? e.touches[0].clientY : e.clientY;
+                let h = startH - (y - startY);          // 위로 끌면 커짐
+                h = Math.max(120, Math.min(h, window.innerHeight * 0.9));
+                sheet.style.height = h + 'px';
+            }
+            function up() {
+                if (!sheet) return;
+                const s = sheet; sheet = null;
+                s.style.transition = '';
+                if (s.getBoundingClientRect().height < 180) closeSFSheet();
+            }
+            document.querySelectorAll('#sort-sheet .sf-grabber, #sort-sheet .sf-sheet-header, #filter-sheet .sf-grabber, #filter-sheet .sf-sheet-header')
+                .forEach(z => { z.addEventListener('touchstart', down, { passive: false }); z.addEventListener('mousedown', down); });
+            window.addEventListener('touchmove', move, { passive: false });
+            window.addEventListener('touchend', up);
+            window.addEventListener('mousemove', move);
+            window.addEventListener('mouseup', up);
+        })();
 
         // 초안이 적용값과 다르면 적용 버튼 활성화
         function updateApplyState() {
