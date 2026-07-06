@@ -154,11 +154,12 @@
             opacity: 0.5;
         }
 
-        /* 정렬·필터 시트 — 초기 50%(미니멈), 드래그로 90%(맥시멈)까지 */
+        /* 정렬·필터 시트 — 초기 50%(미니멈), 드래그로 90%(맥시멈)까지.
+           %는 iOS에서 조상(뷰포트보다 큰 phone-inner) 기준이라 dvh(뷰포트)로 고정 */
         #sort-sheet,
         #filter-sheet {
-            height: 50%;
-            max-height: 90%;
+            height: 50dvh;
+            max-height: 90dvh;
         }
 
         /* 드래그로 커질 때 내용이 늘어나도록 (공유 .month-list max-height 해제) */

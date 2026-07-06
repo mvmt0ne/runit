@@ -755,10 +755,11 @@
       background: transparent;
     }
 
-    /* 월 시트: 초기 50%(미니멈), 드래그로 90%(맥시멈)까지 */
+    /* 월 시트: 초기 50%(미니멈), 드래그로 90%(맥시멈)까지.
+       %는 iOS에서 조상(뷰포트보다 큰 phone-inner) 기준이라 dvh(뷰포트)로 고정 */
     #month-sheet {
-      height: 50%;
-      max-height: 90%;
+      height: 50dvh;
+      max-height: 90dvh;
     }
 
     /* 시트 높이에 맞춰 리스트가 늘어나도록 (공유 .month-list 의 max-height:300 해제) */
