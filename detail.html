@@ -741,7 +741,8 @@
       font-family: 'Pretendard Variable', sans-serif;
     }
 
-    /* 래퍼: 크기/위치만 (transform·filter 없음 → 자식 그림자를 자르지 않음) */
+    /* 래퍼: 리빌 모션(세틀 인) 담당 — 화면 수직 기준 살짝 크게+위에서 부드럽게 안착.
+       transform·filter 없는 자식 구조라 그림자 클립 없음. */
     .nd-shoe-wrap {
       display: block;
       width: 75%;
@@ -749,92 +750,42 @@
       position: relative;
       z-index: 1;
       pointer-events: none;
+      animation: shoe-settle 0.7s cubic-bezier(0.22, 1, 0.3, 1) both;
     }
 
-    /* 그림자 — filter(drop-shadow)를 transform 없는 래퍼에 적용.
-       회전은 자식 img 에만 → iOS 의 "transform+filter 동일요소 박스 클립" 버그 회피.
-       실루엣을 따르는 실제 그림자라 신발 뒤로 가려지지 않고 보임. */
-    .nd-shoe-inner {
-      display: block;
-      filter: drop-shadow(0 22px 22px rgba(0, 0, 0, 0.75));
-      animation: shoe-blur 1.35s cubic-bezier(0.22, 1, 0.36, 1) both;
-    }
-
-    @keyframes shoe-blur {
+    /* 세틀 인 — 위로 16px 뜬 채 1.06배로 들어와 제자리에 안착 (제품 화보 느낌) */
+    @keyframes shoe-settle {
       0% {
-        filter: drop-shadow(0 10px 10px rgba(0, 0, 0, 0.75)) blur(22px) contrast(1.4);
+        opacity: 0;
+        transform: translateY(-16px) scale(1.06);
+      }
+
+      60% {
+        opacity: 1;
       }
 
       100% {
-        filter: drop-shadow(0 10px 10px rgba(0, 0, 0, 0.75)) blur(0) contrast(1);
+        opacity: 1;
+        transform: translateY(0) scale(1);
       }
+    }
+
+    /* 그림자 — filter(drop-shadow)를 transform 없는 요소에 적용.
+       회전은 자식 img 에만 → iOS 의 "transform+filter 동일요소 박스 클립" 버그 회피. */
+    .nd-shoe-inner {
+      display: block;
+      filter: drop-shadow(0 22px 22px rgba(0, 0, 0, 0.75));
     }
 
     .nd-shoe {
       display: block;
       width: 100%;
       transform: rotate(-35deg);
-      animation: shoe-develop 1.35s cubic-bezier(0.22, 1, 0.36, 1) both;
-    }
-
-    /* 현상 리빌 — 확대·페이드 (회전 유지, filter 없음) */
-    @keyframes shoe-develop {
-      0% {
-        opacity: 0;
-        transform: rotate(-35deg) scale(1.08);
-      }
-
-      35% {
-        opacity: 1;
-      }
-
-      100% {
-        opacity: 1;
-        transform: rotate(-35deg) scale(1);
-      }
-    }
-
-    /* 인터레이스 스캔라인 — 이미지 위 오버레이(마스킹 아님). 이미지와 동일하게 회전시켜 정렬 */
-    @property --sv {
-      syntax: '<length>';
-      inherits: false;
-      initial-value: 0px;
-    }
-
-    .nd-shoe-scan {
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      pointer-events: none;
-      transform: rotate(-35deg);
-      --sv: 9px;
-      background: repeating-linear-gradient(to bottom, var(--asphalt-black) 0, var(--asphalt-black) var(--sv), transparent var(--sv), transparent 9px);
-      animation: shoe-scan 1.05s cubic-bezier(0.22, 1, 0.36, 1) both;
-    }
-
-    @keyframes shoe-scan {
-      from {
-        --sv: 9px;
-      }
-
-      to {
-        --sv: 0px;
-      }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .nd-shoe-inner {
+      .nd-shoe-wrap {
         animation: none;
-        filter: drop-shadow(0 22px 22px rgba(0, 0, 0, 0.75));
-      }
-
-      .nd-shoe {
-        animation: none;
-        transform: rotate(-35deg);
-      }
-
-      .nd-shoe-scan {
-        display: none;
       }
     }
 
@@ -1344,7 +1295,7 @@
           </div>` : `
           <div class="nd-hero" onclick="openShoePicker()">
             <h1 class="nd-title">${titleText}</h1>
-            ${shoeImg ? `<span class="nd-shoe-wrap"><span class="nd-shoe-inner"><img class="nd-shoe" src="${shoeImg}" alt="러닝화"></span><span class="nd-shoe-scan"></span></span>` : ''}
+            ${shoeImg ? `<span class="nd-shoe-wrap"><span class="nd-shoe-inner"><img class="nd-shoe" src="${shoeImg}" alt="러닝화"></span></span>` : ''}
             <div class="nd-mileage"><span class="nd-mileage-label">MILEAGE</span><span class="nd-mileage-val">${shoeMileage != null ? shoeMileage : '--'}<em>K</em></span></div>
           </div>`}
 
