@@ -1265,14 +1265,15 @@
     }
 
     // 평균 대비 행 (심박/케이던스/보폭/접지)
-    function ndAvgRow(label, val, unit, avg) {
+    // lowerBetter=true 면 평균보다 "낮을 때" 포인트 컬러 (심박·접지시간처럼 낮을수록 좋은 지표)
+    function ndAvgRow(label, val, unit, avg, lowerBetter) {
       if (val == null || val === '' || isNaN(val)) return '';
       let delta = '';
       if (avg != null && avg !== 0) {
         const pct = ((val - avg) / avg) * 100;
         const arrow = Math.abs(pct) < 0.05 ? '·' : (pct < 0 ? '▼' : '▲');
-        const higher = pct >= 0.05;
-        delta = `<span class="nd-avg-delta${higher ? ' is-higher' : ''}">${arrow} ${Math.abs(Math.round(pct * 10) / 10)}</span>`;
+        const good = lowerBetter ? (pct <= -0.05) : (pct >= 0.05);
+        delta = `<span class="nd-avg-delta${good ? ' is-higher' : ''}">${arrow} ${Math.abs(Math.round(pct * 10) / 10)}</span>`;
       }
       return `<div class="nd-avg-row">
         <span class="nd-avg-label">${label}</span>
@@ -1315,11 +1316,11 @@
 
       // 평균 기록 (전체 활동 평균 대비)
       const avgRows = [
-        ndAvgRow('심박', act.bpm, 'bpm', avgOf(list, 'bpm')),
+        ndAvgRow('심박', act.bpm, 'bpm', avgOf(list, 'bpm'), true),
         ndAvgRow('케이던스', act.spm, 'spm', avgOf(list, 'spm')),
         ndAvgRow('보폭', act.stride != null ? Math.round(act.stride * 100) : null, 'cm',
           avgOf(list, 'stride') != null ? avgOf(list, 'stride') * 100 : null),
-        ndAvgRow('접지시간', act.ground, 'ms', avgOf(list, 'ground')),
+        ndAvgRow('접지시간', act.ground, 'ms', avgOf(list, 'ground'), true),
       ].filter(Boolean).join('');
       const avgCard = avgRows ? `
         <div class="nd-avg round-box">
