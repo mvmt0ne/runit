@@ -742,7 +742,7 @@
     .month-item-meta {
       font-size: 13px;
       font-family: 'Urbanist', sans-serif;
-      color: var(--text-3);
+      color: var(--cloudy-gray);
       transition: color 0.2s;
     }
 
@@ -753,6 +753,33 @@
     /* 월 선택 확인 버튼 — 비활성 상태는 채움 없이 (선택 전) */
     #month-apply:disabled {
       background: transparent;
+    }
+
+    /* 월 시트: 드래그 핸들 + 핸들로 높이 조절 */
+    #month-sheet {
+      height: 56%;
+      max-height: 90%;
+    }
+
+    .sf-handle {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 0 4px;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    .sf-handle:active {
+      cursor: grabbing;
+    }
+
+    .sf-handle-bar {
+      width: 40px;
+      height: 5px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.28);
     }
 
     /* ─── FAB ─────────────────────────────── */
@@ -932,15 +959,9 @@
       <!-- ── Month Picker Sheet ── -->
       <div class="sf-backdrop" id="month-backdrop" onclick="closeMonthSheet()"></div>
       <div class="month-modal" id="month-sheet">
-        <div class="sf-sheet-header" style="padding: 18px 20px 14px; flex-shrink:0;">
+        <div class="sf-handle" id="month-handle"><span class="sf-handle-bar"></span></div>
+        <div class="sf-sheet-header" style="padding: 2px 20px 12px; flex-shrink:0;">
           <span class="sf-sheet-title">월 선택</span>
-          <button class="sf-sheet-close" onclick="closeMonthSheet()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 6 6 18" />
-              <path d="m6 6 12 12" />
-            </svg>
-          </button>
         </div>
         <div class="month-list" id="month-list" style="flex:1; overflow-y:auto; padding:4px 12px 8px;"></div>
         <div class="wheel-sheet-footer">
@@ -1200,7 +1221,10 @@
       renderMonthList();
       const btn = document.getElementById('month-apply');
       if (btn) btn.disabled = true;   // 선택 전에는 비활성화
-      document.getElementById('month-sheet').classList.add('open');
+      const sheet = document.getElementById('month-sheet');
+      sheet.style.transition = '';    // 드래그 후 남은 override 제거
+      sheet.style.height = '';        // 기본 높이(56%)로 리셋
+      sheet.classList.add('open');
       document.getElementById('month-backdrop').classList.add('open');
       // 현재 월을 화면 중앙으로 스크롤
       requestAnimationFrame(() => {
@@ -1258,6 +1282,44 @@
       document.getElementById('month-sheet').classList.remove('open');
       document.getElementById('month-backdrop').classList.remove('open');
     }
+
+    // 핸들 드래그로 시트 높이 조절 (아래로 크게 내리면 닫힘)
+    (function () {
+      const handle = document.getElementById('month-handle');
+      const sheet = document.getElementById('month-sheet');
+      if (!handle || !sheet) return;
+      let startY = 0, startH = 0, dragging = false;
+
+      function onDown(e) {
+        dragging = true;
+        startY = (e.touches ? e.touches[0].clientY : e.clientY);
+        startH = sheet.getBoundingClientRect().height;
+        sheet.style.transition = 'none';       // 드래그 중 즉각 반응
+        if (e.cancelable) e.preventDefault();
+      }
+      function onMove(e) {
+        if (!dragging) return;
+        const y = (e.touches ? e.touches[0].clientY : e.clientY);
+        const maxH = window.innerHeight * 0.9;
+        let h = startH - (y - startY);          // 위로 끌면 커짐
+        h = Math.max(120, Math.min(h, maxH));
+        sheet.style.height = h + 'px';
+      }
+      function onUp() {
+        if (!dragging) return;
+        dragging = false;
+        sheet.style.transition = '';            // 애니메이션 복구
+        // 너무 작아졌으면 닫기
+        if (sheet.getBoundingClientRect().height < 180) closeMonthSheet();
+      }
+
+      handle.addEventListener('touchstart', onDown, { passive: false });
+      window.addEventListener('touchmove', onMove, { passive: false });
+      window.addEventListener('touchend', onUp);
+      handle.addEventListener('mousedown', onDown);
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('mouseup', onUp);
+    })();
 
     // Swipe (touch + mouse) on calendar
     (function () {
