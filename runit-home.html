@@ -750,6 +750,11 @@
       color: var(--accent);
     }
 
+    /* 월 선택 확인 버튼 — 비활성 상태는 채움 없이 (선택 전) */
+    #month-apply:disabled {
+      background: transparent;
+    }
+
     /* ─── FAB ─────────────────────────────── */
     .fab {
       position: absolute;
@@ -937,19 +942,9 @@
             </svg>
           </button>
         </div>
-        <div class="wheel-picker">
-          <div class="wheel-highlight"></div>
-          <div class="wheel-col wheel-col-year" id="wheel-year">
-            <div class="wheel-spacer"></div>
-            <div class="wheel-spacer"></div>
-          </div>
-          <div class="wheel-col" id="wheel-month">
-            <div class="wheel-spacer"></div>
-            <div class="wheel-spacer"></div>
-          </div>
-        </div>
+        <div class="month-list" id="month-list" style="flex:1; overflow-y:auto; padding:4px 12px 8px;"></div>
         <div class="wheel-sheet-footer">
-          <button class="sf-apply-btn" onclick="confirmMonthPick()">확인</button>
+          <button class="sf-apply-btn" id="month-apply" onclick="confirmMonthPick()" disabled>확인</button>
         </div>
       </div>
 
@@ -1175,7 +1170,6 @@
     ═══════════════════════════════════════ */
     let ALL_MONTHS = [];        // [{year, month}] 내림차순 (최신 → 과거)
     let MONTH_KEY_MAP = {};     // 'YYYY-M' → MONTHS_ORDER idx
-    let WHEEL_YEARS = [];
 
     function buildWheelMonths() {
       // 데이터 있는 가장 오래된 달 ~ 가장 최신 달 범위로 휠 채움
@@ -1197,70 +1191,54 @@
         const [y, m] = ym.split('-').map(n => parseInt(n, 10));
         MONTH_KEY_MAP[`${y}-${m}`] = idx;
       });
-      WHEEL_YEARS = [...new Set(ALL_MONTHS.map(m => m.year))].sort((a, b) => b - a);
-    }
-    const WHEEL_ITEM_H = 44;
-
-    function getMonthsForYear(year) {
-      return ALL_MONTHS
-        .filter(m => m.year === year)
-        .map(m => m.month)
-        .sort((a, b) => b - a);
     }
 
-    let _wheelMonths = [];
-
-    function buildMonthWheel(year, snapMonth) {
-      _wheelMonths = getMonthsForYear(year);
-      const col = document.getElementById('wheel-month');
-      col.innerHTML =
-        '<div class="wheel-spacer"></div>' +
-        _wheelMonths.map(m => `<div class="wheel-item">${m}월</div>`).join('') +
-        '<div class="wheel-spacer"></div>';
-      const idx = snapMonth !== undefined
-        ? Math.max(0, _wheelMonths.indexOf(snapMonth))
-        : 0;
-      col.scrollTop = idx * WHEEL_ITEM_H;
-    }
+    let _pickedIdx = null;   // 리스트에서 탭해 고른 월 인덱스 (확인 활성화 기준)
 
     function openMonthSheet() {
-      const curObj = ALL_MONTHS.find(m => MONTH_KEY_MAP[`${m.year}-${m.month}`] === currentMonthIdx);
-      const initYear = curObj ? curObj.year : WHEEL_YEARS[0];
-      const initMonth = curObj ? curObj.month : getMonthsForYear(WHEEL_YEARS[0])[0];
-
-      const yearCol = document.getElementById('wheel-year');
-      yearCol.innerHTML =
-        '<div class="wheel-spacer"></div>' +
-        WHEEL_YEARS.map(y => `<div class="wheel-item">${y}년</div>`).join('') +
-        '<div class="wheel-spacer"></div>';
-      yearCol.scrollTop = WHEEL_YEARS.indexOf(initYear) * WHEEL_ITEM_H;
-
-      buildMonthWheel(initYear, initMonth);
-
-      let _yearTimer = null;
-      yearCol.onscroll = () => {
-        clearTimeout(_yearTimer);
-        _yearTimer = setTimeout(() => {
-          const yi = Math.round(yearCol.scrollTop / WHEEL_ITEM_H);
-          const y = WHEEL_YEARS[Math.max(0, Math.min(yi, WHEEL_YEARS.length - 1))];
-          buildMonthWheel(y);
-        }, 120);
-      };
-
+      _pickedIdx = null;
+      renderMonthList();
+      const btn = document.getElementById('month-apply');
+      if (btn) btn.disabled = true;   // 선택 전에는 비활성화
       document.getElementById('month-sheet').classList.add('open');
       document.getElementById('month-backdrop').classList.add('open');
+      // 현재 월을 화면 중앙으로 스크롤
+      requestAnimationFrame(() => {
+        const cur = document.querySelector(`#month-list .month-item[data-idx="${currentMonthIdx}"]`);
+        if (cur) cur.scrollIntoView({ block: 'center' });
+      });
+    }
+
+    const _MONTH_NAMES = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+
+    function renderMonthList() {
+      const wrap = document.getElementById('month-list');
+      if (!wrap) return;
+      wrap.innerHTML = ALL_MONTHS.map(o => {
+        const idx = MONTH_KEY_MAP[`${o.year}-${o.month}`];
+        if (idx === undefined) return '';
+        const ym = `${o.year}-${String(o.month).padStart(2, '0')}`;
+        const d = MONTH_DATA[ym];
+        const meta = d ? `${d.km} km` : '';
+        return `<div class="month-item" data-idx="${idx}" onclick="selectMonthItem(this, ${idx})">
+            <span class="month-item-label">${o.year}년 ${_MONTH_NAMES[o.month - 1]}</span>
+            <span class="month-item-meta">${meta}</span>
+          </div>`;
+      }).join('');
+    }
+
+    function selectMonthItem(el, idx) {
+      document.querySelectorAll('#month-list .month-item.active').forEach(e => e.classList.remove('active'));
+      el.classList.add('active');
+      _pickedIdx = idx;
+      const btn = document.getElementById('month-apply');
+      if (btn) btn.disabled = false;   // 선택되면 활성화
     }
 
     function confirmMonthPick() {
-      const yearCol = document.getElementById('wheel-year');
-      const monthCol = document.getElementById('wheel-month');
-      const yearIdx = Math.round(yearCol.scrollTop / WHEEL_ITEM_H);
-      const monthIdx = Math.round(monthCol.scrollTop / WHEEL_ITEM_H);
-      const year = WHEEL_YEARS[Math.max(0, Math.min(yearIdx, WHEEL_YEARS.length - 1))];
-      const month = _wheelMonths[Math.max(0, Math.min(monthIdx, _wheelMonths.length - 1))];
-      const newIdx = MONTH_KEY_MAP[`${year}-${month}`];
+      const newIdx = _pickedIdx;
       closeMonthSheet();
-      if (newIdx === undefined || newIdx === currentMonthIdx) return;
+      if (newIdx == null || newIdx === currentMonthIdx) return;
       const dir = newIdx > currentMonthIdx ? 1 : -1;
       const wrap = document.getElementById('cal-slide-wrap');
       wrap.classList.add(dir < 0 ? 'slide-out-right' : 'slide-out-left');
