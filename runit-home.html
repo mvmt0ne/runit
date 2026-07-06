@@ -761,6 +761,12 @@
       max-height: 90%;
     }
 
+    /* 시트 높이에 맞춰 리스트가 늘어나도록 (공유 .month-list 의 max-height:300 해제) */
+    #month-list {
+      max-height: none;
+      min-height: 0;
+    }
+
     .sf-handle {
       flex-shrink: 0;
       display: flex;
