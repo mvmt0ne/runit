@@ -81,12 +81,11 @@
     /* 프로필 */
     .profile-section { display: flex; flex-direction: column; align-items: center; gap: 14px; padding-top: 28px; }
     .app-version {
-      text-align: center;
-      padding: 20px 0 8px;
+      margin-left: auto;
       font-size: 12px;
       letter-spacing: 0.04em;
       color: var(--text-2);
-      opacity: 0.5;
+      opacity: 0.6;
       font-family: 'Urbanist', sans-serif;
     }
     .mp-avatar {
@@ -118,6 +117,7 @@
             </svg>
           </button>
           <span class="back-title">마이페이지</span>
+          <span class="app-version" id="app-version">runit</span>
         </div>
 
         <div class="input-scroll">
@@ -201,9 +201,6 @@
               러닝화는 전체 삭제에서 제외됩니다(자산). CSV 마스터(data/activities.csv)는 영향 없습니다.
             </div>
           </div>
-
-          <!-- 버전 -->
-          <div class="app-version" id="app-version">runit</div>
         </div>
       </div>
     </div>
