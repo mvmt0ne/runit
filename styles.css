@@ -698,11 +698,12 @@ sup {
 }
 
 .lp-date-day {
-    font-size: 13px;
+    /* stats.html '이 주의 러닝'(.wk-run-sub) 날짜와 폰트 스타일 통일 */
+    font-size: 14px;
     font-weight: 400;
-    font-family: 'Urbanist', sans-serif;
+    font-family: 'Space Mono', monospace;
     line-height: 1;
-    color: var(--slate-gray);
+    color: var(--cloudy-gray);
     font-feature-settings: 'tnum';
 }
 
