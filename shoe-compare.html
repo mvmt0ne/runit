@@ -37,10 +37,6 @@
       padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
     }
 
-    #sc-body {
-      padding: 4px 16px 0;
-    }
-
     .sc-scroll::-webkit-scrollbar {
       display: none;
     }
@@ -53,8 +49,9 @@
       /* 컴팩트 스티키 헤더(lp-header) 바로 아래에 붙음 */
       top: calc(env(safe-area-inset-top, 0px) + 28px);
       z-index: 2;
-      background: var(--asphalt-black);
-      padding: 8px 0 10px;
+      background: var(--bone);
+      padding: 16px;
+      border-radius: 0 0 16px 16px;
     }
 
     .sc-head {
@@ -62,9 +59,9 @@
       flex-direction: column;
       align-items: center;
       gap: 12px;
-      padding: 18px 4px;
+      padding: 24px 4px;
       border-radius: 12px;
-      background: var(--dark-gray);
+      background: var(--light-gray);
       cursor: pointer;
       min-width: 0;
     }
@@ -74,8 +71,8 @@
     }
 
     .sc-head-img {
-      width: 100%;
-      height: 56px;
+      width: 70%;
+      height: 36px;
       object-fit: contain;
     }
 
@@ -90,11 +87,10 @@
 
     .sc-head-name {
       font-size: 14px;
-      font-weight: 600;
-      color: var(--bone);
+      font-weight: 500;
+      color: var(--asphalt-gray);
       font-family: 'Pretendard Variable', sans-serif;
-      text-align: center;
-      line-height: 1.2;
+      text-align: left;
       max-width: 100%;
       white-space: nowrap;
       overflow: hidden;
@@ -102,30 +98,27 @@
     }
 
     .sc-head-runs {
-      font-size: 11px;
-      color: var(--cloudy-gray);
-      font-family: 'Urbanist', sans-serif;
+      font-size: 14px;
     }
 
     .sc-head.sc-add {
       background: transparent;
-      border: 1px dashed rgba(255, 255, 255, 0.16);
+      border: 1px dashed rgba(0, 0, 0, 0.16);
       justify-content: center;
-      color: var(--slate-gray);
     }
 
     .sc-head-remove {
       position: absolute;
       top: 4px;
       right: 6px;
-      color: var(--cloudy-gray);
+      color: var(--asphalt-black);
     }
 
     .sc-head-edit {
       position: absolute;
       top: 6px;
       left: 8px;
-      color: var(--cloudy-gray);
+      color: var(--asphalt-black);
       cursor: pointer;
       padding: 2px;
     }
@@ -456,7 +449,7 @@
       if (canAdd) {
         heads += `<div class="sc-head sc-add" onclick="openCmpPicker(${scSlots.length})">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-          <span class="sc-head-runs" style="color:var(--slate-gray)">추가</span>
+          <span class="sc-head-runs">추가</span>
         </div>`;
       }
       heads += `</div>`;
