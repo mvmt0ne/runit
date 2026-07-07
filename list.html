@@ -23,6 +23,26 @@
     <link rel="stylesheet" href="./styles.css" />
     <script src="./transitions.js"></script>
     <style>
+        /* PB 진입 버튼 (러닝 활동 상단) */
+        .lp-pb-btn {
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 7px 14px;
+            border-radius: 100px;
+            background: var(--asphalt-black);
+            color: var(--bone);
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Pretendard Variable', sans-serif;
+            cursor: pointer;
+        }
+
+        .lp-pb-btn:active {
+            opacity: 0.8;
+        }
+
         /* ─── List page layout ── */
         .list-page {
             flex: 1;
@@ -231,6 +251,10 @@
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="m6 9 6 6 6-6" />
                             </svg>
+                        </button>
+                        <button class="lp-pb-btn" onclick="goTo('pb.html')" style="margin-left:auto;">
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v4a4 4 0 0 1-8 0V4Z"/><path d="M16 6h3v2a3 3 0 0 1-3 3M8 6H5v2a3 3 0 0 0 3 3"/><path d="M10 14h4v3h-4zM8 20h8"/></svg>
+                            PB
                         </button>
                     </div>
                     <div id="runs-list-container"></div>

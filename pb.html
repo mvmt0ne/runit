@@ -351,12 +351,39 @@
       .pb-row { transition: none !important; }
       .pb-hero-card.tap { animation: none !important; }
     }
+
+    .pb-back {
+      position: absolute;
+      top: calc(env(safe-area-inset-top, 0px) + 12px);
+      left: 14px;
+      z-index: 40;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      color: var(--slate-gray);
+      cursor: pointer;
+    }
+
+    .pb-back:active {
+      transform: scale(0.92);
+    }
   </style>
 </head>
 
 <body>
   <div class="phone">
     <div class="phone-inner">
+
+      <button class="pb-back" onclick="goBackSmart()" aria-label="뒤로">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="m15 18-6-6 6-6" />
+        </svg>
+      </button>
 
       <div class="pb-scroll">
 
@@ -445,6 +472,12 @@
   <script src="./data/store.js"></script>
   <script src="./data/activities.js"></script>
   <script>
+    // 단독 진입(목록 상단 PB 버튼) 시 목록으로 복귀
+    function goBackSmart() {
+      if (window.history.length > 1) { history.back(); return; }
+      goBack('app.html#list');
+    }
+
     // 거리별 PB — 실제 활동에서 계산. 각 거리의 허용 범위(km) 안의 러닝을
     // 기록(시간) 빠른 순으로 정렬해 상위 5개. (스플릿 데이터 없어 활동 거리 기준 근사)
     const DIST_BANDS = {
