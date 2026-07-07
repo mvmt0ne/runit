@@ -178,7 +178,7 @@
        * 페이지 CSS 를 portal 대상(modal/sheet 등)용 전역 룰과 슬라이드 한정 룰로 분리.
        * portal 대상 엘리먼트는 document.body 로 이동하기 때문에 @scope 안에 두면 스타일이 안 먹음.
        */
-      const PORTAL_RE = /\.(month-modal|sf-sheet|sf-backdrop|sf-section|sf-divider|sf-reset|sf-apply|wheel-|month-list|month-item|filter-|range-|zone-|ctrl-)/;
+      const PORTAL_RE = /[.#](month-modal|month-sheet|sf-sheet|sf-handle|sf-grabber|sf-backdrop|sf-section|sf-divider|sf-reset|sf-apply|sf-sort|wheel-|month-list|month-item|filter-|sort-sheet|range-|zone-|ctrl-)/;
       function splitPageCSS(css) {
         let depth = 0, buf = '', global = '', scoped = '';
         for (let i = 0; i < css.length; i++) {
