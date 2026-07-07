@@ -30,31 +30,15 @@
       overflow: hidden;
     }
 
-    .sc-header {
-      padding: calc(env(safe-area-inset-top, 0px) + 20px) 20px 12px;
-      flex-shrink: 0;
-    }
-
-    .sc-title {
-      font-size: 26px;
-      font-weight: 700;
-      color: var(--bone);
-      font-family: 'Pretendard Variable', sans-serif;
-      letter-spacing: -0.02em;
-    }
-
-    .sc-sub {
-      font-size: 13px;
-      color: var(--cloudy-gray);
-      margin-top: 4px;
-      font-family: 'Pretendard Variable', sans-serif;
-    }
-
     .sc-scroll {
       flex: 1;
       overflow-y: auto;
       scrollbar-width: none;
-      padding: 4px 16px calc(40px + env(safe-area-inset-bottom, 0px));
+      padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+    }
+
+    #sc-body {
+      padding: 4px 16px 0;
     }
 
     .sc-scroll::-webkit-scrollbar {
@@ -66,7 +50,8 @@
       display: grid;
       gap: 6px;
       position: sticky;
-      top: 0;
+      /* 컴팩트 스티키 헤더(lp-header) 바로 아래에 붙음 */
+      top: calc(env(safe-area-inset-top, 0px) + 28px);
       z-index: 2;
       background: var(--asphalt-black);
       padding: 8px 0 10px;
@@ -259,11 +244,15 @@
   <div class="phone">
     <div class="phone-inner bg-dark" style="background: var(--asphalt-black);">
       <div class="sc-page">
-        <div class="sc-header">
-          <div class="sc-title">러닝화</div>
-          <div class="sc-sub">최대 3족까지 나란히 비교</div>
-        </div>
-        <div class="sc-scroll">
+        <div class="sc-scroll" id="sc-scroll">
+          <!-- Compact sticky header -->
+          <div class="lp-header">
+            <span class="lp-header-title-compact">러닝화</span>
+          </div>
+          <!-- Large title -->
+          <div class="lp-hero">
+            <h1 class="lp-hero-title">러닝화</h1>
+          </div>
           <div id="sc-body"><div class="sc-empty-page">불러오는 중…</div></div>
         </div>
       </div>
@@ -455,6 +444,11 @@
       loadActivities().then(scInit).catch(() => scInit([]));
     } else {
       scInit([]);
+    }
+
+    // 다른 탭과 동일한 접히는 대형 타이틀
+    if (typeof setupCollapsingHeader === 'function') {
+      setupCollapsingHeader(document.getElementById('sc-scroll'));
     }
 
     if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js').then(function (r) { if (r) { setInterval(function () { r.update(); }, 60000); } }); (function () { var _rf = false; navigator.serviceWorker.addEventListener('controllerchange', function () { if (_rf) return; _rf = true; location.reload(); }); })(); }
