@@ -447,7 +447,7 @@
     function scInit(list) {
       SC_ACTS = list || [];
       SC_SHOES = (typeof getShoes === 'function') ? getShoes() : [];
-      scSlots = SC_SHOES.slice(0, Math.min(3, SC_SHOES.length)).map(s => s.id);
+      scSlots = SC_SHOES.slice(0, 1).map(s => s.id);   // 기본은 1족, + 로 최대 3족 비교
       renderCompare();
     }
 
