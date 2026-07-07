@@ -58,6 +58,29 @@
     return `${m[1]}. ${parseInt(m[2], 10)}. ${parseInt(m[3], 10)}.`;
   };
 
+  /* ── 네이티브 date 입력의 0 패딩 표기(2026. 07. 06.)를 fmtDateDot 오버레이로 교체.
+     네이티브 포맷은 로케일이 결정해 직접 변경 불가 → 값 있을 때 네이티브 텍스트를
+     투명 처리하고 같은 자리에 포맷 텍스트를 겹침. 부모는 position:relative 필요. ── */
+  window.bindDateDot = function (input) {
+    if (!input || input._dotBound) return;
+    input._dotBound = true;
+    const span = document.createElement('span');
+    span.className = 'date-dot-display';
+    const cs = getComputedStyle(input);
+    span.style.font = cs.font;
+    span.style.color = cs.color;
+    (input.parentElement || input).appendChild(span);
+    const upd = () => {
+      const has = !!input.value;
+      span.textContent = has ? window.fmtDateDot(input.value) : '';
+      input.classList.toggle('date-dotted', has);
+    };
+    input.addEventListener('input', upd);
+    input.addEventListener('change', upd);
+    setInterval(upd, 600); // 프로그램적 value 세팅(편집 진입 등) 반영
+    upd();
+  };
+
   /* ── Forward ── */
   window.goTo = function (url) {
     sessionStorage.setItem('runit-nav', 'forward');
