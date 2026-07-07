@@ -127,7 +127,7 @@
       color: var(--bone);
     }
 
-    /* 착용 기록 */
+    /* 러닝 활동 */
     .sc-runs {
       margin: 20px;
     }
@@ -478,7 +478,7 @@
         </div>`;
       });
 
-      // 착용 기록 — 신발별 활동 목록 (탭 → 상세)
+      // 러닝 활동 — 신발별 활동 목록 (탭 → 상세)
       let history = '';
       stats.forEach(st => {
         if (!st.acts.length) return;
@@ -494,7 +494,7 @@
           </div>`;
         }).join('');
         history += `<div class="sc-runs">
-          <div class="sc-runs-title">${stats.length > 1 ? scEsc(st.name) + ' ' : ''}착용 기록 <em>${st.runs}</em></div>
+          <div class="sc-runs-title">${stats.length > 1 ? scEsc(st.name) + ' ' : ''}러닝 활동 <em>${st.runs}</em></div>
           ${items}
         </div>`;
       });
