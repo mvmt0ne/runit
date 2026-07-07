@@ -122,7 +122,7 @@
             display: block;
             font-size: 16px;
             font-weight: 500;
-            color: var(--bone);
+            color: var(--accent);
             transition:
                 transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
                 opacity 0.18s;
@@ -253,7 +253,12 @@
                             </svg>
                         </button>
                         <button class="lp-pb-btn" onclick="goTo('pb.html')" style="margin-left:auto;">
-                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v4a4 4 0 0 1-8 0V4Z"/><path d="M16 6h3v2a3 3 0 0 1-3 3M8 6H5v2a3 3 0 0 0 3 3"/><path d="M10 14h4v3h-4zM8 20h8"/></svg>
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M8 4h8v4a4 4 0 0 1-8 0V4Z" />
+                                <path d="M16 6h3v2a3 3 0 0 1-3 3M8 6H5v2a3 3 0 0 0 3 3" />
+                                <path d="M10 14h4v3h-4zM8 20h8" />
+                            </svg>
                             PB
                         </button>
                     </div>
@@ -918,7 +923,7 @@
     </script>
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').then(function(r){ if(r){ setInterval(function(){ r.update(); }, 60000); } }); (function(){ var _rf=false; navigator.serviceWorker.addEventListener('controllerchange', function(){ if(_rf) return; _rf=true; location.reload(); }); })();
+            navigator.serviceWorker.register('./sw.js').then(function (r) { if (r) { setInterval(function () { r.update(); }, 60000); } }); (function () { var _rf = false; navigator.serviceWorker.addEventListener('controllerchange', function () { if (_rf) return; _rf = true; location.reload(); }); })();
         }
     </script>
 </body>
