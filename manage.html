@@ -223,10 +223,10 @@
       left: 0;
       right: 0;
       bottom: 0;
-      padding: 5px 0;
+      padding: 12px 0;
       background: rgba(0, 0, 0, 0.55);
       color: var(--bone);
-      font-size: 11px;
+      font-size: 14px;
       text-align: center;
       font-family: 'Pretendard Variable', sans-serif;
     }
@@ -238,12 +238,11 @@
     /* 휴지통 — 아바타 우상단에 겹치는 원형 버튼 */
     .mp-avatar-remove {
       position: absolute;
-      top: -4px;
-      right: -12px;
-      width: 40px;
-      height: 40px;
+      top: 6px;
+      right: 0px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
-      border: 1px solid rgba(255, 255, 255, 0.14);
       background: var(--dark-gray);
       color: var(--slate-gray);
       display: flex;
@@ -313,7 +312,14 @@
               <input id="z3max" class="zone-input" type="number" inputmode="numeric" placeholder="중/고 경계(존3 상한)">
             </div>
             <div class="field-row">
-              <input id="zfrom" class="zone-input" type="date">
+              <div class="date-wrap">
+                <input id="zfrom" class="zone-input" type="date" onclick="try{this.showPicker()}catch(e){}">
+                <svg class="date-wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <path d="M16 2v4M8 2v4M3 10h18" />
+                </svg>
+              </div>
               <button class="ghost-btn" onclick="onSaveZones()" style="color:var(--accent)">적용</button>
             </div>
             <div
@@ -409,7 +415,7 @@
       actsEl.innerHTML = acts.length ? acts.map(a => `
         <li class="saved-item">
           <div>
-            <div class="saved-date">${a.date} · ${a.km ?? '?'}km</div>
+            <div class="saved-date">${fmtDateDot(a.date)} · ${a.km ?? '?'}km</div>
             <div class="saved-tags">
               <span class="saved-tag">${a.name || a.type || '활동'}</span>
               ${a.id && a.id.startsWith('csv-') ? '<span class="saved-tag">CSV</span>' : '<span class="saved-tag">수동</span>'}
@@ -431,7 +437,7 @@
         return `
         <li class="saved-item">
           <div>
-            <div class="saved-date">${item.date}</div>
+            <div class="saved-date">${fmtDateDot(item.date)}</div>
             <div class="saved-tags">${tags.join('') || '<span class="saved-tag">메타</span>'}</div>
           </div>
           <button class="delete-btn" onclick="onRemove('${item.date}')">삭제</button>
@@ -504,7 +510,7 @@
       document.getElementById('zone-hist').innerHTML = hist.length
         ? hist.slice().reverse().map(h => `
           <li class="saved-item">
-            <span class="saved-date">${h.from}부터</span>
+            <span class="saved-date">${fmtDateDot(h.from)}부터</span>
             <span class="saved-tag">저≤${h.z2Max} · 중≤${h.z3Max}</span>
           </li>`).join('')
         : '';
@@ -518,7 +524,7 @@
         showToast('경계값을 확인하세요 (저/중 경계 < 중/고 경계)', true); return;
       }
       addZoneConfig(from, z2, z3);
-      showToast(`${from}부터 새 심박존 적용`);
+      showToast(`${fmtDateDot(from)}부터 새 심박존 적용`);
       renderZones();
     }
 

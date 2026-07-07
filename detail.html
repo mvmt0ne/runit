@@ -1243,7 +1243,7 @@
 
       // 헤더 중앙: 날짜 · 시각
       const timeStr = meta.startTime || act.startTime || '';
-      const headerDate = (act.date || '').replace(/-/g, '.') + (timeStr ? ' · ' + timeStr : '');
+      const headerDate = fmtDateDot(act.date) + (timeStr ? ' · ' + timeStr : '');
       const hd = document.getElementById('d-header-date');
       if (hd) hd.textContent = headerDate;
 

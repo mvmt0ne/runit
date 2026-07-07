@@ -51,6 +51,13 @@
     if (kind) e.viewTransition.types.add(kind);
   });
 
+  /* ── 날짜 표기 통일: 'YYYY-MM-DD' → '2026. 7. 26.' ── */
+  window.fmtDateDot = function (iso) {
+    const m = String(iso || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (!m) return iso || '';
+    return `${m[1]}. ${parseInt(m[2], 10)}. ${parseInt(m[3], 10)}.`;
+  };
+
   /* ── Forward ── */
   window.goTo = function (url) {
     sessionStorage.setItem('runit-nav', 'forward');

@@ -1712,6 +1712,52 @@ input[type='range'].range-input::-moz-range-thumb {
     font-family: 'Pretendard Variable', sans-serif;
 }
 
+/* ── 공용 날짜 입력 래퍼: 네이티브 아이콘 숨기고 텍스트 컬러의 커스텀 달력 아이콘 ── */
+.date-wrap {
+    position: relative;
+    display: flex;
+    flex: 1;
+    min-width: 0;
+}
+
+.date-wrap>input {
+    width: 100%;
+    padding-right: 40px;
+}
+
+input[type="date"].zone-input,
+input[type="date"].input-field {
+    color-scheme: dark;
+    min-height: 46px;
+    line-height: 1.2;
+}
+
+input[type="date"].zone-input::-webkit-date-and-time-value,
+input[type="date"].input-field::-webkit-date-and-time-value {
+    text-align: left;
+    margin: 0;
+}
+
+input[type="date"].zone-input::-webkit-calendar-picker-indicator,
+input[type="date"].input-field::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 0;
+}
+
+.date-wrap-ico {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    /* 입력 텍스트와 동일한 밝기 */
+    color: var(--slate-gray);
+    pointer-events: none;
+}
+
 /* 날짜 입력 — 다크 배경 + 커스텀 달력 아이콘 (모바일에서 네이티브가 깨져 보이는 문제 해결) */
 input[type="date"].pb-input {
     color-scheme: dark;

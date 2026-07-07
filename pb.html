@@ -516,7 +516,7 @@
       const m = String(p || '').match(/^(\d+):(\d+)$/);
       return m ? `${m[1]}'${m[2]}"/km` : (p || '');
     };
-    const _fmtDate = d => (d ? String(d).replace(/-/g, '.') : '');
+    const _fmtDate = d => (d ? fmtDateDot(d) : '');
     const _fmtTime = a => {
       if (a.dur) return a.dur;
       const s = a.durSec;

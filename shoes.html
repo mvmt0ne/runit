@@ -163,7 +163,15 @@
             <label class="input-label" style="margin-top:20px">마일리지</label>
             <div class="field-row">
               <input type="number" id="shoe-base-km" class="input-field" inputmode="numeric" placeholder="기준 마일리지 (km)" style="flex:1;margin-bottom:0">
-              <input type="date" id="shoe-mileage-from" class="input-field" style="flex:1;margin-bottom:0">
+              <div class="date-wrap" style="margin-bottom:0">
+                <input type="date" id="shoe-mileage-from" class="input-field" style="margin-bottom:0"
+                  onclick="try{this.showPicker()}catch(e){}">
+                <svg class="date-wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <path d="M16 2v4M8 2v4M3 10h18" />
+                </svg>
+              </div>
             </div>
             <div class="input-helper">시작일 이후의 러닝 거리가 기준 마일리지에 자동 합산됩니다.</div>
 
