@@ -121,6 +121,90 @@
       color: var(--cloudy-gray);
     }
 
+    .sc-head-edit {
+      position: absolute;
+      top: 6px;
+      left: 8px;
+      color: var(--cloudy-gray);
+      cursor: pointer;
+      padding: 2px;
+    }
+
+    .sc-head-edit:active {
+      color: var(--bone);
+    }
+
+    /* 착용 기록 */
+    .sc-runs {
+      margin-top: 24px;
+    }
+
+    .sc-runs-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--slate-gray);
+      font-family: 'Pretendard Variable', sans-serif;
+      margin-bottom: 4px;
+    }
+
+    .sc-runs-title em {
+      font-style: normal;
+      font-weight: 400;
+      color: var(--cloudy-gray);
+      font-family: 'Urbanist', sans-serif;
+      margin-left: 4px;
+    }
+
+    .sc-run {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 2px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      cursor: pointer;
+    }
+
+    .sc-run:active {
+      opacity: 0.55;
+    }
+
+    .sc-run-date {
+      width: 44px;
+      flex-shrink: 0;
+      font-size: 13px;
+      color: var(--cloudy-gray);
+      font-family: 'Space Mono', monospace;
+    }
+
+    .sc-run-name {
+      flex: 1;
+      min-width: 0;
+      font-size: 14px;
+      color: var(--bone);
+      font-family: 'Pretendard Variable', sans-serif;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sc-run-km,
+    .sc-run-pace {
+      flex-shrink: 0;
+      font-size: 13px;
+      font-family: 'Urbanist', sans-serif;
+      color: var(--slate-gray);
+      text-align: right;
+    }
+
+    .sc-run-km {
+      width: 52px;
+    }
+
+    .sc-run-pace {
+      width: 44px;
+      color: var(--cloudy-gray);
+    }
+
     .sc-head-wrap {
       position: relative;
       min-width: 0;
@@ -198,6 +282,12 @@
     .sc-empty-page a {
       color: var(--accent);
       cursor: pointer;
+    }
+
+    /* 선택 시트 리스트 — 높이는 JS 지정 (공유 .month-list max-height:300 해제) */
+    #sc-pick-list {
+      max-height: none;
+      min-height: 0;
     }
 
     /* 선택 시트 안 러닝화 항목 */
@@ -297,13 +387,15 @@
     function scStats(shoe) {
       const from = shoe.mileageFrom || '';
       const base = Number(shoe.baseMileage) || 0;
+      // 착용 활동 = shoeId 가 이 신발인 모든 활동 (횟수·평균·최고 집계 기준)
       const acts = SC_ACTS.filter(a => {
         const m = (typeof getMeta === 'function') ? (getMeta(a.date) || {}) : {};
-        return m.shoeId === shoe.id && (!from || a.date >= from);
+        return m.shoeId === shoe.id;
       });
       let km = 0, pS = 0, pN = 0, best = null, sS = 0, sN = 0, bS = 0, bN = 0, tS = 0, tN = 0, maxS = null, maxB = null;
       acts.forEach(a => {
-        km += a.km || 0;
+        // 마일리지 합산만 기준일 이후 (기준 마일리지에 이전 거리가 이미 포함돼 있어 이중 계산 방지)
+        if (!from || a.date >= from) km += a.km || 0;
         if (a.paceV) { pS += a.paceV; pN++; if (best == null || a.paceV < best) best = a.paceV; }
         if (a.spm) { sS += a.spm; sN++; }
         if (a.bpm) { bS += a.bpm; bN++; }
@@ -313,6 +405,7 @@
       });
       return {
         id: shoe.id, name: shoe.name, image: shoe.image, runs: acts.length,
+        acts: acts.slice().sort((a, b) => (a.date < b.date ? 1 : -1)),
         totalKm: Math.round(base + km),
         avgPace: pN ? Math.round(pS / pN) : null,
         bestPace: best,
@@ -354,6 +447,7 @@
             <span class="sc-head-name">${scEsc(st.name)}</span>
             <span class="sc-head-runs">${st.runs}회</span>
           </div>
+          <span class="sc-head-edit" onclick="goTo('shoes.html?edit=${st.id}');event.stopPropagation();" aria-label="러닝화 수정"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></span>
           ${scSlots.length > 1 ? `<span class="sc-head-remove" onclick="removeSlot(${i});event.stopPropagation();"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></span>` : ''}
         </div>`;
       });
@@ -386,7 +480,28 @@
         </div>`;
       });
 
-      body.innerHTML = heads + rows + `<div class="sc-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 3a6 6 0 0 0-4 10.5V16h8v-2.5A6 6 0 0 0 12 3zM9 20h6M10 22h4"/></svg>액센트 = 지표별 더 나은 값 · 최고 페이스는 단일 활동 최고 평균</div>`;
+      // 착용 기록 — 신발별 활동 목록 (탭 → 상세)
+      let history = '';
+      stats.forEach(st => {
+        if (!st.acts.length) return;
+        const items = st.acts.map(a => {
+          const [, mm, dd] = (a.date || '').split('-');
+          const meta = (typeof getMeta === 'function') ? (getMeta(a.date) || {}) : {};
+          const nm = (meta.name && meta.name.trim()) || a.name || '러닝';
+          return `<div class="sc-run" onclick="goTo('detail.html?date=${a.date}')">
+            <span class="sc-run-date">${parseInt(mm)}.${parseInt(dd)}</span>
+            <span class="sc-run-name">${scEsc(nm)}</span>
+            <span class="sc-run-km">${(a.km || 0).toFixed(1)} K</span>
+            <span class="sc-run-pace">${a.pace || '--'}</span>
+          </div>`;
+        }).join('');
+        history += `<div class="sc-runs">
+          <div class="sc-runs-title">${stats.length > 1 ? scEsc(st.name) + ' ' : ''}착용 기록 <em>${st.runs}회</em></div>
+          ${items}
+        </div>`;
+      });
+
+      body.innerHTML = heads + rows + `<div class="sc-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 3a6 6 0 0 0-4 10.5V16h8v-2.5A6 6 0 0 0 12 3zM9 20h6M10 22h4"/></svg>액센트 = 지표별 더 나은 값 · 최고 페이스는 단일 활동 최고 평균</div>` + history;
     }
 
     function removeSlot(i) {
@@ -432,6 +547,38 @@
       document.getElementById('sc-backdrop').classList.remove('open');
       document.getElementById('sc-sheet').classList.remove('open');
     }
+
+    // 핸들 드래그로 시트 높이 조절 — 리스트 높이를 직접 변경 (다른 시트와 동일)
+    (function () {
+      const handle = document.querySelector('#sc-sheet .sf-handle');
+      const list = document.getElementById('sc-pick-list');
+      if (!handle || !list) return;
+      let startY = 0, startH = 0, dragging = false;
+      function down(e) {
+        dragging = true;
+        startY = e.touches ? e.touches[0].clientY : e.clientY;
+        startH = list.getBoundingClientRect().height;
+        if (e.cancelable) e.preventDefault();
+      }
+      function move(e) {
+        if (!dragging) return;
+        const y = e.touches ? e.touches[0].clientY : e.clientY;
+        let h = startH - (y - startY);          // 위로 끌면 커짐
+        h = Math.max(40, Math.min(h, window.innerHeight * 0.9));
+        list.style.height = h + 'px';
+      }
+      function up() {
+        if (!dragging) return;
+        dragging = false;
+        if (list.getBoundingClientRect().height < 70) closeCmpPicker();
+      }
+      handle.addEventListener('touchstart', down, { passive: false });
+      window.addEventListener('touchmove', move, { passive: false });
+      window.addEventListener('touchend', up);
+      handle.addEventListener('mousedown', down);
+      window.addEventListener('mousemove', move);
+      window.addEventListener('mouseup', up);
+    })();
 
     function scInit(list) {
       SC_ACTS = list || [];
