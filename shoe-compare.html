@@ -48,7 +48,7 @@
     /* 신발 헤더 행 */
     .sc-heads {
       display: grid;
-      gap: 6px;
+      gap: 12px;
       position: sticky;
       /* 컴팩트 스티키 헤더(lp-header) 바로 아래에 붙음 */
       top: calc(env(safe-area-inset-top, 0px) + 28px);
@@ -61,8 +61,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
-      padding: 8px 4px;
+      gap: 12px;
+      padding: 18px 4px;
       border-radius: 12px;
       background: var(--dark-gray);
       cursor: pointer;
@@ -89,7 +89,7 @@
     }
 
     .sc-head-name {
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 600;
       color: var(--bone);
       font-family: 'Pretendard Variable', sans-serif;
@@ -343,7 +343,9 @@
           <div class="lp-hero">
             <h1 class="lp-hero-title">러닝화</h1>
           </div>
-          <div id="sc-body"><div class="sc-empty-page">불러오는 중…</div></div>
+          <div id="sc-body">
+            <div class="sc-empty-page">불러오는 중…</div>
+          </div>
         </div>
       </div>
 
