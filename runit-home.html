@@ -750,10 +750,7 @@
       color: var(--accent);
     }
 
-    /* 월 선택 확인 버튼 — 비활성 상태는 채움 없이 (선택 전) */
-    #month-apply:disabled {
-      background: transparent;
-    }
+
 
     /* 월 시트: 초기 50%(미니멈), 드래그로 90%(맥시멈)까지.
        %는 iOS에서 조상(뷰포트보다 큰 phone-inner) 기준이라 dvh(뷰포트)로 고정 */
@@ -1475,7 +1472,7 @@
   </script>
   <script>
     if ('serviceWorker' in navigator && location.protocol !== 'file:') {
-      navigator.serviceWorker.register('./sw.js').then(function(r){ if(r){ setInterval(function(){ r.update(); }, 60000); } }); (function(){ var _rf=false; navigator.serviceWorker.addEventListener('controllerchange', function(){ if(_rf) return; _rf=true; location.reload(); }); })();
+      navigator.serviceWorker.register('./sw.js').then(function (r) { if (r) { setInterval(function () { r.update(); }, 60000); } }); (function () { var _rf = false; navigator.serviceWorker.addEventListener('controllerchange', function () { if (_rf) return; _rf = true; location.reload(); }); })();
     }
   </script>
 </body>

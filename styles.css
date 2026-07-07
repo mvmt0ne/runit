@@ -1140,9 +1140,7 @@ sup {
 }
 
 .sf-apply-btn:disabled {
-    color: rgba(239, 238, 237, 0.4);
-    border: 1px solid rgba(239, 238, 237, 0.4);
-    cursor: default;
+    opacity: 0.1;
 }
 
 /* ═══════════════════════════════════════════════════════════
