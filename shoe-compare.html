@@ -44,7 +44,7 @@
     /* 신발 헤더 행 */
     .sc-heads {
       display: grid;
-      gap: 12px;
+      gap: 4px;
       position: sticky;
       /* 컴팩트 스티키 헤더(lp-header) 바로 아래에 붙음 */
       top: calc(env(safe-area-inset-top, 0px) + 28px);
@@ -59,7 +59,7 @@
       flex-direction: column;
       align-items: center;
       gap: 12px;
-      padding: 24px 4px;
+      padding: 24px 14px;
       border-radius: 12px;
       background: var(--light-gray);
       cursor: pointer;
@@ -129,23 +129,25 @@
 
     /* 착용 기록 */
     .sc-runs {
-      margin-top: 24px;
+      margin: 20px;
     }
 
     .sc-runs-title {
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 15px;
+      font-weight: 400;
       color: var(--slate-gray);
-      font-family: 'Pretendard Variable', sans-serif;
-      margin-bottom: 4px;
+      margin-bottom: 16px;
     }
 
     .sc-runs-title em {
       font-style: normal;
-      font-weight: 400;
-      color: var(--cloudy-gray);
-      font-family: 'Urbanist', sans-serif;
+      font-weight: 500;
+      color: var(--asphalt-black);
+      background: var(--accent);
+      /* font-family: 'Urbanist', sans-serif; */
       margin-left: 4px;
+      padding: 2px 7px;
+      border-radius: 45%;
     }
 
     .sc-run {
@@ -206,14 +208,15 @@
     /* 지표 행 */
     .sc-metric {
       border-top: 1px solid rgba(255, 255, 255, 0.06);
-      padding: 14px 0 4px;
+      padding: 14px 0;
+      margin: 0 20px;
     }
 
     .sc-metric-label {
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 12px;
+      font-size: 13px;
       color: var(--cloudy-gray);
       font-family: 'Pretendard Variable', sans-serif;
       margin-bottom: 8px;
@@ -259,7 +262,7 @@
       gap: 6px;
       font-size: 12px;
       color: var(--asphalt-gray);
-      margin-top: 20px;
+      margin: 20px;
       font-family: 'Pretendard Variable', sans-serif;
     }
 
@@ -491,7 +494,7 @@
           </div>`;
         }).join('');
         history += `<div class="sc-runs">
-          <div class="sc-runs-title">${stats.length > 1 ? scEsc(st.name) + ' ' : ''}착용 기록 <em>${st.runs}회</em></div>
+          <div class="sc-runs-title">${stats.length > 1 ? scEsc(st.name) + ' ' : ''}착용 기록 <em>${st.runs}</em></div>
           ${items}
         </div>`;
       });
