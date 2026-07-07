@@ -765,7 +765,7 @@
       position: relative;
       z-index: 1;
       pointer-events: none;
-      filter: drop-shadow(0 22px 22px rgba(0, 0, 0, 0.75));
+      filter: drop-shadow(0 12px 12px rgba(0, 0, 0, 0.85));
     }
 
     /* 회전 + 세틀 인 모션은 자식 img 에만 (translateY 를 맨 앞에 둬 화면 수직 기준 이동) */
@@ -1412,7 +1412,7 @@
 
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').then(function(r){ if(r){ setInterval(function(){ r.update(); }, 60000); } }); (function(){ var _rf=false; navigator.serviceWorker.addEventListener('controllerchange', function(){ if(_rf) return; _rf=true; location.reload(); }); })();
+      navigator.serviceWorker.register('./sw.js').then(function (r) { if (r) { setInterval(function () { r.update(); }, 60000); } }); (function () { var _rf = false; navigator.serviceWorker.addEventListener('controllerchange', function () { if (_rf) return; _rf = true; location.reload(); }); })();
     }
   </script>
 </body>
