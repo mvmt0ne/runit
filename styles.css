@@ -751,11 +751,11 @@ sup {
 }
 
 .lp-head-km {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 500;
     font-family: 'Urbanist', sans-serif;
     font-feature-settings: 'tnum';
-    color: var(--slate-gray);
+    color: var(--bone);
     flex-shrink: 0;
     margin-left: auto;
 }
@@ -774,12 +774,12 @@ sup {
 }
 
 .lp-stat-value {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 400;
     font-family: 'Space Mono', monospace;
     font-feature-settings: 'tnum';
     line-height: 1;
-    color: var(--cloudy-gray);
+    color: var(--slate-gray);
 }
 
 .lp-stat-label {
