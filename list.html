@@ -154,17 +154,16 @@
             opacity: 0.5;
         }
 
-        /* 정렬·필터 시트 — 초기 50%(미니멈), 드래그로 90%(맥시멈)까지.
-           %는 iOS에서 조상(뷰포트보다 큰 phone-inner) 기준이라 dvh(뷰포트)로 고정 */
+        /* 정렬·필터 시트 — 내용 크기(스크롤 영역 높이는 JS가 지정). flex 분배 미의존(iOS 안정) */
         #sort-sheet,
         #filter-sheet {
-            height: 50dvh;
-            max-height: 90dvh;
+            max-height: none;
         }
 
-        /* 드래그로 커질 때 내용이 늘어나도록 (공유 .month-list max-height 해제) */
-        #sf-sort-opts {
-            flex: 1;
+        /* 스크롤 영역: 높이는 JS가 px로 지정 (공유 max-height/flex 해제) */
+        #sf-sort-opts,
+        #filter-sheet .sf-sheet-body {
+            flex: none;
             max-height: none;
             min-height: 0;
         }
@@ -529,13 +528,28 @@
         }
 
         /* ─── Sort / Filter sheets ── */
+        // 스크롤 영역 셀렉터
+        const SF_SCROLL = { 'sort-sheet': '#sf-sort-opts', 'filter-sheet': '.sf-sheet-body' };
+
+        // 시트 전체 목표 높이(px)에 맞춰 스크롤 영역 높이 계산 (그 외 자식/패딩 제외)
+        function fitSFSheet(sheetId, targetPx) {
+            const s = document.getElementById(sheetId);
+            const sc = s.querySelector(SF_SCROLL[sheetId]);
+            if (!sc) return;
+            const cs = getComputedStyle(s);
+            let chrome = (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0);
+            [...s.children].forEach(c => { if (c !== sc) chrome += c.offsetHeight; });
+            const target = Math.min(targetPx, window.innerHeight * 0.9);
+            sc.style.height = Math.max(80, Math.round(target - chrome)) + 'px';
+        }
+
         function openSortSheet() {
             renderSortPanel();
             const s = document.getElementById('sort-sheet');
             s.style.transition = '';
-            s.style.height = Math.round(window.innerHeight * 0.5) + 'px';  // 뷰포트 절반(px 직접 지정)
             s.classList.add('open');
             document.getElementById('sf-backdrop').classList.add('open');
+            fitSFSheet('sort-sheet', window.innerHeight * 0.5);   // 동기 실행
         }
 
         function openFilterSheet() {
@@ -544,35 +558,34 @@
             updateApplyState();
             const s = document.getElementById('filter-sheet');
             s.style.transition = '';
-            s.style.height = Math.round(window.innerHeight * 0.5) + 'px';  // 뷰포트 절반(px 직접 지정)
             s.classList.add('open');
             document.getElementById('sf-backdrop').classList.add('open');
+            fitSFSheet('filter-sheet', window.innerHeight * 0.5);
         }
 
-        // 시트 핸들 드래그 — 위로 끌면 커지고, 아래로 많이 내리면 닫힘 (월 시트와 동일)
+        // 시트 핸들 드래그 — 스크롤 영역 높이 조절(위=커짐), 아래로 많이 내리면 닫힘
         (function () {
-            let sheet = null, startY = 0, startH = 0;
+            let scroll = null, startY = 0, startH = 0;
             function down(e) {
                 const s = e.currentTarget.closest('.month-modal');
                 if (!s) return;
-                sheet = s;
+                scroll = s.querySelector(SF_SCROLL[s.id]);
+                if (!scroll) return;
                 startY = e.touches ? e.touches[0].clientY : e.clientY;
-                startH = s.getBoundingClientRect().height;
-                s.style.transition = 'none';
+                startH = scroll.getBoundingClientRect().height;
                 if (e.cancelable) e.preventDefault();
             }
             function move(e) {
-                if (!sheet) return;
+                if (!scroll) return;
                 const y = e.touches ? e.touches[0].clientY : e.clientY;
                 let h = startH - (y - startY);          // 위로 끌면 커짐
-                h = Math.max(120, Math.min(h, window.innerHeight * 0.9));
-                sheet.style.height = h + 'px';
+                h = Math.max(40, Math.min(h, window.innerHeight * 0.9));
+                scroll.style.height = h + 'px';
             }
             function up() {
-                if (!sheet) return;
-                const s = sheet; sheet = null;
-                s.style.transition = '';
-                if (s.getBoundingClientRect().height < 180) closeSFSheet();
+                if (!scroll) return;
+                const sc = scroll; scroll = null;
+                if (sc.getBoundingClientRect().height < 70) closeSFSheet();
             }
             document.querySelectorAll('#sort-sheet .sf-grabber, #sort-sheet .sf-sheet-header, #filter-sheet .sf-grabber, #filter-sheet .sf-sheet-header')
                 .forEach(z => { z.addEventListener('touchstart', down, { passive: false }); z.addEventListener('mousedown', down); });
