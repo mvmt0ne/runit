@@ -298,8 +298,10 @@
       { key: 'totalKm', label: '총 거리', unit: 'K', icon: '<path d="M9 20l-5.4-2.3a1 1 0 0 1-.6-.9V5.2a1 1 0 0 1 1.4-.9L9 6m0 14l6-2m-6 2V6m6 12l5.4 2.3a1 1 0 0 0 1.4-.9V6.8a1 1 0 0 0-.6-.9L15 4m0 14V4m0 0L9 6" />', better: 'high', fmt: v => v },
       { key: 'avgPace', label: '평균 페이스', unit: '/km', icon: '<circle cx="12" cy="13" r="8"/><path d="M12 13V9"/><path d="M9 3h6"/>', better: 'low', fmt: scSecToPace },
       { key: 'bestPace', label: '최고 페이스', unit: '/km', icon: '<path d="M13 2 3 14h7l-1 8 10-12h-7z"/>', better: 'low', fmt: scSecToPace },
-      { key: 'avgSpm', label: '케이던스', unit: 'spm', icon: '<path d="M3 12h4l3 8 4-16 3 8h4"/>', better: 'high', fmt: v => v },
+      { key: 'avgSpm', label: '평균 케이던스', unit: 'spm', icon: '<path d="M3 12h4l3 8 4-16 3 8h4"/>', better: 'high', fmt: v => v },
+      { key: 'maxSpm', label: '최고 케이던스', unit: 'spm', icon: '<path d="M3 12h4l3 8 4-16 3 8h4"/>', better: 'high', fmt: v => v },
       { key: 'avgBpm', label: '평균 심박', unit: 'bpm', icon: '<path d="M19 14c1.5-1.5 3-3.2 3-5.5A3.5 3.5 0 0 0 12 5 3.5 3.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/>', better: 'low', fmt: v => v },
+      { key: 'maxBpm', label: '최고 심박', unit: 'bpm', icon: '<path d="M19 14c1.5-1.5 3-3.2 3-5.5A3.5 3.5 0 0 0 12 5 3.5 3.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/>', better: 'none', fmt: v => v },
       { key: 'avgStride', label: '평균 보폭', unit: 'm', icon: '<path d="M3 6h18M3 6l3-3M3 6l3 3M21 18H3m18 0-3-3m3 3-3 3"/>', better: 'high', fmt: v => (v == null ? '--' : v.toFixed(2)) },
     ];
 
@@ -310,13 +312,15 @@
         const m = (typeof getMeta === 'function') ? (getMeta(a.date) || {}) : {};
         return m.shoeId === shoe.id && (!from || a.date >= from);
       });
-      let km = 0, pS = 0, pN = 0, best = null, sS = 0, sN = 0, bS = 0, bN = 0, tS = 0, tN = 0;
+      let km = 0, pS = 0, pN = 0, best = null, sS = 0, sN = 0, bS = 0, bN = 0, tS = 0, tN = 0, maxS = null, maxB = null;
       acts.forEach(a => {
         km += a.km || 0;
         if (a.paceV) { pS += a.paceV; pN++; if (best == null || a.paceV < best) best = a.paceV; }
         if (a.spm) { sS += a.spm; sN++; }
         if (a.bpm) { bS += a.bpm; bN++; }
         if (a.stride) { tS += a.stride; tN++; }
+        if (a.maxSpm && (maxS == null || a.maxSpm > maxS)) maxS = a.maxSpm;
+        if (a.maxBpm && (maxB == null || a.maxBpm > maxB)) maxB = a.maxBpm;
       });
       return {
         id: shoe.id, name: shoe.name, image: shoe.image, runs: acts.length,
@@ -324,7 +328,9 @@
         avgPace: pN ? Math.round(pS / pN) : null,
         bestPace: best,
         avgSpm: sN ? Math.round(sS / sN) : null,
+        maxSpm: maxS,
         avgBpm: bN ? Math.round(bS / bN) : null,
+        maxBpm: maxB,
         avgStride: tN ? (tS / tN) : null,
       };
     }
@@ -376,7 +382,7 @@
         const vals = stats.map(st => st[m.key]);
         const nums = vals.filter(v => v != null);
         let bestVal = null;
-        if (nums.length) bestVal = m.better === 'low' ? Math.min(...nums) : Math.max(...nums);
+        if (nums.length && (m.better === 'low' || m.better === 'high')) bestVal = m.better === 'low' ? Math.min(...nums) : Math.max(...nums);
         let cells = `<div class="sc-vals" style="${gridCols}">`;
         vals.forEach(v => {
           if (v == null) { cells += `<div class="sc-val sc-empty">--</div>`; return; }
