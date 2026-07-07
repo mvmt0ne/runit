@@ -231,9 +231,29 @@
       font-family: 'Pretendard Variable', sans-serif;
     }
 
-    .mp-actions {
+    .mp-avatar-wrap {
+      position: relative;
+    }
+
+    /* 휴지통 — 아바타 우상단에 겹치는 원형 버튼 */
+    .mp-avatar-remove {
+      position: absolute;
+      top: 0;
+      right: -6px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: var(--dark-gray);
+      color: var(--slate-gray);
       display: flex;
-      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .mp-avatar-remove:active {
+      color: var(--accent);
     }
   </style>
 </head>
@@ -257,18 +277,26 @@
         <div class="input-scroll">
           <!-- ── 프로필 ── -->
           <div class="input-section profile-section">
-            <div class="mp-avatar" id="mp-avatar" onclick="document.getElementById('avatar-file').click()">
-              <svg id="mp-avatar-ph" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="8" r="4" />
-                <path d="M4 21c0-4 3.6-6 8-6s8 2 8 6" />
-              </svg>
-              <img id="mp-avatar-img" alt="" style="display:none">
-              <span class="mp-avatar-edit">변경</span>
-            </div>
-            <div class="mp-actions">
-              <button class="ghost-btn" id="mp-avatar-remove" onclick="onRemoveAvatar()"
-                style="display:none">삭제</button>
+            <div class="mp-avatar-wrap">
+              <div class="mp-avatar" id="mp-avatar" onclick="document.getElementById('avatar-file').click()">
+                <svg id="mp-avatar-ph" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M4 21c0-4 3.6-6 8-6s8 2 8 6" />
+                </svg>
+                <img id="mp-avatar-img" alt="" style="display:none">
+                <span class="mp-avatar-edit">변경</span>
+              </div>
+              <button class="mp-avatar-remove" id="mp-avatar-remove" onclick="onRemoveAvatar()" style="display:none"
+                aria-label="사진 삭제">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 6h18" />
+                  <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" />
+                  <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                  <path d="M10 11v6M14 11v6" />
+                </svg>
+              </button>
             </div>
             <input type="file" id="avatar-file" accept="image/*" style="display:none" onchange="onAvatarPick(event)">
           </div>
