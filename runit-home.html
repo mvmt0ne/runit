@@ -1230,7 +1230,8 @@
       if (btn) btn.disabled = true;   // 선택 전에는 비활성화
       const sheet = document.getElementById('month-sheet');
       sheet.style.transition = '';    // 드래그 후 남은 override 제거
-      sheet.style.height = '';        // 기본 높이(56%)로 리셋
+      // 뷰포트 기준 절반 높이를 px로 직접 지정 (CSS % / dvh 가 iOS 조상 기준으로 어긋나는 문제 회피)
+      sheet.style.height = Math.round(window.innerHeight * 0.5) + 'px';
       sheet.classList.add('open');
       document.getElementById('month-backdrop').classList.add('open');
       // 현재 월을 화면 중앙으로 스크롤

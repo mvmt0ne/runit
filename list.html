@@ -532,7 +532,8 @@
         function openSortSheet() {
             renderSortPanel();
             const s = document.getElementById('sort-sheet');
-            s.style.transition = ''; s.style.height = '';   // 드래그 override 리셋
+            s.style.transition = '';
+            s.style.height = Math.round(window.innerHeight * 0.5) + 'px';  // 뷰포트 절반(px 직접 지정)
             s.classList.add('open');
             document.getElementById('sf-backdrop').classList.add('open');
         }
@@ -542,7 +543,8 @@
             renderFilterPanel();
             updateApplyState();
             const s = document.getElementById('filter-sheet');
-            s.style.transition = ''; s.style.height = '';
+            s.style.transition = '';
+            s.style.height = Math.round(window.innerHeight * 0.5) + 'px';  // 뷰포트 절반(px 직접 지정)
             s.classList.add('open');
             document.getElementById('sf-backdrop').classList.add('open');
         }
