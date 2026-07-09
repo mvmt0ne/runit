@@ -164,7 +164,7 @@
     }
 
     .sc-run-date {
-      width: 44px;
+      width: 66px;
       flex-shrink: 0;
       font-size: 13px;
       color: var(--cloudy-gray);
@@ -483,11 +483,10 @@
       stats.forEach(st => {
         if (!st.acts.length) return;
         const items = st.acts.map(a => {
-          const [, mm, dd] = (a.date || '').split('-');
           const meta = (typeof getMeta === 'function') ? (getMeta(a.date) || {}) : {};
           const nm = (meta.name && meta.name.trim()) || a.name || '러닝';
           return `<div class="sc-run" onclick="goTo('detail.html?date=${a.date}')">
-            <span class="sc-run-date">${parseInt(mm)}.${parseInt(dd)}</span>
+            <span class="sc-run-date">${fmtDateDot(a.date)}</span>
             <span class="sc-run-name">${scEsc(nm)}</span>
             <span class="sc-run-km">${(a.km || 0).toFixed(1)} K</span>
             <span class="sc-run-pace">${a.pace || '--'}</span>

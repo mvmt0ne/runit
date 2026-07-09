@@ -1759,6 +1759,19 @@ input[type="date"].input-field::-webkit-calendar-picker-indicator {
     pointer-events: none;
 }
 
+/* 네이티브 date 텍스트 숨김 + yy-mm-dd 오버레이 */
+input[type="date"].date-dotted::-webkit-datetime-edit {
+    color: transparent;
+}
+
+.date-dot-display {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
 /* 날짜 입력 — 다크 배경 + 커스텀 달력 아이콘 (모바일에서 네이티브가 깨져 보이는 문제 해결) */
 input[type="date"].pb-input {
     color-scheme: dark;

@@ -457,7 +457,6 @@
         function rowHTML(r, showMonth = false, flat = false) {
             const parts = r.date.split('-');
             const month = parseInt(parts[1]);
-            const day = parseInt(parts[2]);
             const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
             const weekday = WEEKDAYS[new Date(r.date).getDay()];
             const strideM = (r.stride / 100).toFixed(2);
@@ -470,7 +469,7 @@
           <div class="lp-row-head">
             <div class="lp-badge type-${r.type}"></div>
             <div class="lp-stat">
-            <span class="lp-date-day">${month}.${day} ${weekday}</span>
+            <span class="lp-date-day">${fmtDateDot(r.date)} ${weekday}</span>
             <span class="lp-run-name">${r.name}</span>
             </div>
             <span class="lp-head-km">${r.km}<sup> K</sup></span>

@@ -51,35 +51,48 @@
     if (kind) e.viewTransition.types.add(kind);
   });
 
-  /* ── 날짜 표기 통일: 'YYYY-MM-DD' → '2026. 7. 26.' ── */
+  /* ── 날짜 표기 통일: 'YYYY-MM-DD' → 'yy-mm-dd' (예: 26-07-06) ── */
   window.fmtDateDot = function (iso) {
     const m = String(iso || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
     if (!m) return iso || '';
-    return `${m[1]}. ${parseInt(m[2], 10)}. ${parseInt(m[3], 10)}.`;
+    return `${m[1].slice(2)}-${m[2]}-${m[3]}`;
   };
 
-  /* ── 네이티브 date 입력의 0 패딩 표기(2026. 07. 06.)를 fmtDateDot 오버레이로 교체.
-     네이티브 포맷은 로케일이 결정해 직접 변경 불가 → 값 있을 때 네이티브 텍스트를
-     투명 처리하고 같은 자리에 포맷 텍스트를 겹침. 부모는 position:relative 필요. ── */
+  /* ── 네이티브 date 입력의 로케일 표기(2026. 07. 06.)를 yy-mm-dd 오버레이로 교체.
+     네이티브 포맷은 OS 로케일이 결정해 직접 변경 불가 → 값이 있을 때 네이티브 텍스트를
+     투명 처리(.date-dotted)하고 같은 위치에 포맷 텍스트 span 을 겹침.
+     input 부모는 position:relative 여야 함 (.dt / .pb-dt / .date-wrap). ── */
   window.bindDateDot = function (input) {
     if (!input || input._dotBound) return;
     input._dotBound = true;
     const span = document.createElement('span');
     span.className = 'date-dot-display';
-    const cs = getComputedStyle(input);
-    span.style.font = cs.font;
-    span.style.color = cs.color;
     (input.parentElement || input).appendChild(span);
     const upd = () => {
       const has = !!input.value;
-      span.textContent = has ? window.fmtDateDot(input.value) : '';
+      if (has) {
+        const cs = getComputedStyle(input);
+        span.style.font = cs.font;
+        span.style.color = cs.color;
+        span.style.left = (input.offsetLeft + parseFloat(cs.paddingLeft || 0)) + 'px';
+        span.style.top = input.offsetTop + 'px';
+        span.style.height = input.offsetHeight + 'px';
+        span.textContent = window.fmtDateDot(input.value);
+      } else {
+        span.textContent = '';
+      }
       input.classList.toggle('date-dotted', has);
     };
     input.addEventListener('input', upd);
     input.addEventListener('change', upd);
-    setInterval(upd, 600); // 프로그램적 value 세팅(편집 진입 등) 반영
+    setInterval(upd, 500); // 프로그램적 value 세팅(편집 진입 등) 반영
     upd();
   };
+
+  /* 페이지 로드 시 모든 date 입력에 오버레이 자동 연결 */
+  window.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('input[type="date"]').forEach(function (el) { window.bindDateDot(el); });
+  });
 
   /* ── Forward ── */
   window.goTo = function (url) {
