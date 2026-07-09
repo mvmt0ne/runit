@@ -1473,19 +1473,21 @@
     // (CSV엔 활동별 평균 심박만 있어 활동을 존으로 분류 후 시간 가중 — 근사)
     function intensityFromRuns(runs) {
       let low = 0, mid = 0, high = 0;
+      let kmLow = 0, kmMid = 0, kmHigh = 0;   // 밴드별 볼륨(거리) = 부하 감
       (runs || []).forEach(r => {
         const z = bpmToIntensity(r.bpm, r.date);
         if (!z) return; // 심박 없는 활동 제외
         const w = (r.durSec && r.durSec > 0) ? r.durSec : 1;
-        if (z === 'low') low += w;
-        else if (z === 'mid') mid += w;
-        else high += w;
+        const km = r.km || 0;
+        if (z === 'low') { low += w; kmLow += km; }
+        else if (z === 'mid') { mid += w; kmMid += km; }
+        else { high += w; kmHigh += km; }
       });
       const total = low + mid + high;
       if (!total) return null;
       const lp = Math.round((low / total) * 100);
       const mp = Math.round((mid / total) * 100);
-      return { low: lp, mid: mp, high: 100 - lp - mp };
+      return { low: lp, mid: mp, high: 100 - lp - mp, kmLow, kmMid, kmHigh };
     }
 
     function calcIntensity(year, month) {
@@ -1516,6 +1518,7 @@
           intensity.mid,
           intensity.high,
           isDefault ? 300 : 60,
+          intensity,
         );
       }
       // 러닝 종류 차트 — 선택 월로 연동
@@ -1910,15 +1913,17 @@
 모두 12시(270°)에서 시계방향 시작, round-linecap 각도 보정 포함.
 텍스트는 SVG 내부에서 제거 — 제목/범례는 컴포넌트 레벨에서 분리 렌더.
 ── */
-    function renderIntensityDonut(containerId, low, mid, high, animDelay) {
+    function renderIntensityDonut(containerId, low, mid, high, animDelay, vols) {
       const el = document.getElementById(containerId);
       if (!el) return;
 
       const TOTAL = 50; // 50칸 · 칸당 2%
+      // 밴드별 볼륨(거리)이 있으면 부하 관점으로 함께 표기
+      const kmSub = (v) => (v != null ? `${Math.round(v)}km` : null);
       const meta = {
-        low: { label: '저', sub: '존1~2 · ~151bpm', pct: low, color: 'var(--asphalt-gray)', cls: 'low' },
-        mid: { label: '중', sub: '존3 · 152~163bpm', pct: mid, color: 'var(--slate-gray)', cls: 'mid' },
-        high: { label: '고', sub: '존4+ · 164bpm~', pct: high, color: 'var(--accent)', cls: 'high' },
+        low: { label: '저', sub: kmSub(vols && vols.kmLow) || '존1~2', pct: low, color: 'var(--asphalt-gray)', cls: 'low' },
+        mid: { label: '중', sub: kmSub(vols && vols.kmMid) || '존3', pct: mid, color: 'var(--slate-gray)', cls: 'mid' },
+        high: { label: '고', sub: kmSub(vols && vols.kmHigh) || '존4+', pct: high, color: 'var(--accent)', cls: 'high' },
       };
 
       // 각 강도의 칸 수(2%당 1칸). 합이 50이 되도록 가장 큰 버킷(저)에서 보정.
@@ -1984,7 +1989,7 @@
     function renderIntensityBar(containerId, runs, animate) {
       const r = intensityFromRuns(runs);
       if (!r) return;
-      renderIntensityDonut(containerId, r.low, r.mid, r.high, animate ? 300 : 0);
+      renderIntensityDonut(containerId, r.low, r.mid, r.high, animate ? 300 : 0, r);
     }
 
     // ══════════════════════════════════════
