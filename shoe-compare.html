@@ -43,7 +43,8 @@
 
     /* 신발 헤더 행 */
     .sc-heads {
-      display: block;
+      display: flex;
+      gap: 8px;
       position: sticky;
       /* 컴팩트 스티키 헤더(lp-header) 바로 아래에 붙음 */
       top: calc(env(safe-area-inset-top, 0px) + 28px);
@@ -81,7 +82,6 @@
       font-size: 24px;
       font-weight: 600;
       color: var(--asphalt-black);
-      white-space: nowrap;
       text-transform: uppercase;
     }
 
@@ -96,13 +96,8 @@
       min-width: 26px;
     }
 
-    .sc-head-runs {
-      font-size: 14px;
-    }
-
     .sc-head.sc-add {
       background: transparent;
-      border: 1px dashed rgba(0, 0, 0, 0.16);
       justify-content: center;
     }
 
@@ -202,6 +197,7 @@
     .sc-head-wrap {
       position: relative;
       min-width: 0;
+      width: 33.3%;
     }
 
     /* 지표 행 */
@@ -449,8 +445,7 @@
       });
       if (canAdd) {
         heads += `<div class="sc-head sc-add" onclick="openCmpPicker(${scSlots.length})">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-          <span class="sc-head-runs">추가</span>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
         </div>`;
       }
       heads += `</div>`;
