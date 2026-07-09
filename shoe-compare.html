@@ -43,8 +43,7 @@
 
     /* 신발 헤더 행 */
     .sc-heads {
-      display: grid;
-      gap: 4px;
+      display: block;
       position: sticky;
       /* 컴팩트 스티키 헤더(lp-header) 바로 아래에 붙음 */
       top: calc(env(safe-area-inset-top, 0px) + 28px);
@@ -55,15 +54,7 @@
     }
 
     .sc-head {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      padding: 24px 14px;
-      border-radius: 12px;
-      background: var(--light-gray);
-      cursor: pointer;
-      min-width: 0;
+      padding: 10px;
     }
 
     .sc-head:active {
@@ -71,6 +62,7 @@
     }
 
     .sc-head-img {
+      display: none;
       width: 70%;
       height: 36px;
       object-fit: contain;
@@ -86,15 +78,22 @@
     }
 
     .sc-head-name {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--asphalt-gray);
-      font-family: 'Pretendard Variable', sans-serif;
-      text-align: left;
-      max-width: 100%;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--asphalt-black);
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      text-transform: uppercase;
+    }
+
+    .sc-head-name em {
+      font-size: 0.5em;
+      background: var(--accent);
+      font-style: normal;
+      vertical-align: super;
+      padding: 4px 6px;
+      border-radius: 40%;
+      margin-left: 4px;
+      min-width: 26px;
     }
 
     .sc-head-runs {
@@ -140,14 +139,14 @@
     }
 
     .sc-runs-title em {
+      font-size: 13px;
       font-style: normal;
       font-weight: 500;
       color: var(--asphalt-black);
       background: var(--accent);
-      /* font-family: 'Urbanist', sans-serif; */
       margin-left: 4px;
-      padding: 2px 7px;
-      border-radius: 45%;
+      padding: 2px 5px;
+      border-radius: 40%;
     }
 
     .sc-run {
@@ -442,8 +441,7 @@
         heads += `<div class="sc-head-wrap">
           <div class="sc-head" onclick="openCmpPicker(${i})">
             ${img}
-            <span class="sc-head-name">${scEsc(st.name)}</span>
-            <span class="sc-head-runs">${st.runs}회</span>
+            <span class="sc-head-name">${scEsc(st.name)}<em>${st.runs}</em></span>
           </div>
           <span class="sc-head-edit" onclick="goTo('shoes.html?edit=${st.id}');event.stopPropagation();" aria-label="러닝화 수정"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></span>
           ${scSlots.length > 1 ? `<span class="sc-head-remove" onclick="removeSlot(${i});event.stopPropagation();"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></span>` : ''}
