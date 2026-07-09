@@ -166,15 +166,18 @@ function buildManualActivity(input) {
   const strideCm = num(input.stride);
   const strideM = strideCm != null ? strideCm / 100 : null;
   const id = input.id || `man-${input.date}-${durSec || ''}-${km || ''}`;
+  // 원본 활동(CSV/기존 수동)을 병합해, 폼에 없는 필드(최대 페이스·최대 심박·최고 케이던스 등)를 보존
+  const base = input.base || {};
   return {
+    ...base,
     id,
     manual: true,
-    date: input.date || null,
-    startTime: (input.startTime || '').slice(0, 5),
-    name: (input.name || '').trim() || (input.type || '러닝'),
-    type: input.type || inferType(input.name),
-    activityKind: '러닝',
-    favorite: false,
+    date: input.date || base.date || null,
+    startTime: (input.startTime || '').slice(0, 5) || base.startTime || '',
+    name: (input.name || '').trim() || (input.type || base.name || '러닝'),
+    type: input.type || inferType(input.name) || base.type,
+    activityKind: base.activityKind || '러닝',
+    favorite: base.favorite || false,
     km,
     dur: fmtDurSec(durSec),
     durSec,

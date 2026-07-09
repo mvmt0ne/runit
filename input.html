@@ -573,6 +573,7 @@
     const dateHelper = document.getElementById('date-helper');
 
     let _editingManualId = null; // 편집 중인 수동 활동 id (없으면 새로 추가)
+    let _editingSource = null;   // 편집 중 원본 활동(CSV/수동) — 저장 시 폼 밖 필드 보존
 
     /* ── 활동 본체 입력칸 채우기/비우기 ── */
     const ACT_FIELDS = ['act-time', 'act-km', 'act-dur', 'act-pace', 'act-bpm', 'act-spm', 'act-stride', 'act-ground'];
@@ -674,6 +675,7 @@
       let act = null;
       try { act = await getActivity(date); } catch (e) { /* ignore */ }
       const src = manual || act;
+      _editingSource = src || null;   // 저장 시 원본 필드 보존용
       if (src) {
         if (manual) _editingManualId = manual.id;
         const setv = (id, v) => { document.getElementById(id).value = (v != null ? v : ''); };
@@ -718,6 +720,7 @@
         if (!Number.isFinite(km) || km <= 0) { showToast('거리(km)를 올바르게 입력하세요', true); return; }
         const act = buildManualActivity({
           id: _editingManualId,
+          base: (_editingSource && _editingSource.date === date) ? _editingSource : null,
           date,
           name,
           type,
