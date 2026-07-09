@@ -850,6 +850,75 @@
       line-height: 1.3;
     }
 
+    .nd-count {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 2px 9px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--slate-gray);
+      font-size: 12px;
+      font-weight: 600;
+      vertical-align: middle;
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
+    /* 그날의 런 목록 */
+    .nd-avg-title em {
+      font-style: normal;
+      color: var(--cloudy-gray);
+      font-size: 14px;
+      margin-left: 6px;
+    }
+
+    .nd-run-row {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .nd-run-row:last-child {
+      border-bottom: none;
+    }
+
+    .nd-run-idx {
+      width: 18px;
+      flex-shrink: 0;
+      color: var(--cloudy-gray);
+      font-size: 13px;
+      font-family: 'Urbanist', sans-serif;
+    }
+
+    .nd-run-time {
+      flex: 1;
+      color: var(--slate-gray);
+      font-size: 14px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .nd-run-km {
+      color: var(--bone);
+      font-size: 16px;
+      font-family: 'Urbanist', sans-serif;
+    }
+
+    .nd-run-km em {
+      font-style: normal;
+      font-size: 11px;
+      color: var(--slate-gray);
+      margin-left: 1px;
+    }
+
+    .nd-run-pace {
+      width: 56px;
+      text-align: right;
+      color: var(--cloudy-gray);
+      font-size: 14px;
+      font-family: 'Urbanist', sans-serif;
+    }
+
     .nd-stats {
       flex: 0 0 46%;
       display: flex;
@@ -1228,6 +1297,22 @@
       </div>`;
     }
 
+    // 하루 여러 런 — 개별 런 목록 카드
+    function ndRunsCard(runs) {
+      if (!runs || runs.length < 2) return '';
+      const rows = runs.map((r, i) => `
+        <div class="nd-run-row">
+          <span class="nd-run-idx">${i + 1}</span>
+          <span class="nd-run-time">${r.startTime || '--'}</span>
+          <span class="nd-run-km">${fmtNum(r.km, 2)}<em>K</em></span>
+          <span class="nd-run-pace">${r.pace || '--'}</span>
+        </div>`).join('');
+      return `<div class="nd-avg round-box">
+        <div class="nd-avg-title">그날의 런 <em>${runs.length}회</em></div>
+        ${rows}
+      </div>`;
+    }
+
     function renderHTML(act, meta, list) {
       list = list || [];
       const displayName = (meta.name && meta.name.trim()) || act.name || '러닝';
@@ -1305,13 +1390,15 @@
           <div class="nd-divider"></div>
 
           <div class="nd-summary">
-            <div class="nd-actname">${escapeHTML(displayName)}</div>
+            <div class="nd-actname">${escapeHTML(displayName)}${act.count > 1 ? `<span class="nd-count">${act.count}회</span>` : ''}</div>
             <div class="nd-stats">
               <div class="nd-stat"><span class="nd-stat-val">${act.dur || '--'}</span><span class="nd-stat-label">시간</span></div>
               <div class="nd-stat"><span class="nd-stat-val">${act.pace || '--'}</span><span class="nd-stat-label">페이스</span></div>
               <div class="nd-stat"><span class="nd-stat-val">${fmtNum(act.km, 2)}<em>K</em></span><span class="nd-stat-label">거리</span></div>
             </div>
           </div>
+
+          ${act.count > 1 ? ndRunsCard(act.runs) : ''}
 
           ${avgCard}
         </div>`;

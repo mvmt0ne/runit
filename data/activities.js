@@ -218,9 +218,79 @@ function loadActivities() {
       const manual = (typeof getManualActivities === 'function' ? getManualActivities() : []).filter(a => a && a.date);
       const overridden = new Set(manual.map(a => a.date));
       const csvKept = csvList.filter(a => !overridden.has(a.date));
-      return csvKept.concat(manual).sort((a, b) => (a.date < b.date ? 1 : -1));
+      const all = csvKept.concat(manual);
+      // 하루 여러 런 → 하나의 '일 기록'으로 통합 (마일리지 합산, 개별 런은 runs 에 보존)
+      return mergeByDay(all).sort((a, b) => (a.date < b.date ? 1 : -1));
     });
   return _activitiesPromise;
+}
+
+/* ── 같은 날짜의 여러 런을 하나로 통합 ──
+   거리·시간=합산, 페이스=총시간/총거리, 심박·케이던스·접지=시간가중평균,
+   보폭=거리가중평균, 최고값=각 런 최댓값. 개별 런은 .runs, 개수는 .count. */
+function mergeByDay(list) {
+  const byDate = new Map();
+  list.forEach(a => {
+    if (!byDate.has(a.date)) byDate.set(a.date, []);
+    byDate.get(a.date).push(a);
+  });
+  const out = [];
+  byDate.forEach((runs, date) => {
+    if (runs.length === 1) { out.push({ ...runs[0], count: 1, runs: runs.slice() }); return; }
+    out.push(mergeDayRuns(date, runs));
+  });
+  return out;
+}
+
+function mergeDayRuns(date, runs) {
+  runs = runs.slice().sort((a, b) => String(a.startTime || '') < String(b.startTime || '') ? -1 : 1);
+  const primary = runs.reduce((p, c) => ((c.km || 0) > (p.km || 0) ? c : p), runs[0]);
+  let km = 0, durSec = 0;
+  let bpmS = 0, bpmW = 0, spmS = 0, spmW = 0, grS = 0, grW = 0, stS = 0, stW = 0;
+  let maxPaceV = null, maxBpm = null, maxSpm = null;
+  runs.forEach(a => {
+    const w = a.durSec || (a.paceV && a.km ? a.paceV * a.km : 0) || 1;
+    km += a.km || 0;
+    durSec += a.durSec || (a.paceV && a.km ? Math.round(a.paceV * a.km) : 0);
+    if (a.bpm != null) { bpmS += a.bpm * w; bpmW += w; }
+    if (a.spm != null) { spmS += a.spm * w; spmW += w; }
+    if (a.ground != null) { grS += a.ground * w; grW += w; }
+    if (a.stride != null) { stS += a.stride * (a.km || 1); stW += (a.km || 1); }
+    const mpv = paceToSec(a.maxPace);
+    if (mpv != null && (maxPaceV == null || mpv < maxPaceV)) maxPaceV = mpv;
+    if (a.maxBpm != null && (maxBpm == null || a.maxBpm > maxBpm)) maxBpm = a.maxBpm;
+    if (a.maxSpm != null && (maxSpm == null || a.maxSpm > maxSpm)) maxSpm = a.maxSpm;
+  });
+  const paceV = (durSec && km) ? Math.round(durSec / km) : (primary.paceV || null);
+  const fmtDur = s => {
+    if (s == null) return null;
+    const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+    return h > 0 ? `${h}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`
+      : `${m}:${String(sec).padStart(2, '0')}`;
+  };
+  const fmtPace = v => (v == null ? null : `${Math.floor(v / 60)}:${String(v % 60).padStart(2, '0')}`);
+  return {
+    id: `day-${date}`,
+    date,
+    activityKind: '러닝',
+    startTime: runs[0].startTime || '',
+    name: primary.name || '러닝',
+    type: primary.type,
+    km: Math.round(km * 100) / 100,
+    durSec,
+    dur: fmtDur(durSec),
+    paceV,
+    pace: fmtPace(paceV),
+    maxPace: fmtPace(maxPaceV),
+    bpm: bpmW ? Math.round(bpmS / bpmW) : null,
+    maxBpm,
+    spm: spmW ? Math.round(spmS / spmW) : null,
+    maxSpm,
+    ground: grW ? Math.round(grS / grW) : null,
+    stride: stW ? (stS / stW) : null,
+    count: runs.length,
+    runs,
+  };
 }
 
 function getActivity(date) {
