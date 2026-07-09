@@ -1704,6 +1704,17 @@ input[type='range'].range-input::-moz-range-thumb {
     border-bottom-color: var(--accent);
 }
 
+/* 셀렉트 펼침 화살표 — 네이티브 대신 텍스트색(bone)과 동일한 커스텀 셰브론 */
+select.input-field {
+    -webkit-appearance: none;
+    appearance: none;
+    padding-right: 26px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' stroke='%23efeeed' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8l3-3 3 3M6 10l3 3 3-3'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 2px center;
+    background-size: 18px 18px;
+}
+
 .pb-input {
     width: 100%;
     box-sizing: border-box;
@@ -1759,7 +1770,8 @@ input[type="date"].input-field::-webkit-calendar-picker-indicator {
     pointer-events: none;
 }
 
-/* 네이티브 date 텍스트 숨김 + yy-mm-dd 오버레이 */
+/* 네이티브 date 텍스트 숨김 + yy-mm-dd 오버레이 (요소 색 자체를 투명 → 모든 브라우저에서 확실) */
+input[type="date"].date-dotted,
 input[type="date"].date-dotted::-webkit-datetime-edit {
     color: transparent;
 }

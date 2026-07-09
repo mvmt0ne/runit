@@ -71,6 +71,9 @@
     const upd = () => {
       const has = !!input.value;
       if (has) {
+        // date-dotted 는 input 텍스트를 transparent 로 만들므로, 실제 텍스트 색은
+        // 클래스를 잠시 뗀 상태에서 읽어 오버레이에 적용 (오버레이까지 투명해지는 것 방지)
+        input.classList.remove('date-dotted');
         const cs = getComputedStyle(input);
         span.style.font = cs.font;
         span.style.color = cs.color;
@@ -78,10 +81,11 @@
         span.style.top = input.offsetTop + 'px';
         span.style.height = input.offsetHeight + 'px';
         span.textContent = window.fmtDateDot(input.value);
+        input.classList.add('date-dotted');
       } else {
         span.textContent = '';
+        input.classList.remove('date-dotted');
       }
-      input.classList.toggle('date-dotted', has);
     };
     input.addEventListener('input', upd);
     input.addEventListener('change', upd);
