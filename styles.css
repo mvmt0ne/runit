@@ -601,7 +601,7 @@ sup {
     padding: 8px 14px;
     background: var(--bone);
     border-radius: 8px;
-    color: var(--slate-gray);
+    color: var(--asphalt-gray);
     text-decoration: none;
     cursor: pointer;
     transition: gap 0.35s cubic-bezier(0.16, 1, 0.3, 1),
