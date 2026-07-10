@@ -388,9 +388,20 @@
 
 
     /* 강도 분포 */
+    /* 강도/부하 각각 별도 박스 → 래퍼는 컨테이너 역할만 */
     .intensity-breakdown {
+      padding: 0;
+      background: transparent;
+    }
+
+    .int-box {
       padding: 30px 20px;
       background: var(--dark-gray);
+      border-radius: 12px;
+    }
+
+    .int-box+.int-box {
+      margin-top: 10px;
     }
 
     /* 강도 카드: 제목 + 도넛 + 범례 */
@@ -2041,12 +2052,14 @@
           mid: '스테디',
           high: '레이스·인터벌·템포·롱',
         }, (animDelay || 0) + 120);
-        loadCard = `<div class="intensity-title" style="margin-top:26px">러닝 부하</div>${loadBlock}`;
+        loadCard = `<div class="int-box"><div class="intensity-title">러닝 부하</div>${loadBlock}</div>`;
       }
 
       el.innerHTML = `
-        <div class="intensity-title">러닝 강도</div>
-        ${intenseBlock}
+        <div class="int-box">
+          <div class="intensity-title">러닝 강도</div>
+          ${intenseBlock}
+        </div>
         ${loadCard}`;
 
       // 칸 채우기 애니메이션 (빈칸 → 색)
