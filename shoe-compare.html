@@ -55,7 +55,7 @@
     }
 
     .sc-head {
-      padding: 10px;
+      padding-right: 10px;
     }
 
     .sc-head:active {
@@ -83,17 +83,8 @@
       font-weight: 600;
       color: var(--asphalt-black);
       text-transform: uppercase;
-    }
-
-    .sc-head-name em {
-      font-size: 0.5em;
-      background: var(--accent);
-      font-style: normal;
-      vertical-align: super;
-      padding: 4px 6px;
-      border-radius: 40%;
-      margin-left: 4px;
-      min-width: 26px;
+      line-height: 1.1;
+      word-break: break-word;
     }
 
     .sc-head.sc-add {
@@ -437,15 +428,15 @@
         heads += `<div class="sc-head-wrap">
           <div class="sc-head" onclick="openCmpPicker(${i})">
             ${img}
-            <span class="sc-head-name">${scEsc(st.name)}<em>${st.runs}</em></span>
+            <span class="sc-head-name">${scEsc(st.name)}</span>
           </div>
-          <span class="sc-head-edit" onclick="goTo('shoes.html?edit=${st.id}');event.stopPropagation();" aria-label="러닝화 수정"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></span>
+           
           ${scSlots.length > 1 ? `<span class="sc-head-remove" onclick="removeSlot(${i});event.stopPropagation();"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></span>` : ''}
         </div>`;
       });
       if (canAdd) {
         heads += `<div class="sc-head sc-add" onclick="openCmpPicker(${scSlots.length})">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M24 8V40M8 24H40"/></svg>
         </div>`;
       }
       heads += `</div>`;
