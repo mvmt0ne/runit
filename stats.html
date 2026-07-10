@@ -1961,14 +1961,16 @@
         el.innerHTML = '<div class="type-chart-empty">기록 없음</div>';
         return;
       }
+      // 부하 등급 색 (강도/부하 도트와 동일 팔레트: 저=asphalt-gray, 중=slate-gray, 고=accent)
+      const BAND_COLOR = { low: 'var(--asphalt-gray)', mid: 'var(--slate-gray)', high: 'var(--accent)' };
       el.innerHTML = visibleTypes.map(t => {
         const count = counts[t.key];
         const pct = Math.round((count / maxCount) * 100);
-        const fill = INTENSITY_COLOR[TYPE_INTENSITY[t.key]] || 'var(--bone)';
+        const fill = BAND_COLOR[TYPE_LOAD[t.key]] || 'var(--slate-gray)';
         return `<div class="type-chart-row">
           <span class="type-chart-label">${t.label}</span>
           <div class="type-chart-track">
-            <div class="type-chart-fill" data-pct="${pct}"></div>
+            <div class="type-chart-fill" data-pct="${pct}" style="background:${fill}"></div>
           </div>
           <span class="type-chart-count">${count}</span>
         </div>`;
