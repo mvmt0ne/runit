@@ -1889,15 +1889,15 @@
     const INTENSITY_COLOR = { low: 'var(--bone)', mid: 'var(--dark-gray)', high: 'var(--accent)' };
     // 런타입 → 강도 등급 (도넛 범례와 일치)
     const TYPE_INTENSITY = {
-      race: 'high', tt: 'high', tempo: 'high', interval: 'high',
-      steady: 'mid', long: 'mid',
+      race: 'high', tt: 'high', interval: 'high',
+      tempo: 'mid', steady: 'mid', long: 'mid',
       easy: 'low', jogging: 'low',
     };
 
     // 런타입 → 부하 등급 (레이스·인터벌·TT·템포·LSD/롱 = 고부하, 스테디 = 중, 이지·조깅 = 저)
     const TYPE_LOAD = {
-      race: 'high', interval: 'high', tt: 'high', tempo: 'high', long: 'high',
-      steady: 'mid',
+      race: 'high', interval: 'high', tt: 'high', long: 'high',
+      tempo: 'mid', steady: 'mid',
       easy: 'low', jogging: 'low',
     };
 
