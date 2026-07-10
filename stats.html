@@ -1898,6 +1898,32 @@
       easy: 'low', jogging: 'low',
     };
 
+    // 런타입 → 부하 등급 (레이스·인터벌·TT·템포·LSD/롱 = 고부하, 스테디 = 중, 이지·조깅 = 저)
+    const TYPE_LOAD = {
+      race: 'high', interval: 'high', tt: 'high', tempo: 'high', long: 'high',
+      steady: 'mid',
+      easy: 'low', jogging: 'low',
+    };
+
+    // 런타입 기준 부하 분포 — 시간(durSec) 가중 + 밴드별 거리
+    function loadFromRuns(runs) {
+      let low = 0, mid = 0, high = 0, kmLow = 0, kmMid = 0, kmHigh = 0;
+      (runs || []).forEach(r => {
+        const t = (typeof normRunType === 'function') ? normRunType(r.type) : r.type;
+        const b = TYPE_LOAD[t] || 'low';
+        const w = (r.durSec && r.durSec > 0) ? r.durSec : 1;
+        const km = r.km || 0;
+        if (b === 'low') { low += w; kmLow += km; }
+        else if (b === 'mid') { mid += w; kmMid += km; }
+        else { high += w; kmHigh += km; }
+      });
+      const total = low + mid + high;
+      if (!total) return null;
+      const lp = Math.round((low / total) * 100);
+      const mp = Math.round((mid / total) * 100);
+      return { low: lp, mid: mp, high: 100 - lp - mp, kmLow, kmMid, kmHigh };
+    }
+
     function renderTypeChart(containerId, runs) {
       const RUN_TYPES = [
         { key: 'race', label: 'Race' },
@@ -1952,36 +1978,27 @@
 모두 12시(270°)에서 시계방향 시작, round-linecap 각도 보정 포함.
 텍스트는 SVG 내부에서 제거 — 제목/범례는 컴포넌트 레벨에서 분리 렌더.
 ── */
-    function renderIntensityDonut(containerId, low, mid, high, animDelay, vols, runs) {
-      const el = document.getElementById(containerId);
-      if (!el) return;
-
+    // 밴드 분포 → 도트 그리드 + 범례 HTML (강도/부하 공용)
+    function bandBlockHTML(dist, subs, animDelay) {
       const TOTAL = 50; // 50칸 · 칸당 2%
-      // 밴드별 볼륨(거리)이 있으면 부하 관점으로 함께 표기
-      const kmSub = (v) => (v != null ? `${Math.round(v)}km` : null);
+      const { low, mid, high } = dist;
       const meta = {
-        low: { label: '저', sub: kmSub(vols && vols.kmLow) || '존1~2', pct: low, color: 'var(--asphalt-gray)', cls: 'low' },
-        mid: { label: '중', sub: kmSub(vols && vols.kmMid) || '존3', pct: mid, color: 'var(--slate-gray)', cls: 'mid' },
-        high: { label: '고', sub: kmSub(vols && vols.kmHigh) || '존4+', pct: high, color: 'var(--accent)', cls: 'high' },
+        low: { label: '저', sub: subs.low, pct: low, color: 'var(--asphalt-gray)', cls: 'low' },
+        mid: { label: '중', sub: subs.mid, pct: mid, color: 'var(--slate-gray)', cls: 'mid' },
+        high: { label: '고', sub: subs.high, pct: high, color: 'var(--accent)', cls: 'high' },
       };
-
-      // 각 강도의 칸 수(2%당 1칸). 합이 50이 되도록 가장 큰 버킷(저)에서 보정.
       let nHigh = Math.round(high / 2);
       let nMid = Math.round(mid / 2);
       let nLow = TOTAL - nHigh - nMid;
       if (nLow < 0) { nMid += nLow; nLow = 0; }
       if (nMid < 0) { nHigh += nMid; nMid = 0; }
       if (nHigh < 0) nHigh = 0;
-
-      // 채우는 순서: 고 → 중 → 저 (범례 순서와 동일)
       const fill = [
         { n: nHigh, color: meta.high.color, cls: 'high' },
         { n: nMid, color: meta.mid.color, cls: 'mid' },
         { n: nLow, color: meta.low.color, cls: 'low' },
       ];
-
-      let cells = '';
-      let idx = 0;
+      let cells = '', idx = 0;
       fill.forEach(g => {
         for (let i = 0; i < g.n && idx < TOTAL; i++, idx++) {
           const delay = (animDelay || 0) + idx * 9;
@@ -1989,63 +2006,54 @@
         }
       });
       for (; idx < TOTAL; idx++) cells += `<span class="ig-cell"><i class="ig-dot"></i></span>`;
-
-      // 범례는 고 → 중 → 저 순
-      const legendRows = [meta.high, meta.mid, meta.low]
-        .map(
-          m => `
+      const legendRows = [meta.high, meta.mid, meta.low].map(m => `
         <div class="intensity-legend-row ${m.cls}">
           <div class="il-top">
             <span class="il-label">${m.label}</span>
             <span class="il-pct">${m.pct}<span class="il-pct-unit">%</span></span>
           </div>
           <span class="il-types">${m.sub}</span>
-        </div>
-      `,
-        )
-        .join('');
+        </div>`).join('');
+      return `<div class="intensity-row">
+          <div class="intensity-legend">${legendRows}</div>
+          <div class="intensity-grid">${cells}</div>
+        </div>`;
+    }
 
-      // 부하 차트 — 세션별 '시간' 막대(길이=부하), 색=강도. 강도와 독립된 축.
-      // LSD: 긴 막대(고부하) + 어두운 색(저강도) 로 대비됨.
-      let loadBar = '';
-      const bandColor = { low: 'var(--asphalt-gray)', mid: 'var(--slate-gray)', high: 'var(--accent)' };
-      const rs = (runs || []).filter(r => (r.durSec || 0) > 0).slice().sort((a, b) => b.durSec - a.durSec);
-      if (rs.length) {
-        const maxDur = rs[0].durSec;
-        const rows = rs.map((r, i) => {
-          const z = bpmToIntensity(r.bpm, r.date) || 'low';
-          const w = Math.max(5, Math.round((r.durSec / maxDur) * 100));
-          const h = Math.floor(r.durSec / 3600), m = Math.round((r.durSec % 3600) / 60);
-          const durTxt = h > 0 ? `${h}:${String(m).padStart(2, '0')}` : `${m}분`;
-          return `<div class="ld-row">
-            <span class="ld-bar" style="width:${w}%;background:${bandColor[z]};transition-delay:${(animDelay || 0) + i * 25}ms" data-fill="1"></span>
-            <span class="ld-km">${(r.km || 0).toFixed(1)}K · ${durTxt}</span>
-          </div>`;
-        }).join('');
-        loadBar = `
-          <div class="intensity-title" style="margin-top:22px">부하 · 세션별 시간</div>
-          <div class="ld-note">막대 길이 = 시간(부하) · 색 = 강도</div>
-          <div class="ld-chart">${rows}</div>`;
+    function renderIntensityDonut(containerId, low, mid, high, animDelay, vols, runs) {
+      const el = document.getElementById(containerId);
+      if (!el) return;
+
+      const kmSub = (v) => (v != null ? `${Math.round(v)}km` : '');
+      // 강도 (심박 존 기준)
+      const intenseBlock = bandBlockHTML({ low, mid, high }, {
+        low: kmSub(vols && vols.kmLow) || '존1~2',
+        mid: kmSub(vols && vols.kmMid) || '존3',
+        high: kmSub(vols && vols.kmHigh) || '존4+',
+      }, animDelay);
+
+      // 부하 (런타입 기준) — 강도 아래에 같은 스타일로
+      let loadCard = '';
+      const L = loadFromRuns(runs);
+      if (L) {
+        const loadBlock = bandBlockHTML(L, {
+          low: '이지·조깅',
+          mid: '스테디',
+          high: '레이스·인터벌·템포·롱',
+        }, (animDelay || 0) + 120);
+        loadCard = `<div class="intensity-title" style="margin-top:26px">러닝 부하</div>${loadBlock}`;
       }
 
       el.innerHTML = `
         <div class="intensity-title">러닝 강도</div>
-        <div class="intensity-row">
-          <div class="intensity-legend">
-            ${legendRows}
-          </div>
-          <div class="intensity-grid">${cells}</div>
-        </div>
-        ${loadBar}`;
+        ${intenseBlock}
+        ${loadCard}`;
 
       // 칸 채우기 애니메이션 (빈칸 → 색)
       requestAnimationFrame(() =>
         requestAnimationFrame(() => {
           el.querySelectorAll('.ig-dot[data-bg]').forEach(c => {
             c.style.background = c.dataset.bg;
-          });
-          el.querySelectorAll('.ld-bar[data-fill]').forEach(s => {
-            s.style.transform = 'scaleX(1)';
           });
         }),
       );
