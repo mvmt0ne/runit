@@ -30,10 +30,15 @@
       padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
     }
 
-    .pb-scroll::-webkit-scrollbar { display: none; }
+    .pb-scroll::-webkit-scrollbar {
+      display: none;
+    }
 
     /* ── Distance tabs — 8개 균등 분배. 개수가 많아 폰트를 줄여 여유 확보 ── */
-    .dist-tabs { padding: 0 6px; }
+    .dist-tabs {
+      padding: 0 6px;
+    }
+
     .dist-tabs .tab {
       flex: 1;
       padding: 12px 0;
@@ -79,9 +84,17 @@
     }
 
     @keyframes hero-tap {
-      0%   { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) scale(1); }
-      50%  { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) scale(0.96); }
-      100% { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) scale(1); }
+      0% {
+        transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) scale(1);
+      }
+
+      50% {
+        transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) scale(0.96);
+      }
+
+      100% {
+        transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) scale(1);
+      }
     }
 
     .pb-hero-bg {
@@ -99,12 +112,10 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(
-          circle 50% 50% at var(--foil-x, 50%) var(--foil-y, 50%),
+        radial-gradient(circle 50% 50% at var(--foil-x, 50%) var(--foil-y, 50%),
           rgba(255, 255, 255, 0.55) 0%,
           rgba(255, 255, 255, 0.1) 35%,
-          transparent 60%
-        );
+          transparent 60%);
       mix-blend-mode: overlay;
       opacity: 0.9;
       pointer-events: none;
@@ -115,14 +126,12 @@
     .pb-hero-sheen {
       position: absolute;
       inset: 0;
-      background: linear-gradient(
-        calc(var(--sheen-angle, 110) * 1deg),
-        transparent 30%,
-        hsla(40, 90%, 75%, 0.18) 42%,
-        hsla(160, 90%, 75%, 0.22) 50%,
-        hsla(280, 90%, 75%, 0.18) 58%,
-        transparent 70%
-      );
+      background: linear-gradient(calc(var(--sheen-angle, 110) * 1deg),
+          transparent 30%,
+          hsla(40, 90%, 75%, 0.18) 42%,
+          hsla(160, 90%, 75%, 0.22) 50%,
+          hsla(280, 90%, 75%, 0.18) 58%,
+          transparent 70%);
       mix-blend-mode: screen;
       pointer-events: none;
       will-change: background;
@@ -340,16 +349,26 @@
       color: rgba(255, 255, 255, 0.95);
       cursor: pointer;
     }
-    .pb-hero-edit:active { background: rgba(255, 255, 255, 0.34); }
+
+    .pb-hero-edit:active {
+      background: rgba(255, 255, 255, 0.34);
+    }
+
     /* 공식 PB 입력 시트 CSS는 styles.css(전역)에 있음 —
        app.html SPA에서 시트를 document.body로 portal 이동 시 스코프 밖이라 전역 필요. */
 
     @media (prefers-reduced-motion: reduce) {
+
       .pb-hero-card,
       .pb-hero-foil,
       .pb-hero-sheen,
-      .pb-row { transition: none !important; }
-      .pb-hero-card.tap { animation: none !important; }
+      .pb-row {
+        transition: none !important;
+      }
+
+      .pb-hero-card.tap {
+        animation: none !important;
+      }
     }
 
     .pb-back {
@@ -377,34 +396,29 @@
 <body>
   <div class="phone">
     <div class="phone-inner">
-
-      <button class="pb-back" onclick="goBackSmart()" aria-label="뒤로">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="m15 18-6-6 6-6" />
-        </svg>
-      </button>
-
+      <div class="back-header back-header--dark">
+        <button class="back-btn" onclick="goBackToDetail()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12 19-7-7 7-7"></path>
+            <path d="M19 12H5"></path>
+          </svg>
+        </button>
+        <span class="back-title">PB</span>
+      </div>
       <div class="pb-scroll">
 
-        <!-- Compact sticky header -->
-        <div class="lp-header">
-          <span class="lp-header-title-compact">PB</span>
-        </div>
-        <!-- Large title -->
-        <div class="lp-hero">
-          <h1 class="lp-hero-title">PB</h1>
-        </div>
+
 
         <div class="tab-row dist-tabs">
-          <button class="tab"        data-dist="400"  onclick="switchDist('400')">400m</button>
-          <button class="tab"        data-dist="1k"   onclick="switchDist('1k')">1K</button>
-          <button class="tab"        data-dist="3k"   onclick="switchDist('3k')">3K</button>
-          <button class="tab active" data-dist="5k"   onclick="switchDist('5k')">5K</button>
-          <button class="tab"        data-dist="10k"  onclick="switchDist('10k')">10K</button>
-          <button class="tab"        data-dist="15k"  onclick="switchDist('15k')">15K</button>
-          <button class="tab"        data-dist="half" onclick="switchDist('half')">하프</button>
-          <button class="tab"        data-dist="full" onclick="switchDist('full')">풀</button>
+          <button class="tab" data-dist="400" onclick="switchDist('400')">400m</button>
+          <button class="tab" data-dist="1k" onclick="switchDist('1k')">1K</button>
+          <button class="tab" data-dist="3k" onclick="switchDist('3k')">3K</button>
+          <button class="tab active" data-dist="5k" onclick="switchDist('5k')">5K</button>
+          <button class="tab" data-dist="10k" onclick="switchDist('10k')">10K</button>
+          <button class="tab" data-dist="15k" onclick="switchDist('15k')">15K</button>
+          <button class="tab" data-dist="half" onclick="switchDist('half')">하프</button>
+          <button class="tab" data-dist="full" onclick="switchDist('full')">풀</button>
         </div>
 
         <div class="pb-content">
@@ -451,12 +465,17 @@
         <label class="pb-field-label">날짜 (선택)</label>
         <div class="pb-dt">
           <input type="date" id="pb-in-date" class="pb-input" onclick="try{this.showPicker()}catch(e){}">
-          <svg class="pb-dt-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          <svg class="pb-dt-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <path d="M16 2v4M8 2v4M3 10h18" />
+          </svg>
         </div>
         <label class="pb-field-label">대회·메모 (선택)</label>
         <input type="text" id="pb-in-name" class="pb-input" placeholder="예: 서울마라톤">
         <div class="pb-sheet-actions">
-          <button class="pb-sheet-btn pb-sheet-del" id="pb-del-btn" onclick="deletePBEntry()" style="display:none">삭제</button>
+          <button class="pb-sheet-btn pb-sheet-del" id="pb-del-btn" onclick="deletePBEntry()"
+            style="display:none">삭제</button>
           <button class="pb-sheet-btn pb-sheet-cancel" onclick="closePBEdit()">취소</button>
           <button class="pb-sheet-btn pb-sheet-save" onclick="savePBEntry()">저장</button>
         </div>
@@ -481,12 +500,12 @@
     // 거리별 PB — 실제 활동에서 계산. 각 거리의 허용 범위(km) 안의 러닝을
     // 기록(시간) 빠른 순으로 정렬해 상위 5개. (스플릿 데이터 없어 활동 거리 기준 근사)
     const DIST_BANDS = {
-      '400':  [0.35, 0.5],
-      '1k':   [0.9, 1.6],
-      '3k':   [2.7, 3.5],
-      '5k':   [4.6, 5.6],
-      '10k':  [9.3, 11.0],
-      '15k':  [14.0, 16.0],
+      '400': [0.35, 0.5],
+      '1k': [0.9, 1.6],
+      '3k': [2.7, 3.5],
+      '5k': [4.6, 5.6],
+      '10k': [9.3, 11.0],
+      '15k': [14.0, 16.0],
       'half': [20.5, 21.6],
       'full': [41.0, 42.8],
     };
@@ -711,7 +730,7 @@
     let _rafRunning = false;
     let _cardVisible = true;   // PB 카드가 화면에 보이는지 (off-screen이면 렌더 루프 정지)
 
-    const EASE_GYRO  = 0.12;   // 자이로 (느린 idle)
+    const EASE_GYRO = 0.12;   // 자이로 (느린 idle)
     const EASE_POINT = 0.28;   // 터치/마우스 (즉시 반응)
     let _currentEase = EASE_GYRO;
 
@@ -811,11 +830,11 @@
     function handleOrient(e) {
       if (_touchActive) return;
       let gamma = e.gamma || 0;
-      let beta  = e.beta  || 0;
+      let beta = e.beta || 0;
       const ang = (screen.orientation && screen.orientation.angle) || 0;
-      if (ang === 90)            { const g = gamma; gamma = beta;  beta = -g; }
+      if (ang === 90) { const g = gamma; gamma = beta; beta = -g; }
       else if (ang === 270 || ang === -90) { const g = gamma; gamma = -beta; beta = g; }
-      else if (ang === 180)      { gamma = -gamma; beta = -beta; }
+      else if (ang === 180) { gamma = -gamma; beta = -beta; }
 
       _targetX = clamp(gamma / 25, -1, 1);
       _targetY = clamp((beta - 45) / 25, -1, 1);
@@ -831,7 +850,7 @@
       };
       // iOS 13+ 권한 요청
       if (typeof DeviceOrientationEvent !== 'undefined' &&
-          typeof DeviceOrientationEvent.requestPermission === 'function') {
+        typeof DeviceOrientationEvent.requestPermission === 'function') {
         DeviceOrientationEvent.requestPermission()
           .then(state => { if (state === 'granted') start(); })
           .catch(() => { /* user denied */ });
@@ -868,13 +887,13 @@
     {
       const _scrollEl = document.querySelector('.pb-scroll');
       if (typeof setupCollapsingHeader === 'function') setupCollapsingHeader(_scrollEl);
-      if (typeof setupAutoHideChrome === 'function')   setupAutoHideChrome(_scrollEl);
+      if (typeof setupAutoHideChrome === 'function') setupAutoHideChrome(_scrollEl);
     }
   </script>
 
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').then(function(r){ if(r){ setInterval(function(){ r.update(); }, 60000); } }); (function(){ var _rf=false; navigator.serviceWorker.addEventListener('controllerchange', function(){ if(_rf) return; _rf=true; location.reload(); }); })();
+      navigator.serviceWorker.register('./sw.js').then(function (r) { if (r) { setInterval(function () { r.update(); }, 60000); } }); (function () { var _rf = false; navigator.serviceWorker.addEventListener('controllerchange', function () { if (_rf) return; _rf = true; location.reload(); }); })();
     }
   </script>
 </body>
