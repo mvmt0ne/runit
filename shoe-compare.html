@@ -55,7 +55,7 @@
     }
 
     .sc-head {
-      padding: 0 10px 36px 0;
+      padding: 0 10px 0 0;
     }
 
     .sc-head:active {
@@ -79,8 +79,8 @@
     }
 
     .sc-head-name {
-      font-size: 24px;
-      font-weight: 600;
+      font-size: 20px;
+      font-weight: 700;
       color: var(--asphalt-black);
       text-transform: uppercase;
       line-height: 1.1;
@@ -89,13 +89,13 @@
 
     .sc-head.sc-add {
       background: transparent;
-      justify-content: center;
-      width: 33.3%;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .sc-head-remove {
-      position: absolute;
       color: var(--asphalt-black);
+      margin-top: 16px;
     }
 
     .sc-head-edit {
@@ -430,7 +430,7 @@
             <span class="sc-head-name">${scEsc(st.name)}</span>
           </div>
            
-          ${scSlots.length > 1 ? `<span class="sc-head-remove" onclick="removeSlot(${i});event.stopPropagation();"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M0.707031 0.707092L8.70703 8.70709M8.70703 8.70709L16.707 16.7071M8.70703 8.70709L0.707031 16.7071M8.70703 8.70709L16.707 0.707092"/></svg></span>` : ''}
+          ${scSlots.length > 1 ? `<div class="sc-head-remove" onclick="removeSlot(${i});event.stopPropagation();"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M0.707031 0.707092L8.70703 8.70709M8.70703 8.70709L16.707 16.7071M8.70703 8.70709L0.707031 16.7071M8.70703 8.70709L16.707 0.707092"/></svg></div>` : ''}
         </div>`;
       });
       if (canAdd) {
