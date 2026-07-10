@@ -1966,6 +1966,28 @@
         )
         .join('');
 
+      // 부하(거리) 스택 바 — 강도 밴드별 볼륨. LSD 등 저강도 고볼륨이 큰 세그먼트로 드러남.
+      let loadBar = '';
+      if (vols) {
+        const kL = vols.kmLow || 0, kM = vols.kmMid || 0, kH = vols.kmHigh || 0;
+        const tot = kL + kM + kH;
+        if (tot > 0) {
+          const seg = (val, bg, tcol, lab) => {
+            if (val <= 0) return '';
+            const pct = (val / tot) * 100;
+            const txt = pct >= 14 ? `<span>${lab} ${Math.round(val)}</span>` : '';
+            return `<div class="isb-seg" style="flex:${val} 0 0;background:${bg};color:${tcol}" data-fill="1">${txt}</div>`;
+          };
+          loadBar = `
+            <div class="intensity-title" style="margin-top:22px">부하 (거리 · km)</div>
+            <div class="intensity-stacked-bar">
+              ${seg(kL, 'var(--asphalt-gray)', 'var(--bone)', '저')}
+              ${seg(kM, 'var(--slate-gray)', 'var(--asphalt-black)', '중')}
+              ${seg(kH, 'var(--accent)', '#000', '고')}
+            </div>`;
+        }
+      }
+
       el.innerHTML = `
         <div class="intensity-title">러닝 강도</div>
         <div class="intensity-row">
@@ -1973,13 +1995,17 @@
             ${legendRows}
           </div>
           <div class="intensity-grid">${cells}</div>
-        </div>`;
+        </div>
+        ${loadBar}`;
 
       // 칸 채우기 애니메이션 (빈칸 → 색)
       requestAnimationFrame(() =>
         requestAnimationFrame(() => {
           el.querySelectorAll('.ig-dot[data-bg]').forEach(c => {
             c.style.background = c.dataset.bg;
+          });
+          el.querySelectorAll('.isb-seg[data-fill]').forEach(s => {
+            s.style.clipPath = 'inset(0 0 0 0)';
           });
         }),
       );
