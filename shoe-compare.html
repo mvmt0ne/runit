@@ -111,27 +111,85 @@
       color: var(--bone);
     }
 
-    /* 러닝 활동 */
-    .sc-runs {
+    /* 러닝화별 러닝 활동 — 어코디언 */
+    .sc-acc-list {
       margin: 20px;
     }
 
-    .sc-runs-title {
-      font-size: 18px;
-      font-weight: 400;
-      color: var(--slate-gray);
-      margin-bottom: 16px;
+    .sc-acc {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    .sc-runs-title em {
-      font-size: 13px;
-      font-style: normal;
+    .sc-acc-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 2px;
+      cursor: pointer;
+    }
+
+    .sc-acc-head:active {
+      opacity: 0.6;
+    }
+
+    .sc-acc-title {
+      flex: 1;
+      min-width: 0;
+      font-size: 16px;
       font-weight: 500;
+      color: var(--bone);
+      font-family: 'Pretendard Variable', sans-serif;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sc-acc-title em {
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 600;
       color: var(--asphalt-black);
       background: var(--accent);
-      margin-left: 4px;
-      padding: 2px 5px;
-      border-radius: 40%;
+      margin-left: 8px;
+      padding: 2px 7px;
+      border-radius: 100px;
+    }
+
+    .sc-acc-edit {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--slate-gray);
+      cursor: pointer;
+    }
+
+    .sc-acc-edit:active {
+      color: var(--accent);
+    }
+
+    .sc-acc-chev {
+      flex-shrink: 0;
+      color: var(--cloudy-gray);
+      display: flex;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .sc-acc.open .sc-acc-chev {
+      transform: rotate(180deg);
+    }
+
+    .sc-acc-body {
+      display: none;
+      padding-bottom: 8px;
+    }
+
+    .sc-acc.open .sc-acc-body {
+      display: block;
     }
 
     .sc-run {
@@ -459,9 +517,9 @@
         </div>`;
       });
 
-      // 러닝 활동 — 신발별 활동 목록 (탭 → 상세)
+      // 러닝화별 러닝 활동 — 어코디언 (헤더 탭 → 펼침/접힘, 편집 버튼 포함)
       let history = '';
-      stats.forEach(st => {
+      stats.forEach((st, si) => {
         if (!st.acts.length) return;
         const items = st.acts.map(a => {
           const meta = (typeof getMeta === 'function') ? (getMeta(a.date) || {}) : {};
@@ -473,13 +531,25 @@
             <span class="sc-run-pace">${a.pace || '--'}</span>
           </div>`;
         }).join('');
-        history += `<div class="sc-runs">
-          <div class="sc-runs-title">${stats.length > 1 ? scEsc(st.name) + ' ' : ''}러닝 활동 <em>${st.runs}</em></div>
-          ${items}
+        history += `<div class="sc-acc${si === 0 ? ' open' : ''}">
+          <div class="sc-acc-head" onclick="toggleAcc(this)">
+            <span class="sc-acc-title">${scEsc(st.name)}<em>${st.runs}</em></span>
+            <button class="sc-acc-edit" onclick="goTo('shoes.html?edit=${st.id}');event.stopPropagation();" aria-label="러닝화 편집">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+            </button>
+            <span class="sc-acc-chev"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+          </div>
+          <div class="sc-acc-body">${items}</div>
         </div>`;
       });
 
-      body.innerHTML = heads + rows + `<div class="sc-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 3a6 6 0 0 0-4 10.5V16h8v-2.5A6 6 0 0 0 12 3zM9 20h6M10 22h4"/></svg>액센트 = 지표별 더 나은 값 · 최고 페이스는 단일 활동 최고 평균</div>` + history;
+      body.innerHTML = heads + rows + `<div class="sc-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 3a6 6 0 0 0-4 10.5V16h8v-2.5A6 6 0 0 0 12 3zM9 20h6M10 22h4"/></svg>액센트 = 지표별 더 나은 값 · 최고 페이스는 단일 활동 최고 평균</div>` + `<div class="sc-acc-list">${history}</div>`;
+    }
+
+    // 어코디언 펼침/접힘
+    function toggleAcc(headEl) {
+      const acc = headEl.closest('.sc-acc');
+      if (acc) acc.classList.toggle('open');
     }
 
     function removeSlot(i) {
