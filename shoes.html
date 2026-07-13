@@ -60,6 +60,11 @@
       font-size: 13px; font-family: 'Pretendard Variable', sans-serif; cursor: pointer;
     }
     .edit-btn:active { color: var(--accent); }
+    .toggle-btn {
+      padding: 6px; background: transparent; border: none; color: var(--text-2);
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+    }
+    .toggle-btn:active { color: var(--accent); }
 
     .shoe-preview-wrap {
       position: relative; width: 100%; aspect-ratio: 16 / 10;
@@ -82,6 +87,13 @@
     .shoe-list-item {
       display: flex; align-items: center; gap: 12px; padding: 8px 10px;
       background: rgba(255, 255, 255, 0.04); border-radius: 8px;
+    }
+    .shoe-list-item.disabled .shoe-list-thumb,
+    .shoe-list-item.disabled .shoe-list-name { opacity: 0.4; }
+    .shoe-off-badge {
+      font-style: normal; font-size: 10px; font-weight: 600; color: var(--asphalt-black);
+      background: var(--slate-gray); margin-left: 8px; padding: 2px 7px; border-radius: 100px;
+      vertical-align: middle;
     }
     .shoe-list-item.dragging {
       position: relative; z-index: 10; opacity: 0.92;
@@ -332,6 +344,15 @@
       renderShoeList();
     }
 
+    function toggleShoeDisabled(id) {
+      const s = getShoe(id);
+      if (!s) return;
+      const next = !s.disabled;
+      saveShoe({ ...s, disabled: next });
+      showToast(next ? `'${s.name}' 비활성화됨` : `'${s.name}' 활성화됨`);
+      renderShoeList();
+    }
+
     function onRemoveShoe(id) {
       removeShoe(id);
       if (window.RUNIT_CLOUD && window.RUNIT_CLOUD.deleteShoeImage) window.RUNIT_CLOUD.deleteShoeImage(id);
@@ -364,12 +385,17 @@
       const shoes = listShoes();
       if (!shoes.length) { list.innerHTML = '<li class="shoe-list-empty">등록된 러닝화 없음</li>'; return; }
       list.innerHTML = shoes.map(s => `
-        <li class="shoe-list-item" data-id="${s.id}">
+        <li class="shoe-list-item${s.disabled ? ' disabled' : ''}" data-id="${s.id}">
           <span class="shoe-drag" aria-label="순서 변경">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01"/></svg>
           </span>
           <img class="shoe-list-thumb" src="${s.image}" alt="${s.name}">
-          <span class="shoe-list-name">${s.name}</span>
+          <span class="shoe-list-name">${s.name}${s.disabled ? '<em class="shoe-off-badge">비활성</em>' : ''}</span>
+          <button class="toggle-btn" onclick="toggleShoeDisabled('${s.id}')" aria-label="${s.disabled ? '활성화' : '비활성화'}">
+            ${s.disabled
+        ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>'
+        : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 10 8 10 8a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.5 13.5 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/></svg>'}
+          </button>
           <button class="edit-btn" onclick="editShoe('${s.id}')">수정</button>
           <button class="delete-btn" onclick="onRemoveShoe('${s.id}')">삭제</button>
         </li>`).join('');

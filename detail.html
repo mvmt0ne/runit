@@ -1407,8 +1407,10 @@
 
     /* ── 신발 선택 시트 (롤링) ── */
     function openShoePicker() {
-      const shoes = (typeof listShoes === 'function') ? listShoes() : [];
       const meta = getMeta(_date) || {};
+      // 비활성 러닝화는 선택 옵션에서 숨김 — 단, 이미 이 활동에 배정된 신발은 유지
+      const shoes = ((typeof listShoes === 'function') ? listShoes() : [])
+        .filter(s => !s.disabled || s.id === meta.shoeId);
       const wrap = document.getElementById('shoe-carousel-wrap');
       if (!shoes.length) {
         wrap.innerHTML = `<div class="shoe-sheet-empty">등록된 러닝화가 없습니다.<br><a onclick="goTo('shoes.html')">러닝화 등록하러 가기 ›</a></div>`;

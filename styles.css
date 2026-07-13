@@ -742,7 +742,7 @@ sup {
 
 .lp-run-name {
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 500;
     min-width: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -753,7 +753,7 @@ sup {
 
 .lp-head-km {
     font-size: 24px;
-    font-weight: 500;
+    font-weight: 400;
     font-family: 'Orbitron', sans-serif;
     font-feature-settings: 'tnum';
     color: var(--bone);
