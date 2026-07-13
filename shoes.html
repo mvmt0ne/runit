@@ -133,6 +133,7 @@
       transition: opacity 0.15s, background 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .save-btn:active { transform: scale(0.98); }
+    .save-btn:disabled { opacity: 0.1; cursor: not-allowed; }
 
     .toast {
       position: fixed; bottom: calc(40px + env(safe-area-inset-bottom, 0px)); left: 50%;
@@ -210,7 +211,7 @@
           </div>
         </div>
         <div class="input-footer">
-          <button class="save-btn" id="shoe-submit" onclick="onAddShoe()">등록</button>
+          <button class="save-btn" id="shoe-submit" onclick="onAddShoe()" disabled>등록</button>
         </div>
       </div>
     </div>
@@ -274,8 +275,16 @@
       _shoeDataURL = dataURL || null;
       if (dataURL) { shoePreview.src = dataURL; shoePreview.classList.add('has-image'); }
       else { shoePreview.src = ''; shoePreview.classList.remove('has-image'); }
+      updateSubmitState();
     }
     function clearShoe() { setShoePreview(null); shoeInput.value = ''; }
+
+    // 저장 버튼 — 이름 + 이미지가 모두 있어야 활성화
+    function updateSubmitState() {
+      const ok = !!(shoeNameInput.value.trim() && _shoeDataURL);
+      document.getElementById('shoe-submit').disabled = !ok;
+    }
+    shoeNameInput.addEventListener('input', updateSubmitState);
 
     /* 브랜드 + 로고 (SVG) */
     const logoInput = document.getElementById('input-logo');
