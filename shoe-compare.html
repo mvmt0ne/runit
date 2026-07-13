@@ -603,9 +603,9 @@
       const handle = document.querySelector('#sc-sheet .sf-grabber');
       const list = document.getElementById('sc-pick-list');
       if (!handle || !list) return;
-      let startY = 0, startH = 0, dragging = false;
+      let startY = 0, startH = 0, dragging = false, moved = 0;
       function down(e) {
-        dragging = true;
+        dragging = true; moved = 0;
         startY = e.touches ? e.touches[0].clientY : e.clientY;
         startH = list.getBoundingClientRect().height;
         if (e.cancelable) e.preventDefault();
@@ -613,6 +613,7 @@
       function move(e) {
         if (!dragging) return;
         const y = e.touches ? e.touches[0].clientY : e.clientY;
+        moved = Math.max(moved, Math.abs(y - startY));
         let h = startH - (y - startY);          // 위로 끌면 커짐
         h = Math.max(40, Math.min(h, window.innerHeight * 0.9));
         list.style.height = h + 'px';
@@ -620,6 +621,16 @@
       function up() {
         if (!dragging) return;
         dragging = false;
+        // 탭(드래그 아님) → 90%로 확대, 이미 크면 절반으로 토글
+        if (moved < 8) {
+          const sh = document.getElementById('sc-sheet');
+          const chrome = sh.querySelector('.sf-grabber').offsetHeight + sh.querySelector('.sf-sheet-header').offsetHeight
+            + (parseFloat(getComputedStyle(sh).paddingBottom) || 0);
+          const nearMax = sh.getBoundingClientRect().height >= window.innerHeight * 0.7;
+          const target = window.innerHeight * (nearMax ? 0.5 : 0.9) - chrome;
+          list.style.height = Math.max(120, Math.round(target)) + 'px';
+          return;
+        }
         if (list.getBoundingClientRect().height < 70) closeCmpPicker();
       }
       handle.addEventListener('touchstart', down, { passive: false });

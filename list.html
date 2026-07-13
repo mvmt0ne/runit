@@ -594,12 +594,13 @@
 
         // 시트 핸들 드래그 — 스크롤 영역 높이 조절(위=커짐), 아래로 많이 내리면 닫힘
         (function () {
-            let scroll = null, startY = 0, startH = 0;
+            let scroll = null, sheetId = null, startY = 0, startH = 0, moved = 0;
             function down(e) {
                 const s = e.currentTarget.closest('.month-modal');
                 if (!s) return;
                 scroll = s.querySelector(SF_SCROLL[s.id]);
                 if (!scroll) return;
+                sheetId = s.id; moved = 0;
                 startY = e.touches ? e.touches[0].clientY : e.clientY;
                 startH = scroll.getBoundingClientRect().height;
                 if (e.cancelable) e.preventDefault();
@@ -607,13 +608,21 @@
             function move(e) {
                 if (!scroll) return;
                 const y = e.touches ? e.touches[0].clientY : e.clientY;
+                moved = Math.max(moved, Math.abs(y - startY));
                 let h = startH - (y - startY);          // 위로 끌면 커짐
                 h = Math.max(40, Math.min(h, window.innerHeight * 0.9));
                 scroll.style.height = h + 'px';
             }
             function up() {
                 if (!scroll) return;
-                const sc = scroll; scroll = null;
+                const sc = scroll, id = sheetId; scroll = null;
+                // 탭(드래그 아님) → 90%로 확대, 이미 크면 절반으로 토글
+                if (moved < 8) {
+                    const sheetH = document.getElementById(id).getBoundingClientRect().height;
+                    const nearMax = sheetH >= window.innerHeight * 0.7;
+                    fitSFSheet(id, window.innerHeight * (nearMax ? 0.5 : 0.9));
+                    return;
+                }
                 if (sc.getBoundingClientRect().height < 70) closeSFSheet();
             }
             document.querySelectorAll('#sort-sheet .sf-grabber, #sort-sheet .sf-sheet-header, #filter-sheet .sf-grabber, #filter-sheet .sf-sheet-header')
