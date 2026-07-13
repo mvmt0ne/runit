@@ -168,15 +168,13 @@
               <select id="shoe-brand" class="input-field" style="flex:1;margin-bottom:0" onchange="onBrandChange()"></select>
               <span id="logo-preview" class="logo-preview"></span>
             </div>
-            <div id="brand-new-row" style="display:none">
-              <input type="text" id="shoe-brand-new" class="input-field" placeholder="새 브랜드 이름" style="margin-top:8px;margin-bottom:8px">
-              <div class="field-row" style="align-items:center">
-                <label class="ghost-btn" for="input-logo" style="flex:1;text-align:center">로고 SVG 선택</label>
-                <button type="button" class="ghost-btn" onclick="clearLogo()">비우기</button>
-              </div>
+            <input type="text" id="shoe-brand-new" class="input-field" placeholder="새 브랜드 이름" style="display:none;margin-top:8px;margin-bottom:0">
+            <div class="field-row" id="logo-upload-row" style="display:none;align-items:center;margin-top:8px">
+              <label class="ghost-btn" for="input-logo" style="flex:1;text-align:center">로고 SVG 선택</label>
+              <button type="button" class="ghost-btn" onclick="clearLogo()">비우기</button>
             </div>
             <input type="file" id="input-logo" accept="image/svg+xml,.svg" style="display:none">
-            <div class="input-helper">브랜드를 선택하면 저장된 로고가 자동 적용됩니다. 처음 쓰는 브랜드는 로고 SVG를 한 번만 올려주세요. (어두운 배경용 밝은 SVG 권장)</div>
+            <div class="input-helper">브랜드를 선택하면 저장된 로고가 자동 적용됩니다. 로고를 바꾸려면 새 SVG를 올리면 됩니다. (어두운 배경용 밝은 SVG 권장)</div>
 
             <label class="input-label" style="margin-top:20px">마일리지</label>
             <div class="field-row">
@@ -285,15 +283,23 @@
     // 브랜드 선택 변경 시 — 저장 브랜드면 로고 자동 적용, 새 브랜드면 이름+업로드 노출
     function onBrandChange() {
       const val = brandSelect.value;
-      const newRow = document.getElementById('brand-new-row');
+      const nameInput = document.getElementById('shoe-brand-new');
+      const uploadRow = document.getElementById('logo-upload-row');
       if (val === '__new__') {
-        newRow.style.display = '';
-        document.getElementById('shoe-brand-new').value = '';
+        nameInput.style.display = '';
+        nameInput.value = '';
+        uploadRow.style.display = '';        // 새 브랜드 — 로고 업로드
+        clearLogo();
+      } else if (val === '') {
+        nameInput.style.display = 'none';
+        nameInput.value = '';
+        uploadRow.style.display = 'none';    // 브랜드 없음
         clearLogo();
       } else {
-        newRow.style.display = 'none';
-        document.getElementById('shoe-brand-new').value = '';
-        setLogoPreview(val ? (typeof getBrandLogo === 'function' ? getBrandLogo(val) : null) : null);
+        nameInput.style.display = 'none';
+        nameInput.value = '';
+        uploadRow.style.display = '';        // 기존 브랜드 — 저장 로고 자동, SVG로 교체 가능
+        setLogoPreview(typeof getBrandLogo === 'function' ? getBrandLogo(val) : null);
       }
     }
     logoInput.addEventListener('change', () => {
@@ -324,8 +330,9 @@
       setShoePreview(s.image || null);
       // 브랜드 복원 — 저장된 브랜드면 select 반영(로고 자동), 없으면 신발에 붙은 로고 그대로
       populateBrandSelect(s.brand || '');
-      document.getElementById('brand-new-row').style.display = 'none';
-      setLogoPreview(s.logo || null);
+      onBrandChange();
+      // 신발에 개별 로고가 있으면 우선 표시(브랜드 저장 로고와 다를 수 있음)
+      if (s.logo) setLogoPreview(s.logo);
       document.getElementById('shoe-base-km').value = s.baseMileage != null ? s.baseMileage : '';
       document.getElementById('shoe-mileage-from').value = s.mileageFrom || '';
       document.getElementById('shoe-submit').textContent = '저장';
@@ -342,7 +349,7 @@
       clearShoe();
       clearLogo();
       populateBrandSelect('');
-      document.getElementById('brand-new-row').style.display = 'none';
+      onBrandChange();
       document.getElementById('shoe-base-km').value = '';
       document.getElementById('shoe-mileage-from').value = '';
       document.getElementById('shoe-submit').textContent = '등록';
