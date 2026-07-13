@@ -158,14 +158,13 @@
 
     .sc-acc-edit {
       flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 100px;
       background: rgba(255, 255, 255, 0.08);
       color: var(--slate-gray);
+      font-size: 13px;
+      font-family: 'Pretendard Variable', sans-serif;
       cursor: pointer;
     }
 
@@ -392,7 +391,7 @@
       <!-- 러닝화 선택 시트 -->
       <div class="sf-backdrop" id="sc-backdrop" onclick="closeCmpPicker()"></div>
       <div class="month-modal" id="sc-sheet">
-        <div class="sf-handle"><span class="sf-handle-bar"></span></div>
+        <div class="sf-grabber"></div>
         <div class="sf-sheet-header" style="padding: 2px 20px 12px;">
           <span class="sf-sheet-title" id="sc-sheet-title">러닝화 선택</span>
         </div>
@@ -536,12 +535,10 @@
             <span class="sc-run-pace">${a.pace || '--'}</span>
           </div>`;
         }).join('');
-        history += `<div class="sc-acc${si === 0 ? ' open' : ''}">
+        history += `<div class="sc-acc">
           <div class="sc-acc-head" onclick="toggleAcc(this)">
             <span class="sc-acc-title">${scEsc(st.name)}<em>${st.runs}</em></span>
-            <button class="sc-acc-edit" onclick="goTo('shoes.html?edit=${st.id}');event.stopPropagation();" aria-label="러닝화 편집">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
-            </button>
+            <button class="sc-acc-edit" onclick="goTo('shoes.html?edit=${st.id}');event.stopPropagation();">편집</button>
             <span class="sc-acc-chev"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
           </div>
           <div class="sc-acc-body">${items}</div>
@@ -583,7 +580,7 @@
       sheet.classList.add('open');
       const list = document.getElementById('sc-pick-list');
       const sh = document.getElementById('sc-sheet');
-      const chrome = sh.querySelector('.sf-handle').offsetHeight + sh.querySelector('.sf-sheet-header').offsetHeight
+      const chrome = sh.querySelector('.sf-grabber').offsetHeight + sh.querySelector('.sf-sheet-header').offsetHeight
         + (parseFloat(getComputedStyle(sh).paddingBottom) || 0);
       list.style.height = Math.max(120, Math.round(window.innerHeight * 0.5 - chrome)) + 'px';
     }
@@ -603,7 +600,7 @@
 
     // 핸들 드래그로 시트 높이 조절 — 리스트 높이를 직접 변경 (다른 시트와 동일)
     (function () {
-      const handle = document.querySelector('#sc-sheet .sf-handle');
+      const handle = document.querySelector('#sc-sheet .sf-grabber');
       const list = document.getElementById('sc-pick-list');
       if (!handle || !list) return;
       let startY = 0, startH = 0, dragging = false;

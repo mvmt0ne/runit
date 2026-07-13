@@ -1384,14 +1384,12 @@ sup {
 .fchk-label {
     font-size: 16px;
     font-weight: 400;
-    font-family: 'Pretendard Variable', sans-serif;
     color: var(--slate-gray);
 }
 
 .fchk-label em {
-    font-family: 'Orbitron', sans-serif;
     color: var(--cloudy-gray);
-    margin-left: 2px;
+    margin-left: 8px;
 }
 
 .filter-chip {
@@ -1519,9 +1517,9 @@ input[type='range'].range-input::-moz-range-thumb {
 
 .range-val {
     font-size: 14px;
-    color: var(--slate-gray);
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 600;
+    color: var(--bone);
+    font-family: 'Space Mono', monospace;
+    font-weight: 500;
 }
 
 /* 빈 결과 */

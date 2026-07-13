@@ -21,130 +21,326 @@
   <link rel="stylesheet" href="./styles.css">
   <script src="./transitions.js"></script>
   <style>
-    .input-page { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .input-page {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
     .input-scroll {
-      flex: 1; overflow-y: auto; overflow-x: hidden; scrollbar-width: none;
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none;
       padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
     }
-    .input-scroll::-webkit-scrollbar { display: none; }
-    .input-section { padding: 24px 20px 8px; }
+
+    .input-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .input-section {
+      padding: 24px 20px 8px;
+    }
+
     .input-label {
-      font-size: 13px; font-weight: 400; color: var(--text-2);
-      font-family: 'Pretendard Variable', sans-serif; margin-bottom: 8px; display: block;
-      letter-spacing: 0.04em; text-transform: uppercase;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-2);
+      font-family: 'Pretendard Variable', sans-serif;
+      margin-bottom: 8px;
+      display: block;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
+
     .input-helper {
-      font-size: 12px; color: var(--text-2); opacity: 0.6; margin-top: 6px;
-      line-height: 1.4; font-family: 'Pretendard Variable', sans-serif;
+      font-size: 12px;
+      color: var(--text-2);
+      opacity: 0.6;
+      margin-top: 6px;
+      line-height: 1.4;
+      font-family: 'Pretendard Variable', sans-serif;
     }
+
     .input-field {
-      width: 100%; box-sizing: border-box; max-width: 100%; padding: 14px 2px;
-      color: var(--bone); font-size: 16px;
-      font-family: 'Orbitron', sans-serif;
+      width: 100%;
+      box-sizing: border-box;
+      max-width: 100%;
+      padding: 14px 2px;
+      color: var(--bone);
+      font-size: 16px;
     }
-    .field-row { display: flex; gap: 8px; align-items: stretch; margin-bottom: 8px; }
+
+    .field-row {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+      margin-bottom: 8px;
+    }
+
     .ghost-btn {
-      padding: 10px 14px; background: transparent; border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 8px; color: var(--slate-gray); font-size: 13px;
-      font-family: 'Pretendard Variable', sans-serif; cursor: pointer;
-      transition: background 0.15s, border-color 0.15s; white-space: nowrap;
+      padding: 10px 14px;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      color: var(--slate-gray);
+      font-size: 13px;
+      font-family: 'Pretendard Variable', sans-serif;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      white-space: nowrap;
     }
-    .ghost-btn:active { background: rgba(255, 255, 255, 0.06); }
+
+    .ghost-btn:active {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
     .delete-btn {
-      padding: 8px 12px; background: transparent; border: none; color: var(--text-2);
-      font-size: 13px; font-family: 'Pretendard Variable', sans-serif; cursor: pointer;
+      padding: 8px 12px;
+      background: transparent;
+      border: none;
+      color: var(--text-2);
+      font-size: 13px;
+      font-family: 'Pretendard Variable', sans-serif;
+      cursor: pointer;
     }
-    .delete-btn:active { color: var(--accent); }
+
+    .delete-btn:active {
+      color: var(--accent);
+    }
+
     .edit-btn {
-      padding: 8px 10px; background: transparent; border: none; color: var(--text-2);
-      font-size: 13px; font-family: 'Pretendard Variable', sans-serif; cursor: pointer;
+      padding: 8px 10px;
+      background: transparent;
+      border: none;
+      color: var(--text-2);
+      font-size: 13px;
+      font-family: 'Pretendard Variable', sans-serif;
+      cursor: pointer;
     }
-    .edit-btn:active { color: var(--accent); }
+
+    .edit-btn:active {
+      color: var(--accent);
+    }
+
     .toggle-btn {
-      padding: 6px; background: transparent; border: none; color: var(--text-2);
-      display: flex; align-items: center; justify-content: center; cursor: pointer;
+      padding: 6px;
+      background: transparent;
+      border: none;
+      color: var(--text-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
     }
-    .toggle-btn:active { color: var(--accent); }
+
+    .toggle-btn:active {
+      color: var(--accent);
+    }
 
     .shoe-preview-wrap {
-      position: relative; width: 100%; aspect-ratio: 16 / 10;
-      background: rgba(255, 255, 255, 0.04); border: 1px dashed rgba(255, 255, 255, 0.12);
-      border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center;
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .shoe-preview { width: 100%; height: 100%; object-fit: contain; display: none; }
-    .shoe-preview.has-image { display: block; }
+
+    .shoe-preview {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: none;
+    }
+
+    .shoe-preview.has-image {
+      display: block;
+    }
+
     .shoe-placeholder {
-      font-size: 12px; color: var(--text-2); opacity: 0.5; font-family: 'Pretendard Variable', sans-serif;
+      font-size: 12px;
+      color: var(--text-2);
+      opacity: 0.5;
+      font-family: 'Pretendard Variable', sans-serif;
     }
-    .shoe-preview.has-image + .shoe-placeholder { display: none; }
+
+    .shoe-preview.has-image+.shoe-placeholder {
+      display: none;
+    }
+
     .logo-preview {
-      width: 72px; height: 34px; flex-shrink: 0;
-      border: 1px solid rgba(255,255,255,0.12); border-radius: 6px;
-      background: rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; overflow: hidden;
+      width: 72px;
+      height: 34px;
+      flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
     }
-    .logo-preview img { max-width: 90%; max-height: 80%; object-fit: contain; }
-    .shoe-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+
+    .logo-preview img {
+      max-width: 90%;
+      max-height: 80%;
+      object-fit: contain;
+    }
+
+    .shoe-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
     .shoe-list-item {
-      display: flex; align-items: center; gap: 12px; padding: 8px 10px;
-      background: rgba(255, 255, 255, 0.04); border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 8px;
     }
+
     .shoe-list-item.disabled .shoe-list-thumb,
-    .shoe-list-item.disabled .shoe-list-name { opacity: 0.4; }
+    .shoe-list-item.disabled .shoe-list-name {
+      opacity: 0.4;
+    }
+
     .shoe-off-badge {
-      font-style: normal; font-size: 10px; font-weight: 600; color: var(--asphalt-black);
-      background: var(--slate-gray); margin-left: 8px; padding: 2px 7px; border-radius: 100px;
+      font-style: normal;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--asphalt-black);
+      background: var(--slate-gray);
+      margin-left: 8px;
+      padding: 2px 7px;
+      border-radius: 100px;
       vertical-align: middle;
     }
+
     .shoe-list-item.dragging {
-      position: relative; z-index: 10; opacity: 0.92;
+      position: relative;
+      z-index: 10;
+      opacity: 0.92;
       background: rgba(255, 255, 255, 0.1);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
     }
+
     .shoe-drag {
-      flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-      width: 24px; color: var(--cloudy-gray); cursor: grab;
-      touch-action: none; /* 핸들 드래그가 스크롤로 안 먹히게 */
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      color: var(--cloudy-gray);
+      cursor: grab;
+      touch-action: none;
+      /* 핸들 드래그가 스크롤로 안 먹히게 */
     }
-    .shoe-drag:active { cursor: grabbing; }
+
+    .shoe-drag:active {
+      cursor: grabbing;
+    }
+
     .shoe-list-thumb {
-      width: 56px; height: 40px; object-fit: contain; flex-shrink: 0;
+      width: 56px;
+      height: 40px;
+      object-fit: contain;
+      flex-shrink: 0;
       filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.4));
     }
+
     .shoe-list-name {
-      flex: 1; min-width: 0; font-size: 14px; color: var(--bone);
-      font-family: 'Pretendard Variable', sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      flex: 1;
+      min-width: 0;
+      font-size: 14px;
+      color: var(--bone);
+      font-family: 'Pretendard Variable', sans-serif;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
+
     .shoe-list-empty {
-      font-size: 12px; color: var(--text-2); opacity: 0.5;
-      font-family: 'Pretendard Variable', sans-serif; padding: 4px 2px;
+      font-size: 12px;
+      color: var(--text-2);
+      opacity: 0.5;
+      font-family: 'Pretendard Variable', sans-serif;
+      padding: 4px 2px;
     }
+
     /* 하단 플로팅 저장 푸터 (input.html과 동일) */
     .input-footer {
       flex-shrink: 0;
       padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 0px));
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
       background: var(--asphalt-black);
     }
+
     .save-btn {
-      width: 100%; box-sizing: border-box; padding: 18px;
-      background: var(--accent); border: none; border-radius: 100px;
-      color: #202020; font-size: 17px; font-weight: 600;
-      font-family: 'Pretendard Variable', sans-serif; cursor: pointer;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 18px;
+      background: var(--accent);
+      border: none;
+      border-radius: 100px;
+      color: #202020;
+      font-size: 17px;
+      font-weight: 600;
+      font-family: 'Pretendard Variable', sans-serif;
+      cursor: pointer;
       transition: opacity 0.15s, background 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .save-btn:active { transform: scale(0.98); }
-    .save-btn:disabled { opacity: 0.1; cursor: not-allowed; }
+
+    .save-btn:active {
+      transform: scale(0.98);
+    }
+
+    .save-btn:disabled {
+      opacity: 0.1;
+      cursor: not-allowed;
+    }
 
     .toast {
-      position: fixed; bottom: calc(40px + env(safe-area-inset-bottom, 0px)); left: 50%;
-      transform: translateX(-50%) translateY(80px); padding: 14px 22px;
-      background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 100px; color: var(--bone);
-      font-size: 14px; font-family: 'Pretendard Variable', sans-serif; z-index: 100; opacity: 0;
-      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.32s; pointer-events: none; white-space: nowrap;
+      position: fixed;
+      bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      padding: 14px 22px;
+      background: rgba(20, 20, 20, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 100px;
+      color: var(--bone);
+      font-size: 14px;
+      font-family: 'Pretendard Variable', sans-serif;
+      z-index: 100;
+      opacity: 0;
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.32s;
+      pointer-events: none;
+      white-space: nowrap;
     }
-    .toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
-    .toast.error { border-color: var(--accent); color: var(--accent); }
+
+    .toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.error {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
   </style>
 </head>
 
@@ -166,7 +362,8 @@
         <div class="input-scroll">
           <div class="input-section">
             <label class="input-label">내 러닝화</label>
-            <input type="text" id="shoe-name" class="input-field" placeholder="러닝화 이름 (예: 베이퍼플라이 3)" style="margin-bottom:8px">
+            <input type="text" id="shoe-name" class="input-field" placeholder="러닝화 이름 (예: 베이퍼플라이 3)"
+              style="margin-bottom:8px">
             <div class="shoe-preview-wrap">
               <img id="shoe-preview" class="shoe-preview" alt="러닝화 미리보기">
               <div id="shoe-placeholder" class="shoe-placeholder">이미지 선택 안 됨</div>
@@ -174,17 +371,20 @@
             <div class="field-row" style="margin-top:8px">
               <label class="ghost-btn" for="input-shoe" style="flex:1;text-align:center">이미지 선택</label>
               <button type="button" class="ghost-btn" onclick="clearShoe()">비우기</button>
-              <button type="button" class="ghost-btn" id="shoe-cancel" onclick="cancelEdit()" style="display:none">취소</button>
+              <button type="button" class="ghost-btn" id="shoe-cancel" onclick="cancelEdit()"
+                style="display:none">취소</button>
             </div>
             <input type="file" id="input-shoe" accept="image/png,image/*" style="display:none">
             <div class="input-helper">배경 없는 누끼 PNG를 올리면 상세 화면에 예쁘게 표시됩니다.</div>
 
             <label class="input-label" style="margin-top:20px">브랜드</label>
             <div class="field-row" style="align-items:center">
-              <select id="shoe-brand" class="input-field" style="flex:1;margin-bottom:0" onchange="onBrandChange()"></select>
+              <select id="shoe-brand" class="input-field" style="flex:1;margin-bottom:0"
+                onchange="onBrandChange()"></select>
               <span id="logo-preview" class="logo-preview"></span>
             </div>
-            <input type="text" id="shoe-brand-new" class="input-field" placeholder="새 브랜드 이름" style="display:none;margin-top:8px;margin-bottom:0">
+            <input type="text" id="shoe-brand-new" class="input-field" placeholder="새 브랜드 이름"
+              style="display:none;margin-top:8px;margin-bottom:0">
             <div class="field-row" id="logo-upload-row" style="display:none;align-items:center;margin-top:8px">
               <label class="ghost-btn" for="input-logo" style="flex:1;text-align:center">로고 SVG 선택</label>
               <button type="button" class="ghost-btn" onclick="clearLogo()">비우기</button>
@@ -194,7 +394,8 @@
 
             <label class="input-label" style="margin-top:20px">마일리지</label>
             <div class="field-row">
-              <input type="number" id="shoe-base-km" class="input-field" inputmode="numeric" placeholder="기준 마일리지 (km)" style="flex:1;margin-bottom:0">
+              <input type="number" id="shoe-base-km" class="input-field" inputmode="numeric" placeholder="기준 마일리지 (km)"
+                style="flex:1;margin-bottom:0">
               <div class="date-wrap" style="margin-bottom:0">
                 <input type="date" id="shoe-mileage-from" class="input-field" style="margin-bottom:0"
                   onclick="try{this.showPicker()}catch(e){}">
@@ -471,8 +672,8 @@
           <span class="shoe-list-name">${s.name}${s.disabled ? '<em class="shoe-off-badge">비활성</em>' : ''}</span>
           <button class="toggle-btn" onclick="toggleShoeDisabled('${s.id}')" aria-label="${s.disabled ? '활성화' : '비활성화'}">
             ${s.disabled
-        ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>'
-        : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 10 8 10 8a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.5 13.5 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/></svg>'}
+          ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>'
+          : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 10 8 10 8a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.5 13.5 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/></svg>'}
           </button>
           <button class="edit-btn" onclick="editShoe('${s.id}')">수정</button>
           <button class="delete-btn" onclick="onRemoveShoe('${s.id}')">삭제</button>
@@ -508,7 +709,7 @@
   </script>
 
   <script>
-    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js').then(function(r){ if(r){ setInterval(function(){ r.update(); }, 60000); } }); (function(){ var _rf=false; navigator.serviceWorker.addEventListener('controllerchange', function(){ if(_rf) return; _rf=true; location.reload(); }); })(); }
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js').then(function (r) { if (r) { setInterval(function () { r.update(); }, 60000); } }); (function () { var _rf = false; navigator.serviceWorker.addEventListener('controllerchange', function () { if (_rf) return; _rf = true; location.reload(); }); })(); }
   </script>
 </body>
 
