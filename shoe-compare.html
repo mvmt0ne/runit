@@ -489,7 +489,8 @@
             <span class="sc-head-name">${scEsc(st.name)}</span>
           </div>
            
-          ${scSlots.length > 1 ? `<div class="sc-head-remove" onclick="removeSlot(${i});event.stopPropagation();"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M0.707031 0.707092L8.70703 8.70709M8.70703 8.70709L16.707 16.7071M8.70703 8.70709L0.707031 16.7071M8.70703 8.70709L16.707 0.707092"/></svg></div>` : ''}
+          ${scSlots.length > 1 ? `<div class="sc-head-remove" onclick="removeSlot(${i});event.stopPropagation();">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"><path d="M0.707031 0.707092L6.70703 6.70709M6.70703 6.70709L12.707 12.7071M6.70703 6.70709L0.707031 12.7071M6.70703 6.70709L12.707 0.707092"/></svg></div>` : ''}
         </div>`;
       });
       if (canAdd) {
