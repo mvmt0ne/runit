@@ -1390,6 +1390,7 @@ sup {
 }
 
 .fchk-label em {
+    font-family: 'Orbitron', sans-serif;
     color: var(--cloudy-gray);
     margin-left: 2px;
 }
