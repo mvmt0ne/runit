@@ -12,6 +12,7 @@ const STORE_KEYS = {
   pb:         'runit:pb',         // 거리별 공식 PB(가민 입력) — { [dist]: {time,pace,date,name} }
   zones:      'runit:zones',      // 심박존 경계 이력 — [{from:'YYYY-MM-DD', z2Max, z3Max}]
   profile:    'runit:profile',    // 프로필 — { avatar: dataURL }
+  brands:     'runit:brands',     // 브랜드 로고 라이브러리 — { [brandName]: logoSVG }
 };
 
 /* ── 프로필 ── */
@@ -108,6 +109,28 @@ function reorderShoes(ids) {
   const all = _load(STORE_KEYS.shoes);
   ids.forEach((id, i) => { if (all[id]) all[id].order = i; });
   _save(STORE_KEYS.shoes, all);
+}
+
+/* ── 브랜드 로고 라이브러리 (업로드 기억) ──
+   브랜드명을 키로 로고 SVG를 저장. 신발 등록 시 브랜드를 선택하면 로고 자동 적용. */
+function getBrands() {
+  return _load(STORE_KEYS.brands);
+}
+
+function listBrands() {
+  return Object.keys(_load(STORE_KEYS.brands)).sort((a, b) => a.localeCompare(b));
+}
+
+function getBrandLogo(brand) {
+  if (!brand) return null;
+  return _load(STORE_KEYS.brands)[brand] || null;
+}
+
+function saveBrandLogo(brand, logo) {
+  if (!brand || !logo) return;
+  const all = _load(STORE_KEYS.brands);
+  all[brand] = logo;
+  _save(STORE_KEYS.brands, all);
 }
 
 /* ── 거리별 공식 PB (가민 기록 직접 입력) ── */

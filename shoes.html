@@ -163,14 +163,20 @@
             <input type="file" id="input-shoe" accept="image/png,image/*" style="display:none">
             <div class="input-helper">배경 없는 누끼 PNG를 올리면 상세 화면에 예쁘게 표시됩니다.</div>
 
-            <label class="input-label" style="margin-top:20px">브랜드 로고 (SVG)</label>
+            <label class="input-label" style="margin-top:20px">브랜드</label>
             <div class="field-row" style="align-items:center">
-              <label class="ghost-btn" for="input-logo" style="flex:1;text-align:center">SVG 선택</label>
-              <button type="button" class="ghost-btn" onclick="clearLogo()">비우기</button>
+              <select id="shoe-brand" class="input-field" style="flex:1;margin-bottom:0" onchange="onBrandChange()"></select>
               <span id="logo-preview" class="logo-preview"></span>
             </div>
+            <div id="brand-new-row" style="display:none">
+              <input type="text" id="shoe-brand-new" class="input-field" placeholder="새 브랜드 이름" style="margin-top:8px;margin-bottom:8px">
+              <div class="field-row" style="align-items:center">
+                <label class="ghost-btn" for="input-logo" style="flex:1;text-align:center">로고 SVG 선택</label>
+                <button type="button" class="ghost-btn" onclick="clearLogo()">비우기</button>
+              </div>
+            </div>
             <input type="file" id="input-logo" accept="image/svg+xml,.svg" style="display:none">
-            <div class="input-helper">모델명 위에 표시되는 브랜드 로고입니다. (어두운 배경용 밝은 SVG 권장)</div>
+            <div class="input-helper">브랜드를 선택하면 저장된 로고가 자동 적용됩니다. 처음 쓰는 브랜드는 로고 SVG를 한 번만 올려주세요. (어두운 배경용 밝은 SVG 권장)</div>
 
             <label class="input-label" style="margin-top:20px">마일리지</label>
             <div class="field-row">
@@ -255,8 +261,9 @@
     }
     function clearShoe() { setShoePreview(null); shoeInput.value = ''; }
 
-    /* 브랜드 로고 (SVG) */
+    /* 브랜드 + 로고 (SVG) */
     const logoInput = document.getElementById('input-logo');
+    const brandSelect = document.getElementById('shoe-brand');
     let _shoeLogo = null;
     function setLogoPreview(dataURL) {
       _shoeLogo = dataURL || null;
@@ -264,6 +271,31 @@
       box.innerHTML = dataURL ? `<img src="${dataURL}" alt="로고">` : '';
     }
     function clearLogo() { setLogoPreview(null); logoInput.value = ''; }
+
+    // 브랜드 select 옵션 채우기 — 저장된 브랜드 + '새 브랜드'
+    function populateBrandSelect(selected) {
+      const brands = (typeof listBrands === 'function') ? listBrands() : [];
+      let html = '<option value="">브랜드 없음</option>';
+      html += brands.map(b => `<option value="${b.replace(/"/g, '&quot;')}">${b}</option>`).join('');
+      html += '<option value="__new__">+ 새 브랜드</option>';
+      brandSelect.innerHTML = html;
+      brandSelect.value = (selected != null) ? selected : '';
+    }
+
+    // 브랜드 선택 변경 시 — 저장 브랜드면 로고 자동 적용, 새 브랜드면 이름+업로드 노출
+    function onBrandChange() {
+      const val = brandSelect.value;
+      const newRow = document.getElementById('brand-new-row');
+      if (val === '__new__') {
+        newRow.style.display = '';
+        document.getElementById('shoe-brand-new').value = '';
+        clearLogo();
+      } else {
+        newRow.style.display = 'none';
+        document.getElementById('shoe-brand-new').value = '';
+        setLogoPreview(val ? (typeof getBrandLogo === 'function' ? getBrandLogo(val) : null) : null);
+      }
+    }
     logoInput.addEventListener('change', () => {
       const f = logoInput.files && logoInput.files[0];
       if (!f) return;
@@ -290,6 +322,9 @@
       _editingShoeId = id;
       shoeNameInput.value = s.name || '';
       setShoePreview(s.image || null);
+      // 브랜드 복원 — 저장된 브랜드면 select 반영(로고 자동), 없으면 신발에 붙은 로고 그대로
+      populateBrandSelect(s.brand || '');
+      document.getElementById('brand-new-row').style.display = 'none';
       setLogoPreview(s.logo || null);
       document.getElementById('shoe-base-km').value = s.baseMileage != null ? s.baseMileage : '';
       document.getElementById('shoe-mileage-from').value = s.mileageFrom || '';
@@ -306,6 +341,8 @@
       shoeNameInput.value = '';
       clearShoe();
       clearLogo();
+      populateBrandSelect('');
+      document.getElementById('brand-new-row').style.display = 'none';
       document.getElementById('shoe-base-km').value = '';
       document.getElementById('shoe-mileage-from').value = '';
       document.getElementById('shoe-submit').textContent = '등록';
@@ -332,13 +369,20 @@
       const baseKmRaw = document.getElementById('shoe-base-km').value.trim();
       const baseMileage = baseKmRaw === '' ? null : Math.max(0, Math.round(+baseKmRaw) || 0);
       const mileageFrom = document.getElementById('shoe-mileage-from').value || null;
+      // 브랜드 결정 — 새 브랜드면 입력값, 아니면 select값
+      const brand = (brandSelect.value === '__new__')
+        ? document.getElementById('shoe-brand-new').value.trim()
+        : brandSelect.value;
+      const logo = _shoeLogo || null;
       // 기존 필드(order 등) 보존 위해 병합 저장
       const prev = getShoe(id) || {};
-      try { saveShoe({ ...prev, id, name, image, logo: _shoeLogo || null, baseMileage, mileageFrom }); }
+      try { saveShoe({ ...prev, id, name, brand: brand || null, image, logo, baseMileage, mileageFrom }); }
       catch (e) {
         if (e && e.name === 'QuotaExceededError') { showToast('저장 공간 부족(이미지 큼)', true); return; }
         throw e;
       }
+      // 브랜드+로고가 있으면 라이브러리에 기억(업서트) — 다음 등록 시 자동 적용
+      if (brand && logo && typeof saveBrandLogo === 'function') saveBrandLogo(brand, logo);
       cancelEdit();
       showToast(wasEdit ? `'${name}' 수정됨` : `'${name}' 등록됨`);
       renderShoeList();
@@ -401,6 +445,7 @@
         </li>`).join('');
     }
 
+    populateBrandSelect('');
     renderShoeList();
 
     // 상세 등에서 ?edit=<shoeId> 로 들어오면 해당 신발 편집 모드로 시작
