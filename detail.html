@@ -499,24 +499,22 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 32px;
+      padding: 0 20px;
       margin-bottom: 16px;
     }
 
     .shoe-sheet-title {
-      font-size: 15px;
-      font-weight: 500;
+      font-size: 18px;
+      font-weight: 400;
       color: var(--bone);
-      font-family: 'Pretendard Variable', sans-serif;
     }
 
     .shoe-sheet-add {
       border: none;
       background: rgba(255, 255, 255, 0.08);
-      color: var(--accent);
-      font-size: 13px;
-      font-weight: 600;
-      font-family: 'Pretendard Variable', sans-serif;
+      color: var(--bone);
+      font-size: 14px;
+      font-weight: 500;
       padding: 7px 14px;
       border-radius: 100px;
       cursor: pointer;
@@ -533,10 +531,10 @@
 
     .shoe-carousel {
       display: flex;
-      gap: 4px;
+      gap: 8px;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
-      padding: 0 32px 8px;
+      padding: 0 20px 8px;
       scrollbar-width: none;
     }
 
@@ -570,10 +568,12 @@
     }
 
     .shoe-card-name {
-      font-size: 16px;
       color: var(--slate-gray);
-      font-family: 'Pretendard Variable', sans-serif;
-      text-align: center;
+      font-weight: 600;
+    }
+
+    .shoe-card.selected span {
+      color: var(--asphalt-black);
     }
 
     .shoe-sheet-empty {
