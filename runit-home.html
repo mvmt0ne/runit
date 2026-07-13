@@ -279,21 +279,20 @@
 
     .hero-km-big {
       font-size: 72px;
-      font-weight: 700;
+      font-weight: 500;
       font-style: italic;
       color: var(--bone);
       letter-spacing: -2px;
       /* iOS: line-height 1이면 큰 이탤릭 글리프가 라인박스를 넘쳐 상위 overflow에서 잘림 → 여유 */
       line-height: 1.25;
       transition: color 0.3s;
-      font-family: 'Urbanist', -apple-system, sans-serif;
+      font-family: 'Orbitron', -apple-system, sans-serif;
     }
 
     /* 단위 K — 위첨자 대신 숫자와 아래(베이스라인) 정렬, 작게, 간격 더 */
     .hero-km-big .km-unit {
-      font-size: 0.42em;
-      font-weight: 500;
-      color: var(--text-2);
+      font-size: 0.3em;
+      font-weight: 400;
       margin-left: 10px;
       letter-spacing: 0;
       /* sup가 아니라 inline → 숫자와 같은 베이스라인(아래 정렬) */
@@ -440,11 +439,11 @@
     }
 
     .day-note {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
       color: inherit;
       line-height: 1;
-      font-family: 'Urbanist', sans-serif;
+      font-family: 'Orbitron', sans-serif;
     }
 
     /* Today indicator — 우측 상단 겹침 원 */
@@ -891,7 +890,8 @@
         <div class="sf-sheet-header">
           <span class="sf-sheet-title">월 선택</span>
         </div>
-        <div class="month-list" id="month-list" style="overflow-y:auto; padding:10px 20px 20px; display:flex; flex-direction:column; gap:30px;"></div>
+        <div class="month-list" id="month-list"
+          style="overflow-y:auto; padding:10px 20px 20px; display:flex; flex-direction:column; gap:30px;"></div>
       </div>
 
     </div><!-- /phone-inner -->

@@ -1390,9 +1390,7 @@ sup {
 }
 
 .fchk-label em {
-    font-style: normal;
-    font-size: 13px;
-    color: var(--asphalt-gray);
+    color: var(--cloudy-gray);
     margin-left: 2px;
 }
 
