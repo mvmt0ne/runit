@@ -482,9 +482,13 @@
       height: 5px;
       border-radius: 3px;
       background: rgba(255, 255, 255, 0.28);
-      margin: 6px auto 14px;
+      margin: 0 auto 8px;
       cursor: grab;
       touch-action: none;
+      /* 보이는 바는 5px 유지, 패딩으로 터치 영역 확대 */
+      padding: 10px 40px;
+      box-sizing: content-box;
+      background-clip: content-box;
     }
 
     .shoe-grabber:active {

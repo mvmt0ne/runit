@@ -1024,8 +1024,14 @@ sup {
     border-radius: 100px;
     background: var(--cloudy-gray);
     opacity: 0.5;
-    margin: 10px auto 0;
+    margin: 0 auto;
     flex-shrink: 0;
+    /* 보이는 바는 4px 유지하되(콘텐츠 박스), 패딩으로 터치 영역을 크게 — 모바일에서 잡기 쉽게 */
+    padding: 12px 40px;
+    box-sizing: content-box;
+    background-clip: content-box;
+    touch-action: none;
+    cursor: grab;
 }
 
 .sf-sheet-header {
