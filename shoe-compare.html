@@ -416,6 +416,7 @@
     }
 
     const SC_METRICS = [
+      { key: 'runs', label: '횟수', unit: '회', icon: '<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>', better: 'high', fmt: v => v },
       { key: 'totalKm', label: '총 거리', unit: 'K', icon: '<path d="M9 20l-5.4-2.3a1 1 0 0 1-.6-.9V5.2a1 1 0 0 1 1.4-.9L9 6m0 14l6-2m-6 2V6m6 12l5.4 2.3a1 1 0 0 0 1.4-.9V6.8a1 1 0 0 0-.6-.9L15 4m0 14V4m0 0L9 6" />', better: 'high', fmt: v => v },
       { key: 'avgPace', label: '평균 페이스', unit: '/km', icon: '<circle cx="12" cy="13" r="8"/><path d="M12 13V9"/><path d="M9 3h6"/>', better: 'low', fmt: scSecToPace },
       { key: 'bestPace', label: '최고 페이스', unit: '/km', icon: '<path d="M13 2 3 14h7l-1 8 10-12h-7z"/>', better: 'low', fmt: scSecToPace },
