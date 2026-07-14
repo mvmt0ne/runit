@@ -40,6 +40,7 @@
   <div class="bar">
     <button id="b-dot" class="on" onclick="setMode('dot')">도트</button>
     <button id="b-glass" onclick="setMode('glass')">글래스</button>
+    <button id="b-prism" onclick="setMode('prism')">프리즘</button>
   </div>
   <script>
     var video = document.getElementById('sp-video');
@@ -105,11 +106,46 @@
       sg.addColorStop(0, 'rgba(255,255,255,0)'); sg.addColorStop(.5, 'rgba(255,120,90,.1)'); sg.addColorStop(.52, 'rgba(255,255,255,.14)'); sg.addColorStop(.54, 'rgba(90,150,255,.1)'); sg.addColorStop(1, 'rgba(255,255,255,0)');
       ctx.fillStyle = sg; ctx.fillRect(0, 0, cw, ch);
     }
-    function loop(now) { raf = requestAnimationFrame(loop); if (mode === 'dot') drawDot(); else drawGlass(now); }
+    function drawPrism(now) {
+      var vw = video.videoWidth, vh = video.videoHeight; if (!vw) return;
+      ctx.globalCompositeOperation = 'source-over';
+      // 1) 세로 스펙트럼 배경 (딥블루 → 화이트 → accent 레드)
+      var sp = ctx.createLinearGradient(0, 0, 0, ch);
+      sp.addColorStop(0.00, '#05060a');
+      sp.addColorStop(0.22, '#15316f');
+      sp.addColorStop(0.42, '#5fb8e0');
+      sp.addColorStop(0.52, '#eef2f8');
+      sp.addColorStop(0.66, '#ff6a44');
+      sp.addColorStop(1.00, '#2a0705');
+      ctx.fillStyle = sp; ctx.fillRect(0, 0, cw, ch);
+      // 2) 좌우 어둡게 → 중앙 세로 블룸 집중
+      var bl = ctx.createLinearGradient(0, 0, cw, 0);
+      bl.addColorStop(0, 'rgba(0,0,0,0.78)'); bl.addColorStop(0.5, 'rgba(0,0,0,0)'); bl.addColorStop(1, 'rgba(0,0,0,0.78)');
+      ctx.fillStyle = bl; ctx.fillRect(0, 0, cw, ch);
+      // 3) 러너 실루엣 — multiply 로 어두운 형상만 스펙트럼 위에 각인
+      ctx.globalCompositeOperation = 'multiply';
+      ctx.filter = 'grayscale(1) contrast(1.5) brightness(1.15)';
+      var scale = Math.max(cw / vw, ch / vh), dw = vw * scale, dh = vh * scale;
+      ctx.drawImage(video, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+      ctx.filter = 'none';
+      // 4) 미세 세로 슬랫 결(블라인드) — 천천히 흐름
+      ctx.globalCompositeOperation = 'source-over';
+      var SL = 7, off = (now * 0.02) % SL;
+      ctx.fillStyle = 'rgba(0,0,0,0.42)';
+      for (var x = -SL + off; x < cw; x += SL) ctx.fillRect(x, 0, 2, ch);
+      // 5) 중앙 세로 하이라이트 코어
+      var core = ctx.createLinearGradient(0, 0, cw, 0);
+      core.addColorStop(0.42, 'rgba(255,255,255,0)'); core.addColorStop(0.5, 'rgba(255,255,255,0.14)'); core.addColorStop(0.58, 'rgba(255,255,255,0)');
+      ctx.globalCompositeOperation = 'screen';
+      ctx.fillStyle = core; ctx.fillRect(0, 0, cw, ch);
+      ctx.globalCompositeOperation = 'source-over';
+    }
+    function loop(now) { raf = requestAnimationFrame(loop); if (mode === 'dot') drawDot(); else if (mode === 'glass') drawGlass(now); else drawPrism(now); }
     function setMode(m) {
       mode = m;
       document.getElementById('b-dot').classList.toggle('on', m === 'dot');
       document.getElementById('b-glass').classList.toggle('on', m === 'glass');
+      document.getElementById('b-prism').classList.toggle('on', m === 'prism');
     }
     function replay() { video.currentTime = 0; video.play().catch(function () { }); }
     video.play().catch(function () { });
