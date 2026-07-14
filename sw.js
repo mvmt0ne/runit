@@ -1,4 +1,4 @@
-const CACHE = 'runit-v190';
+const CACHE = 'runit-v191';
 const CORE = [
   './app.html',
   './login.html',
@@ -18,6 +18,9 @@ const CORE = [
   './grained.js',
   './manifest.json',
   './icon.svg',
+  './apple-touch-icon.png',
+  './icon-192.png',
+  './icon-512.png',
   './data/store.js',
   './data/cloud.js',
   './data/activities.js',

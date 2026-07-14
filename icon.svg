@@ -1,26 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" fill="#202020"/>
-  <!-- Corner markers (Shift5 chevron tribute) -->
-  <g stroke="#FF5841" stroke-width="8" fill="none">
-    <path d="M 40 72 L 64 48 L 88 72"/>
-    <path d="M 40 104 L 64 80 L 88 104"/>
-  </g>
-  <!-- Wordmark "R" -->
-  <text x="50%" y="58%" text-anchor="middle" dominant-baseline="middle"
-        font-family="'Space Grotesk', 'Helvetica Neue', Arial, sans-serif"
-        font-weight="700"
-        font-size="320"
-        letter-spacing="-8"
-        fill="#FF5841">R</text>
-  <!-- Mono meta strip -->
-  <text x="48" y="472"
-        font-family="'Space Mono', ui-monospace, monospace"
-        font-size="22"
-        letter-spacing="4"
-        fill="#8B8B8B">01 · RUNIT</text>
-  <text x="464" y="472" text-anchor="end"
-        font-family="'Space Mono', ui-monospace, monospace"
-        font-size="22"
-        letter-spacing="4"
-        fill="#FF5841">/</text>
+<svg width="102" height="102" viewBox="0 0 102 102" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="102" height="102" fill="#202020"/>
+<g clip-path="url(#clip0_142_110)">
+<path d="M49.4416 50.5952C49.717 50.7948 49.717 51.2052 49.4416 51.4048L20.7935 72.1747C20.4629 72.4144 20 72.1782 20 71.7699L20 30.2301C20 29.8218 20.4629 29.5856 20.7935 29.8253L49.4416 50.5952Z" fill="#FF4C31"/>
+<path d="M66.7723 50.6986C66.907 50.8769 66.907 51.1231 66.7723 51.3014L50.8989 72.3102C50.6098 72.6929 50 72.4884 50 72.0088L50 29.9912C50 29.5116 50.6098 29.3071 50.8989 29.6898L66.7723 50.6986Z" fill="#FF4C31"/>
+<path d="M76.9097 50.7969C76.9672 50.9262 76.9672 51.0738 76.9097 51.2031L67.9569 71.347C67.7376 71.8405 67 71.6839 67 71.1439L67 30.8561C67 30.3161 67.7376 30.1595 67.9569 30.653L76.9097 50.7969Z" fill="#FF4C31"/>
+<path d="M81.9759 50.8915C81.9918 50.963 81.9918 51.037 81.9759 51.1085L77.9881 69.0536C77.8585 69.6368 77 69.5426 77 68.9451L77 33.0549C77 32.4574 77.8585 32.3632 77.9881 32.9464L81.9759 50.8915Z" fill="#FF4C31"/>
+</g>
+<defs>
+<clipPath id="clip0_142_110">
+<rect width="62" height="45" fill="white" transform="translate(20 28.5)"/>
+</clipPath>
+</defs>
 </svg>
