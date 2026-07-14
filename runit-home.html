@@ -804,13 +804,13 @@
 
             <div class="calendar" id="calendar-1">
               <div class="cal-weekdays">
-                <div class="cal-wd">일</div>
                 <div class="cal-wd">월</div>
                 <div class="cal-wd">화</div>
                 <div class="cal-wd">수</div>
                 <div class="cal-wd">목</div>
                 <div class="cal-wd">금</div>
                 <div class="cal-wd">토</div>
+                <div class="cal-wd">일</div>
               </div>
               <div class="cal-slide-wrap" id="cal-slide-wrap">
                 <div class="cal-grid" id="cal-grid-1">
@@ -958,7 +958,7 @@
 
     function buildCalGrid(ym, dayMap, today) {
       const [y, m] = ym.split('-').map(n => parseInt(n, 10));
-      const offset = new Date(y, m - 1, 1).getDay();   // 0=Sun..6=Sat
+      const offset = (new Date(y, m - 1, 1).getDay() + 6) % 7;   // 월요일 시작(Mon=0..Sun=6)
       const lastDay = new Date(y, m, 0).getDate();
       let html = '';
       for (let i = 0; i < offset; i++) html += '<div class="cal-day"></div>';
