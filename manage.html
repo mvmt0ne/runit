@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>runit — 마이페이지</title>
+  <title>runnabe — 마이페이지</title>
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#202020">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -270,7 +270,7 @@
             </svg>
           </button>
           <span class="back-title">마이페이지</span>
-          <span class="app-version" id="app-version">runit</span>
+          <span class="app-version" id="app-version">runnabe</span>
         </div>
 
         <div class="input-scroll">
@@ -397,7 +397,7 @@
         const keys = await caches.keys();
         const v = keys.map(k => (k.match(/runit-v(\d+)/) || [])[1])
           .filter(Boolean).map(Number).sort((a, b) => b - a)[0];
-        if (v != null) el.textContent = 'runit · v' + v;
+        if (v != null) el.textContent = 'runnabe · v' + v;
       } catch (e) { /* ignore */ }
     })();
     function showToast(msg) {

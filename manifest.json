@@ -1,6 +1,6 @@
 {
-  "name": "runit",
-  "short_name": "runit",
+  "name": "runnabe",
+  "short_name": "runnabe",
   "description": "러닝 활동 트래커",
   "start_url": "./app.html#home",
   "scope": "./",
