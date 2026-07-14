@@ -398,9 +398,9 @@
       font-family: 'Pretendard Variable', -apple-system, sans-serif;
     }
 
-    /* 일(첫번째), 토(마지막): 하양 */
-    .cal-wd:first-child,
-    .cal-wd:last-child {
+    /* 주말 — 토(6번째)·일(7번째): 하양 */
+    .cal-wd:nth-child(6),
+    .cal-wd:nth-child(7) {
       color: var(--cloudy-gray);
     }
 
