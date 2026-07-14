@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>runnabe — 제너러티브 스플래시 미리보기</title>
+  <link rel="stylesheet" href="./styles.css">
+  <style>
+    html,body{margin:0;height:100%;background:#0c0c0d;overflow:hidden;font-family:'Pretendard Variable',sans-serif}
+    #splash{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    #c{position:absolute;inset:0;width:100%;height:100%}
+    .scrim{position:absolute;inset:0;pointer-events:none;
+      background:radial-gradient(42% 26% at 50% 50%, rgba(0,0,0,.5) 0%, transparent 74%)}
+    #splash svg{position:relative;width:200px;height:auto}
+    .sp-tri{fill:var(--accent)}.sp-wm{fill:var(--bone)}
+    .bar{position:fixed;left:0;right:0;bottom:calc(24px + env(safe-area-inset-bottom,0px));display:flex;gap:8px;justify-content:center;z-index:10;flex-wrap:wrap;padding:0 12px}
+    .bar button{padding:12px 18px;border-radius:100px;border:1px solid rgba(255,255,255,.2);
+      background:rgba(20,20,20,.6);backdrop-filter:blur(12px);color:#efeeed;font-size:14px;font-weight:600}
+    .bar button.on{background:var(--accent);color:#202020;border-color:transparent}
+    .hint{position:fixed;top:calc(20px + env(safe-area-inset-top,0px));left:0;right:0;text-align:center;color:#888;font-size:12px;z-index:10}
+  </style>
+</head>
+<body>
+  <div class="hint">A 스펙트럼 · B 파티클 러너 · C 스트라이드 (영상 없이 코드 생성)</div>
+  <div id="splash">
+    <canvas id="c"></canvas>
+    <div class="scrim"></div>
+    <svg viewBox="20 40 120 80" xmlns="http://www.w3.org/2000/svg">
+      <path class="sp-tri" d="M79.0302 65.7481C79.2015 65.8723 79.2015 66.1277 79.0302 66.2519L61.2047 79.1754C60.999 79.3245 60.7109 79.1776 60.7109 78.9235L60.7109 53.0765C60.7109 52.8224 60.999 52.6755 61.2047 52.8246L79.0302 65.7481Z"/>
+      <path class="sp-tri" d="M89.8135 65.8125C89.8974 65.9234 89.8974 66.0766 89.8135 66.1875L79.9368 79.2597C79.7569 79.4978 79.3774 79.3706 79.3774 79.0722L79.3774 52.9278C79.3774 52.6294 79.7569 52.5022 79.9368 52.7403L89.8135 65.8125Z"/>
+      <path class="sp-tri" d="M96.1216 65.8736C96.1574 65.9541 96.1574 66.0459 96.1216 66.1264L90.551 78.6603C90.4145 78.9674 89.9556 78.87 89.9556 78.534L89.9556 53.466C89.9556 53.13 90.4145 53.0326 90.551 53.3397L96.1216 65.8736Z"/>
+      <path class="sp-tri" d="M99.2738 65.9325C99.2837 65.977 99.2837 66.023 99.2738 66.0675L96.7925 77.2333C96.7119 77.5963 96.1777 77.5376 96.1777 77.1658L96.1777 54.8342C96.1777 54.4624 96.7119 54.4037 96.7925 54.7667L99.2738 65.9325Z"/>
+      <path class="sp-wm" d="M35.3 108L31.12 103.02H35.18L38.5 106.94V108H35.3ZM24.12 108V93.62H35.54C36.0867 93.62 36.58 93.7533 37.02 94.02C37.4733 94.2867 37.8333 94.6467 38.1 95.1C38.38 95.5533 38.52 96.0467 38.52 96.58V100.3C38.52 100.833 38.38 101.327 38.1 101.78C37.8333 102.233 37.4733 102.593 37.02 102.86C36.58 103.127 36.0867 103.26 35.54 103.26L27.22 103.28V108H24.12ZM27.22 100.14H35.38V96.72H27.22V100.14ZM42.9439 108C42.4106 108 41.9172 107.867 41.4639 107.6C41.0106 107.333 40.6506 106.973 40.3839 106.52C40.1172 106.067 39.9839 105.573 39.9839 105.04V93.6H43.0839V104.88H51.2439V93.6H54.3839V105.04C54.3839 105.573 54.2439 106.067 53.9639 106.52C53.6972 106.973 53.3372 107.333 52.8839 107.6C52.4439 107.867 51.9572 108 51.4239 108H42.9439ZM55.9864 108V93.6H59.1864L67.2464 103.2V93.6H70.3864V108H67.1864L59.0864 98.36V108H55.9864ZM72.027 108V93.6H75.227L83.287 103.2V93.6H86.427V108H83.227L75.127 98.36V108H72.027ZM88.1077 108V96.56C88.1077 96.0133 88.241 95.52 88.5077 95.08C88.7743 94.6267 89.1343 94.2667 89.5877 94C90.041 93.7333 90.5343 93.6 91.0677 93.6H99.5277C100.074 93.6 100.568 93.7333 101.008 94C101.461 94.2667 101.821 94.6267 102.088 95.08C102.368 95.52 102.508 96.0133 102.508 96.56V108H99.3677V103.36H91.2077V108H88.1077ZM91.2077 100.24H99.3677V96.72H91.2077V100.24ZM104.246 108V93.6H115.126C115.66 93.6 116.146 93.7533 116.586 94C117.04 94.2667 117.4 94.6267 117.666 95.08C117.946 95.52 118.086 96.0133 118.086 96.56V99.26C118.086 99.4333 118.073 99.6 118.046 99.76C118.033 99.9067 118 100.047 117.946 100.18C118.146 100.433 118.313 100.727 118.446 101.06C118.58 101.393 118.646 101.727 118.646 102.06V105.04C118.646 105.573 118.506 106.067 118.226 106.52C117.96 106.973 117.6 107.333 117.146 107.6C116.706 107.867 116.213 108 115.666 108H104.246ZM107.346 104.88H115.506V102.24H107.346V104.88ZM107.346 99.12H114.946V96.72H107.346V99.12ZM120.267 108V93.6H133.567V96.72H123.407V99.24H131.587V102.36H123.407V104.88H133.567V108H120.267Z"/>
+    </svg>
+  </div>
+  <div class="bar">
+    <button id="b-a" class="on" onclick="setMode('a')">A 스펙트럼</button>
+    <button id="b-b" onclick="setMode('b')">B 파티클러너</button>
+    <button id="b-c" onclick="setMode('c')">C 스트라이드</button>
+  </div>
+  <script>
+    var cv = document.getElementById('c'), ctx = cv.getContext('2d');
+    var dpr = Math.min(window.devicePixelRatio || 1, 2), cw = 0, ch = 0, mode = 'a';
+    var ACC = '#ff4c31';
+    function resize() { cw = innerWidth; ch = innerHeight; cv.width = cw * dpr; cv.height = ch * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+    resize(); addEventListener('resize', resize);
+    function fade(a) { ctx.globalCompositeOperation = 'source-over'; ctx.fillStyle = 'rgba(12,12,13,' + a + ')'; ctx.fillRect(0, 0, cw, ch); }
+
+    // ── A. 제너러티브 스펙트럼 ──
+    function drawA(now) {
+      ctx.globalCompositeOperation = 'source-over';
+      var g = ctx.createLinearGradient(0, 0, 0, ch);
+      g.addColorStop(0, '#05060a'); g.addColorStop(.24, '#15316f'); g.addColorStop(.44, '#5fb8e0');
+      g.addColorStop(.52, '#eef2f8'); g.addColorStop(.66, '#ff6a44'); g.addColorStop(1, '#2a0705');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, cw, ch);
+      var breathe = 0.5 + 0.5 * Math.sin(now * 0.0011);
+      var bl = ctx.createLinearGradient(0, 0, cw, 0);
+      var edge = 0.62 + 0.16 * breathe;
+      bl.addColorStop(0, 'rgba(0,0,0,' + edge + ')'); bl.addColorStop(.5, 'rgba(0,0,0,0)'); bl.addColorStop(1, 'rgba(0,0,0,' + edge + ')');
+      ctx.fillStyle = bl; ctx.fillRect(0, 0, cw, ch);
+      // 흐르는 세로 슬랫
+      var SL = 6, off = (now * 0.03) % SL;
+      ctx.fillStyle = 'rgba(0,0,0,0.4)';
+      for (var x = -SL + off; x < cw; x += SL) ctx.fillRect(x, 0, 1.6, ch);
+      // 위로 흐르는 미세 스파클 스트릭
+      ctx.globalCompositeOperation = 'screen';
+      for (var i = 0; i < 26; i++) {
+        var seed = i * 61.7;
+        var sx = (Math.sin(seed) * 0.5 + 0.5) * cw;
+        var sp = ((now * 0.00013 * (0.5 + (i % 5) / 5)) + i * 0.13) % 1;
+        var sy = ch - sp * ch;
+        var a = Math.sin(sp * Math.PI) * 0.5;
+        ctx.fillStyle = 'rgba(255,255,255,' + a.toFixed(3) + ')';
+        ctx.fillRect(sx, sy, 1.4, 26);
+      }
+      // 중앙 하이라이트 코어(호흡)
+      var core = ctx.createLinearGradient(0, 0, cw, 0);
+      var w = 0.06 + 0.02 * breathe;
+      core.addColorStop(0.5 - w, 'rgba(255,255,255,0)'); core.addColorStop(0.5, 'rgba(255,255,255,' + (0.12 + 0.08 * breathe).toFixed(3) + ')'); core.addColorStop(0.5 + w, 'rgba(255,255,255,0)');
+      ctx.fillStyle = core; ctx.fillRect(0, 0, cw, ch);
+      ctx.globalCompositeOperation = 'source-over';
+    }
+
+    // ── 파라메트릭 러너(사이드뷰 게이트) ──
+    function runner(t, cx, cy, s) {
+      var TAU = Math.PI * 2, lean = -0.16;
+      var bob = Math.sin(t * TAU * 2) * 4 * s;
+      var hip = { x: cx, y: cy + bob };
+      var torso = 52 * s;
+      var sh = { x: hip.x + Math.sin(lean) * torso, y: hip.y - Math.cos(lean) * torso };
+      var head = { x: sh.x + Math.sin(lean) * 20 * s, y: sh.y - 20 * s };
+      function leg(ph) {
+        var th = 36 * s, shn = 36 * s;
+        var hipAng = 0.5 * Math.sin(ph * TAU) - 0.15;
+        var knee = { x: hip.x + Math.sin(hipAng) * th, y: hip.y + Math.cos(hipAng) * th };
+        var bend = 0.5 + 0.7 * (1 + Math.sin(ph * TAU + 1.3)) / 2;
+        var sAng = hipAng + bend;
+        var foot = { x: knee.x + Math.sin(sAng) * shn, y: knee.y + Math.cos(sAng) * shn };
+        return { knee: knee, foot: foot };
+      }
+      function arm(ph) {
+        var up = 26 * s, fo = 24 * s;
+        var shAng = 0.5 * Math.sin(ph * TAU) + lean;
+        var el = { x: sh.x + Math.sin(shAng) * up, y: sh.y + Math.cos(shAng) * up };
+        var fAng = shAng - 1.1;
+        var hand = { x: el.x + Math.sin(fAng) * fo, y: el.y + Math.cos(fAng) * fo };
+        return { el: el, hand: hand };
+      }
+      return { hip: hip, sh: sh, head: head, L: leg(t), R: leg(t + 0.5), AL: arm(t + 0.5), AR: arm(t), s: s };
+    }
+    function limb(a, b, w) { ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+    function drawRunnerFig(p, color) {
+      ctx.strokeStyle = color; ctx.lineCap = 'round';
+      var w = 9 * p.s;
+      // 먼 팔다리(어둡게) → 가까운 팔다리
+      limb(p.sh, p.AL.el, w); limb(p.AL.el, p.AL.hand, w * 0.8);
+      limb(p.hip, p.R.knee, w); limb(p.R.knee, p.R.foot, w * 0.82);
+      limb(p.hip, p.sh, w * 1.25);
+      limb(p.hip, p.L.knee, w); limb(p.L.knee, p.L.foot, w * 0.82);
+      limb(p.sh, p.AR.el, w); limb(p.AR.el, p.AR.hand, w * 0.8);
+      ctx.beginPath(); ctx.arc(p.head.x, p.head.y, 10 * p.s, 0, 6.2832); ctx.fillStyle = color; ctx.fill();
+    }
+    // ── B. 파티클 러너 (실루엣 → 파티클) ──
+    function drawB(now) {
+      fade(0.22); // 잔상
+      ctx.globalCompositeOperation = 'lighter';
+      var t = (now * 0.0009) % 1;
+      var s = Math.min(cw, ch) / 340;
+      var cx = cw / 2, cy = ch / 2 + 40 * s;
+      // 속도 스트릭(뒤로 흐르는 파티클)
+      for (var i = 0; i < 70; i++) {
+        var sd = i * 41.3;
+        var yy = cy - 120 * s + ((Math.sin(sd) * 0.5 + 0.5)) * 240 * s;
+        var pr = ((now * 0.0006 * (0.6 + (i % 6) / 6)) + i * 0.11) % 1;
+        var xx = cx + 180 * s - pr * 380 * s;
+        var a = Math.sin(pr * Math.PI) * 0.5;
+        ctx.fillStyle = 'rgba(255,120,90,' + a.toFixed(3) + ')';
+        ctx.fillRect(xx, yy, 16 * s * (1 - pr) + 3, 1.6);
+      }
+      // 러너: 라인을 따라 파티클 뿌리기
+      var p = runner(t, cx, cy, s);
+      var segs = [[p.sh, p.AL.el], [p.AL.el, p.AL.hand], [p.hip, p.R.knee], [p.R.knee, p.R.foot],
+      [p.hip, p.sh], [p.hip, p.L.knee], [p.L.knee, p.L.foot], [p.sh, p.AR.el], [p.AR.el, p.AR.hand]];
+      for (var sI = 0; sI < segs.length; sI++) {
+        var a2 = segs[sI][0], b = segs[sI][1];
+        for (var k = 0; k < 14; k++) {
+          var u = k / 13;
+          var jx = (Math.sin((now * 0.004) + sI * 7 + k) ) * 3 * s;
+          var jy = (Math.cos((now * 0.004) + sI * 5 + k) ) * 3 * s;
+          var px = a2.x + (b.x - a2.x) * u + jx, py = a2.y + (b.y - a2.y) * u + jy;
+          var rad = (2.2 + Math.sin(now * 0.005 + k + sI) * 1) * s;
+          ctx.fillStyle = u > 0.6 ? 'rgba(255,120,90,0.9)' : 'rgba(240,244,248,0.85)';
+          ctx.beginPath(); ctx.arc(px, py, Math.max(0.6, rad), 0, 6.2832); ctx.fill();
+        }
+      }
+      // 머리
+      ctx.fillStyle = 'rgba(240,244,248,0.9)';
+      ctx.beginPath(); ctx.arc(p.head.x, p.head.y, 9 * s, 0, 6.2832); ctx.fill();
+      ctx.globalCompositeOperation = 'source-over';
+    }
+
+    // ── C. 스트라이드 마크 (심볼 질주 잔상) ──
+    function chev(x, y, h, col, a) {
+      // fast-forward 삼각형 1개 (오른쪽 방향)
+      ctx.globalAlpha = a; ctx.fillStyle = col;
+      ctx.beginPath(); ctx.moveTo(x, y - h / 2); ctx.lineTo(x + h * 0.62, y); ctx.lineTo(x, y + h / 2); ctx.closePath(); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+    function drawC(now) {
+      fade(0.28);
+      var s = Math.min(cw, ch) / 340;
+      var cy = ch / 2, h = 60 * s;
+      var t = (now * 0.0013);
+      // 3개 셰브런이 질주하며 잔상 남김
+      for (var g = 0; g < 3; g++) {
+        var base = cw / 2 - 40 * s + g * 34 * s;
+        var sway = Math.sin(t * 2 - g * 0.5) * 26 * s;
+        for (var tr = 6; tr >= 0; tr--) {
+          var x = base + sway - tr * 16 * s;
+          var a = (1 - tr / 7) * (0.9 - g * 0.12);
+          var col = tr === 0 ? ACC : '#ff6a44';
+          chev(x, cy, h * (1 - g * 0.12), col, a * (tr === 0 ? 1 : 0.5));
+        }
+      }
+      // 배경 속도 라인
+      ctx.strokeStyle = 'rgba(255,255,255,0.05)'; ctx.lineWidth = 1;
+      for (var i = 0; i < 7; i++) {
+        var yy = cy - 120 * s + i * 40 * s;
+        var xoff = (t * 300 * s + i * 90) % (cw + 200) - 100;
+        ctx.beginPath(); ctx.moveTo(xoff, yy); ctx.lineTo(xoff + 80 * s, yy); ctx.stroke();
+      }
+    }
+
+    function loop(now) {
+      requestAnimationFrame(loop);
+      if (mode === 'a') drawA(now);
+      else if (mode === 'b') drawB(now);
+      else drawC(now);
+    }
+    function setMode(m) {
+      mode = m; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.globalAlpha = 1;
+      ctx.globalCompositeOperation = 'source-over'; ctx.fillStyle = '#0c0c0d'; ctx.fillRect(0, 0, cw, ch);
+      ['a', 'b', 'c'].forEach(function (k) { document.getElementById('b-' + k).classList.toggle('on', k === m); });
+    }
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
