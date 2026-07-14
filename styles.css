@@ -80,6 +80,33 @@ button:active {
     --type-none-text: #555550;
 }
 
+/* 하단 스티키 저장 푸터 */
+.input-footer {
+    flex-shrink: 0;
+    padding: 0 20px calc(12px + env(safe-area-inset-bottom, 0px));
+    background: var(--accent);
+}
+
+.save-btn {
+    width: 100%;
+    box-sizing: border-box;
+    padding-top: 18px;
+    color: var(--asphalt-black);
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s, background 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.save-btn:active {
+    transform: scale(0.98);
+}
+
+.save-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
 /* ─── Cross-document View Transitions ───── */
 @view-transition {
     navigation: auto;
