@@ -44,8 +44,8 @@ button:active {
     --bg-modal: #313131;
     /* Accent */
     --accent: #0FFF54;
-    --accent-rgb: 255, 76, 49;
-    --accent-dim: rgba(255, 76, 49, 0.13);
+    --accent-rgb: 15, 255, 96;
+    --accent-dim: rgba(15, 255, 96, 0.13);
 
     /* Text */
     --text-1: #f0f0eb;
@@ -65,8 +65,8 @@ button:active {
 
     /* Run type palette (theme-independent) */
     --type-race-bg: #1d1d1d;
-    --type-race-text: #ff4c31;
-    --type-dark-bg: #ff4c31;
+    --type-race-text: var(--accent);
+    --type-dark-bg: var(--accent);
     --type-dark-text: #323232;
     --type-steady-bg: #7e7e7e;
     --type-steady-text: #323232;
@@ -74,7 +74,7 @@ button:active {
     --type-easy-text: #323232;
     --type-jog-bg: #b9b9b9;
     --type-jog-text: #323232;
-    --type-long-bg: #ff4c31;
+    --type-long-bg: var(--accent);
     --type-long-text: #323232;
     --type-none-border: #282828;
     --type-none-text: #555550;
