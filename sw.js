@@ -1,4 +1,4 @@
-const CACHE = 'runit-v193';
+const CACHE = 'runit-v194';
 const CORE = [
   './app.html',
   './login.html',
@@ -21,6 +21,7 @@ const CORE = [
   './apple-touch-icon.png',
   './icon-192.png',
   './icon-512.png',
+  './splash.mp4',
   './data/store.js',
   './data/cloud.js',
   './data/activities.js',

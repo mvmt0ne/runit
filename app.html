@@ -101,8 +101,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
       opacity: 1;
-      transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     #splash.splash-hide {
@@ -110,9 +111,45 @@
       pointer-events: none;
     }
 
+    /* 러너 영상 — 흑백 고대비 + 느린 줌(케니번스) 아트 표현 */
+    #splash .sp-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(1) contrast(1.25) brightness(0.5);
+      opacity: 0;
+      transform: scale(1.12);
+      animation: sp-video-in 0.9s ease both, sp-video-zoom 3s ease-out both;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* 비네트 + 하단 스크림 → 로고 가독성 */
+    #splash .sp-scrim {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(120% 90% at 50% 42%, transparent 30%, rgba(0, 0, 0, 0.55) 100%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.1) 40%, rgba(0, 0, 0, 0.55) 100%);
+    }
+
     #splash svg {
+      position: relative;
       width: 200px;
       height: auto;
+    }
+
+    @keyframes sp-video-in {
+      from { opacity: 0; }
+      to   { opacity: 0.85; }
+    }
+
+    @keyframes sp-video-zoom {
+      from { transform: scale(1.12); }
+      to   { transform: scale(1); }
     }
 
     #splash .sp-tri,
@@ -159,6 +196,8 @@
 
 <body>
   <div id="splash">
+    <video class="sp-video" autoplay muted playsinline preload="auto" src="./splash.mp4"></video>
+    <div class="sp-scrim"></div>
     <svg viewBox="20 40 120 80" xmlns="http://www.w3.org/2000/svg">
       <!-- 심볼 (fast-forward 마크) -->
       <path class="sp-tri sp-t1" d="M79.0302 65.7481C79.2015 65.8723 79.2015 66.1277 79.0302 66.2519L61.2047 79.1754C60.999 79.3245 60.7109 79.1776 60.7109 78.9235L60.7109 53.0765C60.7109 52.8224 60.999 52.6755 61.2047 52.8246L79.0302 65.7481Z"/>
@@ -482,7 +521,7 @@
       if (!sp) return;
       if (sessionStorage.getItem('splashShown')) { sp.remove(); return; }
       sessionStorage.setItem('splashShown', '1');
-      var HOLD = 1400;  // 모션(약 0.9s) + 잠깐 유지
+      var HOLD = 2700;  // 러너 영상 + 로고 모션 (약 2.7s)
       setTimeout(function () {
         sp.classList.add('splash-hide');
         sp.addEventListener('transitionend', function () { sp.remove(); }, { once: true });
