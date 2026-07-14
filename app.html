@@ -111,29 +111,35 @@
       pointer-events: none;
     }
 
-    /* 러너 영상 — 흑백 고대비 + 느린 줌(케니번스) 아트 표현 */
+    /* 러너 영상 — 소스로만 사용(화면엔 안 보임). 캔버스가 도트로 재구성 */
     #splash .sp-video {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      opacity: 0.001;
+      pointer-events: none;
+    }
+
+    /* 도트-매트릭스 캔버스 — 러너 실루엣을 점으로 표현 */
+    #splash .sp-canvas {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      filter: grayscale(1) contrast(1.25) brightness(0.5);
       opacity: 0;
-      transform: scale(1.12);
-      animation: sp-video-in 0.9s ease both, sp-video-zoom 3s ease-out both;
+      transform: scale(1.1);
+      animation: sp-canvas-in 1s ease both, sp-canvas-zoom 3s cubic-bezier(0.16, 1, 0.3, 1) both;
       pointer-events: none;
-      user-select: none;
     }
 
-    /* 비네트 + 하단 스크림 → 로고 가독성 */
+    /* 비네트 + 로고 뒤 소프트 스크림 → 가독성 */
     #splash .sp-scrim {
       position: absolute;
       inset: 0;
       pointer-events: none;
       background:
-        radial-gradient(120% 90% at 50% 42%, transparent 30%, rgba(0, 0, 0, 0.55) 100%),
-        linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.1) 40%, rgba(0, 0, 0, 0.55) 100%);
+        radial-gradient(38% 26% at 50% 50%, rgba(0, 0, 0, 0.55) 0%, transparent 70%),
+        radial-gradient(115% 80% at 50% 46%, transparent 26%, rgba(0, 0, 0, 0.72) 100%);
     }
 
     #splash svg {
@@ -142,13 +148,13 @@
       height: auto;
     }
 
-    @keyframes sp-video-in {
+    @keyframes sp-canvas-in {
       from { opacity: 0; }
-      to   { opacity: 0.85; }
+      to   { opacity: 1; }
     }
 
-    @keyframes sp-video-zoom {
-      from { transform: scale(1.12); }
+    @keyframes sp-canvas-zoom {
+      from { transform: scale(1.1); }
       to   { transform: scale(1); }
     }
 
@@ -196,7 +202,8 @@
 
 <body>
   <div id="splash">
-    <video class="sp-video" autoplay muted playsinline preload="auto" src="./splash.mp4"></video>
+    <video class="sp-video" id="sp-video" autoplay muted playsinline preload="auto" src="./splash.mp4"></video>
+    <canvas class="sp-canvas" id="sp-canvas"></canvas>
     <div class="sp-scrim"></div>
     <svg viewBox="20 40 120 80" xmlns="http://www.w3.org/2000/svg">
       <!-- 심볼 (fast-forward 마크) -->
@@ -521,11 +528,79 @@
       if (!sp) return;
       if (sessionStorage.getItem('splashShown')) { sp.remove(); return; }
       sessionStorage.setItem('splashShown', '1');
-      var HOLD = 2700;  // 러너 영상 + 로고 모션 (약 2.7s)
+
+      // ── 러너를 도트-매트릭스로 재구성 (밝기→도트 크기 + 딥블루→화이트→accent 스펙트럼) ──
+      var video = document.getElementById('sp-video');
+      var canvas = document.getElementById('sp-canvas');
+      var rafId = 0;
+      if (video && canvas && canvas.getContext) {
+        var ctx = canvas.getContext('2d');
+        var CELL = 11;                 // 도트 간격(px)
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        var cols = 0, rows = 0;
+        var oc = document.createElement('canvas');
+        var octx = oc.getContext('2d', { willReadFrequently: true });
+
+        function resize() {
+          var w = sp.clientWidth, h = sp.clientHeight;
+          canvas.width = w * dpr; canvas.height = h * dpr;
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          cols = Math.ceil(w / CELL); rows = Math.ceil(h / CELL);
+          oc.width = cols; oc.height = rows;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        // object-fit: cover 로 비디오를 그리드 해상도에 다운스케일
+        function drawCover() {
+          var vw = video.videoWidth, vh = video.videoHeight;
+          if (!vw || !vh) return false;
+          var scale = Math.max(cols / vw, rows / vh);
+          var dw = vw * scale, dh = vh * scale;
+          octx.drawImage(video, (cols - dw) / 2, (rows - dh) / 2, dw, dh);
+          return true;
+        }
+
+        // 밝기 → 색 (딥블루 → 화이트 → accent 레드)
+        function ramp(t) { // t: 0~1
+          var a = [10, 22, 48], b = [235, 238, 245], c = [255, 76, 49];
+          var p, q, k;
+          if (t < 0.55) { k = t / 0.55; p = a; q = b; }
+          else { k = (t - 0.55) / 0.45; p = b; q = c; }
+          var r = Math.round(p[0] + (q[0] - p[0]) * k);
+          var g = Math.round(p[1] + (q[1] - p[1]) * k);
+          var bl = Math.round(p[2] + (q[2] - p[2]) * k);
+          return 'rgb(' + r + ',' + g + ',' + bl + ')';
+        }
+
+        function frame() {
+          rafId = requestAnimationFrame(frame);
+          if (!drawCover()) return;
+          var data = octx.getImageData(0, 0, cols, rows).data;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          for (var y = 0; y < rows; y++) {
+            for (var x = 0; x < cols; x++) {
+              var i = (y * cols + x) * 4;
+              var lum = (0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2]) / 255;
+              if (lum < 0.08) continue;                 // 어두운 배경은 비움 → 실루엣
+              var rad = 0.6 + lum * (CELL * 0.62);      // 밝을수록 큰 도트
+              ctx.fillStyle = ramp(lum);
+              ctx.beginPath();
+              ctx.arc(x * CELL + CELL / 2, y * CELL + CELL / 2, rad, 0, 6.2832);
+              ctx.fill();
+            }
+          }
+        }
+        video.play().catch(function () {});
+        frame();
+      }
+
+      var HOLD = 3000;  // 러너 도트 모션 + 로고 (약 3s)
       setTimeout(function () {
         sp.classList.add('splash-hide');
-        sp.addEventListener('transitionend', function () { sp.remove(); }, { once: true });
-        setTimeout(function () { if (sp.parentNode) sp.remove(); }, 700); // 폴백
+        function done() { if (rafId) cancelAnimationFrame(rafId); if (sp.parentNode) sp.remove(); }
+        sp.addEventListener('transitionend', done, { once: true });
+        setTimeout(done, 800); // 폴백
       }, HOLD);
     })();
     if ('serviceWorker' in navigator) {
