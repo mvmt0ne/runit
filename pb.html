@@ -34,18 +34,45 @@
       display: none;
     }
 
-    /* ── Distance tabs — 8개 균등 분배. 개수가 많아 폰트를 줄여 여유 확보 ── */
+    /* ── Distance tabs — 8개 균등 분배. 다크 헤더에 맞춘 다크 글래스 ── */
     .dist-tabs {
       padding: 0 6px;
+      /* 하위 뎁스 다크 헤더와 동일한 글래스 톤 */
+      background: rgba(34, 34, 34, 0.75);
+      backdrop-filter: blur(40px) saturate(160%);
+      -webkit-backdrop-filter: blur(40px) saturate(160%);
+      border-radius: 0;
+      /* back-header(다크) 바로 아래에 docking */
+      top: calc(env(safe-area-inset-top, 0px) + 50px);
     }
 
     .dist-tabs .tab {
       flex: 1;
+      position: relative;
       padding: 12px 0;
       font-size: 16px;
       letter-spacing: -0.3px;
       text-align: center;
       white-space: nowrap;
+      color: var(--asphalt-gray);
+      /* 비활성: 흐린 회색 */
+    }
+
+    .dist-tabs .tab.active {
+      color: var(--bone);
+    }
+
+    /* 활성 표시 — accent 언더라인 */
+    .dist-tabs .tab.active::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: 4px;
+      transform: translateX(-50%);
+      width: 18px;
+      height: 2px;
+      border-radius: 2px;
+      background: var(--accent);
     }
 
     /* ── PB content ── */
