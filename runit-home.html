@@ -897,18 +897,29 @@
       return W + paths[kind] + '</svg>';
     }
 
+    // 위치 실패(권한 거부/타임아웃/미지원) 시 기본값 — 서울
+    const WEATHER_FALLBACK = { lat: 37.5665, lon: 126.9780 };
+
+    function getCoords() {
+      return new Promise(resolve => {
+        const cached = localStorage.getItem('runit-coords');
+        if (cached) { try { return resolve(JSON.parse(cached)); } catch (e) { } }
+        if (!('geolocation' in navigator)) return resolve(WEATHER_FALLBACK);
+        navigator.geolocation.getCurrentPosition(
+          pos => {
+            const c = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+            localStorage.setItem('runit-coords', JSON.stringify(c));
+            resolve(c);
+          },
+          () => resolve(WEATHER_FALLBACK),           // 거부/실패 → 폴백(캐시 안 함 → 다음에 재시도)
+          { timeout: 8000, maximumAge: 600000, enableHighAccuracy: false }
+        );
+      });
+    }
+
     async function fetchWeather() {
       try {
-        let lat, lon;
-        const cached = localStorage.getItem('runit-coords');
-        if (cached) {
-          ({ lat, lon } = JSON.parse(cached));
-        } else {
-          const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej));
-          lat = pos.coords.latitude;
-          lon = pos.coords.longitude;
-          localStorage.setItem('runit-coords', JSON.stringify({ lat, lon }));
-        }
+        const { lat, lon } = await getCoords();
 
         // Weather + Air Quality
         const [wRes, aRes] = await Promise.all([
