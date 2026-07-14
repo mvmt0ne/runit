@@ -58,7 +58,7 @@
     resize(); window.addEventListener('resize', resize);
 
     function ramp(t) {
-      var a = [10, 22, 48], b = [235, 238, 245], c = [255, 76, 49], p, q, k;
+      var a = [10, 22, 48], b = [235, 238, 245], c = [15, 255, 84], p, q, k;
       if (t < 0.55) { k = t / 0.55; p = a; q = b; } else { k = (t - 0.55) / 0.45; p = b; q = c; }
       return 'rgb(' + Math.round(p[0] + (q[0] - p[0]) * k) + ',' + Math.round(p[1] + (q[1] - p[1]) * k) + ',' + Math.round(p[2] + (q[2] - p[2]) * k) + ')';
     }
@@ -103,7 +103,7 @@
       }
       var p = ((now - t0) % 3400) / 2600, band = -cw + p * cw * 2.4;
       var sg = ctx.createLinearGradient(band, 0, band + cw * .5, ch);
-      sg.addColorStop(0, 'rgba(255,255,255,0)'); sg.addColorStop(.5, 'rgba(255,120,90,.1)'); sg.addColorStop(.52, 'rgba(255,255,255,.14)'); sg.addColorStop(.54, 'rgba(90,150,255,.1)'); sg.addColorStop(1, 'rgba(255,255,255,0)');
+      sg.addColorStop(0, 'rgba(255,255,255,0)'); sg.addColorStop(.5, 'rgba(40,255,110,.1)'); sg.addColorStop(.52, 'rgba(255,255,255,.14)'); sg.addColorStop(.54, 'rgba(90,150,255,.1)'); sg.addColorStop(1, 'rgba(255,255,255,0)');
       ctx.fillStyle = sg; ctx.fillRect(0, 0, cw, ch);
     }
     function drawPrism(now) {
@@ -115,8 +115,8 @@
       sp.addColorStop(0.22, '#15316f');
       sp.addColorStop(0.42, '#5fb8e0');
       sp.addColorStop(0.52, '#eef2f8');
-      sp.addColorStop(0.66, '#ff6a44');
-      sp.addColorStop(1.00, '#2a0705');
+      sp.addColorStop(0.66, '#1bff5f');
+      sp.addColorStop(1.00, '#04160a');
       ctx.fillStyle = sp; ctx.fillRect(0, 0, cw, ch);
       // 2) 좌우 어둡게 → 중앙 세로 블룸 집중
       var bl = ctx.createLinearGradient(0, 0, cw, 0);

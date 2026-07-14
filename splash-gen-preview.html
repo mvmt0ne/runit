@@ -41,7 +41,7 @@
   <script>
     var cv = document.getElementById('c'), ctx = cv.getContext('2d');
     var dpr = Math.min(window.devicePixelRatio || 1, 2), cw = 0, ch = 0, mode = 'a';
-    var ACC = '#ff4c31';
+    var ACC = '#0fff54';
     function resize() { cw = innerWidth; ch = innerHeight; cv.width = cw * dpr; cv.height = ch * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
     resize(); addEventListener('resize', resize);
     function fade(a) { ctx.globalCompositeOperation = 'source-over'; ctx.fillStyle = 'rgba(12,12,13,' + a + ')'; ctx.fillRect(0, 0, cw, ch); }
@@ -51,7 +51,7 @@
       ctx.globalCompositeOperation = 'source-over';
       var g = ctx.createLinearGradient(0, 0, 0, ch);
       g.addColorStop(0, '#05060a'); g.addColorStop(.24, '#15316f'); g.addColorStop(.44, '#5fb8e0');
-      g.addColorStop(.52, '#eef2f8'); g.addColorStop(.66, '#ff6a44'); g.addColorStop(1, '#2a0705');
+      g.addColorStop(.52, '#eef2f8'); g.addColorStop(.66, '#1bff5f'); g.addColorStop(1, '#04160a');
       ctx.fillStyle = g; ctx.fillRect(0, 0, cw, ch);
       var breathe = 0.5 + 0.5 * Math.sin(now * 0.0011);
       var bl = ctx.createLinearGradient(0, 0, cw, 0);
@@ -134,7 +134,7 @@
         var pr = ((now * 0.0006 * (0.6 + (i % 6) / 6)) + i * 0.11) % 1;
         var xx = cx + 180 * s - pr * 380 * s;
         var a = Math.sin(pr * Math.PI) * 0.5;
-        ctx.fillStyle = 'rgba(255,120,90,' + a.toFixed(3) + ')';
+        ctx.fillStyle = 'rgba(40,255,110,' + a.toFixed(3) + ')';
         ctx.fillRect(xx, yy, 16 * s * (1 - pr) + 3, 1.6);
       }
       // 러너: 라인을 따라 파티클 뿌리기
@@ -149,7 +149,7 @@
           var jy = (Math.cos((now * 0.004) + sI * 5 + k) ) * 3 * s;
           var px = a2.x + (b.x - a2.x) * u + jx, py = a2.y + (b.y - a2.y) * u + jy;
           var rad = (2.2 + Math.sin(now * 0.005 + k + sI) * 1) * s;
-          ctx.fillStyle = u > 0.6 ? 'rgba(255,120,90,0.9)' : 'rgba(240,244,248,0.85)';
+          ctx.fillStyle = u > 0.6 ? 'rgba(40,255,110,0.9)' : 'rgba(240,244,248,0.85)';
           ctx.beginPath(); ctx.arc(px, py, Math.max(0.6, rad), 0, 6.2832); ctx.fill();
         }
       }
@@ -178,7 +178,7 @@
         for (var tr = 6; tr >= 0; tr--) {
           var x = base + sway - tr * 16 * s;
           var a = (1 - tr / 7) * (0.9 - g * 0.12);
-          var col = tr === 0 ? ACC : '#ff6a44';
+          var col = tr === 0 ? ACC : '#1bff5f';
           chev(x, cy, h * (1 - g * 0.12), col, a * (tr === 0 ? 1 : 0.5));
         }
       }
