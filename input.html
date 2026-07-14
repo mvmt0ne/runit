@@ -192,19 +192,16 @@
     .input-footer {
       flex-shrink: 0;
       padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 0px));
+      background: var(--accent);
     }
 
     .save-btn {
       width: 100%;
       box-sizing: border-box;
       padding: 18px;
-      background: var(--accent);
-      border: none;
-      border-radius: 100px;
-      color: #202020;
-      font-size: 17px;
+      color: var(--asphalt-black);
+      font-size: 18px;
       font-weight: 600;
-      font-family: 'Pretendard Variable', sans-serif;
       cursor: pointer;
       transition: opacity 0.15s, background 0.15s, transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -214,7 +211,7 @@
     }
 
     .save-btn:disabled {
-      opacity: 0.1;
+      opacity: 0.3;
       cursor: not-allowed;
     }
 
