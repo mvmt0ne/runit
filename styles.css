@@ -36,6 +36,14 @@ button:active {
     color: inherit;
 }
 
+input {
+    color: var(--slate-gray);
+}
+
+select {
+    color: var(--slate-gray);
+}
+
 /* ─── Tokens ────────────────────────────── */
 :root {
     /* Surfaces */
