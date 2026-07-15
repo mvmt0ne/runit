@@ -248,11 +248,21 @@
       flex-direction: column;
     }
 
+    /* 지표 리스트 박스 (횟수~평균 보폭) */
+    .sc-metric-box {
+      background: var(--dark-gray);
+      overflow: hidden;
+      padding: 4px 16px;
+    }
+
     /* 지표 행 */
     .sc-metric {
       border-top: 1px solid rgba(255, 255, 255, 0.06);
-      padding: 14px 0;
-      margin: 0 20px;
+      padding: 14px 4px;
+    }
+
+    .sc-metric-box .sc-metric:first-child {
+      border-top: none;
     }
 
     .sc-metric-label {
@@ -545,7 +555,7 @@
         </div>`;
       });
 
-      body.innerHTML = heads + rows + `<div class="sc-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 3a6 6 0 0 0-4 10.5V16h8v-2.5A6 6 0 0 0 12 3zM9 20h6M10 22h4"/></svg>액센트 = 지표별 더 나은 값 · 최고 페이스는 단일 활동 최고 평균</div>` + `<div class="sc-acc-list">${history}</div>`;
+      body.innerHTML = heads + `<div class="round-box sc-metric-box">${rows}</div>` + `<div class="sc-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 3a6 6 0 0 0-4 10.5V16h8v-2.5A6 6 0 0 0 12 3zM9 20h6M10 22h4"/></svg>액센트 = 지표별 더 나은 값 · 최고 페이스는 단일 활동 최고 평균</div>` + `<div class="sc-acc-list">${history}</div>`;
     }
 
     // 어코디언 펼침/접힘
