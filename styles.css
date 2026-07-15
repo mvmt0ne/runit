@@ -735,8 +735,7 @@ sup {
 
 .lp-date-day {
     /* stats.html '이 주의 러닝'(.wk-run-sub) 날짜와 폰트 스타일 통일 */
-    font-size: 14px;
-    font-weight: 400;
+    font-size: 13px;
     font-family: 'Space Mono', monospace;
     line-height: 1;
     color: var(--cloudy-gray);
@@ -776,19 +775,18 @@ sup {
 }
 
 .lp-run-name {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 500;
     min-width: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: var(--bone);
+    color: var(--slate-gray);
     flex: 1;
 }
 
 .lp-head-km {
-    font-size: 24px;
-    font-weight: 400;
+    font-size: 20px;
     font-family: 'Orbitron', sans-serif;
     font-feature-settings: 'tnum';
     color: var(--bone);
@@ -1896,5 +1894,5 @@ input[type="date"].pb-input::-webkit-calendar-picker-indicator {
 
 .round-box {
     border-radius: 12px;
-    margin: 3px 0;
+    margin: 3px;
 }
