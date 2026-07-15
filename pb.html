@@ -34,45 +34,90 @@
       display: none;
     }
 
-    /* ── Distance tabs — 8개 균등 분배. 다크 헤더에 맞춘 다크 글래스 ── */
-    .dist-tabs {
-      padding: 0 6px;
-      /* 하위 뎁스 다크 헤더와 동일한 글래스 톤 */
-      background: rgba(34, 34, 34, 0.75);
-      backdrop-filter: blur(40px) saturate(160%);
-      -webkit-backdrop-filter: blur(40px) saturate(160%);
-      border-radius: 0;
-      /* back-header(다크) 바로 아래에 docking */
-      top: calc(env(safe-area-inset-top, 0px) + 50px);
+    /* ── Badge carousel — 거리별 뱃지 카드, 좌우 스냅 스와이프 ── */
+    .pb-badges {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      /* 카드 76% 폭 → 좌우 12% 패딩으로 첫/끝 카드도 중앙 정렬 가능 */
+      padding: 20px 12% 8px;
+      scrollbar-width: none;
     }
 
-    .dist-tabs .tab {
-      flex: 1;
-      position: relative;
-      padding: 12px 0;
-      font-size: 16px;
-      letter-spacing: -0.3px;
-      text-align: center;
-      white-space: nowrap;
-      color: var(--asphalt-gray);
-      /* 비활성: 흐린 회색 */
+    .pb-badges::-webkit-scrollbar {
+      display: none;
     }
 
-    .dist-tabs .tab.active {
-      color: var(--bone);
+    .pb-badge {
+      flex: 0 0 76%;
+      scroll-snap-align: center;
+      perspective: 1200px;
+      transform: scale(0.9);
+      opacity: 0.45;
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.32s;
     }
 
-    /* 활성 표시 — accent 언더라인 */
-    .dist-tabs .tab.active::after {
-      content: '';
-      position: absolute;
-      left: 50%;
-      bottom: 4px;
-      transform: translateX(-50%);
-      width: 18px;
-      height: 2px;
-      border-radius: 2px;
-      background: var(--accent);
+    .pb-badge.active {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    /* ── 거리별 뱃지 컬러 (400m→풀: 레드→골드 스펙트럼) ── */
+    .bg-400 .pb-hero-bg {
+      background:
+        radial-gradient(ellipse 80% 60% at 80% 0%, #FFC46B 0%, transparent 55%),
+        radial-gradient(ellipse 70% 60% at 0% 100%, #FF4E6E 0%, transparent 55%),
+        linear-gradient(135deg, #B3202D 0%, #D92D3A 45%, #FF7A3C 100%);
+    }
+
+    .bg-1k .pb-hero-bg {
+      background:
+        radial-gradient(ellipse 80% 60% at 80% 0%, #FFE08A 0%, transparent 55%),
+        radial-gradient(ellipse 70% 60% at 0% 100%, #FF9C4A 0%, transparent 55%),
+        linear-gradient(135deg, #C06A00 0%, #E08A00 45%, #FFC93C 100%);
+    }
+
+    .bg-3k .pb-hero-bg {
+      background:
+        radial-gradient(ellipse 80% 60% at 80% 0%, #EAFF8A 0%, transparent 55%),
+        radial-gradient(ellipse 70% 60% at 0% 100%, #6BCB3C 0%, transparent 55%),
+        linear-gradient(135deg, #5A8F0E 0%, #7CB518 45%, #C6E94E 100%);
+    }
+
+    .bg-5k .pb-hero-bg {
+      background:
+        radial-gradient(ellipse 80% 60% at 80% 0%, #A8FFC4 0%, transparent 55%),
+        radial-gradient(ellipse 70% 60% at 0% 100%, #0FFF54 0%, transparent 55%),
+        linear-gradient(135deg, #067A33 0%, #0BA84A 45%, #33FF77 100%);
+    }
+
+    .bg-10k .pb-hero-bg {
+      background:
+        radial-gradient(ellipse 80% 60% at 80% 0%, #8AFFE8 0%, transparent 55%),
+        radial-gradient(ellipse 70% 60% at 0% 100%, #14C2B0 0%, transparent 55%),
+        linear-gradient(135deg, #086E62 0%, #0E9E8F 45%, #3CE0C8 100%);
+    }
+
+    .bg-15k .pb-hero-bg {
+      background:
+        radial-gradient(ellipse 80% 60% at 80% 0%, #9CD1FF 0%, transparent 55%),
+        radial-gradient(ellipse 70% 60% at 0% 100%, #3C7DFF 0%, transparent 55%),
+        linear-gradient(135deg, #12489E 0%, #1F6FE0 45%, #4FA8FF 100%);
+    }
+
+    .bg-half .pb-hero-bg {
+      background:
+        radial-gradient(ellipse 80% 60% at 80% 0%, #FF9CFF 0%, transparent 55%),
+        radial-gradient(ellipse 70% 60% at 0% 100%, #4F8DFF 0%, transparent 55%),
+        linear-gradient(135deg, #6431F0 0%, #8B5CF6 45%, #C77DFF 100%);
+    }
+
+    .bg-full .pb-hero-bg {
+      background:
+        radial-gradient(ellipse 80% 60% at 80% 0%, #FFF3B0 0%, transparent 55%),
+        radial-gradient(ellipse 70% 60% at 0% 100%, #FFB84C 0%, transparent 55%),
+        linear-gradient(135deg, #8A6A0A 0%, #C9A227 45%, #FFE066 100%);
     }
 
     /* ── PB content ── */
@@ -83,12 +128,7 @@
       gap: 24px;
     }
 
-    /* ── Hero card (1위) ── */
-    .pb-hero {
-      perspective: 1200px;
-      padding: 0 6px;
-    }
-
+    /* ── Badge card (거리별 1위 기록) ── */
     .pb-hero-card {
       position: relative;
       width: 100%;
@@ -101,7 +141,7 @@
       will-change: transform;
       /* transition 없음 — rAF 루프가 직접 보간 (안 그러면 뚝뚝 끊김) */
       box-shadow:
-        0 24px 60px -20px rgba(123, 91, 255, 0.55),
+        0 24px 60px -20px rgba(0, 0, 0, 0.55),
         0 8px 24px -8px rgba(0, 0, 0, 0.4),
         inset 0 0 0 1px rgba(255, 255, 255, 0.12);
     }
@@ -437,40 +477,10 @@
 
 
 
-        <div class="tab-row dist-tabs">
-          <button class="tab" data-dist="400" onclick="switchDist('400')">400m</button>
-          <button class="tab" data-dist="1k" onclick="switchDist('1k')">1K</button>
-          <button class="tab" data-dist="3k" onclick="switchDist('3k')">3K</button>
-          <button class="tab active" data-dist="5k" onclick="switchDist('5k')">5K</button>
-          <button class="tab" data-dist="10k" onclick="switchDist('10k')">10K</button>
-          <button class="tab" data-dist="15k" onclick="switchDist('15k')">15K</button>
-          <button class="tab" data-dist="half" onclick="switchDist('half')">하프</button>
-          <button class="tab" data-dist="full" onclick="switchDist('full')">풀</button>
-        </div>
+        <!-- 거리별 뱃지 캐러셀 (좌우 스와이프) -->
+        <div class="pb-badges" id="pb-badges"></div>
 
         <div class="pb-content">
-
-          <!-- Hero card (1위) -->
-          <div class="pb-hero">
-            <div class="pb-hero-card" id="pb-hero-card" onclick="onHeroTap()">
-              <div class="pb-hero-bg"></div>
-              <div class="pb-hero-watermark" id="pb-hero-watermark">5</div>
-              <div class="pb-hero-sheen"></div>
-              <div class="pb-hero-foil"></div>
-              <div class="pb-hero-content">
-                <div class="pb-hero-top">
-                  <span class="pb-hero-dist" id="pb-hero-dist">5K</span>
-                  <button class="pb-hero-edit" onclick="event.stopPropagation(); openPBEdit()">편집</button>
-                </div>
-                <div class="pb-hero-time" id="pb-hero-time">18:42</div>
-                <div class="pb-hero-pace" id="pb-hero-pace">3'44"/km</div>
-                <div class="pb-hero-meta">
-                  <span id="pb-hero-name">서울 10K</span>
-                  <span class="pb-hero-date" id="pb-hero-date">2026.03.22</span>
-                </div>
-              </div>
-            </div>
-          </div>
 
           <!-- 활동 기준 기록 -->
           <div>
@@ -594,56 +604,80 @@
     const DISTS = { '400': '400m', '1k': '1K', '3k': '3K', '5k': '5K', '10k': '10K', '15k': '15K', 'half': '하프', 'full': '풀' };
     const WATERMARKS = { '400': '400', '1k': '1', '3k': '3', '5k': '5', '10k': '10', '15k': '15', 'half': '21', 'full': '42' };
 
+    const DIST_ORDER = ['400', '1k', '3k', '5k', '10k', '15k', 'half', 'full'];
     let currentDist = '5k';
 
-    function switchDist(dist) {
-      if (dist === currentDist) return;
-      currentDist = dist;
-      document.querySelectorAll('.dist-tabs .tab').forEach(t =>
-        t.classList.toggle('active', t.dataset.dist === dist));
-      renderPB();
+    // 거리별 히어로 기록 — 수동 공식 PB 우선, 없으면 CSV 최고 기록
+    function badgeHero(dist) {
+      const records = ACT_DATA[dist] || [];
+      const pb = (typeof getPB === 'function') ? getPB(dist) : null;
+      if (pb && pb.time) {
+        return {
+          time: pb.time,
+          pace: pb.pace || _paceFromTime(_timeToSec(pb.time), DIST_KM[dist]),
+          name: pb.name || '', dateDisp: _fmtDate(pb.date), dateKey: pb.date || '',
+          fromCsv: false,
+        };
+      }
+      if (records.length) {
+        const a = records[0];
+        return { time: a.time, pace: a.pace, name: a.name || '', dateDisp: a.date, dateKey: a.dateKey || '', fromCsv: true };
+      }
+      return null;
     }
 
-    function renderPB() {
-      document.getElementById('pb-hero-dist').textContent = DISTS[currentDist];
-      document.getElementById('pb-hero-watermark').textContent = WATERMARKS[currentDist];
+    // 뱃지 카드 8개 생성 (1회)
+    function buildBadges() {
+      const wrap = document.getElementById('pb-badges');
+      wrap.innerHTML = DIST_ORDER.map(d => `
+        <div class="pb-badge" data-dist="${d}">
+          <div class="pb-hero-card bg-${d}" data-dist="${d}" onclick="onBadgeTap('${d}')">
+            <div class="pb-hero-bg"></div>
+            <div class="pb-hero-watermark">${WATERMARKS[d]}</div>
+            <div class="pb-hero-sheen"></div>
+            <div class="pb-hero-foil"></div>
+            <div class="pb-hero-content">
+              <div class="pb-hero-top">
+                <span class="pb-hero-dist">${DISTS[d]}</span>
+                <button class="pb-hero-edit" onclick="event.stopPropagation(); onBadgeEdit('${d}')">편집</button>
+              </div>
+              <div class="pb-hero-time" id="pb-time-${d}">--</div>
+              <div class="pb-hero-pace" id="pb-pace-${d}"></div>
+              <div class="pb-hero-meta">
+                <span id="pb-name-${d}"></span>
+                <span class="pb-hero-date" id="pb-date-${d}"></span>
+              </div>
+            </div>
+          </div>
+        </div>`).join('');
+    }
 
-      const heroTime = document.getElementById('pb-hero-time');
-      const heroCard = document.getElementById('pb-hero-card');
-      const records = ACT_DATA[currentDist] || [];
-
-      // ── 히어로: 수동 공식 PB가 있으면 우선, 없으면 CSV 최고 기록 자동 ──
-      const pb = (typeof getPB === 'function') ? getPB(currentDist) : null;
-      let hero = null, fromCsv = false;
-      if (pb && pb.time) {
-        hero = {
-          time: pb.time,
-          pace: pb.pace || _paceFromTime(_timeToSec(pb.time), DIST_KM[currentDist]),
-          name: pb.name || '',
-          dateDisp: _fmtDate(pb.date),
-          dateKey: pb.date || '',
-        };
-      } else if (records.length) {
-        const a = records[0]; // 가장 빠른 활동
-        hero = { time: a.time, pace: a.pace, name: a.name || '', dateDisp: a.date, dateKey: a.dateKey || '' };
-        fromCsv = true;
-      }
-
+    function renderBadge(dist, animate) {
+      const hero = badgeHero(dist);
+      const timeEl = document.getElementById('pb-time-' + dist);
+      const card = document.querySelector(`.pb-hero-card[data-dist="${dist}"]`);
+      if (!timeEl || !card) return;
       if (hero) {
-        document.getElementById('pb-hero-pace').textContent = hero.pace;
-        document.getElementById('pb-hero-name').textContent = hero.name;
-        document.getElementById('pb-hero-date').textContent = hero.dateDisp;
-        heroCard.dataset.date = hero.dateKey;
-        slotAnimate(heroTime, hero.time);
+        document.getElementById('pb-pace-' + dist).textContent = hero.pace;
+        document.getElementById('pb-name-' + dist).textContent = hero.name;
+        document.getElementById('pb-date-' + dist).textContent = hero.dateDisp;
+        card.dataset.date = hero.dateKey;
+        if (animate) slotAnimate(timeEl, hero.time);
+        else timeEl.textContent = hero.time;
       } else {
-        heroTime.textContent = '--';
-        document.getElementById('pb-hero-pace').textContent = '탭하여 PB 입력';
-        document.getElementById('pb-hero-name').textContent = '';
-        document.getElementById('pb-hero-date').textContent = '';
-        heroCard.dataset.date = '';
+        timeEl.textContent = '--';
+        document.getElementById('pb-pace-' + dist).textContent = '탭하여 PB 입력';
+        document.getElementById('pb-name-' + dist).textContent = '';
+        document.getElementById('pb-date-' + dist).textContent = '';
+        card.dataset.date = '';
       }
+    }
 
-      // ── 하단: 활동 기준 기록 (상세 링크). 히어로가 CSV 최고면 그 1건은 제외 ──
+    function renderList() {
+      const records = ACT_DATA[currentDist] || [];
+      const hero = badgeHero(currentDist);
+      const fromCsv = !!(hero && hero.fromCsv);
+      // 히어로가 CSV 최고면 그 1건은 리스트에서 제외
       const listRecords = fromCsv ? records.slice(1) : records;
       const startRank = fromCsv ? 2 : 1;
       if (!listRecords.length) {
@@ -664,6 +698,52 @@
         </div>
       `).join('');
     }
+
+    function renderPB() {
+      DIST_ORDER.forEach(d => renderBadge(d, d === currentDist));
+      renderList();
+      updateActiveBadge();
+    }
+
+    /* ── 캐러셀: 스크롤 스냅 → 중앙 카드 감지 → currentDist 갱신 ── */
+    function activeCardEl() {
+      return document.querySelector(`.pb-hero-card[data-dist="${currentDist}"]`);
+    }
+
+    function updateActiveBadge() {
+      document.querySelectorAll('.pb-badge').forEach(b =>
+        b.classList.toggle('active', b.dataset.dist === currentDist));
+    }
+
+    function centerBadge(dist, smooth) {
+      const wrap = document.getElementById('pb-badges');
+      const badge = wrap.querySelector(`.pb-badge[data-dist="${dist}"]`);
+      if (!badge) return;
+      const left = badge.offsetLeft - (wrap.clientWidth - badge.offsetWidth) / 2;
+      wrap.scrollTo({ left, behavior: smooth ? 'smooth' : 'instant' });
+    }
+
+    (function setupBadgeSnap() {
+      const wrap = document.getElementById('pb-badges');
+      let timer;
+      wrap.addEventListener('scroll', () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          const center = wrap.scrollLeft + wrap.clientWidth / 2;
+          let best = null, bd = Infinity;
+          wrap.querySelectorAll('.pb-badge').forEach(b => {
+            const d = Math.abs(b.offsetLeft + b.offsetWidth / 2 - center);
+            if (d < bd) { bd = d; best = b; }
+          });
+          if (best && best.dataset.dist !== currentDist) {
+            currentDist = best.dataset.dist;
+            updateActiveBadge();
+            renderBadge(currentDist, true);   // 슬롯머신 카운터
+            renderList();
+          }
+        }, 90);
+      }, { passive: true });
+    })();
 
     /* ─── 공식 PB 입력 시트 ─── */
     function openPBEdit() {
@@ -764,10 +844,11 @@
     function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 
     function applyTilt(dx, dy) {
-      const card = document.getElementById('pb-hero-card');
+      const card = activeCardEl();
       if (!card) return;
-      const rx = -dy * 9;
-      const ry = dx * 12;
+      // 강화된 틸트 — 뱃지가 확실히 기울어지게
+      const rx = -dy * 16;
+      const ry = dx * 20;
       const fx = ((dx + 1) / 2) * 100;
       const fy = ((dy + 1) / 2) * 100;
       card.style.setProperty('--rx', rx.toFixed(2) + 'deg');
@@ -803,10 +884,13 @@
     }
 
     (function setupPointerTilt() {
-      const card = document.getElementById('pb-hero-card');
-      if (!card) return;
+      const wrap = document.getElementById('pb-badges');
+      if (!wrap) return;
 
+      // 활성(중앙) 카드 기준으로 포인터 → 틸트 목표값
       function fromPointer(clientX, clientY) {
+        const card = activeCardEl();
+        if (!card) return;
         const rect = card.getBoundingClientRect();
         const cx = rect.left + rect.width / 2;
         const cy = rect.top + rect.height / 2;
@@ -815,17 +899,17 @@
         startRenderLoop(); // 정지된 보간 루프 재가동
       }
 
-      card.addEventListener('mousemove', e => fromPointer(e.clientX, e.clientY));
-      card.addEventListener('mouseleave', () => {
+      wrap.addEventListener('mousemove', e => fromPointer(e.clientX, e.clientY));
+      wrap.addEventListener('mouseleave', () => {
         if (!_gyroEnabled) { _targetX = 0; _targetY = 0; }
       });
 
-      card.addEventListener('touchstart', e => {
+      wrap.addEventListener('touchstart', e => {
         _touchActive = true;
         const t = e.touches[0];
         if (t) fromPointer(t.clientX, t.clientY);
       }, { passive: true });
-      card.addEventListener('touchmove', e => {
+      wrap.addEventListener('touchmove', e => {
         const t = e.touches[0];
         if (t) fromPointer(t.clientX, t.clientY);
       }, { passive: true });
@@ -833,10 +917,10 @@
         _touchActive = false;
         if (!_gyroEnabled) { _targetX = 0; _targetY = 0; }
       };
-      card.addEventListener('touchend', endTouch);
-      card.addEventListener('touchcancel', endTouch);
+      wrap.addEventListener('touchend', endTouch);
+      wrap.addEventListener('touchcancel', endTouch);
 
-      // 카드가 화면에 보일 때만 렌더 루프 가동 — SPA에서 다른 탭(마일리지 등)으로
+      // 캐러셀이 화면에 보일 때만 렌더 루프 가동 — SPA에서 다른 탭(마일리지 등)으로
       // 이동해 PB 슬라이드가 off-screen 되면 3D 틸트 애니메이션을 멈춰
       // iOS Safari 합성이 깨져 인접 화면이 비는 문제 방지.
       if ('IntersectionObserver' in window) {
@@ -844,7 +928,7 @@
           _cardVisible = entries[0].isIntersecting;
           if (_cardVisible) startRenderLoop();
         }, { threshold: 0.01 });
-        io.observe(card);
+        io.observe(wrap);
       }
 
       startRenderLoop();
@@ -863,8 +947,9 @@
       else if (ang === 270 || ang === -90) { const g = gamma; gamma = -beta; beta = g; }
       else if (ang === 180) { gamma = -gamma; beta = -beta; }
 
-      _targetX = clamp(gamma / 25, -1, 1);
-      _targetY = clamp((beta - 45) / 25, -1, 1);
+      // 감도 강화 — 작은 기울임에도 뱃지가 반응
+      _targetX = clamp(gamma / 14, -1, 1);
+      _targetY = clamp((beta - 45) / 14, -1, 1);
     }
 
     function enableGyro() {
@@ -886,22 +971,38 @@
       }
     }
 
-    /* ─── 탭 시 살짝 펄스 + 자이로 권한 요청 ─── */
-    function onHeroTap() {
-      const c = document.getElementById('pb-hero-card');
-      const date = c.dataset.date;
+    /* ─── 뱃지 탭 — 사이드 카드면 중앙으로, 활성 카드면 상세/입력 ─── */
+    function onBadgeTap(dist) {
+      if (dist !== currentDist) { centerBadge(dist, true); enableGyro(); return; }
+      const c = activeCardEl();
+      const date = c ? c.dataset.date : '';
       // 공식 PB에 날짜가 있고 그 활동이 있으면 상세로, 아니면 PB 입력 시트
       if (date) { goTo(`detail.html?date=${date}`); return; }
       openPBEdit();
       // 펄스 + 자이로 권한 요청도 함께
-      c.classList.remove('tap');
-      void c.offsetWidth; // reflow
-      c.classList.add('tap');
+      if (c) {
+        c.classList.remove('tap');
+        void c.offsetWidth; // reflow
+        c.classList.add('tap');
+      }
       enableGyro();
     }
 
+    // 편집 버튼 — 사이드 카드면 먼저 중앙으로 이동 후 시트 오픈
+    function onBadgeEdit(dist) {
+      if (dist !== currentDist) {
+        centerBadge(dist, true);
+        currentDist = dist;
+        updateActiveBadge();
+        renderList();
+      }
+      openPBEdit();
+    }
+
     // 실제 활동 → 거리별 PB 계산 후 렌더
+    buildBadges();
     renderPB(); // 로딩 전 기본 상태(공식 PB는 즉시, 활동 목록은 로드 후)
+    centerBadge(currentDist, false); // 5K를 중앙에
     if (typeof loadActivities === 'function') {
       loadActivities().then(acts => { ACT_DATA = buildPBData(acts); renderPB(); });
     }
