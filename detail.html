@@ -463,6 +463,7 @@
       pointer-events: auto;
     }
 
+    /* 다른 바텀시트(정렬/월/러닝화 비교)와 동일한 리사이즈 시트 */
     .shoe-sheet {
       position: fixed;
       left: 0;
@@ -471,22 +472,26 @@
       z-index: 61;
       background: var(--bg-modal);
       border-radius: 16px 16px 0 0;
-      padding: 10px 0 calc(24px + env(safe-area-inset-bottom, 0px));
+      display: flex;
+      flex-direction: column;
+      max-height: 90%;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
       transform: translateY(100%);
       transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* 드래그 핸들 (다른 바텀시트와 동일) */
+    /* 드래그 핸들 (다른 바텀시트와 동일한 sf-grabber 규격) */
     .shoe-grabber {
       width: 40px;
-      height: 5px;
-      border-radius: 3px;
-      background: rgba(255, 255, 255, 0.28);
-      margin: 0 auto 8px;
+      height: 4px;
+      border-radius: 100px;
+      background: var(--cloudy-gray);
+      opacity: 0.5;
+      margin: 0 auto;
+      flex-shrink: 0;
       cursor: grab;
       touch-action: none;
-      /* 보이는 바는 5px 유지, 패딩으로 터치 영역 확대 */
-      padding: 10px 40px;
+      padding: 12px 40px;
       box-sizing: content-box;
       background-clip: content-box;
     }
@@ -503,8 +508,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 20px;
-      margin-bottom: 16px;
+      padding: 2px 20px 12px;
+      flex-shrink: 0;
     }
 
     .shoe-sheet-title {
@@ -533,51 +538,66 @@
       gap: 8px;
     }
 
-    .shoe-carousel {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      padding: 0 20px 8px;
+    /* 러닝화 옵션 — 수직 리스트 (높이는 JS 지정) */
+    .shoe-list {
+      overflow-y: auto;
       scrollbar-width: none;
+      padding: 0 10px 12px;
     }
 
-    .shoe-carousel::-webkit-scrollbar {
+    .shoe-list::-webkit-scrollbar {
       display: none;
     }
 
-    .shoe-card {
-      flex: 0 0 62%;
-      scroll-snap-align: center;
+    .shoe-opt {
       display: flex;
-      flex-direction: column;
       align-items: center;
       gap: 12px;
-      padding: 20px 12px;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.04);
+      padding: 12px 14px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: border-color 0.2s, background 0.2s;
     }
 
-    .shoe-card.selected {
+    .shoe-opt:active {
+      background: rgba(128, 128, 128, 0.18);
+    }
+
+    .shoe-opt.selected {
       background: var(--accent);
     }
 
-    .shoe-card-img {
-      width: 75%;
-      height: 110px;
+    .shoe-opt-img {
+      width: 52px;
+      height: 38px;
       object-fit: contain;
-      filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.5));
+      flex-shrink: 0;
+      filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.4));
     }
 
-    .shoe-card-name {
-      color: var(--slate-gray);
+    .shoe-opt-name {
+      flex: 1;
+      min-width: 0;
+      font-size: 15px;
+      color: var(--bone);
+      font-family: 'Pretendard Variable', sans-serif;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .shoe-opt.selected .shoe-opt-name {
+      color: var(--asphalt-black);
       font-weight: 600;
     }
 
-    .shoe-card.selected span {
+    .shoe-opt-check {
+      flex-shrink: 0;
+      display: none;
       color: var(--asphalt-black);
+    }
+
+    .shoe-opt.selected .shoe-opt-check {
+      display: flex;
     }
 
     .shoe-sheet-empty {
@@ -1141,7 +1161,7 @@
         <button class="shoe-sheet-add" onclick="goTo('shoes.html')">+ 등록</button>
       </div>
     </div>
-    <div id="shoe-carousel-wrap"></div>
+    <div class="shoe-list" id="shoe-carousel-wrap"></div>
   </div>
 
   <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
@@ -1419,17 +1439,31 @@
       if (!shoes.length) {
         wrap.innerHTML = `<div class="shoe-sheet-empty">등록된 러닝화가 없습니다.<br><a onclick="goTo('shoes.html')">러닝화 등록하러 가기 ›</a></div>`;
       } else {
-        wrap.innerHTML = `<div class="shoe-carousel">${shoes.map(s => `
-          <div class="shoe-card${meta.shoeId === s.id ? ' selected' : ''}" onclick="selectShoe('${s.id}')">
-            <img class="shoe-card-img" src="${s.image}" alt="${escapeHTML(s.name)}">
-            <span class="shoe-card-name">${escapeHTML(s.name)}</span>
-          </div>`).join('')}</div>`;
+        wrap.innerHTML = shoes.map(s => `
+          <div class="shoe-opt${meta.shoeId === s.id ? ' selected' : ''}" onclick="selectShoe('${s.id}')">
+            <img class="shoe-opt-img" src="${s.image}" alt="${escapeHTML(s.name)}">
+            <span class="shoe-opt-name">${escapeHTML(s.name)}</span>
+            <span class="shoe-opt-check"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+          </div>`).join('');
       }
       const sheet = document.getElementById('shoe-sheet');
       sheet.style.transition = '';
       sheet.style.transform = '';   // 드래그 override 리셋
       document.getElementById('shoe-backdrop').classList.add('open');
       sheet.classList.add('open');
+      // 리스트 높이 = 화면 절반(다른 시트와 동일한 미니멈)
+      shoeSizeList(window.innerHeight * 0.5);
+    }
+
+    // 시트 목표 높이(px)에 맞춰 리스트 높이 계산 (핸들/헤더/패딩 제외)
+    function shoeSizeList(sheetTargetPx) {
+      const sheet = document.getElementById('shoe-sheet');
+      const list = document.getElementById('shoe-carousel-wrap');
+      const grab = document.getElementById('shoe-grabber');
+      const head = sheet.querySelector('.shoe-sheet-head');
+      const chrome = grab.offsetHeight + head.offsetHeight + (parseFloat(getComputedStyle(sheet).paddingBottom) || 0);
+      const target = Math.min(sheetTargetPx, window.innerHeight * 0.9);
+      list.style.height = Math.max(90, Math.round(target - chrome)) + 'px';
     }
 
     function closeShoePicker() {
@@ -1440,30 +1474,37 @@
       sheet.classList.remove('open');
     }
 
-    // 핸들 드래그로 아래로 내려 닫기 (일정 이상 내리면 닫힘, 아니면 스냅백)
+    // 핸들 드래그로 리스트 높이 조절(위=커짐) · 탭하면 맥시멈(90%) 토글 · 많이 내리면 닫힘
     (function () {
       const grab = document.getElementById('shoe-grabber');
       const sheet = document.getElementById('shoe-sheet');
-      if (!grab || !sheet) return;
-      let startY = 0, dy = 0, dragging = false;
+      const list = document.getElementById('shoe-carousel-wrap');
+      if (!grab || !sheet || !list) return;
+      let startY = 0, startH = 0, dragging = false, moved = 0;
       function down(e) {
-        dragging = true; dy = 0;
+        dragging = true; moved = 0;
         startY = e.touches ? e.touches[0].clientY : e.clientY;
-        sheet.style.transition = 'none';
+        startH = list.getBoundingClientRect().height;
         if (e.cancelable) e.preventDefault();
       }
       function move(e) {
         if (!dragging) return;
         const y = e.touches ? e.touches[0].clientY : e.clientY;
-        dy = Math.max(0, y - startY);   // 아래로만
-        sheet.style.transform = `translateY(${dy}px)`;
+        moved = Math.max(moved, Math.abs(y - startY));
+        let h = startH - (y - startY);          // 위로 끌면 커짐
+        h = Math.max(40, Math.min(h, window.innerHeight * 0.9));
+        list.style.height = h + 'px';
       }
       function up() {
         if (!dragging) return;
         dragging = false;
-        sheet.style.transition = '';
-        if (dy > 100) closeShoePicker();
-        else sheet.style.transform = '';   // 스냅백
+        // 탭(드래그 아님) → 90%로 확대, 이미 크면 절반으로 토글
+        if (moved < 8) {
+          const nearMax = sheet.getBoundingClientRect().height >= window.innerHeight * 0.7;
+          shoeSizeList(window.innerHeight * (nearMax ? 0.5 : 0.9));
+          return;
+        }
+        if (list.getBoundingClientRect().height < 70) closeShoePicker();
       }
       grab.addEventListener('touchstart', down, { passive: false });
       window.addEventListener('touchmove', move, { passive: false });
