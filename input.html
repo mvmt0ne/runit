@@ -52,22 +52,15 @@
 
     .input-label {
       font-size: 13px;
-      font-weight: 400;
-      color: var(--text-2);
-      font-family: 'Pretendard Variable', sans-serif;
-      margin-bottom: 8px;
       display: block;
-      letter-spacing: 0.04em;
       text-transform: uppercase;
     }
 
     .input-helper {
       font-size: 12px;
-      color: var(--text-2);
-      opacity: 0.6;
+      color: var(--asphalt-gray);
       margin-top: 6px;
       line-height: 1.4;
-      font-family: 'Pretendard Variable', sans-serif;
     }
 
     .hidden-block {
@@ -82,7 +75,7 @@
       color: var(--asphalt-gray);
       font-size: 14px;
       /* 공유 밑줄(화이트 계열) → 라이트용 다크 */
-      border-bottom-color: rgba(0, 0, 0, 0.15);
+      border-bottom-color: var(--cloudy-gray);
     }
 
     /* 라이트 배경 — placeholder/select 텍스트도 어둡게 */
@@ -91,7 +84,6 @@
     }
 
     select.input-field {
-      color: var(--cloudy-gray);
       /* 커스텀 셰브런(공유 스타일은 bone) → 라이트용 다크 */
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' stroke='%2362625d' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8l3-3 3 3M6 10l3 3 3-3'/%3E%3C/svg%3E");
     }
@@ -137,7 +129,7 @@
       transform: translateY(-50%);
       width: 19px;
       height: 19px;
-      color: var(--cloudy-gray);
+      color: var(--asphaltgray);
       pointer-events: none;
     }
 
@@ -178,7 +170,7 @@
       top: 50%;
       transform: translateY(-50%);
       font-size: 13px;
-      color: var(--cloudy-gray);
+      color: var(--asphalt-gray);
       font-family: 'Space Mono', ui-monospace, monospace;
       pointer-events: none;
     }
@@ -186,10 +178,11 @@
     .ghost-btn {
       padding: 14px;
       background: transparent;
-      border: 1px solid rgba(0, 0, 0, 0.15);
+      border: 1px solid var(--cloudy-gray);
       border-radius: 8px;
       color: var(--asphalt-gray);
       font-size: 14px;
+      font-weight: 500;
       cursor: pointer;
       transition: background 0.15s, border-color 0.15s;
       white-space: nowrap;
@@ -494,8 +487,8 @@
             <input type="text" id="input-name" class="input-field" placeholder="이름 (예: 인천하프) — 비우면 CSV 값"
               style="margin-bottom:8px">
             <select id="input-type" class="input-field" style="margin-bottom:8px">
-              <option value="">-- type (비우면 CSV 자동 추정) --</option>
-              <option value="jogging">회복주</option>
+              <option value="">-- 러닝 타입 --</option>
+              <option value="jogging">리커버리런</option>
               <option value="easy">이지런</option>
               <option value="steady">스테디런</option>
               <option value="long">롱런</option>
