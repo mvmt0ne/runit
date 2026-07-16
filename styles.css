@@ -49,7 +49,7 @@ select {
     /* Surfaces */
     --bg: #1d1d1d;
     --bone: #efeeed;
-    --bg-modal: var(--accent);
+    --bg-modal: #313131;
     /* Accent */
     --accent: #0FFF54;
     --accent-rgb: 15, 255, 96;
@@ -1055,7 +1055,8 @@ sup {
     width: 40px;
     height: 4px;
     border-radius: 100px;
-    background: rgba(0, 0, 0, 0.25);
+    background: var(--cloudy-gray);
+    opacity: 0.5;
     margin: 0 auto;
     flex-shrink: 0;
     /* 보이는 바는 4px 유지하되(콘텐츠 박스), 패딩으로 터치 영역을 크게 — 모바일에서 잡기 쉽게 */
@@ -1080,7 +1081,7 @@ sup {
     font-weight: 500;
     font-family: 'Pretendard Variable', sans-serif;
     transition: color 0.3s;
-    color: var(--asphalt-black);
+    color: var(--cloudy-gray);
 }
 
 .sf-sheet-close {
@@ -1388,7 +1389,7 @@ sup {
     flex-shrink: 0;
     box-sizing: border-box;
     background: rgb(180 180 180 / 20%);
-    border: 0 solid var(--asphalt-black);
+    border: 0 solid var(--accent);
     transition:
         background 0.18s ease,
         border-width 0.18s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1422,11 +1423,12 @@ sup {
 .fchk-label {
     font-size: 16px;
     font-weight: 400;
-    color: var(--asphalt-black);
+    color: var(--slate-gray);
 }
 
 .fchk-label em {
-    color: white;
+    color: var(--cloudy-gray);
+    margin-left: 8px;
 }
 
 .filter-chip {
