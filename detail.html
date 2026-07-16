@@ -331,14 +331,15 @@
       gap: 12px;
     }
 
-    /* ─── 메모 ─── */
+    /* ─── 메모 (다크 카드 안) ─── */
     .d-note {
       font-size: 15px;
       line-height: 1.6;
-      color: var(--asphalt-black);
+      color: var(--slate-gray);
       font-family: 'Pretendard Variable', sans-serif;
       white-space: pre-wrap;
       word-break: break-word;
+      padding-bottom: 16px;
     }
 
     /* ─── Stats grid ─── */
@@ -1398,6 +1399,14 @@
           ${avgRows}
         </div>` : '';
 
+      // 메모 (입력화면에서 저장한 meta.note)
+      const noteText = (meta.note && meta.note.trim()) || act.note || '';
+      const noteCard = noteText ? `
+        <div class="nd-avg round-box">
+          <div class="nd-avg-title">메모</div>
+          <div class="d-note">${escapeHTML(noteText)}</div>
+        </div>` : '';
+
       // 이전/다음 활동 날짜 저장 (list: 최신순) — 하단 고정 탭바가 사용
       const idx = list.findIndex(a => a.date === act.date);
       _prevDate = (idx >= 0 && idx < list.length - 1) ? list[idx + 1].date : null;  // prev(과거)
@@ -1440,6 +1449,8 @@
           ${act.count > 1 ? ndRunsCard(act.runs) : ''}
 
           ${avgCard}
+
+          ${noteCard}
         </div>`;
     }
 
