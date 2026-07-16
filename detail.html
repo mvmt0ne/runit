@@ -32,18 +32,28 @@
       position: relative;
     }
 
-    /* 상단 고정 헤더 — 콘텐츠 위에 떠 있되 배경을 블러 처리 (하단으로 페이드) */
+    /* 상단 고정 헤더 — 콘텐츠 위에 떠 있음. 블러 배경은 ::before 레이어로 분리 */
     .detail-page .back-header {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       z-index: 25;
-      /* 블러 + 옅은 다크 틴트 → 콘텐츠 위에서도 버튼/타이틀 가독 */
+      background: transparent;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+      pointer-events: none;
+    }
+
+    /* 블러 + 옅은 다크 틴트 배경 (하단으로 소프트 페이드). 타이틀/버튼 뒤에만 깔려 콘텐츠는 완전 불투명 유지 */
+    .detail-page .back-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
       background: linear-gradient(180deg, rgba(34, 34, 34, 0.5) 0%, rgba(34, 34, 34, 0) 100%);
       -webkit-backdrop-filter: blur(14px) saturate(140%);
       backdrop-filter: blur(14px) saturate(140%);
-      /* 하단 경계가 딱 끊기지 않게 블러/틴트를 아래로 소프트 페이드 */
       -webkit-mask-image: linear-gradient(180deg, #000 58%, transparent 100%);
       mask-image: linear-gradient(180deg, #000 58%, transparent 100%);
       pointer-events: none;
