@@ -47,7 +47,6 @@
     }
 
     .input-section+.input-section {
-      border-top: 1px solid rgba(0, 0, 0, 0.08);
       margin-top: 8px;
     }
 
@@ -80,8 +79,8 @@
       box-sizing: border-box;
       max-width: 100%;
       padding: 14px 2px;
-      color: var(--asphalt-black);
-      font-size: 16px;
+      color: var(--asphalt-gray);
+      font-size: 14px;
       /* 공유 밑줄(화이트 계열) → 라이트용 다크 */
       border-bottom-color: rgba(0, 0, 0, 0.15);
     }
@@ -92,9 +91,9 @@
     }
 
     select.input-field {
-      color: var(--asphalt-black);
+      color: var(--cloudy-gray);
       /* 커스텀 셰브런(공유 스타일은 bone) → 라이트용 다크 */
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' stroke='%23222222' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8l3-3 3 3M6 10l3 3 3-3'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' stroke='%2362625d' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8l3-3 3 3M6 10l3 3 3-3'/%3E%3C/svg%3E");
     }
 
     /* iOS Safari의 날짜 입력 정규화 — 기본 높이/정렬/아이콘이 다른 입력과 어긋나 깨져 보이는 문제 */
@@ -185,13 +184,12 @@
     }
 
     .ghost-btn {
-      padding: 10px 14px;
+      padding: 14px;
       background: transparent;
       border: 1px solid rgba(0, 0, 0, 0.15);
       border-radius: 8px;
       color: var(--asphalt-gray);
-      font-size: 13px;
-      font-family: 'Pretendard Variable', sans-serif;
+      font-size: 14px;
       cursor: pointer;
       transition: background 0.15s, border-color 0.15s;
       white-space: nowrap;
@@ -450,7 +448,7 @@
 
 <body>
   <div class="phone">
-    <div class="phone-inner" style="background: var(--bone);">
+    <div class="phone-inner" style="background: var(--slate-gray);">
 
       <div class="input-page">
         <div class="back-header">
@@ -509,7 +507,6 @@
             <textarea id="input-note" class="input-field" placeholder="메모 (자유 텍스트)"
               style="min-height:80px;font-family:'Pretendard Variable',sans-serif;font-size:14px;margin-bottom:12px"></textarea>
 
-            <div class="input-helper">이름·타입·메모는 CSV에 없는 값. 입력하면 detail에 표시됩니다.</div>
           </div>
 
           <!-- 활동 본체 (CSV 없이 직접 추가) -->
@@ -538,7 +535,7 @@
                   placeholder="접지"><span class="iu-suf">ms</span></div>
               <div style="flex:1"></div>
             </div>
-            <div class="input-helper">거리만 채워도 추가됨. 이름·타입은 위 메타값 사용. 마일리지·리스트에 즉시 반영(새로고침).</div>
+
           </div>
 
           <!-- 다른 화면 링크 -->

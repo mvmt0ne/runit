@@ -279,10 +279,10 @@ sup {
     position: sticky;
     top: 0;
     z-index: 25;
-    /* 기본: 라이트 글래스 */
+    /* 기본: 라이트 글래스 
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);*/
 }
 
 /* 다크 글래스 (stats.html, detail.html 등) */
@@ -1725,7 +1725,7 @@ input[type='range'].range-input::-moz-range-thumb {
 .pb-input {
     background: transparent;
     border: none;
-    border-bottom: 1.5px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.82);
     border-radius: 0;
     outline: none;
     transition: border-color 0.15s;
