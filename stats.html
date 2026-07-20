@@ -1674,9 +1674,9 @@
 
     // 지표 정의 — lowerBetter: 값이 낮을수록 개선
     const TREND_METRICS = [
-      { key: 'pace', label: '페이스', unit: '/km', lowerBetter: true, fmt: secToPace },
       { key: 'km', label: '거리', unit: 'K', lowerBetter: false, fmt: v => v.toFixed(1) },
       { key: 'bpm', label: '심박', unit: 'bpm', lowerBetter: true, fmt: v => Math.round(v) },
+      { key: 'pace', label: '페이스', unit: '/km', lowerBetter: true, fmt: secToPace },
       { key: 'spm', label: '케이던스', unit: 'spm', lowerBetter: false, fmt: v => Math.round(v) },
       { key: 'ground', label: '접지', unit: 'ms', lowerBetter: true, fmt: v => Math.round(v) },
       { key: 'stride', label: '보폭', unit: 'cm', lowerBetter: false, fmt: v => Math.round(v) },
@@ -1730,7 +1730,7 @@
       }));
     }
 
-    let trendMetric = 'pace';
+    let trendMetric = 'km';
 
     // 공통 렌더 — series(오래된→최신)를 최신이 위로 오게 역순 표시
     function renderTrendInto(ids, series, labelUnit) {
