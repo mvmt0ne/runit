@@ -1096,15 +1096,15 @@
           <h1 class="lp-hero-title">마일리지</h1>
         </div>
         <div class="tab-row">
-          <div class="tab" data-tab="week">주간</div>
-          <div class="tab active" data-tab="month">월간</div>
+          <div class="tab active" data-tab="week">주간</div>
+          <div class="tab" data-tab="month">월간</div>
           <div class="tab" data-tab="year">년간</div>
         </div>
 
         <!-- ══════════════════════════════
          WEEK VIEW (주간)
     ══════════════════════════════ -->
-        <div id="view-week" style="display: none">
+        <div id="view-week">
           <!-- 최근 12주 추이 (맨 위) -->
           <div class="trend-block round-box" id="week-trend-block">
             <div class="trend-head">
@@ -1161,7 +1161,7 @@
         <!-- ══════════════════════════════
          MONTH VIEW (월간)
     ══════════════════════════════ -->
-        <div id="view-month">
+        <div id="view-month" style="display: none">
           <!-- 1년 추이 (맨 위) -->
           <div class="trend-block round-box" id="trend-block">
             <div class="trend-head">
@@ -1306,7 +1306,7 @@
       });
     });
 
-    // 초기 상태: 월간 탭이 기본 활성
+    // 초기 상태: 주간 탭이 기본 활성
     setFabVisible(true);
 
     // ══════════════════════════════════════
@@ -1844,9 +1844,10 @@
         const heroNum = document.querySelector('.stats-hero-num');
         if (heroNum) heroNum.innerHTML = `${S.totalKm}<sup>K</sup>`;
 
-        // 초기 렌더 (월간 탭 + 추이)
+        // 초기 렌더 (주간 탭 기본 + 월간은 전환 대비 미리, 추이)
+        renderWeekChart();
         updateYearNav();
-        updateMonthChart(/* animate */ true);
+        updateMonthChart(/* animate */ false);
         renderTrend();
       })
       .catch(err => {
