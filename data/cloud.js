@@ -31,7 +31,7 @@
   let storage = null;
   try { storage = firebase.storage ? firebase.storage() : null; } catch (e) {}
 
-  const STORE_KEYS = ['runit:meta', 'runit:activities', 'runit:shoes', 'runit:pb', 'runit:zones', 'runit:profile'];
+  const STORE_KEYS = ['runit:meta', 'runit:activities', 'runit:shoes', 'runit:pb', 'runit:zones', 'runit:profile', 'runit:brands'];
   const shortKey = k => k.split(':')[1];
   const docFor = (uid, key) => db.collection('users').doc(uid).collection('store').doc(shortKey(key));
 
