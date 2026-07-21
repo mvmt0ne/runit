@@ -45,19 +45,15 @@
     }
 
     .input-section+.input-section {
-      border-top: 1px solid rgba(0, 0, 0, 0.08);
-      margin-top: 8px;
+      margin-top: 12px;
     }
 
     .input-label {
-      font-size: 13px;
-      font-weight: 400;
-      color: var(--asphalt-gray);
-      font-family: 'Pretendard Variable', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #686868;
       margin-bottom: 8px;
       display: block;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
     }
 
     .field-row {
@@ -89,14 +85,14 @@
       box-sizing: border-box;
       padding: 12px 2px;
       color: var(--asphalt-gray);
-      font-size: 16px;
-      font-family: 'Pretendard Variable', sans-serif;
+      font-weight: 500;
+      font-size: 15px;
       /* 공유 밑줄(화이트 계열) → 라이트용 다크 */
-      border-bottom-color: rgba(0, 0, 0, 0.15);
+      border-bottom-color: var(--cloudy-gray);
     }
 
     .zone-input::placeholder {
-      color: var(--asphalt-gray);
+      color: var(--cloudy-gray);
     }
 
     input[type="date"] {
@@ -114,7 +110,6 @@
       align-items: center;
       justify-content: space-between;
       padding: 14px 0;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     }
 
     .saved-item:last-child {
@@ -134,12 +129,11 @@
     }
 
     .saved-tag {
-      font-size: 11px;
-      padding: 2px 8px;
+      font-size: 14px;
+      padding: 8px 16px;
       border-radius: 100px;
-      background: rgba(0, 0, 0, 0.07);
+      background: rgba(255, 255, 255, 0.2);
       color: var(--asphalt-gray);
-      font-family: 'Pretendard Variable', sans-serif;
     }
 
     .delete-btn {
@@ -251,8 +245,8 @@
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: rgba(0, 0, 0, 0.08);
-      color: var(--asphalt-gray);
+      background: var(--asphalt-black);
+      color: var(--bone);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -335,7 +329,7 @@
               </div>
               <button class="ghost-btn" onclick="onSaveZones()">적용</button>
             </div>
-            <div style="font-size:13px;color:var(--asphalt-gray);margin-top:10px;">
+            <div class="input-helper">
               적용 시작일 이후 기록부터 새 존이 적용됩니다. 이전 기록은 당시 존 기준으로 유지됩니다.
             </div>
             <ul class="saved-list" id="zone-hist"></ul>

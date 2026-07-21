@@ -1895,3 +1895,10 @@ input[type="date"].pb-input::-webkit-calendar-picker-indicator {
     border-radius: 12px;
     margin: 3px;
 }
+
+.input-helper {
+    font-size: 12px;
+    color: var(--asphalt-gray);
+    margin-top: 6px;
+    line-height: 1.4;
+}
