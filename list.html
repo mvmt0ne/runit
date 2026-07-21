@@ -54,7 +54,6 @@
         .list-scroll {
             flex: 1;
             overflow-y: auto;
-            overscroll-behavior-y: contain;
             scrollbar-width: none;
             padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
         }
@@ -218,11 +217,11 @@
 
             <!-- 리스트 -->
             <div class="list-page">
+                <!-- 고정 헤더 (스크롤 밖) -->
+                <div class="lp-header">
+                    <span class="lp-header-title-compact">러닝 활동</span>
+                </div>
                 <div class="list-scroll" id="list-scroll">
-                    <!-- Compact sticky header -->
-                    <div class="lp-header">
-                        <span class="lp-header-title-compact">러닝 활동</span>
-                    </div>
                     <!-- Large title -->
                     <div class="lp-hero">
                         <h1 class="lp-hero-title">러닝 활동</h1>

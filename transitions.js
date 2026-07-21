@@ -115,7 +115,9 @@
      스크롤하면 큰 타이틀이 페이드/축소되고 sticky 헤더에 작은 타이틀이 페이드인. */
   window.setupCollapsingHeader = function (scrollEl) {
     if (!scrollEl) return;
-    const compactTitle = scrollEl.querySelector('.lp-header-title-compact');
+    // 컴팩트 헤더는 스크롤 밖(형제)으로 분리됨 → 부모에서 탐색(구조 하위호환 위해 scrollEl도 폴백)
+    const compactTitle = (scrollEl.parentElement && scrollEl.parentElement.querySelector('.lp-header-title-compact'))
+      || scrollEl.querySelector('.lp-header-title-compact');
     const largeTitle = scrollEl.querySelector('.lp-hero-title');
     if (!compactTitle || !largeTitle) return;
 

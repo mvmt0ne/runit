@@ -33,7 +33,6 @@
     .sc-scroll {
       flex: 1;
       overflow-y: auto;
-      overscroll-behavior-y: contain;
       scrollbar-width: none;
       padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
     }
@@ -47,8 +46,8 @@
       display: flex;
       gap: 8px;
       position: sticky;
-      /* 컴팩트 스티키 헤더(lp-header) 바로 아래에 붙음 */
-      top: calc(env(safe-area-inset-top, 0px) + 28px);
+      /* 헤더가 스크롤 밖으로 분리됨 → 스크롤 최상단(0)에 붙음 */
+      top: 0;
       z-index: 2;
       background: var(--bone);
       padding: 16px;
@@ -384,11 +383,11 @@
   <div class="phone">
     <div class="phone-inner bg-dark" style="background: var(--asphalt-black);">
       <div class="sc-page">
+        <!-- 고정 헤더 (스크롤 밖) -->
+        <div class="lp-header">
+          <span class="lp-header-title-compact">러닝화</span>
+        </div>
         <div class="sc-scroll" id="sc-scroll">
-          <!-- Compact sticky header -->
-          <div class="lp-header">
-            <span class="lp-header-title-compact">러닝화</span>
-          </div>
           <!-- Large title -->
           <div class="lp-hero">
             <h1 class="lp-hero-title">러닝화</h1>
