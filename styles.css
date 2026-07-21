@@ -398,8 +398,9 @@ sup {
     pointer-events: none;
 }
 
-/* ─── Hero (large title — 스크롤 시 자연스럽게 사라짐) ── */
+/* ─── Hero (large title — 상단 고정 블록의 일부) ── */
 .lp-hero {
+    flex-shrink: 0;
     padding: 12px 20px 20px;
     background: var(--bone);
     display: flex;

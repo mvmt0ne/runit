@@ -221,13 +221,12 @@
                 <div class="lp-header">
                     <span class="lp-header-title-compact">러닝 활동</span>
                 </div>
-                <div class="list-scroll" id="list-scroll">
-                    <!-- Large title -->
-                    <div class="lp-hero">
-                        <h1 class="lp-hero-title">러닝 활동</h1>
-                    </div>
-                    <!-- Tab area: 모드 / 정렬 / 필터 -->
-                    <div class="tab-row list-tab-row">
+                <!-- Large title (고정) -->
+                <div class="lp-hero">
+                    <h1 class="lp-hero-title">러닝 활동</h1>
+                </div>
+                <!-- Tab area: 모드 / 정렬 / 필터 (고정) -->
+                <div class="tab-row list-tab-row">
                         <button class="lp-view-toggle" id="lp-view-toggle" aria-label="뷰 모드 전환" onclick="toggleView()">
                             <svg class="icon-expanded" width="22" height="22" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
@@ -266,8 +265,10 @@
                             PB
                         </button>
                     </div>
-                    <div id="runs-list-container"></div>
-                </div>
+                    <!-- 스크롤: 리스트만 -->
+                    <div class="list-scroll" id="list-scroll">
+                        <div id="runs-list-container"></div>
+                    </div>
             </div>
 
             <!-- Sort sheet -->
