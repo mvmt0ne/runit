@@ -110,14 +110,11 @@
     location.href = url;
   };
 
-  /* ── Collapsing large title (iOS-style) ──
-     scrollEl 안에 .lp-header-title-compact + .lp-hero-title 가 있어야 함.
-     스크롤하면 큰 타이틀이 페이드/축소되고 sticky 헤더에 작은 타이틀이 페이드인. */
-  window.setupCollapsingHeader = function (scrollEl) {
+  /* ── (사용 안 함) 큰 타이틀 접힘 — 스크롤 리플로우로 끊김 발생해 제거.
+     이제 큰 타이틀은 스크롤과 함께 자연스럽게 사라지고 탭만 sticky로 상단 고정됨. */
+  window.setupCollapsingHeader = function () { /* no-op */ };
+  window._setupCollapsingHeader_unused = function (scrollEl) {
     if (!scrollEl) return;
-    // 헤더·큰 타이틀은 스크롤 밖(형제)에 고정 — 부모에서 탐색.
-    // "미니멈"은 스크롤 위치에 따라 고정된 큰 타이틀(.lp-hero) 높이를 JS로 줄여 구현
-    // (스크롤 안에 두지 않으므로 iOS 오버스크롤 시 헤더와 벌어지지 않음).
     const page = scrollEl.parentElement;
     if (!page) return;
     const hero = page.querySelector('.lp-hero');
@@ -125,7 +122,6 @@
     const largeTitle = hero && hero.querySelector('.lp-hero-title');
     if (!hero || !largeTitle) return;
 
-    // 큰 타이틀 영역 원본 높이·패딩 캡처(1회) — 이 값 기준으로 접음
     let fullH = 0, padT = 0, padB = 0;
     function measure() {
       hero.style.maxHeight = ''; hero.style.paddingTop = ''; hero.style.paddingBottom = '';
@@ -143,12 +139,10 @@
     function update() {
       const y = scrollEl.scrollTop;
       const t = Math.max(0, Math.min(1, (y - FADE_START) / (FADE_END - FADE_START)));
-      // 큰 타이틀: 높이·패딩·투명도를 함께 축소 → 완전히 접히면 흔적 없이 헤더+탭만 남음(미니멈, 다크 밴드 없음)
       hero.style.maxHeight = (fullH * (1 - t)) + 'px';
       hero.style.paddingTop = (padT * (1 - t)) + 'px';
       hero.style.paddingBottom = (padB * (1 - t)) + 'px';
       hero.style.opacity = String(1 - t);
-      // 컴팩트 헤더 타이틀 페이드인
       if (compactTitle) compactTitle.style.opacity = String(t);
     }
     scrollEl.addEventListener('scroll', update, { passive: true });

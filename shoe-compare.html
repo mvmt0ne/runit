@@ -47,8 +47,8 @@
       display: flex;
       gap: 8px;
       position: sticky;
-      /* 헤더가 스크롤 밖으로 분리됨 → 스크롤 최상단(0)에 붙음 */
-      top: 0;
+      /* 컴팩트 헤더(노치 바) 바로 아래에 붙음 */
+      top: calc(env(safe-area-inset-top, 0px) + 28px);
       z-index: 2;
       background: var(--bone);
       padding: 16px;
@@ -384,15 +384,15 @@
   <div class="phone">
     <div class="phone-inner bg-dark" style="background: var(--asphalt-black);">
       <div class="sc-page">
-        <!-- 고정 헤더 (스크롤 밖) -->
-        <div class="lp-header">
-          <span class="lp-header-title-compact">러닝화</span>
-        </div>
-        <!-- 큰 타이틀 (고정, 스크롤 시 JS로 접힘) -->
-        <div class="lp-hero">
-          <h1 class="lp-hero-title">러닝화</h1>
-        </div>
         <div class="sc-scroll" id="sc-scroll">
+          <!-- 노치 바 (스크롤 안 sticky) -->
+          <div class="lp-header">
+            <span class="lp-header-title-compact">러닝화</span>
+          </div>
+          <!-- 큰 타이틀 (스크롤과 함께 사라짐) -->
+          <div class="lp-hero">
+            <h1 class="lp-hero-title">러닝화</h1>
+          </div>
           <div id="sc-body">
             <div class="sc-empty-page">불러오는 중…</div>
           </div>
