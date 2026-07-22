@@ -115,24 +115,44 @@
      스크롤하면 큰 타이틀이 페이드/축소되고 sticky 헤더에 작은 타이틀이 페이드인. */
   window.setupCollapsingHeader = function (scrollEl) {
     if (!scrollEl) return;
-    // 컴팩트 헤더는 스크롤 밖(형제)으로 분리됨 → 부모에서 탐색(구조 하위호환 위해 scrollEl도 폴백)
-    const compactTitle = (scrollEl.parentElement && scrollEl.parentElement.querySelector('.lp-header-title-compact'))
-      || scrollEl.querySelector('.lp-header-title-compact');
-    const largeTitle = scrollEl.querySelector('.lp-hero-title');
-    if (!compactTitle || !largeTitle) return;
+    // 헤더·큰 타이틀은 스크롤 밖(형제)에 고정 — 부모에서 탐색.
+    // "미니멈"은 스크롤 위치에 따라 고정된 큰 타이틀(.lp-hero) 높이를 JS로 줄여 구현
+    // (스크롤 안에 두지 않으므로 iOS 오버스크롤 시 헤더와 벌어지지 않음).
+    const page = scrollEl.parentElement;
+    if (!page) return;
+    const hero = page.querySelector('.lp-hero');
+    const compactTitle = page.querySelector('.lp-header-title-compact');
+    const largeTitle = hero && hero.querySelector('.lp-hero-title');
+    if (!hero || !largeTitle) return;
 
-    const FADE_START = 16, FADE_END = 44;
+    // 큰 타이틀 영역 원본 높이·패딩 캡처(1회) — 이 값 기준으로 접음
+    let fullH = 0, padT = 0, padB = 0;
+    function measure() {
+      hero.style.maxHeight = ''; hero.style.paddingTop = ''; hero.style.paddingBottom = '';
+      const cs = getComputedStyle(hero);
+      padT = parseFloat(cs.paddingTop) || 0;
+      padB = parseFloat(cs.paddingBottom) || 0;
+      fullH = hero.scrollHeight;
+    }
+    measure();
+    hero.style.overflow = 'hidden';
+    hero.style.willChange = 'max-height, opacity';
+
+    const FADE_START = 8, FADE_END = 60;
 
     function update() {
       const y = scrollEl.scrollTop;
       const t = Math.max(0, Math.min(1, (y - FADE_START) / (FADE_END - FADE_START)));
-      compactTitle.style.opacity = t;
-      const scale = 1 - t * 0.05;
-      largeTitle.style.transform = `scale(${scale})`;
-      largeTitle.style.transformOrigin = 'left center';
-      largeTitle.style.opacity = 1 - t * 0.5;
+      // 큰 타이틀: 높이·패딩·투명도를 함께 축소 → 완전히 접히면 흔적 없이 헤더+탭만 남음(미니멈, 다크 밴드 없음)
+      hero.style.maxHeight = (fullH * (1 - t)) + 'px';
+      hero.style.paddingTop = (padT * (1 - t)) + 'px';
+      hero.style.paddingBottom = (padB * (1 - t)) + 'px';
+      hero.style.opacity = String(1 - t);
+      // 컴팩트 헤더 타이틀 페이드인
+      if (compactTitle) compactTitle.style.opacity = String(t);
     }
     scrollEl.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', function () { measure(); update(); });
     update();
   };
 
