@@ -472,9 +472,9 @@ sup {
     flex-shrink: 0;
     position: sticky;
     display: flex;
-    padding-left: 4px;
-    /* 컴팩트 헤더(노치 바) 바로 밑에 docking */
-    top: calc(env(safe-area-inset-top, 0px) + 28px);
+    /* 탭 바가 최상단 고정 — 노치(safe-area)는 배경으로 덮음 */
+    padding: env(safe-area-inset-top, 0px) 0 0 4px;
+    top: 0;
     z-index: 20;
     width: 100%;
     background: var(--bone);
