@@ -177,6 +177,7 @@
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
+      overscroll-behavior-y: contain;
       scrollbar-width: none;
       /* 상단에서 더 당겼을 때 브라우저 네이티브 새로고침(당겨서 새로고침) 차단 */
       /* padding-top: calc(env(safe-area-inset-top, 0px) + 16px);  */
@@ -1089,16 +1090,16 @@
       <div class="lp-header">
         <span class="lp-header-title-compact">마일리지</span>
       </div>
-      <!-- Large title (고정) -->
-      <div class="lp-hero">
-        <h1 class="lp-hero-title">마일리지</h1>
-      </div>
-      <div class="tab-row">
-        <div class="tab active" data-tab="week">주간</div>
-        <div class="tab" data-tab="month">월간</div>
-        <div class="tab" data-tab="year">년간</div>
-      </div>
       <div class="scroll-area">
+        <!-- Large title (스크롤 시 접힘) -->
+        <div class="lp-hero">
+          <h1 class="lp-hero-title">마일리지</h1>
+        </div>
+        <div class="tab-row">
+          <div class="tab active" data-tab="week">주간</div>
+          <div class="tab" data-tab="month">월간</div>
+          <div class="tab" data-tab="year">년간</div>
+        </div>
 
         <!-- ══════════════════════════════
          WEEK VIEW (주간)

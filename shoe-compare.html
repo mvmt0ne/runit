@@ -33,6 +33,7 @@
     .sc-scroll {
       flex: 1;
       overflow-y: auto;
+      overscroll-behavior-y: contain;
       scrollbar-width: none;
       padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
     }
@@ -387,11 +388,11 @@
         <div class="lp-header">
           <span class="lp-header-title-compact">러닝화</span>
         </div>
-        <!-- Large title (고정) -->
-        <div class="lp-hero">
-          <h1 class="lp-hero-title">러닝화</h1>
-        </div>
         <div class="sc-scroll" id="sc-scroll">
+          <!-- Large title (스크롤 시 접힘) -->
+          <div class="lp-hero">
+            <h1 class="lp-hero-title">러닝화</h1>
+          </div>
           <div id="sc-body">
             <div class="sc-empty-page">불러오는 중…</div>
           </div>
