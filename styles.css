@@ -472,13 +472,21 @@ sup {
     flex-shrink: 0;
     position: sticky;
     display: flex;
-        padding-left: 4px;
-    /* 컴팩트 헤더(노치 바) 바로 밑에 docking */
-    top: calc(env(safe-area-inset-top, 0px) + 28px);
+    padding-left: 4px;
+    /* 고정 타이틀이 스크롤 밖에 있으므로 스크롤 컨테이너 최상단(0)에 도킹 */
+    top: 0;
     z-index: 20;
     width: 100%;
     background: var(--bone);
     border-radius: 0 0 16px 16px;
+    /* 처음엔 숨김 — 스크롤하면 아래로 슬라이드-노출 */
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tab-row.tab-row--revealed {
+    max-height: var(--tab-row-h, 200px);
 }
 
 .tab {
