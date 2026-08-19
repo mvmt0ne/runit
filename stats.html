@@ -1086,21 +1086,23 @@
 <body>
   <div class="phone">
     <div class="phone-inner">
+      <!-- 노치 바 (고정) -->
+      <div class="lp-header">
+        <span class="lp-header-title-compact">마일리지</span>
+      </div>
+      <!-- 큰 타이틀 (고정) -->
+      <div class="lp-hero">
+        <h1 class="lp-hero-title">마일리지</h1>
+      </div>
+      <!-- 스크롤: 탭(스크롤 시 슬라이드-노출) + 콘텐츠 -->
       <div class="scroll-area">
-                <!-- 노치 바 (스크롤 안 sticky) -->
-        <div class="lp-header">
-          <span class="lp-header-title-compact">마일리지</span>
-        </div>
-        <!-- 큰 타이틀 (스크롤과 함께 사라짐) -->
-        <div class="lp-hero">
-          <h1 class="lp-hero-title">마일리지</h1>
-        </div>
-        <!-- 탭 바 (최상단 고정 sticky) -->
+        <!-- 탭 바 -->
         <div class="tab-row">
           <div class="tab active" data-tab="week">주간</div>
           <div class="tab" data-tab="month">월간</div>
           <div class="tab" data-tab="year">년간</div>
         </div>
+
 
         <!-- ══════════════════════════════
          WEEK VIEW (주간)
@@ -2277,11 +2279,12 @@
     addChartSwipe('week-chart-swipe-wrap', changeWeekPeriod);
     addChartSwipe('year-chart-swipe-wrap', changeYearPeriod);
 
-    /* ─── Collapsing large title + auto-hide chrome ── */
+    /* ─── Collapsing large title + auto-hide chrome + tab reveal ── */
     {
       const _scrollEl = document.querySelector('.scroll-area');
       setupCollapsingHeader(_scrollEl);
       setupAutoHideChrome(_scrollEl);
+      setupTabReveal(_scrollEl, document.querySelector('.tab-row'));
     }
   </script>
 

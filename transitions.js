@@ -150,6 +150,18 @@
     update();
   };
 
+  /* ── Tab reveal (타이틀은 고정, 탭 영역은 스크롤 시 아래로 슬라이드-노출) ──
+     scrollTop 이 0 근처면 숨김(max-height:0), 스크롤하면 자연 높이로 펼쳐짐. */
+  window.setupTabReveal = function (scrollEl, tabEl) {
+    if (!scrollEl || !tabEl) return;
+    tabEl.style.setProperty('--tab-row-h', tabEl.scrollHeight + 'px');
+    function update() {
+      tabEl.classList.toggle('tab-row--revealed', scrollEl.scrollTop > 4);
+    }
+    scrollEl.addEventListener('scroll', update, { passive: true });
+    update();
+  };
+
   /* ── Auto-hide chrome (탭바 + 플로팅 바만) ──
      스크롤 방향 감지: 아래로 → 탭바 화면 밖, 플로팅 바도 탭바 자리로 내려옴.
      위로 스크롤하면 둘 다 다시 올라옴. 헤더는 영향 없음. */

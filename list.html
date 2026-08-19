@@ -218,16 +218,17 @@
 
             <!-- 리스트 -->
             <div class="list-page">
+                <!-- 노치 바 (고정) -->
+                <div class="lp-header">
+                    <span class="lp-header-title-compact">러닝 활동</span>
+                </div>
+                <!-- 큰 타이틀 (고정) -->
+                <div class="lp-hero">
+                    <h1 class="lp-hero-title">러닝 활동</h1>
+                </div>
+                <!-- 스크롤: 탭(스크롤 시 슬라이드-노출) + 리스트 -->
                 <div class="list-scroll" id="list-scroll">
-                                        <!-- 노치 바 (스크롤 안 sticky) -->
-                    <div class="lp-header">
-                        <span class="lp-header-title-compact">러닝 활동</span>
-                    </div>
-                    <!-- 큰 타이틀 (스크롤과 함께 사라짐) -->
-                    <div class="lp-hero">
-                        <h1 class="lp-hero-title">러닝 활동</h1>
-                    </div>
-                    <!-- Tab area: 모드 / 정렬 / 필터 (최상단 고정 sticky) -->
+                    <!-- Tab area: 모드 / 정렬 / 필터 -->
                     <div class="tab-row list-tab-row">
                         <button class="lp-view-toggle" id="lp-view-toggle" aria-label="뷰 모드 전환" onclick="toggleView()">
                             <svg class="icon-expanded" width="22" height="22" viewBox="0 0 24 24" fill="none"
@@ -850,7 +851,7 @@
             }));
 
             /* 타이틀의 natural bottom — 이 지점이 스크롤로 사라진 후에만 bar 표시 */
-            const titleEl = scrollEl.querySelector('.lp-hero-title');
+            const titleEl = scrollEl.parentElement.querySelector('.lp-hero-title');
             const titleNaturalBottom = titleEl ? titleEl.getBoundingClientRect().bottom : 0;
 
             _currentMonthKey = null;
@@ -886,11 +887,12 @@
             _monthTrackScroll(); /* initial state — 타이틀 보임 → bar 숨김 */
         }
 
-        /* ─── Collapsing large title + auto-hide chrome ── */
+        /* ─── Collapsing large title + auto-hide chrome + tab reveal ── */
         {
             const _scrollEl = document.getElementById('list-scroll');
             setupCollapsingHeader(_scrollEl);
             setupAutoHideChrome(_scrollEl);
+            setupTabReveal(_scrollEl, document.querySelector('.tab-row.list-tab-row'));
         }
 
         /* ─── Init ── */
