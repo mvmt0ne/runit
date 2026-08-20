@@ -1097,10 +1097,12 @@
       <!-- 스크롤: 탭(스크롤 시 슬라이드-노출) + 콘텐츠 -->
       <div class="scroll-area">
         <!-- 탭 바 -->
-        <div class="tab-row">
-          <div class="tab active" data-tab="week">주간</div>
-          <div class="tab" data-tab="month">월간</div>
-          <div class="tab" data-tab="year">년간</div>
+        <div class="tab-row" id="stats-tab-row">
+          <div class="tab-row-inner">
+            <div class="tab active" data-tab="week">주간</div>
+            <div class="tab" data-tab="month">월간</div>
+            <div class="tab" data-tab="year">년간</div>
+          </div>
         </div>
 
 
@@ -2284,7 +2286,7 @@
       const _scrollEl = document.querySelector('.scroll-area');
       setupCollapsingHeader(_scrollEl);
       setupAutoHideChrome(_scrollEl);
-      setupTabReveal(_scrollEl, document.querySelector('.tab-row'));
+      setupTabReveal(_scrollEl, document.getElementById('stats-tab-row'));
     }
   </script>
 

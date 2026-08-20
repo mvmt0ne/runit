@@ -151,10 +151,11 @@
   };
 
   /* ── Tab reveal (타이틀은 고정, 탭 영역은 스크롤 시 아래로 슬라이드-노출) ──
-     scrollTop 이 0 근처면 숨김(max-height:0), 스크롤하면 자연 높이로 펼쳐짐. */
+     scrollTop 이 0 근처면 숨김, 스크롤하면 펼쳐짐. 높이 애니메이션은
+     grid-template-rows: 0fr → 1fr (styles.css) 로 처리 — 콘텐츠의 실제
+     높이에 자동으로 맞춰지므로 JS 로 px 를 미리 재는 방식의 오차가 없음. */
   window.setupTabReveal = function (scrollEl, tabEl) {
     if (!scrollEl || !tabEl) return;
-    tabEl.style.setProperty('--tab-row-h', tabEl.scrollHeight + 'px');
     function update() {
       tabEl.classList.toggle('tab-row--revealed', scrollEl.scrollTop > 4);
     }

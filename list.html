@@ -229,7 +229,8 @@
                 <!-- 스크롤: 탭(스크롤 시 슬라이드-노출) + 리스트 -->
                 <div class="list-scroll" id="list-scroll">
                     <!-- Tab area: 모드 / 정렬 / 필터 -->
-                    <div class="tab-row list-tab-row">
+                    <div class="tab-row" id="list-tab-row">
+                      <div class="tab-row-inner list-tab-row">
                         <button class="lp-view-toggle" id="lp-view-toggle" aria-label="뷰 모드 전환" onclick="toggleView()">
                             <svg class="icon-expanded" width="22" height="22" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
@@ -267,6 +268,7 @@
                             </svg>
                             PB
                         </button>
+                      </div>
                     </div>
                     <div id="runs-list-container"></div>
                 </div>
@@ -892,7 +894,7 @@
             const _scrollEl = document.getElementById('list-scroll');
             setupCollapsingHeader(_scrollEl);
             setupAutoHideChrome(_scrollEl);
-            setupTabReveal(_scrollEl, document.querySelector('.tab-row.list-tab-row'));
+            setupTabReveal(_scrollEl, document.getElementById('list-tab-row'));
         }
 
         /* ─── Init ── */
