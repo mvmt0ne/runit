@@ -471,22 +471,31 @@ sup {
 .tab-row {
     flex-shrink: 0;
     position: sticky;
-    display: flex;
-    padding-left: 4px;
     /* 고정 타이틀이 스크롤 밖에 있으므로 스크롤 컨테이너 최상단(0)에 도킹 */
     top: 0;
     z-index: 20;
     width: 100%;
     background: var(--bone);
     border-radius: 0 0 16px 16px;
-    /* 처음엔 숨김 — 스크롤하면 아래로 슬라이드-노출 */
+    /* 처음엔 숨김 — 스크롤하면 아래로 슬라이드-노출.
+       grid-template-rows: 0fr → 1fr 는 내부 콘텐츠의 실제 높이에 맞춰 애니메이션되므로
+       (JS로 px 를 미리 측정해 고정하는 방식과 달리) 폰트 로딩 등으로 인한
+       높이 오차로 잘려 보이는 문제가 없음. */
+    display: grid;
+    grid-template-rows: 0fr;
     overflow: hidden;
-    max-height: 0;
-    transition: max-height 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: grid-template-rows 0.32s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .tab-row.tab-row--revealed {
-    max-height: var(--tab-row-h, 200px);
+    grid-template-rows: 1fr;
+}
+
+.tab-row-inner {
+    display: flex;
+    padding-left: 4px;
+    overflow: hidden;
+    min-height: 0;
 }
 
 .tab {
