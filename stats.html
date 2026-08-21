@@ -177,7 +177,9 @@
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
-      overscroll-behavior-y: contain;
+      /* contain 은 스크롤 체이닝만 막고 자체 고무줄 바운스는 남아있어
+         고정 헤더와 틈이 벌어져 보임 — none 으로 바운스 자체를 억제 */
+      overscroll-behavior-y: none;
       scrollbar-width: none;
       /* 상단에서 더 당겼을 때 브라우저 네이티브 새로고침(당겨서 새로고침) 차단 */
       /* padding-top: calc(env(safe-area-inset-top, 0px) + 16px);  */
