@@ -484,11 +484,15 @@ sup {
     display: grid;
     grid-template-rows: 0fr;
     overflow: hidden;
-    transition: grid-template-rows 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    /* 닫힘(사라짐): 가속하며 빠르게 접힘 — 열림과 같은 감속 커브를 거꾸로 쓰면
+       끝에서 늘어지듯 멈춰 어색해 보임 */
+    transition: grid-template-rows 0.26s cubic-bezier(0.4, 0, 1, 1);
 }
 
 .tab-row.tab-row--revealed {
     grid-template-rows: 1fr;
+    /* 열림(노출): 감속하며 자연스럽게 안착 */
+    transition: grid-template-rows 0.32s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .tab-row-inner {
