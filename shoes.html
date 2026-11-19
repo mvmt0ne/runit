@@ -602,7 +602,11 @@
         try {
           showToast('이미지 업로드 중…');
           image = await window.RUNIT_CLOUD.uploadShoeImage(id, _shoeDataURL);
-        } catch (e) { showToast('이미지 업로드 실패', true); return; }
+        } catch (e) {
+          console.error('[shoes] 이미지 업로드 실패', e);
+          showToast('이미지 업로드 실패: ' + (e && (e.code || e.message) || '알 수 없는 오류'), true);
+          return;
+        }
       }
 
       const wasEdit = !!_editingShoeId;
@@ -655,7 +659,7 @@
             const url = await window.RUNIT_CLOUD.uploadShoeImage(s.id, s.image);
             saveShoe({ ...s, image: url });
             changed = true;
-          } catch (e) { /* 실패 시 다음 기회에 재시도 */ }
+          } catch (e) { console.error('[shoes] 이미지 마이그레이션 실패', s.id, e); /* 실패 시 다음 기회에 재시도 */ }
         }
       }
       if (changed) renderShoeList();
